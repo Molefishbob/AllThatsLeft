@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class VolumeControl {
+public abstract class VolumeControl : MonoBehaviour {
     private enum SoundType {
         SoundEffect,
         Music,
@@ -38,6 +40,15 @@ public abstract class VolumeControl {
     }
     public void Mute(bool muted) {
         _audioSource.mute = muted;
+    }
+    public void StopSound() {
+        _audioSource.Stop();
+    }
+    public void PauseSound() {
+        _audioSource.Pause();
+    }
+    public void UnPauseSound() {
+        _audioSource.UnPause();
     }
     protected virtual void OnDestroy() {
         switch(_soundType) {
