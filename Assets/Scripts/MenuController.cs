@@ -30,4 +30,10 @@ public class MenuController : MonoBehaviour
         Canvas.transform.GetChild(1).gameObject.SetActive(false); // Main Menu panel
         Canvas.transform.GetChild(2).gameObject.SetActive(true); // Options panel
     }
+
+    public void Quit()
+    {
+        Debug.Log("Quitted");
+        Application.Quit();
+    }
 }
