@@ -5,11 +5,10 @@ using UnityEngine;
 public abstract class GenericMover : MonoBehaviour
 {
 
-    [Tooltip("Enter all the transforms here.\nWorks with any number of transforms.")]
-    public Transform[] _transform;
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
     protected float _eventTime;
+    protected List<Transform> _transform;
     protected float _fracTime;
     protected int _amountOfTransforms;
     protected int _currentObjectNum = 0;
@@ -28,9 +27,18 @@ public abstract class GenericMover : MonoBehaviour
     {
         _eventTime = Time.time;
         _ogStartTime = _eventTime;
-        _amountOfTransforms = _transform.Length - 1;
 
-        for (int a = 0; a < _transform.Length-1; a++)
+        _transform = new List<Transform>(transform.parent.childCount);
+
+        foreach (Transform child in transform.parent) {
+            if (child != transform) {
+                _transform.Add(child);
+            }
+        }
+        
+        _amountOfTransforms = _transform.Count - 1;
+
+        for (int a = 0; a < _transform.Count-1; a++)
         {
             _length += (_transform[a].position - _transform[a + 1].position).magnitude;
         }
