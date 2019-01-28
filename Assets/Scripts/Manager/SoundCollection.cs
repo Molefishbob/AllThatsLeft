@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SoundCollection : VolumeControl {
     [SerializeField]
-    private string _resourceFolder;
+    private string _resourceFolder = "";
     [SerializeField]
-    private float _pitchVariance;
+    private float _pitchVariance = 0.25f;
     private AudioClip[] _sounds;
     public bool IsPlaying { get { return _audioSource.isPlaying; } }
     private void Awake() {

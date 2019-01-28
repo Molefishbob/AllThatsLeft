@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class VolumeControl : MonoBehaviour {
+public abstract class VolumeControl : MonoBehaviour, IPauseable {
     private enum SoundType {
         SoundEffect,
         Music,
@@ -16,17 +16,17 @@ public abstract class VolumeControl : MonoBehaviour {
         _fullVolume = _audioSource.volume;
         switch(_soundType) {
             case SoundType.SoundEffect:
-                SoundManager.Instance._soundsSFX.Add(this);
+                SoundManager.Instance.SoundsSFX.Add(this);
                 _audioSource.mute = SoundManager.Instance.MutedSFX || SoundManager.Instance.MutedAll;
                 _audioSource.volume = SoundManager.Instance.VolumeSFX * SoundManager.Instance.VolumeAll * _fullVolume;
                 break;
             case SoundType.Music:
-                SoundManager.Instance._soundsMusic.Add(this);
+                SoundManager.Instance.SoundsMusic.Add(this);
                 _audioSource.mute = SoundManager.Instance.MutedMusic || SoundManager.Instance.MutedAll;
                 _audioSource.volume = SoundManager.Instance.VolumeMusic * SoundManager.Instance.VolumeAll * _fullVolume;
                 break;
             case SoundType.Interface:
-                SoundManager.Instance._soundsUI.Add(this);
+                SoundManager.Instance.SoundsUI.Add(this);
                 _audioSource.mute = SoundManager.Instance.MutedUI || SoundManager.Instance.MutedAll;
                 _audioSource.volume = SoundManager.Instance.VolumeUI * SoundManager.Instance.VolumeAll * _fullVolume;
                 break;
@@ -34,6 +34,7 @@ public abstract class VolumeControl : MonoBehaviour {
             Debug.LogError("INVALID SOUND TYPE!!!!!");
                 break;
         }
+        AddToPauseCollection();
     }
     public void SetVolume(float volume) {
         _audioSource.volume = volume * _fullVolume;
@@ -44,26 +45,33 @@ public abstract class VolumeControl : MonoBehaviour {
     public void StopSound() {
         _audioSource.Stop();
     }
-    public void PauseSound() {
+    public void Pause() {
         _audioSource.Pause();
     }
-    public void UnPauseSound() {
+    public void UnPause() {
         _audioSource.UnPause();
+    }
+    public void AddToPauseCollection() {
+        GameManager.Instance.Pauseables.Add(this);
+    }
+    public void RemoveFromPauseCollection() {
+        GameManager.Instance.Pauseables.Remove(this);
     }
     protected virtual void OnDestroy() {
         switch(_soundType) {
             case SoundType.SoundEffect:
-                SoundManager.Instance._soundsSFX.Remove(this);
+                SoundManager.Instance.SoundsSFX.Remove(this);
                 break;
             case SoundType.Music:
-                SoundManager.Instance._soundsMusic.Remove(this);
+                SoundManager.Instance.SoundsMusic.Remove(this);
                 break;
             case SoundType.Interface:
-                SoundManager.Instance._soundsUI.Remove(this);
+                SoundManager.Instance.SoundsUI.Remove(this);
                 break;
             default:
             Debug.LogError("INVALID SOUND TYPE!!!!!");
                 break;
         }
+        RemoveFromPauseCollection();
     }
 }

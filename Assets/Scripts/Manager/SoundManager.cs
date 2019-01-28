@@ -5,9 +5,9 @@ using UnityEngine;
 public class SoundManager : Singleton<SoundManager> {
     // (Optional) Prevent non-singleton constructor use.
     protected SoundManager() { }
-    public HashSet<VolumeControl> _soundsSFX = new HashSet<VolumeControl>();
-    public HashSet<VolumeControl> _soundsMusic = new HashSet<VolumeControl>();
-    public HashSet<VolumeControl> _soundsUI = new HashSet<VolumeControl>();
+    public HashSet<VolumeControl> SoundsSFX { get; private set; } = new HashSet<VolumeControl>();
+    public HashSet<VolumeControl> SoundsMusic { get; private set; } = new HashSet<VolumeControl>();
+    public HashSet<VolumeControl> SoundsUI { get; private set; } = new HashSet<VolumeControl>();
     //TODO: read values from player preferences!!!
     public bool MutedSFX { get; private set; } = false;
     public bool MutedMusic { get; private set; } = false;
@@ -51,61 +51,61 @@ public class SoundManager : Singleton<SoundManager> {
     }
     public void MuteSFX(bool muted) {
         MutedSFX = muted;
-        foreach(VolumeControl control in _soundsSFX) {
+        foreach(VolumeControl control in SoundsSFX) {
             control.Mute(muted || MutedAll);
         }
     }
     public void MuteMusic(bool muted) {
         MutedMusic = muted;
-        foreach(VolumeControl control in _soundsMusic) {
+        foreach(VolumeControl control in SoundsMusic) {
             control.Mute(muted || MutedAll);
         }
     }
     public void MuteUI(bool muted) {
         MutedUI = muted;
-        foreach(VolumeControl control in _soundsUI) {
+        foreach(VolumeControl control in SoundsUI) {
             control.Mute(muted || MutedAll);
         }
     }
     public void MuteAll(bool muted) {
         MutedAll = muted;
-        foreach(VolumeControl control in _soundsSFX) {
+        foreach(VolumeControl control in SoundsSFX) {
             control.Mute(muted || MutedSFX);
         }
-        foreach(VolumeControl control in _soundsMusic) {
+        foreach(VolumeControl control in SoundsMusic) {
             control.Mute(muted || MutedMusic);
         }
-        foreach(VolumeControl control in _soundsUI) {
+        foreach(VolumeControl control in SoundsUI) {
             control.Mute(muted || MutedUI);
         }
     }
     public void SetVolumeSFX(float volume) {
         VolumeSFX = volume;
-        foreach(VolumeControl control in _soundsSFX) {
+        foreach(VolumeControl control in SoundsSFX) {
             control.SetVolume(VolumeSFX * VolumeAll);
         }
     }
     public void SetVolumeMusic(float volume) {
         VolumeMusic = volume;
-        foreach(VolumeControl control in _soundsMusic) {
+        foreach(VolumeControl control in SoundsMusic) {
             control.SetVolume(VolumeMusic * VolumeAll);
         }
     }
     public void SetVolumeUI(float volume) {
         VolumeUI = volume;
-        foreach(VolumeControl control in _soundsUI) {
+        foreach(VolumeControl control in SoundsUI) {
             control.SetVolume(VolumeUI * VolumeAll);
         }
     }
     public void SetVolumeAll(float volume) {
         VolumeAll = volume;
-        foreach(VolumeControl control in _soundsSFX) {
+        foreach(VolumeControl control in SoundsSFX) {
             control.SetVolume(VolumeSFX * VolumeAll);
         }
-        foreach(VolumeControl control in _soundsMusic) {
+        foreach(VolumeControl control in SoundsMusic) {
             control.SetVolume(VolumeMusic * VolumeAll);
         }
-        foreach(VolumeControl control in _soundsUI) {
+        foreach(VolumeControl control in SoundsUI) {
             control.SetVolume(VolumeUI * VolumeAll);
         }
     }
