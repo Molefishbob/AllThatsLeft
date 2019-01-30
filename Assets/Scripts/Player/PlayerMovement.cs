@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
 
     public float _speed;
@@ -30,6 +30,7 @@ public class Movement : MonoBehaviour
 
         int layerMask = 1 << 10;
         RaycastHit hit;
+        // Makes player the child of the platform he is standing on
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1.5f , layerMask))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * hit.distance, Color.red);
@@ -39,24 +40,24 @@ public class Movement : MonoBehaviour
             gameObject.transform.parent = null;
         }
 
+        _yaw += _horizontalSensitivity * Input.GetAxis("Mouse X");
+        transform.eulerAngles = new Vector3(0, _yaw, 0);
+
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
-        _yaw += _horizontalSensitivity * Input.GetAxis("Mouse X");
 
         Vector3 forward = vertical * _speed * Vector3.forward;
-
-        transform.eulerAngles = new Vector3(0, _yaw, 0);
 
         if (vertical  < 0)
         {
             forward *= _backwardMultiplier;
         }
 
-        Vector3 sideWays = _strafeSpeed * Vector3.right * horizontal;
+        Vector3 sideWays = _strafeSpeed * horizontal * Vector3.right;
 
         Vector3 movement = (forward + sideWays) * Time.deltaTime;
 
-        movement = transform.TransformVector(movement);
+        movement = transform.TransformDirection(movement);
 
         _controller.Move(movement);
     }

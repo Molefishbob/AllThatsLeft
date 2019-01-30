@@ -21,6 +21,6 @@ public class CameraScript : MonoBehaviour
             _pitch = 90;
         }
 
-        transform.eulerAngles = new Vector3(_pitch, Movement.Yaw, 0.0f);
+        transform.eulerAngles = new Vector3(_pitch, PlayerMovement.Yaw, 0.0f);
     }
 }

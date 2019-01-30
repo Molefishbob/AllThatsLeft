@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Jump : MonoBehaviour
 {
-    private bool _isGrounded;
+    private bool _canJump;
     private CharacterController _controller;
     public float _jumpForce;
     public float _gravity;
@@ -19,12 +19,12 @@ public class Jump : MonoBehaviour
     private void Update()
     {
 
-        if (_isGrounded)
+        if (_canJump)
         {
             if (Input.GetButtonDown("Jump"))
             {
                 _jump.y = _jumpForce;
-                _isGrounded = false;
+                _canJump = false;
             }
         }
 
@@ -35,9 +35,9 @@ public class Jump : MonoBehaviour
 
     public void OnControllerColliderHit(ControllerColliderHit col)
     {
-        if (col.gameObject.layer == 9)
+        if (col.gameObject.layer == 9 || col.gameObject.layer == 10)
         {
-            _isGrounded = true;
+            _canJump = true;
         }
     }
 }
