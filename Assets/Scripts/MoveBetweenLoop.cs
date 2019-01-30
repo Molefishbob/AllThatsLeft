@@ -56,13 +56,11 @@ public class MoveBetweenLoop: GenericMover, IButtonInteraction
 
     public void ButtonDown()
     {
-        Debug.Log("activated");
         _activated = true;
     }
 
     public void ButtonUp()
     {
-        Debug.Log("DeActivated");
         _activated = false;
     }
 }

@@ -58,7 +58,6 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction
         {
             if (!_isButtonPressed)
             {
-                Debug.Log("COLLISION STAY");
                 ButtonDown();
                 _isButtonPressed = true;
             }
@@ -71,7 +70,6 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction
         {
             if (_isButtonPressed)
             {
-                Debug.Log("COLLISION EXIT");
                 ButtonUp();
                 _isButtonPressed = false;
             }
