@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBetweenLoop: GenericMover
+public class MoveBetweenLoop: GenericMover, IButtonInteraction
 {
     
-
 
     // FixedUpdate is called once per physics update
     void FixedUpdate()
     {
-        _fracTime = (Time.time - _eventTime) / (_duration *
-                (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude / _length);
-        
-        transform.position = 
-                            Vector3.Lerp(_transform[_currentObjectNum].position
-                                        , _transform[_nextObjectNum].position, _fracTime);
-
-        if (_fracTime >= 1)
+        if (_activated)
         {
-            ChangeTarget();
+            _fracTime = (Time.time - _eventTime) / (_duration *
+                    (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude / _length);
+
+            transform.position =
+                                Vector3.Lerp(_transform[_currentObjectNum].position
+                                            , _transform[_nextObjectNum].position, _fracTime);
+
+            if (_fracTime >= 1)
+            {
+                ChangeTarget();
+            }
         }
     }
 
@@ -50,5 +52,17 @@ public class MoveBetweenLoop: GenericMover
     {
         base.Init();
         _length += (_transform[0].position - _transform[_amountOfTransforms].position).magnitude;
+    }
+
+    public void ButtonDown()
+    {
+        Debug.Log("activated");
+        _activated = true;
+    }
+
+    public void ButtonUp()
+    {
+        Debug.Log("DeActivated");
+        _activated = false;
     }
 }

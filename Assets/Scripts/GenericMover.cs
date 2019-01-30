@@ -16,7 +16,8 @@ public abstract class GenericMover : MonoBehaviour
     protected float _length;
     protected float _ogStartTime;
     protected int _trackRecord = 0;
-    
+    protected bool _activated;
+
     // Start is called before the first frame update
     void Start()
     {
