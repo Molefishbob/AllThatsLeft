@@ -6,17 +6,21 @@ public class CameraScript : MonoBehaviour
 {
 
     public float _verticalSensitivity;
-    public float _horizontalSensitivity;
 
-    private float _yaw = 0.0f;
     private float _pitch = 0.0f;
-
 
     void Update()
     {
-        _yaw -= _verticalSensitivity * Input.GetAxis("Mouse Y");
-        _pitch += _horizontalSensitivity * Input.GetAxis("Mouse X");
+        _pitch -= _verticalSensitivity * Input.GetAxis("Mouse Y");
        
-        transform.eulerAngles = new Vector3(_yaw, _pitch, 0.0f);
+        if(_pitch <= -90)
+        {
+            _pitch = -90;
+        } else if(_pitch >= 90)
+        {
+            _pitch = 90;
+        }
+
+        transform.eulerAngles = new Vector3(_pitch, Movement.Yaw, 0.0f);
     }
 }
