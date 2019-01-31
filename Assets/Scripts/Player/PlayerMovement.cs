@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float _horizontalSensitivity = 2.0f;
     private static float _yaw = 0.0f;
     private CameraScript _camera;
+    private Transform t;
 
     public static float Yaw
     {
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        t = GetComponent<Transform>();
         _controller = GetComponent<CharacterController>();
         _camera = GetComponentInChildren<CameraScript>();
     }
@@ -46,19 +48,23 @@ public class PlayerMovement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
 
-        Vector3 forward = vertical * _speed * Vector3.forward;
+        /*Vector3 forward = vertical * _speed * Vector3.forward;*/
 
-        if (vertical  < 0)
+        if (vertical < 0)
         {
-            forward *= _backwardMultiplier;
+            //forward *= _backwardMultiplier;
+            vertical *= _backwardMultiplier;
         }
 
-        Vector3 sideWays = _strafeSpeed * horizontal * Vector3.right;
+        t.position += transform.forward * _speed * vertical * Time.deltaTime;
 
-        Vector3 movement = (forward + sideWays) * Time.deltaTime;
+        //Vector3 sideWays = _strafeSpeed * horizontal * Vector3.right;
+        t.position += transform.right * _strafeSpeed * horizontal * Time.deltaTime;
 
-        movement = transform.TransformDirection(movement);
-
-        _controller.Move(movement);
+        //Vector3 movement = (forward + sideWays) * Time.deltaTime;
+        
+        //movement = transform.TransformDirection(movement);
+        //Debug.Log(movement);
+        //_controller.Move(movement);
     }
 }
