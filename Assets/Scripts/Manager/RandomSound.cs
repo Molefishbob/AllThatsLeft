@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundCollection : VolumeControl {
+public class RandomSound : VolumeControl {
     [SerializeField]
     private string _resourceFolder = "";
     [SerializeField]

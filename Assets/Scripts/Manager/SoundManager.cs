@@ -49,24 +49,40 @@ public class SoundManager : Singleton<SoundManager> {
             _volumeAll = Mathf.Clamp(value, 0.0f, 1.0f);
         }
     }
+    /// <summary>
+    /// Mutes sound effects.
+    /// </summary>
+    /// <param name="muted">true to mute</param>
     public void MuteSFX(bool muted) {
         MutedSFX = muted;
         foreach(VolumeControl control in SoundsSFX) {
             control.Mute(muted || MutedAll);
         }
     }
+    /// <summary>
+    /// Mutes music.
+    /// </summary>
+    /// <param name="muted">true to mute</param>
     public void MuteMusic(bool muted) {
         MutedMusic = muted;
         foreach(VolumeControl control in SoundsMusic) {
             control.Mute(muted || MutedAll);
         }
     }
+    /// <summary>
+    /// Mutes user interface sounds.
+    /// </summary>
+    /// <param name="muted">true to mute</param>
     public void MuteUI(bool muted) {
         MutedUI = muted;
         foreach(VolumeControl control in SoundsUI) {
             control.Mute(muted || MutedAll);
         }
     }
+    /// <summary>
+    /// Mutes all sounds.
+    /// </summary>
+    /// <param name="muted">true to mute</param>
     public void MuteAll(bool muted) {
         MutedAll = muted;
         foreach(VolumeControl control in SoundsSFX) {
@@ -79,24 +95,40 @@ public class SoundManager : Singleton<SoundManager> {
             control.Mute(muted || MutedUI);
         }
     }
+    /// <summary>
+    /// Changes sound effect volume.
+    /// </summary>
+    /// <param name="volume">float [0.0,1.0]</param>
     public void SetVolumeSFX(float volume) {
         VolumeSFX = volume;
         foreach(VolumeControl control in SoundsSFX) {
             control.SetVolume(VolumeSFX * VolumeAll);
         }
     }
+    /// <summary>
+    /// Changes music volume.
+    /// </summary>
+    /// <param name="volume">float [0.0,1.0]</param>
     public void SetVolumeMusic(float volume) {
         VolumeMusic = volume;
         foreach(VolumeControl control in SoundsMusic) {
             control.SetVolume(VolumeMusic * VolumeAll);
         }
     }
+    /// <summary>
+    /// Changes user interface volume.
+    /// </summary>
+    /// <param name="volume">float [0.0,1.0]</param>
     public void SetVolumeUI(float volume) {
         VolumeUI = volume;
         foreach(VolumeControl control in SoundsUI) {
             control.SetVolume(VolumeUI * VolumeAll);
         }
     }
+    /// <summary>
+    /// Changes master volume.
+    /// </summary>
+    /// <param name="volume">float [0.0,1.0]</param>
     public void SetVolumeAll(float volume) {
         VolumeAll = volume;
         foreach(VolumeControl control in SoundsSFX) {

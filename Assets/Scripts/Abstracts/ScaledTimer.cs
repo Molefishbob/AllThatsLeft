@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class ScaledTimer : Timer, IPauseable {
+    private bool _paused;
+    protected virtual void Start() {
+        _paused = GameManager.Instance.Paused;
+        AddToPauseCollection();
+    }
+    protected override void Update() {
+        if(IsRunning && !_paused) {
+            _timer += Time.deltaTime;
+            if(_timer >= Duration) {
+                CompletedTimer();
+                _timedObject.TimedAction();
+            }
+        }
+    }
+    protected abstract void CompletedTimer();
+    private void OnDestroy() {
+        RemoveFromPauseCollection();
+    }
+    public void Pause() {
+        _paused = true;
+    }
+    public void UnPause() {
+        _paused = false;
+    }
+    public void AddToPauseCollection() {
+        GameManager.Instance.Pauseables.Add(this);
+    }
+    public void RemoveFromPauseCollection() {
+        GameManager.Instance.Pauseables.Remove(this);
+    }
+}
