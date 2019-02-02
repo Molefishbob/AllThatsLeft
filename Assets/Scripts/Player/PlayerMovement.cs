@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float _horizontalSensitivity = 2.0f;
     private static float _yaw = 0.0f;
     private CameraScript _camera;
-    private Transform t;
+    private Transform _trans;
 
     public static float Yaw
     {
@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        t = GetComponent<Transform>();
+        _trans = GetComponent<Transform>();
         _controller = GetComponent<CharacterController>();
         _camera = GetComponentInChildren<CameraScript>();
     }
@@ -32,10 +32,10 @@ public class PlayerMovement : MonoBehaviour
 
         int layerMask = 1 << 10;
         RaycastHit hit;
-        // Makes player the child of the platform he is standing on
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1.5f , layerMask))
+
+        if (Physics.SphereCast(transform.position, 0.5f, new Vector3(0, -0.5f, 0), out hit, 2.5f, layerMask))
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * hit.distance, Color.red);
+            // Makes player the child of the platform he is standing on
             gameObject.transform.parent = hit.transform;
         } else
         {
@@ -56,10 +56,10 @@ public class PlayerMovement : MonoBehaviour
             vertical *= _backwardMultiplier;
         }
 
-        t.position += transform.forward * _speed * vertical * Time.deltaTime;
+        _trans.position += transform.forward * _speed * vertical * Time.deltaTime;
 
         //Vector3 sideWays = _strafeSpeed * horizontal * Vector3.right;
-        t.position += transform.right * _strafeSpeed * horizontal * Time.deltaTime;
+        _trans.position += transform.right * _strafeSpeed * horizontal * Time.deltaTime;
 
         //Vector3 movement = (forward + sideWays) * Time.deltaTime;
         
