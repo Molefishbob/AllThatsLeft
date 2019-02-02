@@ -1,18 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class IButtonInteraction : MonoBehaviour
+﻿public interface IButtonInteraction
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    /// <summary>
+    /// Add the desired effect when the connected button is pressed.
+    /// </summary>
+    void ButtonDown();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    /// <summary>
+    /// Add the desired effect when the connected button is not pressed / released.
+    /// </summary>
+    void ButtonUp();
 }
