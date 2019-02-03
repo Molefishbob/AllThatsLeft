@@ -2,30 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomSound : VolumeControl {
+public class RandomSound : SoundEffect {
     [SerializeField]
     private string _resourceFolder = "";
-    [SerializeField]
-    private float _pitchVariance = 0.25f;
     private AudioClip[] _sounds;
-    public bool IsPlaying { get { return _audioSource.isPlaying; } }
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
         _sounds = Resources.LoadAll<AudioClip>(_resourceFolder);
-        _audioSource = GetComponent<AudioSource>();
     }
-    public void PlaySound() {
-        PlaySound(Random.Range(0,_sounds.Length), true);
+    public override void PlaySound() {
+        PlaySound(true, Random.Range(0, _sounds.Length));
     }
-    public void PlaySound(int index) {
-        PlaySound(index, true);
+    public override void PlaySound(bool usePitch) {
+        PlaySound(usePitch, Random.Range(0, _sounds.Length));
     }
-    public void PlaySound(bool usePitch) {
-        PlaySound(Random.Range(0,_sounds.Length), true);
+    public virtual void PlaySound(int index) {
+        PlaySound(true, index);
     }
-    public void PlaySound(int index, bool usePitch) {
-        index = Mathf.Clamp(index,0,_sounds.Length);
-        if(usePitch && _pitchVariance != 0) _audioSource.pitch = 1 + Random.Range(-_pitchVariance,_pitchVariance);
-        else _audioSource.pitch = 1;
+    public virtual void PlaySound(bool usePitch, int index) {
+        if(usePitch) {
+            RandomizePitch();
+        }
+        index = Mathf.Clamp(index, 0, _sounds.Length);
         _audioSource.PlayOneShot(_sounds[index]);
     }
 }
