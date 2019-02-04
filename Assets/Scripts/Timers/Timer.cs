@@ -24,6 +24,7 @@ public abstract class Timer : MonoBehaviour {
     public float NormalizedTimeLeft { get { return TimeLeft / Duration; } }
     public bool IsRunning { get; protected set; }
     protected abstract void Update();
+    protected abstract void CompletedTimer();
     public void SetTimerTarget(ITimedAction timedObject) {
         _timedObject = timedObject;
     }

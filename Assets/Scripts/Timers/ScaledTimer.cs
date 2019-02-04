@@ -17,7 +17,6 @@ public abstract class ScaledTimer : Timer, IPauseable {
             }
         }
     }
-    protected abstract void CompletedTimer();
     private void OnDestroy() {
         RemoveFromPauseCollection();
     }
@@ -31,6 +30,6 @@ public abstract class ScaledTimer : Timer, IPauseable {
         GameManager.Instance.Pauseables.Add(this);
     }
     public void RemoveFromPauseCollection() {
-        GameManager.Instance.Pauseables.Remove(this);
+        if(GameManager.Instance != null) GameManager.Instance.Pauseables.Remove(this);
     }
 }

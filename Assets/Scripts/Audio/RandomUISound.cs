@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomSound : SoundEffect {
+public class RandomUISound : SingleUISound {
     [SerializeField]
     private string _resourceFolder = "";
     private AudioClip[] _sounds;

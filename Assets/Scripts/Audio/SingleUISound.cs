@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundEffect : VolumeControl {
+public class SingleUISound : VolumeControl {
     [SerializeField]
     protected float _pitchVariance = 0.25f;
     public bool IsPlaying { get { return _audioSource.isPlaying; } }
-    protected virtual void Awake() {
+    protected override void Awake() {
+        base.Awake();
         _audioSource = GetComponent<AudioSource>();
     }
     protected void RandomizePitch() {
@@ -24,5 +25,8 @@ public class SoundEffect : VolumeControl {
             RandomizePitch();
         }
         _audioSource.Play();
+    }
+    protected override void SetSoundType() {
+        _soundType = SoundType.Interface;
     }
 }

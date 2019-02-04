@@ -16,7 +16,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
     public static T Instance {
         get {
             if (m_ShuttingDown) {
-                Debug.LogWarning("[Singleton] Instance '" + typeof(T) + "' already destroyed. Returning null.");
+                //Debug.LogWarning("[Singleton] Instance '" + typeof(T) + "' already destroyed. Returning null.");
                 return null;
             }
 

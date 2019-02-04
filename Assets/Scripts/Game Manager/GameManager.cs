@@ -13,14 +13,18 @@ public class GameManager : Singleton<GameManager> {
         _timeScaleBeforePause = Time.timeScale;
         Time.timeScale = 0;
         foreach(IPauseable item in Pauseables) {
-            item.Pause();
+            if(item != null) {
+                item.Pause();
+            }
         }
     }
     public void UnPauseGame() {
         Paused = false;
         Time.timeScale = _timeScaleBeforePause;
         foreach(IPauseable item in Pauseables) {
-            item.UnPause();
+            if(item != null) {
+                item.UnPause();
+            }
         }
     }
 }

@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnscaledTimer : Timer {
+public class UnscaledOneShotTimer : Timer {
     protected override void Update() {
         if(IsRunning) {
             _timer += Time.unscaledDeltaTime;
             if(_timer >= Duration) {
-                IsRunning = false;
+                CompletedTimer();
                 _timedObject.TimedAction();
             }
         }
+    }
+    protected override void CompletedTimer() {
+        IsRunning = false;
     }
 }
