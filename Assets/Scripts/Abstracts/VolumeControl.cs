@@ -31,7 +31,7 @@ public abstract class VolumeControl : MonoBehaviour, IPauseable {
                 _audioSource.volume = SoundManager.Instance.VolumeUI * SoundManager.Instance.VolumeAll * _fullVolume;
                 break;
             default:
-            Debug.LogError("INVALID SOUND TYPE!!!!!");
+                Debug.LogError("INVALID SOUND TYPE!!!!!");
                 break;
         }
         AddToPauseCollection();
@@ -69,7 +69,7 @@ public abstract class VolumeControl : MonoBehaviour, IPauseable {
                 SoundManager.Instance.SoundsUI.Remove(this);
                 break;
             default:
-            Debug.LogError("INVALID SOUND TYPE!!!!!");
+                Debug.LogError("INVALID SOUND TYPE!!!!!");
                 break;
         }
         RemoveFromPauseCollection();
