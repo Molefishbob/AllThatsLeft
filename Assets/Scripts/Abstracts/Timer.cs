@@ -24,12 +24,18 @@ public abstract class Timer : MonoBehaviour {
     public float NormalizedTimeLeft { get { return TimeLeft / Duration; } }
     public bool IsRunning { get; protected set; }
     protected abstract void Update();
-    public void StartTimer(float duration, ITimedAction timedObject) {
-        Duration = duration;
-        StartTimer(timedObject);
-    }
-    public void StartTimer(ITimedAction timedObject) {
+    public void SetTimerTarget(ITimedAction timedObject) {
         _timedObject = timedObject;
+    }
+    public void StartTimer(float duration) {
+        if(_timedObject == null) {
+            Debug.LogError("Set timer target first, please.");
+            return;
+        }
+        Duration = duration;
+        if(Duration <= 0.0f) {
+            Debug.LogWarning("Timer duration is " + Duration + ", are you sure this is what you wanted?");
+        }
         _timer = 0.0f;
         IsRunning = true;
     }
