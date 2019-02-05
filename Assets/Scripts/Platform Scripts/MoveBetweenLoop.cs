@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class MoveBetweenLoop: GenericMover, IButtonInteraction
 {
-    
 
-    // FixedUpdate is called once per physics update
+    /// <summary>
+    /// FixedUpdate is called once per physics update
+    /// </summary>
     void FixedUpdate()
     {
         if (_activated)
