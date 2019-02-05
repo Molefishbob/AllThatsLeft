@@ -6,6 +6,12 @@ public abstract class Timer : MonoBehaviour {
     protected ITimedAction _timedObject;
     protected float _timer = 0.0f;
     private float _duration = 0.0f;
+    /// <summary>
+    /// The time the timer takes to complete.
+    /// </summary>
+    /// <value>
+    /// Only get is public, use StartTimer to set the duration.
+    /// </value>
     public float Duration {
         get {
             return _duration;
@@ -18,13 +24,44 @@ public abstract class Timer : MonoBehaviour {
             }
         }
     }
+    /// <summary>
+    /// Time elapsed in seconds since the timer started.
+    /// </summary>
+    /// <value>
+    /// Get only.
+    /// </value>
     public float TimeElapsed { get { return _timer; } }
+    /// <summary>
+    /// Time left in the timer in seconds.
+    /// </summary>
+    /// <value>
+    /// Get only.
+    /// </value>
     public float TimeLeft { get { return Duration - _timer; } }
+    /// <summary>
+    /// Time elapsed since the timer started normalized to 0-1.
+    /// </summary>
+    /// <value>
+    /// Get only.
+    /// </value>
     public float NormalizedTimeElapsed { get { return TimeElapsed / Duration; } }
+    /// <summary>
+    /// Time left in the timer normalized to 0-1.
+    /// </summary>
+    /// <value>
+    /// Get only.
+    /// </value>
     public float NormalizedTimeLeft { get { return TimeLeft / Duration; } }
+    /// <summary>
+    /// True when the timer is running.
+    /// </summary>
     public bool IsRunning { get; protected set; }
     protected abstract void Update();
     protected abstract void CompletedTimer();
+    /// <summary>
+    /// Sets the timer's target for TimedAction when the timer has completed.
+    /// </summary>
+    /// <param name="timedObject">Any object that implements ITimedAction.</param>
     public void SetTimerTarget(ITimedAction timedObject) {
         _timedObject = timedObject;
     }

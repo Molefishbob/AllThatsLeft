@@ -12,6 +12,7 @@ public abstract class ScaledTimer : Timer, IPauseable {
         if(IsRunning && !_paused) {
             _timer += Time.deltaTime;
             if(_timer >= Duration) {
+                _timer = Duration;
                 CompletedTimer();
                 _timedObject.TimedAction();
             }
