@@ -17,6 +17,12 @@ public abstract class ObjectPool<T> : Singleton<ObjectPool<T>> where T : MonoBeh
             obj.gameObject.SetActive(false);
         }
     }
+    /// <summary>
+    /// Gets an object from the pool.
+    /// </summary>
+    /// <returns>
+    /// Returns a pooled object or null.
+    /// </returns>
     public T GetObject() {
         T result = null;
         foreach(T item in _pool) {
@@ -29,7 +35,6 @@ public abstract class ObjectPool<T> : Singleton<ObjectPool<T>> where T : MonoBeh
             result = Spawn();
         }
         if(result != null) {
-            ResetObject(result);
             result.gameObject.SetActive(true);
         }
         return result;
@@ -39,5 +44,4 @@ public abstract class ObjectPool<T> : Singleton<ObjectPool<T>> where T : MonoBeh
         _pool.Add(obj);
         return obj;
     }
-    protected abstract void ResetObject(T obj);
 }

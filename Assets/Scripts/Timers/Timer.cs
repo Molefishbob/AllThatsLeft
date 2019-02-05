@@ -28,6 +28,10 @@ public abstract class Timer : MonoBehaviour {
     public void SetTimerTarget(ITimedAction timedObject) {
         _timedObject = timedObject;
     }
+    /// <summary>
+    /// Starts the timer from zero.
+    /// </summary>
+    /// <param name="duration">Timer duration in seconds.</param>
     public void StartTimer(float duration) {
         if(_timedObject == null) {
             Debug.LogError("Set timer target first, please.");
@@ -40,9 +44,17 @@ public abstract class Timer : MonoBehaviour {
         _timer = 0.0f;
         IsRunning = true;
     }
+    /// <summary>
+    /// Resume a stopped timer.
+    /// </summary>
     public void ResumeTimer() {
-        IsRunning = true;
+        if(_timer < Duration) {
+            IsRunning = true;
+        }
     }
+    /// <summary>
+    /// Stop the timer.
+    /// </summary>
     public void StopTimer() {
         IsRunning = false;
     }
