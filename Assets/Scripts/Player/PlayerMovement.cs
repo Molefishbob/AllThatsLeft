@@ -13,10 +13,11 @@ public class PlayerMovement : MonoBehaviour
     public float _horizontalSensitivity = 2.0f;
     private static float _yaw = 0.0f;
     private CameraScript _camera;
-    private Transform _trans;
     private bool _canJump;
     public float _jumpForce;
     private Vector3 _jump = Vector3.zero;
+    private Vector3 _platformPosition;
+    private bool isOnPlatform;
 
     public static float Yaw
     {
@@ -25,26 +26,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        _trans = GetComponent<Transform>();
         _controller = GetComponent<CharacterController>();
         _camera = GetComponentInChildren<CameraScript>();
     }
 
     void FixedUpdate()
     {
-
-        int layerMask = 1 << 10;
-        RaycastHit hit;
-
-        if (Physics.SphereCast(transform.position, 0.5f, new Vector3(0, -0.5f, 0), out hit, 2.5f, layerMask))
-        {
-            // Makes player the child of the platform he is standing on
-            gameObject.transform.parent = hit.transform;
-        } else
-        {
-            gameObject.transform.parent = null;
-        }
-
         _yaw += _horizontalSensitivity * Input.GetAxis("Mouse X");
         transform.eulerAngles = new Vector3(0, _yaw, 0);
 
@@ -62,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (_canJump)
         {
-            if (Input.GetButtonDown("Jump"))
+            if (Input.GetButton("Jump"))
             {
                 _jump.y = _jumpForce;
                 _canJump = false;
@@ -70,13 +57,36 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _jump += (Physics.gravity * Time.deltaTime);
-
-        Vector3 movement = (forward + sideWays + _jump) * Time.deltaTime;
         
-        movement = transform.TransformVector(movement);
-     
+        Vector3 movement = (forward + sideWays + _jump) * Time.deltaTime;
+
+        movement = transform.TransformDirection(movement);
+        
         _controller.Move(movement);
 
+        int layerMask = 1 << 10;
+        RaycastHit hit;
+        Vector3 platformMoveDist = Vector3.zero;
+     
+        if (Physics.SphereCast(transform.position, 0.5f, new Vector3(0, -0.5f, 0), out hit, 2.5f, layerMask))
+        {
+            Vector3 newPlatformPosition = hit.transform.position;
+            platformMoveDist = newPlatformPosition - _platformPosition;
+            if (_platformPosition != newPlatformPosition)
+            {
+                _platformPosition = newPlatformPosition;
+            }
+            if (isOnPlatform)
+            {
+                transform.position += platformMoveDist;
+            }
+            isOnPlatform = true;
+        }
+        else
+        {
+            platformMoveDist = Vector3.zero;
+            isOnPlatform = false;
+        } 
     }
 
     public void OnControllerColliderHit(ControllerColliderHit col)
