@@ -8,23 +8,23 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     public float _fLifetime = 5;
     [SerializeField]
     private bool _bMoving;
-    private bool _bPaused;
+    protected bool _bPaused;
     private CharacterController _charCon;
-    private OneShotTimer _timer;
+    private OneShotTimer _lifeTimeTimer;
 
-    void Awake()
+    protected virtual void Awake()
     {
         _charCon = GetComponent<CharacterController>();
-        _timer = GetComponent<OneShotTimer>();
+        _lifeTimeTimer = GetComponent<OneShotTimer>();
     }
 
-    void Start()
+    protected virtual void Start()
     {
         AddToPauseCollection();
         StartMovement();
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (!_bPaused)
         {
@@ -33,15 +33,17 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
                 Vector3 movement = transform.forward * _fSpeed * Time.deltaTime;
                 movement += Physics.gravity * Time.deltaTime;
                 _charCon.Move(movement);
+                if((_charCon.collisionFlags & CollisionFlags.CollidedSides) != 0){
+                    _bMoving = false;
+                }
             }
         }
     }
 
-    void StartMovement()
+    protected virtual void StartMovement()
     {
         _bMoving = true;
-        _timer.StartTimer(_fLifetime, this);
-        // Animations and stuff here
+        _lifeTimeTimer.StartTimer(_fLifetime, this);
     }
 
     void ResetBot()
