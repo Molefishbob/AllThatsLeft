@@ -7,6 +7,7 @@ public class UnscaledOneShotTimer : Timer {
         if(IsRunning) {
             _timer += Time.unscaledDeltaTime;
             if(_timer >= Duration) {
+                _timer = Duration;
                 CompletedTimer();
                 _timedObject.TimedAction();
             }
