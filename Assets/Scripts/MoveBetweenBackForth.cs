@@ -5,34 +5,45 @@ using UnityEngine;
 public class MoveBetweenBackForth : GenericMover {
 
 	private bool _backwards;
-    private float time;
 	
 	// FixedUpdate is called once per physics update
 	void FixedUpdate ()
     {
+        float currLength = _timer.NormalizedTimeElapsed * _length;
 
-        time += Time.deltaTime;
+        if (!_backwards)
+        {
+            for (int i = 0; i < _currentObjectNum; ++i)
+            {
+                currLength -= (_transform[i].position - _transform[i + 1].position).magnitude;
+            }
+        }
+        else
+        {
+            for (int i = _transform.Count - 1; i > _currentObjectNum; --i)
+            {
+                currLength -= (_transform[i].position - _transform[i - 1].position).magnitude;
+            }
+        }
 
+        _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude;
 
-        _fracTime = (Time.time - _eventTime) / (_duration *
-                (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude / _length);
-        
         if (!_backwards)
         {
 
-            transform.position = 
+            transform.position =
                                 Vector3.Lerp(_transform[_currentObjectNum].position
                                             , _transform[_nextObjectNum].position, _fracTime);
 
 
-		}
+        }
         else
         {
 
-            transform.position = 
+            transform.position =
                                 Vector3.Lerp(_transform[_currentObjectNum].position
-                                            ,_transform[_nextObjectNum].position,_fracTime);
-            
+                                            , _transform[_nextObjectNum].position, _fracTime);
+
 
         }
 
@@ -50,33 +61,28 @@ public class MoveBetweenBackForth : GenericMover {
     private void ChangeTarget()
     {
 
-        if (_currentObjectNum >= _amountOfTransforms - 1 && !_backwards)
-        {
-            _backwards = true;
-            _trackRecord++;
-            _eventTime = _ogStartTime + _trackRecord * _duration;
-        }
-        else if (_currentObjectNum <= 1 && _backwards)
-        {
-            _backwards = false;
-            _trackRecord++;
-            _eventTime = _ogStartTime + _trackRecord * _duration;
-        }
-        else
-        {
-            _eventTime = Time.time;
-        }
-
         if (!_backwards)
         {
-            _currentObjectNum = _nextObjectNum;
-            _nextObjectNum += 1;
-            
+            if (_nextObjectNum < _transform.Count - 1)
+            {
+                _currentObjectNum = _nextObjectNum;
+                _nextObjectNum += 1;
+            }
+
         }
         else
         {
-            _currentObjectNum = _nextObjectNum;
-            _nextObjectNum -= 1;
+            if (_nextObjectNum > 0 )
+            {
+                _currentObjectNum = _nextObjectNum;
+                _nextObjectNum -= 1;
+            }
+            
         }
+    }
+
+    public override void TimedAction()
+    {
+        _backwards = !_backwards;
     }
 }
