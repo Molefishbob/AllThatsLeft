@@ -51,25 +51,14 @@ public class PlayerMovement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
 
-        Vector3 forward = vertical * _speed * Vector3.forward;
-
         if (vertical < 0)
         {
-            forward *= _backwardMultiplier;
             vertical *= _backwardMultiplier;
         }
 
-        //_trans.position += transform.forward * _speed * vertical * Time.deltaTime;
+        Vector3 forward = vertical * _speed * Vector3.forward;
 
         Vector3 sideWays = _strafeSpeed * horizontal * Vector3.right;
-        //_trans.position += transform.right * _strafeSpeed * horizontal * Time.deltaTime;
-
-        Vector3 movement = (forward + sideWays) * Time.deltaTime;
-        
-        movement = transform.TransformVector(movement);
-      
-
-        _controller.Move(movement);
 
         if (_canJump)
         {
@@ -82,7 +71,12 @@ public class PlayerMovement : MonoBehaviour
 
         _jump += (Physics.gravity * Time.deltaTime);
 
-        _controller.Move(_jump * Time.deltaTime);
+        Vector3 movement = (forward + sideWays + _jump) * Time.deltaTime;
+        
+        movement = transform.TransformVector(movement);
+     
+        _controller.Move(movement);
+
     }
 
     public void OnControllerColliderHit(ControllerColliderHit col)
