@@ -7,6 +7,8 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction
 
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
+    [SerializeField,Tooltip("The amount of time the platform is still at the ends of the route")]
+    protected float _stopTime;
     protected float _eventTime;
     protected List<Transform> _transform;
     protected float _fracTime;
@@ -32,7 +34,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction
     public virtual void Init()
     {
         _timer.SetTimerTarget(this);
-        _timer.StartTimer(_duration);
+        _timer.StartTimer(_duration + _stopTime);
 
         _transform = new List<Transform>(transform.parent.childCount);
 

@@ -3,55 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveBetweenBackForth : GenericMover {
-
-	private bool _backwards;
+    
+    private bool _backwards;
+    private bool _stop;
+    private float _stopCounter;
 	
 	// FixedUpdate is called once per physics update
 	void FixedUpdate ()
     {
-        float currLength = _timer.NormalizedTimeElapsed * _length;
-
-        if (!_backwards)
+        if (_timer.TimeElapsed > _stopTime)
         {
-            for (int i = 0; i < _currentObjectNum; ++i)
+            float currLength = (_timer.TimeElapsed - _stopTime) / (_timer.Duration - _stopTime) * _length;
+
+            if (!_backwards)
             {
-                currLength -= (_transform[i].position - _transform[i + 1].position).magnitude;
+                for (int i = 0; i < _currentObjectNum; ++i)
+                {
+                    currLength -= (_transform[i].position - _transform[i + 1].position).magnitude;
+                }
+                _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_currentObjectNum + 1].position).magnitude;
+            }
+            else
+            {
+                for (int i = _transform.Count - 1; i > _currentObjectNum; --i)
+                {
+                    currLength -= (_transform[i].position - _transform[i - 1].position).magnitude;
+                }
+                _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_currentObjectNum - 1].position).magnitude;
+            }
+
+
+            if (!_backwards)
+            {
+
+                transform.position =
+                                    Vector3.Lerp(_transform[_currentObjectNum].position
+                                                , _transform[_currentObjectNum + 1].position, _fracTime);
+
+
+            }
+            else
+            {
+
+                transform.position =
+                                    Vector3.Lerp(_transform[_currentObjectNum].position
+                                                , _transform[_currentObjectNum - 1].position, _fracTime);
+
+
+            }
+
+            if (_fracTime >= 1)
+            {
+                ChangeTarget();
             }
         }
-        else
-        {
-            for (int i = _transform.Count - 1; i > _currentObjectNum; --i)
-            {
-                currLength -= (_transform[i].position - _transform[i - 1].position).magnitude;
-            }
-        }
-
-        _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude;
-
-        if (!_backwards)
-        {
-
-            transform.position =
-                                Vector3.Lerp(_transform[_currentObjectNum].position
-                                            , _transform[_nextObjectNum].position, _fracTime);
-
-
-        }
-        else
-        {
-
-            transform.position =
-                                Vector3.Lerp(_transform[_currentObjectNum].position
-                                            , _transform[_nextObjectNum].position, _fracTime);
-
-
-        }
-
-        if (_fracTime >= 1)
-        {
-            ChangeTarget();
-        }
-
     }
 
 
@@ -63,19 +68,17 @@ public class MoveBetweenBackForth : GenericMover {
 
         if (!_backwards)
         {
-            if (_nextObjectNum < _transform.Count - 1)
+            if (_currentObjectNum < _transform.Count -1)
             {
-                _currentObjectNum = _nextObjectNum;
-                _nextObjectNum += 1;
+                _currentObjectNum++;
             }
 
         }
         else
         {
-            if (_nextObjectNum > 0 )
+            if (_currentObjectNum > 0 )
             {
-                _currentObjectNum = _nextObjectNum;
-                _nextObjectNum -= 1;
+                _currentObjectNum--;
             }
             
         }
@@ -83,6 +86,15 @@ public class MoveBetweenBackForth : GenericMover {
 
     public override void TimedAction()
     {
-        _backwards = !_backwards;
+        if (!_backwards)
+        {
+            _backwards = true;
+            _currentObjectNum = _transform.Count - 1;
+        }
+        else
+        {
+            _backwards = false;
+            _currentObjectNum = 0;
+        }
     }
 }
