@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UnscaledOneShotTimer : Timer {
-    protected override void Update() {
+    protected virtual void Update() {
         if(IsRunning) {
             _timer += Time.unscaledDeltaTime;
             if(_timer >= Duration) {

@@ -56,7 +56,6 @@ public abstract class Timer : MonoBehaviour {
     /// True when the timer is running.
     /// </summary>
     public bool IsRunning { get; protected set; }
-    protected abstract void Update();
     protected abstract void CompletedTimer();
     /// <summary>
     /// Sets the timer's target for TimedAction when the timer has completed.

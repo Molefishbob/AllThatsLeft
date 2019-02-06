@@ -8,7 +8,7 @@ public abstract class ScaledTimer : Timer, IPauseable {
         _paused = GameManager.Instance.Paused;
         AddToPauseCollection();
     }
-    protected override void Update() {
+    protected void FixedUpdate() {
         if(IsRunning && !_paused) {
             _timer += Time.deltaTime;
             if(_timer >= Duration) {
