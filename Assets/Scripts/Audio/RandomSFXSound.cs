@@ -2,36 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomSFXSound : RandomUISound, IPauseable {
-    protected bool _paused;
-    protected override void Start() {
-        base.Start();
-        _paused = GameManager.Instance.Paused;
-        if(_paused) _audioSource.Pause();
-        AddToPauseCollection();
+public class RandomSFXSound : SingleSFXSound
+{
+    [SerializeField]
+    private string _resourceFolder = "";
+    private AudioClip[] _sounds;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _sounds = Resources.LoadAll<AudioClip>(_resourceFolder);
     }
-    protected override void OnDestroy() {
-        base.OnDestroy();
-        RemoveFromPauseCollection();
+
+    public override void PlaySound()
+    {
+        PlaySound(true, Random.Range(0, _sounds.Length));
     }
-    public override void PlaySound(bool usePitch, int index) {
-        if(!_paused) base.PlaySound(usePitch, index);
+
+    public override void PlaySound(bool usePitch)
+    {
+        PlaySound(usePitch, Random.Range(0, _sounds.Length));
     }
-    protected override void SetSoundType() {
-        _soundType = SoundType.SoundEffect;
+
+    public virtual void PlaySound(int index)
+    {
+        PlaySound(true, index);
     }
-    public virtual void Pause() {
-        _paused = true;
-        _audioSource.Pause();
-    }
-    public virtual void UnPause() {
-        _paused = false;
-        _audioSource.UnPause();
-    }
-    public void AddToPauseCollection() {
-        GameManager.Instance.Pauseables.Add(this);
-    }
-    public void RemoveFromPauseCollection() {
-        if(GameManager.Instance != null) GameManager.Instance.Pauseables.Remove(this);
+
+    public virtual void PlaySound(bool usePitch, int index)
+    {
+        if (!_paused)
+        {
+            if (usePitch)
+            {
+                RandomizePitch();
+            }
+            index = Mathf.Clamp(index, 0, _sounds.Length);
+            _audioSource.PlayOneShot(_sounds[index]);
+        }
     }
 }

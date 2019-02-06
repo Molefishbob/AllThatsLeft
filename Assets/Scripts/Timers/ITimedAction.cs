@@ -1,3 +1,4 @@
-public interface ITimedAction {
+public interface ITimedAction
+{
     void TimedAction();
 }
