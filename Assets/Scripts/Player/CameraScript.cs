@@ -6,8 +6,12 @@ public class CameraScript : MonoBehaviour
 {
 
     public float _verticalSensitivity;
-
     private float _pitch = 0.0f;
+
+    void Start()
+    {
+         Cursor.lockState = CursorLockMode.Locked;
+    }
 
     void Update()
     {
@@ -23,4 +27,6 @@ public class CameraScript : MonoBehaviour
 
         transform.eulerAngles = new Vector3(_pitch, PlayerMovement.Yaw, 0.0f);
     }
+
+
 }
