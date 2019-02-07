@@ -33,8 +33,8 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         RaycastHit hit;
-        int platformLayerMask = 1 << 10;
-        int groundLayerMask = 1 << 9;
+        int platformLayerMask = 1 << 13;
+        int groundLayerMask = 1 << 12;
         int jumpLayerMask = groundLayerMask | platformLayerMask;
         if (Physics.SphereCast(transform.position, _controller.radius * 0.9f, new Vector3(0, -1, 0), out hit, 0.9f, jumpLayerMask))
         {
