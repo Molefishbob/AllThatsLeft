@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Door : MonoBehaviour, IButtonInteraction
 {
+    public string _openTrigger = "Open";
+    public string _closeTrigger = "Close";
     private Animator _anim;
 
     // Awake is called before the first frame update
@@ -11,14 +13,14 @@ public class Door : MonoBehaviour, IButtonInteraction
     {
         _anim = GetComponent<Animator>();
     }
-    
+
     public void ButtonDown()
     {
-        _anim.SetTrigger("Open");
+        _anim.SetTrigger(_openTrigger);
     }
 
     public void ButtonUp()
     {
-        _anim.SetTrigger("Close");
+        _anim.SetTrigger(_closeTrigger);
     }
 }
