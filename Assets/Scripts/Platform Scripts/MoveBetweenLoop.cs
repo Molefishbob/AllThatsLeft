@@ -2,20 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBetweenLoop: GenericMover, IButtonInteraction
+public class MoveBetweenLoop: GenericMover
 {
+    
 
-    /// <summary>
-    /// FixedUpdate is called once per physics update
-    /// </summary>
+
+    // FixedUpdate is called once per physics update
     void FixedUpdate()
     {
         if (_activated)
         {
-            _fracTime = (Time.time - _eventTime) / (_duration *
-                    (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude / _length);
+            float currLength = _timer.NormalizedTimeElapsed * _length;
 
-            transform.position =
+            for (int i = 0; i < _currentObjectNum; ++i)
+            {
+                currLength -= (_transform[i].position - _transform[i + 1].position).magnitude;
+            }
+            _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude;
+
+            transform.position = 
                                 Vector3.Lerp(_transform[_currentObjectNum].position
                                             , _transform[_nextObjectNum].position, _fracTime);
 
@@ -31,21 +36,12 @@ public class MoveBetweenLoop: GenericMover, IButtonInteraction
     /// </summary>
     private void ChangeTarget()
     {
-        
+
         _currentObjectNum = _nextObjectNum;
         _nextObjectNum = _currentObjectNum + 1;
-
-        if (_nextObjectNum > _amountOfTransforms)
+        if (_nextObjectNum >= _transform.Count)
         {
             _nextObjectNum = 0;
-            _eventTime = Time.time;
-        } else if (_currentObjectNum == 0)
-        {
-            _trackRecord++;
-            _eventTime = _ogStartTime + _trackRecord * _duration;
-        } else
-        {
-            _eventTime = Time.time;
         }
     }
 
@@ -54,14 +50,21 @@ public class MoveBetweenLoop: GenericMover, IButtonInteraction
         base.Init();
         _length += (_transform[0].position - _transform[_amountOfTransforms].position).magnitude;
     }
-
-    public void ButtonDown()
+    public override void TimedAction()
     {
-        _activated = true;
+        _nextObjectNum = 1;
+        _currentObjectNum = 0;
     }
 
-    public void ButtonUp()
+    public override void ButtonDown()
+    {
+        _activated = true;
+        _timer.ResumeTimer();
+    }
+
+    public override void ButtonUp()
     {
         _activated = false;
+        _timer.StopTimer();
     }
 }
