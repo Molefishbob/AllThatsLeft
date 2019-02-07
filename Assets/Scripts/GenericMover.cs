@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericMover : MonoBehaviour
+public abstract class GenericMover : MonoBehaviour, ITimedAction
 {
 
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
+    [SerializeField,Tooltip("The amount of time the platform is still at the ends of the route")]
+    protected float _stopTime;
     protected float _eventTime;
     protected List<Transform> _transform;
     protected float _fracTime;
@@ -16,7 +18,13 @@ public abstract class GenericMover : MonoBehaviour
     protected float _length;
     protected float _ogStartTime;
     protected int _trackRecord = 0;
-    
+    protected RepeatingTimer _timer;
+
+    private void Awake()
+    {
+        _timer = GetComponent<RepeatingTimer>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,8 +33,8 @@ public abstract class GenericMover : MonoBehaviour
 
     public virtual void Init()
     {
-        _eventTime = Time.time;
-        _ogStartTime = _eventTime;
+        _timer.SetTimerTarget(this);
+        _timer.StartTimer(_duration + _stopTime);
 
         _transform = new List<Transform>(transform.parent.childCount);
 
@@ -42,5 +50,10 @@ public abstract class GenericMover : MonoBehaviour
         {
             _length += (_transform[a].position - _transform[a + 1].position).magnitude;
         }
+    }
+
+    public virtual void TimedAction()
+    {
+        
     }
 }
