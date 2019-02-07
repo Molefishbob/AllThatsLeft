@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class BombBot : GenericBot
 {
+    [Tooltip("The RADIUS of explosion")]
     public float _fExplosionRadius;
-    private RepeatingTimer _SurroundCheckTimer;
     private bool _bIsChecking;
     private float _fCheckTime;
     private float _fCheckTimer = 0.25f;
+    [Tooltip("Put in enemy and other interactables here if needed")]
+    public LayerMask _lUnignoredLayers;
     protected override void Awake(){
         base.Awake();
-        _SurroundCheckTimer = GetComponent<RepeatingTimer>();
     }
 
     protected override void Start()
@@ -20,11 +21,11 @@ public class BombBot : GenericBot
     }
 
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
         if(!_bPaused){
-            if(_fCheckTime > _fCheckTimer)
+            if(_fCheckTime > _fCheckTimer && _bIsChecking)
                 CheckSurroundings();
             _fCheckTime += Time.deltaTime;
         }
@@ -32,14 +33,14 @@ public class BombBot : GenericBot
 
     protected override void StartMovement(){
         base.StartMovement();
-        
+        _bIsChecking = true;
     }
 
     void CheckSurroundings(){
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _fExplosionRadius); // Add enemy layer mask or compare tags
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _fExplosionRadius, _lUnignoredLayers); // Add enemy layer mask or compare tags
         foreach (Collider o in hitColliders){
-            if(o.name != "Plane")
-                Debug.DrawLine(transform.position, o.transform.position, Color.red, 5f);
+            Debug.DrawLine(transform.position, o.transform.position, Color.red, 5f);
+            o.gameObject.SetActive(false);
         }
         _fCheckTime = 0;
     }

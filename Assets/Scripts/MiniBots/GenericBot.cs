@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
 {
+    [Tooltip("Speed of the bot")]
     public float _fSpeed = 5;
+    [Tooltip("Lifetime in seconds")]
     public float _fLifetime = 5;
     [SerializeField]
     private bool _bMoving;
@@ -24,7 +26,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
         StartMovement();
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
         if (!_bPaused)
         {
@@ -46,10 +48,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
         _lifeTimeTimer.StartTimer(_fLifetime, this);
     }
 
-    void ResetBot()
-    {
-
-    }
+    protected virtual void ResetBot(){/*Waiting for pooling*/}
 
     public void Pause()
     {
