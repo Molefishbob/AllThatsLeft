@@ -32,6 +32,15 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        RaycastHit hit;
+        int platformLayerMask = 1 << 10;
+        int groundLayerMask = 1 << 9;
+        int jumpLayerMask = groundLayerMask | platformLayerMask;
+        if (Physics.SphereCast(transform.position, _controller.radius * 0.9f, new Vector3(0, -1, 0), out hit, 0.9f, jumpLayerMask))
+        {
+            _canJump = true;
+        }
+
         _yaw += _horizontalSensitivity * Input.GetAxis("Mouse X");
         transform.eulerAngles = new Vector3(0, _yaw, 0);
 
@@ -64,11 +73,9 @@ public class PlayerMovement : MonoBehaviour
         
         _controller.Move(movement);
 
-        int layerMask = 1 << 10;
-        RaycastHit hit;
         Vector3 platformMoveDist = Vector3.zero;
      
-        if (Physics.SphereCast(transform.position, 0.5f, new Vector3(0, -0.5f, 0), out hit, 2.5f, layerMask))
+        if (Physics.SphereCast(transform.position, _controller.radius * 0.9f, new Vector3(0, -1, 0), out hit, 3, platformLayerMask))
         {
             Vector3 newPlatformPosition = hit.transform.position;
             platformMoveDist = newPlatformPosition - _platformPosition;
@@ -87,13 +94,5 @@ public class PlayerMovement : MonoBehaviour
             platformMoveDist = Vector3.zero;
             isOnPlatform = false;
         } 
-    }
-
-    public void OnControllerColliderHit(ControllerColliderHit col)
-    {
-        if (col.gameObject.layer == 9 || col.gameObject.layer == 10)
-        {
-            _canJump = true;
-        }
     }
 }
