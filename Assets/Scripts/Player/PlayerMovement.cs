@@ -10,7 +10,8 @@ public class PlayerMovement : MonoBehaviour
     public float _backwardMultiplier;
     public float _strafeSpeed;
     private CharacterController _controller;
-    public float _horizontalSensitivity = 2.0f;
+    public float _mouseSensitivity = 2.0f;
+    public static float _cameraSensitivity;
     private static float _yaw = 0.0f;
     private CameraScript _camera;
     private bool _canJump;
@@ -24,10 +25,16 @@ public class PlayerMovement : MonoBehaviour
         get { return _yaw; }
     }
 
+    public static float Sensitivity
+    {
+        get { return _cameraSensitivity; }
+    }
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _camera = GetComponentInChildren<CameraScript>();
+        _cameraSensitivity = _mouseSensitivity;
     }
 
     void FixedUpdate()
@@ -41,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
             _canJump = true;
         }
 
-        _yaw += _horizontalSensitivity * Input.GetAxis("Mouse X");
+        _yaw += _mouseSensitivity * Input.GetAxis("Mouse X");
         transform.eulerAngles = new Vector3(0, _yaw, 0);
 
         float vertical = Input.GetAxis("Vertical");
