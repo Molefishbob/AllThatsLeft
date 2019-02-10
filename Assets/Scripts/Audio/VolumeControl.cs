@@ -33,19 +33,19 @@ public abstract class VolumeControl : MonoBehaviour
         switch (_soundType)
         {
             case SoundType.SoundEffect:
-                SoundManager.Instance.SoundsSFX.Add(this);
-                _audioSource.volume = SoundManager.Instance.SFXVolume * SoundManager.Instance.MasterVolume * _fullVolume;
-                _audioSource.mute = SoundManager.Instance.SFXMute || SoundManager.Instance.MasterMute;
+                AudioManager.Instance.SoundsSFX.Add(this);
+                _audioSource.volume = AudioManager.Instance.SFXVolume * AudioManager.Instance.MasterVolume * _fullVolume;
+                _audioSource.mute = AudioManager.Instance.SFXMute || AudioManager.Instance.MasterMute;
                 break;
             case SoundType.Music:
-                SoundManager.Instance.SoundsMusic.Add(this);
-                _audioSource.volume = SoundManager.Instance.MusicVolume * SoundManager.Instance.MasterVolume * _fullVolume;
-                _audioSource.mute = SoundManager.Instance.MusicMute || SoundManager.Instance.MasterMute;
+                AudioManager.Instance.SoundsMusic.Add(this);
+                _audioSource.volume = AudioManager.Instance.MusicVolume * AudioManager.Instance.MasterVolume * _fullVolume;
+                _audioSource.mute = AudioManager.Instance.MusicMute || AudioManager.Instance.MasterMute;
                 break;
             case SoundType.Interface:
-                SoundManager.Instance.SoundsUI.Add(this);
-                _audioSource.volume = SoundManager.Instance.UIVolume * SoundManager.Instance.MasterVolume * _fullVolume;
-                _audioSource.mute = SoundManager.Instance.UIMute || SoundManager.Instance.MasterMute;
+                AudioManager.Instance.SoundsUI.Add(this);
+                _audioSource.volume = AudioManager.Instance.UIVolume * AudioManager.Instance.MasterVolume * _fullVolume;
+                _audioSource.mute = AudioManager.Instance.UIMute || AudioManager.Instance.MasterMute;
                 break;
             default:
                 Debug.LogError("INVALID SOUND TYPE!!!!!");
@@ -55,18 +55,18 @@ public abstract class VolumeControl : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if (SoundManager.Instance != null)
+        if (AudioManager.Instance != null)
         {
             switch (_soundType)
             {
                 case SoundType.SoundEffect:
-                    SoundManager.Instance.SoundsSFX.Remove(this);
+                    AudioManager.Instance.SoundsSFX.Remove(this);
                     break;
                 case SoundType.Music:
-                    SoundManager.Instance.SoundsMusic.Remove(this);
+                    AudioManager.Instance.SoundsMusic.Remove(this);
                     break;
                 case SoundType.Interface:
-                    SoundManager.Instance.SoundsUI.Remove(this);
+                    AudioManager.Instance.SoundsUI.Remove(this);
                     break;
                 default:
                     Debug.LogError("INVALID SOUND TYPE!!!!!");
@@ -76,7 +76,7 @@ public abstract class VolumeControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets audio source volume. Used only through Sound Manager!
+    /// Sets audio source volume. Used only through Audio Manager!
     /// </summary>
     /// <param name="volume">The volume</param>
     public void SetVolume(float volume)
@@ -85,7 +85,7 @@ public abstract class VolumeControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Mutes the audio source. Used only through Sound Manager!
+    /// Mutes the audio source. Used only through Audio Manager!
     /// </summary>
     /// <param name="muted">Mute or not</param>
     public void Mute(bool muted)
