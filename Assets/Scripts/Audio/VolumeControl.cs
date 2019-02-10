@@ -25,6 +25,7 @@ public abstract class VolumeControl : MonoBehaviour
     protected virtual void Awake()
     {
         SetSoundType();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     protected virtual void Start()

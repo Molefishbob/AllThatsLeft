@@ -8,12 +8,6 @@ public class SingleUISound : VolumeControl
     protected float _pitchVariance = 0.25f;
     protected float _basePitch;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        _audioSource = GetComponent<AudioSource>();
-    }
-
     protected override void Start()
     {
         base.Start();
