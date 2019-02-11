@@ -5,18 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject Canvas;
-    private GameObject mainMenuPanel;
-    private GameObject optionsPanel;
-    private GameObject quitPanel;
+    public GameObject _canvas;
+    private GameObject _mainMenuPanel;
+    private GameObject _optionsPanel;
+    private GameObject _quitPanel;
 
     // Start is called before the first frame update
     void Start()
     {
-        mainMenuPanel = Canvas.transform.GetChild(1).gameObject;
-        optionsPanel = Canvas.transform.GetChild(2).gameObject;
-        quitPanel = Canvas.transform.GetChild(3).gameObject;
+        _mainMenuPanel = _canvas
+.transform.GetChild(1).gameObject;
+        _optionsPanel = _canvas
+.transform.GetChild(2).gameObject;
+        _quitPanel = _canvas
+.transform.GetChild(3).gameObject;
     }
 
     void StartGame(){
@@ -25,20 +27,20 @@ public class MenuController : MonoBehaviour
 
     public void EnableMainMenuPanel()
     {
-        mainMenuPanel.SetActive(true);
-        optionsPanel.SetActive(false);
-        quitPanel.SetActive(false);
+        _mainMenuPanel.SetActive(true);
+        _optionsPanel.SetActive(false);
+        _quitPanel.SetActive(false);
     }
 
     public void EnableOptionsPanel()
     {
-        mainMenuPanel.SetActive(false);
-        optionsPanel.SetActive(true);
+        _mainMenuPanel.SetActive(false);
+        _optionsPanel.SetActive(true);
     }
 
     public void EnableConfirmQuit(){
-        mainMenuPanel.SetActive(false);
-        quitPanel.SetActive(true);
+        _mainMenuPanel.SetActive(false);
+        _quitPanel.SetActive(true);
     }
 
     public void Quit()
