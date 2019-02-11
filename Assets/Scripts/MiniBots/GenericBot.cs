@@ -6,6 +6,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
 {
     [Tooltip("Speed of the bot")]
     public float _fSpeed = 5;
+    public float _fTurnSpeed = 2;
     [Tooltip("Lifetime in seconds")]
     public float _fLifetime = 5;
     [SerializeField]
@@ -90,5 +91,14 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
         //Used for dying
         ResetBot();
         //Play animations explode
+    }
+
+    protected void TurnTowards(GameObject target){
+        Vector3 v3TurnDirection = target.transform.position - transform.position;
+        v3TurnDirection = v3TurnDirection.normalized;
+        v3TurnDirection.y = 0;
+        Quaternion qTargetRotation = Quaternion.LookRotation(v3TurnDirection);
+        Quaternion qLimitedRotation = Quaternion.Lerp(transform.rotation, qTargetRotation, _fTurnSpeed * Time.deltaTime);
+        transform.rotation = qLimitedRotation;
     }
 }

@@ -6,7 +6,6 @@ public class BombBot : GenericBot
 {
     [Tooltip("Units used is the unity Grid 1 square = 1 unit in radius")]
     public float _fExplosionRadius;
-    public float _fTurnSpeed = 2;
     private bool _bIsChecking;
     private bool _bIsExploding;
     private float _fCheckTime;
@@ -38,12 +37,7 @@ public class BombBot : GenericBot
                 Explode();
 
             if(_goClosestObject != null){
-                Vector3 v3TurnDirection = _goClosestObject.transform.position - transform.position;
-                v3TurnDirection = v3TurnDirection.normalized;
-                v3TurnDirection.y = 0;
-                Quaternion qTargetRotation = Quaternion.LookRotation(v3TurnDirection);
-                Quaternion qLimitedRotation = Quaternion.Lerp(transform.rotation, qTargetRotation, _fTurnSpeed * Time.deltaTime);
-                transform.rotation = qLimitedRotation;
+                TurnTowards(_goClosestObject);
             }
             
             _fCheckTime += Time.deltaTime;
