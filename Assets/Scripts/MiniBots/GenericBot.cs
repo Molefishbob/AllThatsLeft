@@ -10,6 +10,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     public float _fLifetime = 5;
     [SerializeField]
     private bool _bMoving;
+    public bool _bDebug;
     protected bool _bPaused;
     protected CharacterController _charCon;
     private OneShotTimer _lifeTimeTimer;
@@ -23,7 +24,8 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     protected virtual void Start()
     {
         AddToPauseCollection();
-        StartMovement();
+        if(_bDebug)
+            StartMovement();
     }
 
     protected virtual void FixedUpdate()
@@ -52,6 +54,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     protected virtual void ResetBot()
     {
         _bMoving = false;
+        _lifeTimeTimer.StopTimer();
         gameObject.SetActive(false);
         // TODO: Return to pool
     }
