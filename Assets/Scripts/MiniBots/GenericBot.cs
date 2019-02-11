@@ -11,7 +11,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     [SerializeField]
     private bool _bMoving;
     protected bool _bPaused;
-    private CharacterController _charCon;
+    protected CharacterController _charCon;
     private OneShotTimer _lifeTimeTimer;
 
     protected virtual void Awake()
@@ -45,10 +45,16 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     protected virtual void StartMovement()
     {
         _bMoving = true;
-        _lifeTimeTimer.StartTimer(_fLifetime, this);
+        _lifeTimeTimer.SetTimerTarget(this);
+        _lifeTimeTimer.StartTimer(_fLifetime);
     }
 
-    protected virtual void ResetBot(){/*Waiting for pooling*/}
+    protected virtual void ResetBot()
+    {
+        _bMoving = false;
+        gameObject.SetActive(false);
+        // TODO: Return to pool
+    }
 
     public void Pause()
     {
@@ -62,13 +68,13 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
 
     public void AddToPauseCollection()
     {
-        GameManager.Instance.Pauseables.Add(this);
+        GameManager.Instance.AddPauseable(this);
     }
 
     public void RemoveFromPauseCollection()
     {
         if(GameManager.Instance != null)
-            GameManager.Instance.Pauseables.Remove(this);
+            GameManager.Instance.AddPauseable(this);
     }
 
     protected virtual void OnDestroy()
@@ -78,7 +84,8 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
 
     public void TimedAction()
     {
-        gameObject.SetActive(false);
+        //Used for dying
+        ResetBot();
         //Play animations explode
     }
 }
