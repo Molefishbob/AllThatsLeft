@@ -12,10 +12,9 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
     [HideInInspector]
     public Vector3 _currentMove = Vector3.zero;
     [HideInInspector]
-    public bool IsGrounded { get { return _controller.isGrounded; } }
+    public CharacterController _controller;
 
     private Vector3 _currentGravity = Vector3.zero;
-    private CharacterController _controller;
     private Transform _cameraTransform;
     private bool _paused;
 
@@ -90,11 +89,12 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
             // reset or apply gravity
             if (_controller.isGrounded)
             {
-                _currentGravity = Vector3.zero;
+                // character controller isn't grounded if it doesn't hit the ground every move method call
+                _currentGravity = Physics.gravity * Time.deltaTime * Time.deltaTime;
             }
             else
             {
-                // gravity is weird
+                // gravity is weird, have to multiply with deltatime twice
                 _currentGravity += Physics.gravity * Time.deltaTime * Time.deltaTime;
             }
 

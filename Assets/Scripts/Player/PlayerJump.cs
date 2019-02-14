@@ -7,8 +7,8 @@ public class PlayerJump : MonoBehaviour, IPauseable
     public float _jumpHeight;
 
     private Vector3 _jumpForce;
-    private ThirdPersonPlayerMovement _player;
     private bool _jumping;
+    private ThirdPersonPlayerMovement _player;
 
     private bool _paused;
 
@@ -46,7 +46,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
     {
         if (!_paused)
         {
-            if (_player.IsGrounded)
+            if (_player._controller.isGrounded)
             {
                 _jumping = Input.GetButton("Jump");
             }
