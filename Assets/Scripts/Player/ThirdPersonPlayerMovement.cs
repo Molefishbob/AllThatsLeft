@@ -80,8 +80,11 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
                 // rotate character towards input rotation
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, inputRotation, _turningSpeed * Time.deltaTime);
 
-                // add to current move
-                _currentMove += transform.forward * desiredSpeed * _speed * Time.deltaTime;
+                // move character only directly forward
+                //_currentMove += transform.forward * desiredSpeed * _speed * Time.deltaTime;
+
+                // move directly in input direction ignoring rotation
+                _currentMove += inputDirection * desiredSpeed * _speed * Time.deltaTime;
             }
 
             // reset or apply gravity
