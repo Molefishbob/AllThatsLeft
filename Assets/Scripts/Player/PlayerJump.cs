@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour, IPauseable
 {
-    public float _jumpForce;
+    public float _jumpHeight;
 
+    private Vector3 _jumpForce;
     private ThirdPersonPlayerMovement _player;
     private bool _jumping;
 
@@ -24,6 +25,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
     private void Awake()
     {
         _player = GetComponent<ThirdPersonPlayerMovement>();
+        _jumpForce = -Physics.gravity.normalized * Mathf.Sqrt(2f * _jumpHeight * Physics.gravity.magnitude);
     }
 
     private void Start()
@@ -51,8 +53,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
 
             if (_jumping)
             {
-                Debug.Log("JUMPING");
-                _player._currentMove += Vector3.up * _jumpForce * Time.deltaTime;
+                _player._currentMove += _jumpForce * Time.deltaTime;
             }
         }
     }

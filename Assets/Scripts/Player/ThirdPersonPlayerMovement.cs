@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
 {
+    [Tooltip("Meters per second")]
     public float _speed;
+    [Tooltip("Degrees per second")]
     public float _turningSpeed;
 
     [HideInInspector]
@@ -89,7 +91,8 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
             }
             else
             {
-                _currentGravity += Physics.gravity * Time.deltaTime;
+                // gravity is weird
+                _currentGravity += Physics.gravity * Time.deltaTime * Time.deltaTime;
             }
 
             // make character controller move with all combined moves
