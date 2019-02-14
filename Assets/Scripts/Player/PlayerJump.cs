@@ -53,7 +53,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
 
             if (_jumping)
             {
-                _player._currentMove += _jumpForce * Time.deltaTime;
+                _player._externalMove += _jumpForce * Time.deltaTime;
             }
         }
     }

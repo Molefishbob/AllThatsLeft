@@ -70,12 +70,21 @@ public class PlayerPlatformMovement : MonoBehaviour, IPauseable
             else
             {
                 _platform = null;
-                _currentPlatformMove -= _currentPlatformMove.normalized * _linearDrag * Time.deltaTime;
+
+                Vector3 drag = -_currentPlatformMove.normalized * _linearDrag * Time.deltaTime;
+                if (_currentPlatformMove.magnitude > drag.magnitude)
+                {
+                    _currentPlatformMove += drag;
+                }
+                else
+                {
+                    _currentPlatformMove = Vector3.zero;
+                }
             }
 
-            if (_currentPlatformMove != Vector3.zero)
+            if (_currentPlatformMove.magnitude > 0.0f)
             {
-                _player._currentMove += _currentPlatformMove;
+                _player._externalMove += _currentPlatformMove;
             }
         }
     }
