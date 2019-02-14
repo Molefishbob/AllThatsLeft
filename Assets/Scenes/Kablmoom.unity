@@ -467,7 +467,7 @@ GameObject:
   - component: {fileID: 844916844}
   - component: {fileID: 844916843}
   m_Layer: 9
-  m_Name: GameObject
+  m_Name: TempMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,14 +945,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1593829828}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 942a771e90517d348bb44c8233e29690, type: 3}
+  m_Script: {fileID: 11500000, guid: c92841cd2c4c06243b11e9e7f971b87e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fSpeed: 5
+  _fSpeed: 2
   _fTurnSpeed: 2
   _fLifetime: 5
   _bMoving: 0
   _bDebug: 0
+  _fDetectRadius: 3
+  _lHackableLayer:
+    serializedVersion: 2
+    m_Bits: 262144
 --- !u!4 &1593829832
 Transform:
   m_ObjectHideFlags: 0
@@ -1539,7 +1543,7 @@ PrefabInstance:
     - target: {fileID: 225399781754807982, guid: 305ba640e5722414cb61f5a2d661a3c6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.83
+      value: -8.42
       objectReference: {fileID: 0}
     - target: {fileID: 225399781754807982, guid: 305ba640e5722414cb61f5a2d661a3c6,
         type: 3}

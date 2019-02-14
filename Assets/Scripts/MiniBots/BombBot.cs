@@ -61,11 +61,6 @@ public class BombBot : GenericBot
             _bIsExploding = true;
             _bIsChecking = false;
         }
-        if(_goClosestObject != null){
-            if(_goClosestObject.layer == 15){
-                Debug.Log("Turning towards CLOSEST BOMBABLE object. Distance : " + shortestDistance);
-            }
-        }
         _fCheckTime = 0;
     }
 
@@ -75,15 +70,9 @@ public class BombBot : GenericBot
             Debug.DrawLine(transform.position, o.transform.position, Color.red, 5f);
             o.gameObject.SetActive(false); // Do something smarter here Kill enemies and push walls
         }
-        Debug.Log("Exploding " + hitColliders.Length + " objects");
         _bIsExploding = false;
         _goClosestObject = null;
         // Particles!
         ResetBot();
-    }
-
-    void OnEnable(){
-        if(_bDebug)
-            StartMovement();
     }
 }

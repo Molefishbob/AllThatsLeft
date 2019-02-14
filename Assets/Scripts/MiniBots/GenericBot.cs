@@ -9,12 +9,11 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     public float _fTurnSpeed = 2;
     [Tooltip("Lifetime in seconds")]
     public float _fLifetime = 5;
-    [SerializeField]
-    private bool _bMoving;
+    public bool _bMoving;
     public bool _bDebug;
     protected bool _bPaused;
     protected CharacterController _charCon;
-    private OneShotTimer _lifeTimeTimer;
+    protected OneShotTimer _lifeTimeTimer;
 
     protected virtual void Awake()
     {
@@ -100,5 +99,10 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
         Quaternion qTargetRotation = Quaternion.LookRotation(v3TurnDirection);
         Quaternion qLimitedRotation = Quaternion.Lerp(transform.rotation, qTargetRotation, _fTurnSpeed * Time.deltaTime);
         transform.rotation = qLimitedRotation;
+    }
+
+    void OnEnable(){
+        if(_bDebug)
+            StartMovement();
     }
 }
