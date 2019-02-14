@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        _timeScaleBeforePause = Time.timeScale;
+
     }
 
     /// <summary>
@@ -25,15 +25,22 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void PauseGame()
     {
-        GamePaused = true;
-        _timeScaleBeforePause = Time.timeScale;
-        Time.timeScale = 0;
-        foreach (IPauseable item in _pauseables)
+        if (!GamePaused)
         {
-            if (item != null)
+            GamePaused = true;
+            _timeScaleBeforePause = Time.timeScale;
+            Time.timeScale = 0;
+            foreach (IPauseable item in _pauseables)
             {
-                item.Pause();
+                if (item != null)
+                {
+                    item.Pause();
+                }
             }
+        }
+        else
+        {
+            Debug.LogWarning("Game is already paused.");
         }
     }
 
@@ -42,14 +49,21 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void UnPauseGame()
     {
-        GamePaused = false;
-        Time.timeScale = _timeScaleBeforePause;
-        foreach (IPauseable item in _pauseables)
+        if (GamePaused)
         {
-            if (item != null)
+            GamePaused = false;
+            Time.timeScale = _timeScaleBeforePause;
+            foreach (IPauseable item in _pauseables)
             {
-                item.UnPause();
+                if (item != null)
+                {
+                    item.UnPause();
+                }
             }
+        }
+        else
+        {
+            Debug.LogWarning("Game is already unpaused.");
         }
     }
 
