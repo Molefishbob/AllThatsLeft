@@ -10,7 +10,8 @@ public class PlayerMovement : MonoBehaviour
     public float _backwardMultiplier;
     public float _strafeSpeed;
     private CharacterController _controller;
-    public float _horizontalSensitivity = 2.0f;
+    private float _mouseSensitivity = 2.0f;
+    private static float _cameraSensitivity;
     private static float _yaw = 0.0f;
     private CameraScript _camera;
     private bool _canJump;
@@ -24,25 +25,33 @@ public class PlayerMovement : MonoBehaviour
         get { return _yaw; }
     }
 
+    public static float Sensitivity
+    {
+        get { return _cameraSensitivity; }
+    }
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _camera = GetComponentInChildren<CameraScript>();
+        _cameraSensitivity = _mouseSensitivity;
     }
 
     void FixedUpdate()
     {
         RaycastHit hit;
-        int platformLayerMask = 1 << 10;
-        int groundLayerMask = 1 << 9;
+        int platformLayerMask = 1 << 13;
+        int groundLayerMask = 1 << 12;
         int jumpLayerMask = groundLayerMask | platformLayerMask;
         if (Physics.SphereCast(transform.position, _controller.radius * 0.9f, new Vector3(0, -1, 0), out hit, 0.9f, jumpLayerMask))
         {
             _canJump = true;
         }
 
-        _yaw += _horizontalSensitivity * Input.GetAxis("Mouse X");
-        transform.eulerAngles = new Vector3(0, _yaw, 0);
+        _yaw += Input.GetAxis("Mouse X");
+        Quaternion rotation = Quaternion.Euler( 0, _yaw, 0);
+        transform.rotation = rotation;
+        //transform.eulerAngles = new Vector3(0, _yaw, 0);
 
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");

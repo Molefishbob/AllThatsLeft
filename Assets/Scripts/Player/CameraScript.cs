@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-
-    public float _verticalSensitivity;
     private float _pitch = 0.0f;
 
     void Start()
@@ -15,7 +13,7 @@ public class CameraScript : MonoBehaviour
 
     void Update()
     {
-        _pitch -= _verticalSensitivity * Input.GetAxis("Mouse Y");
+        _pitch -= PlayerMovement.Sensitivity * Input.GetAxis("Mouse Y");
        
         if(_pitch <= -90)
         {
