@@ -6,13 +6,15 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
 {
     public LayerMask _ignoredLayer;
     public Transform _lookAt;
-    public Transform _camTransform;
     public float _distance = 5.0f;
     private float _yaw = 0.0f;
     private float _pitch = 0.0f;
     public  float _horizontalSensitivity = 1.0f;
     public float _verticalSensitivity = 1.0f;
     private bool _paused;
+    public float _smooth = 8.0f;
+    private bool _cameraBlocked;
+    private float _tempDistance;
 
     public void Pause()
     {
@@ -27,7 +29,6 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        _camTransform = transform;
     }
 
     // Start is called before the first frame update
@@ -59,19 +60,45 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
         {
             _pitch = -70;
         }
- 
+        
+
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
 
+        _tempDistance = 0;
+
+        _tempDistance = CheckCollision(_tempDistance);
+
+        //float lerpedDist = Mathf.Lerp(_distance, _tempDistance, Time.deltaTime / 2);
+
+        Vector3 dir = new Vector3(0, 0, -_tempDistance);
+       
+        transform.position = _lookAt.position + rotation * dir;
+          
+        transform.LookAt(_lookAt.position);
+    }
+
+    private float CheckCollision(float tDistance)
+    {
+        tDistance = _distance;         
         RaycastHit hit;
-        float tempDistance = _distance;
+
         if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, ~_ignoredLayer))
         {
             Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
-            tempDistance = newDistance;
-        }
-        Vector3 dir = new Vector3(0, 0, -tempDistance);
-        _camTransform.position = _lookAt.position + rotation * dir;
-        _camTransform.LookAt(_lookAt.position);
+            tDistance = newDistance;
+            _cameraBlocked = true;
+        }  
+
+        return tDistance;
     }
+
+    /*IEnumerator reeeeeeeee()
+    {
+        for (int i = 0; i <= 100; i++)
+        {
+            yield return new WaitForSeconds(0.01f);
+            Mathf.Lerp(_distance, _tempDistance, i / 100);
+        }
+    }*/
 }
