@@ -12,7 +12,7 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
     private IButtonInteraction _tInt;
     private BoxCollider _coll;
     private bool _isButtonPressed;
-    private UnscaledOneShotTimer _timer;
+    private OneShotTimer _timer;
     private bool _cooldownDone = true;
     private bool _buttonOnHold;
 
@@ -21,7 +21,7 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
     /// </summary>
     void Awake()
     {
-        _timer = GetComponent<UnscaledOneShotTimer>();
+        _timer = GetComponent<OneShotTimer>();
         _timer.SetTimerTarget(this);
         _coll = GetComponent<BoxCollider>();
         if (_target.GetComponent<IButtonInteraction>() == null)
@@ -81,7 +81,7 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
     {
         if (other.gameObject.layer == PlayerLayer)
         {
-            if (_isButtonPressed && _cooldownDone)
+            if (_isButtonPressed )
             {
                 ButtonUp();
                 _isButtonPressed = false;
