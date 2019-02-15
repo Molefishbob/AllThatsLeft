@@ -8,17 +8,18 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
     public float _speed;
     [Tooltip("Degrees per second")]
     public float _turningSpeed;
-    [Tooltip("In seconds")]
+    [Tooltip("NOT in seconds")]
     public float _accelerationTime;
-    [Tooltip("In seconds")]
+    [Tooltip("NOT in seconds")]
     public float _decelerationTime;
+    public string _horizontalAxis = "Horizontal";
+    public string _verticalAxis = "Vertical";
 
     [HideInInspector]
     public Vector3 _externalMove = Vector3.zero;
     [HideInInspector]
     public CharacterController _controller;
 
-    private float _previousDesiredSpeed = 0.0f;
     private Vector3 _internalMove = Vector3.zero;
     private Vector3 _currentGravity = Vector3.zero;
     private Transform _cameraTransform;
@@ -59,17 +60,21 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
         if (!_paused)
         {
             // read input
-            float vertical = Input.GetAxis("Vertical");
-            float horizontal = Input.GetAxis("Horizontal");
+            float horizontal = Input.GetAxisRaw(_horizontalAxis);
+            float vertical = Input.GetAxisRaw(_verticalAxis);
 
-            // create combined vector of input
-            Vector3 inputDirection = new Vector3(horizontal, 0, vertical);
+            float maxSpeed = _speed * Time.deltaTime;
+            float accelerationMagnitude = maxSpeed / _accelerationTime;
+            float decelerationMagnitude = maxSpeed / _decelerationTime;
 
-            // get desired speed from vector magnitude
-            float desiredSpeed = Mathf.Clamp(inputDirection.magnitude, 0.0f, 1.0f);
-
-            if (desiredSpeed > 0.0f && desiredSpeed >= _previousDesiredSpeed)
+            if (horizontal != 0.0f || vertical != 0.0f)
             {
+                // create combined vector of input
+                Vector3 inputDirection = new Vector3(horizontal, 0, vertical);
+
+                // get desired speed from vector magnitude
+                float desiredSpeed = Mathf.Clamp(inputDirection.magnitude, 0.0f, 1.0f);
+
                 // convert to world space relative to camera
                 inputDirection = _cameraTransform.TransformDirection(inputDirection);
 
@@ -85,32 +90,38 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
                 // rotate character towards input rotation
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, inputRotation, _turningSpeed * Time.deltaTime);
 
-                // move character only directly forward
-                //_currentMove += transform.forward * _speed * Time.deltaTime / _accelerationTime;
+                // save previous move's magnitude
+                float previousMoveMagnitude = _internalMove.magnitude;
 
-                // move directly in input direction ignoring rotation
-                _internalMove += inputDirection * _speed * Time.deltaTime / _accelerationTime;
+                // add to current movement
+                _internalMove += inputDirection * desiredSpeed * accelerationMagnitude;
 
-                // drop extra speed
-                if (_internalMove.magnitude > desiredSpeed)
+                // cap acceleration
+                if (_internalMove.magnitude - previousMoveMagnitude > accelerationMagnitude)
                 {
-                    _internalMove = _internalMove.normalized * desiredSpeed;
+                    _internalMove = _internalMove.normalized * (previousMoveMagnitude + accelerationMagnitude);
+                }
+                // cap deceleration
+                else if (previousMoveMagnitude - _internalMove.magnitude > decelerationMagnitude)
+                {
+                    _internalMove = _internalMove.normalized * (previousMoveMagnitude - decelerationMagnitude);
+                }
+
+                // cap max speed
+                if (_internalMove.magnitude > maxSpeed)
+                {
+                    _internalMove = _internalMove.normalized * maxSpeed;
                 }
             }
-            else if (_internalMove.magnitude > 0.0f)
+            // no input deceleration
+            else if (_internalMove.magnitude > decelerationMagnitude)
             {
-                Vector3 drag = -_internalMove.normalized * _speed * Time.deltaTime / _decelerationTime;
-                if (_internalMove.magnitude > drag.magnitude)
-                {
-                    _internalMove += drag;
-                }
-                else
-                {
-                    _internalMove = Vector3.zero;
-                }
+                _internalMove -= _internalMove.normalized * decelerationMagnitude;
             }
-
-            _previousDesiredSpeed = desiredSpeed;
+            else
+            {
+                _internalMove = Vector3.zero;
+            }
 
             // reset or apply gravity
             if (_controller.isGrounded)

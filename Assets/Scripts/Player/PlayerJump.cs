@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerJump : MonoBehaviour, IPauseable
 {
     public float _jumpHeight;
+    public string _jumpButton = "Jump";
 
     private Vector3 _jumpForce;
     private bool _jumping;
@@ -48,7 +49,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
         {
             if (_player._controller.isGrounded)
             {
-                _jumping = Input.GetButton("Jump");
+                _jumping = Input.GetButton(_jumpButton);
             }
 
             if (_jumping)
