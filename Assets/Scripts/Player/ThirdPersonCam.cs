@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ThirdPersonCam : MonoBehaviour, IPauseable
 {
-
+    public LayerMask _ignoredLayer;
     public Transform _lookAt;
     public Transform _camTransform;
     public float _distance = 5.0f;
@@ -59,24 +59,18 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
         {
             _pitch = -70;
         }
-
-        Vector3 dir = new Vector3(0, 0, - _distance);
+ 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
 
         RaycastHit hit;
-
-        if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance))
+        float tempDistance = _distance;
+        if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, ~_ignoredLayer))
         {
             Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
-            Vector3 localhitPoint = _lookAt.position - hit.point;
-            if(localhitPoint.z > 0)
-            {
-                localhitPoint.z *= -1;
-            }
-            dir.z = localhitPoint.z;
+            float newDistance = Vector3.Distance(hit.point, _lookAt.position);
+            tempDistance = newDistance;
         }
-
-        Debug.Log(dir.z);
+        Vector3 dir = new Vector3(0, 0, -tempDistance);
         _camTransform.position = _lookAt.position + rotation * dir;
         _camTransform.LookAt(_lookAt.position);
     }
