@@ -6,7 +6,7 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
 {
     private const int PlayerLayer = 10;
     [SerializeField, Tooltip("Add the object that is affected by the button being pressed.\nMust Implement IButtonIntercation -Interface!")]
-    private GameObject _target;
+    private MonoBehaviour _target;
     [SerializeField]
     private float _cooldownDuration = 1;
     private IButtonInteraction _tInt;
@@ -24,12 +24,13 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
         _timer = GetComponent<OneShotTimer>();
         _timer.SetTimerTarget(this);
         _coll = GetComponent<BoxCollider>();
-        if (_target.GetComponent<IButtonInteraction>() == null)
+        try
+        {
+            _tInt = (IButtonInteraction) _target;
+        }
+        catch
         {
             Debug.LogError("The Target of " + gameObject.name + " " + transform.position + " HAS to implement IButtonInteraction");
-        } else
-        {
-            _tInt = _target.GetComponent<IButtonInteraction>();
         }
     }
 
