@@ -7,7 +7,6 @@ public class PlayerJump : MonoBehaviour, IPauseable
     public float _jumpHeight;
     public string _jumpButton = "Jump";
 
-    private Vector3 _jumpForce;
     private bool _jumping;
     private ThirdPersonPlayerMovement _player;
 
@@ -26,7 +25,6 @@ public class PlayerJump : MonoBehaviour, IPauseable
     private void Awake()
     {
         _player = GetComponent<ThirdPersonPlayerMovement>();
-        _jumpForce = -Physics.gravity.normalized * Mathf.Sqrt(2f * _jumpHeight * Physics.gravity.magnitude);
     }
 
     private void Start()
@@ -54,7 +52,8 @@ public class PlayerJump : MonoBehaviour, IPauseable
 
             if (_jumping)
             {
-                _player._externalMove += _jumpForce * Time.deltaTime;
+                Vector3 jumpForce = -Physics.gravity.normalized * Mathf.Sqrt(2f * _jumpHeight * Physics.gravity.magnitude);
+                _player._externalMove += jumpForce * Time.deltaTime;
             }
         }
     }
