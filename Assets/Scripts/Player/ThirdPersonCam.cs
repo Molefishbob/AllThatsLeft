@@ -7,9 +7,11 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
     public LayerMask _ignoredLayer;
     public Transform _lookAt;
     public float _distance = 5.0f;
+    public string _cameraXAxis = "Camera X";
+    public string _cameraYAxis = "Camera Y";
     private float _yaw = 0.0f;
     private float _pitch = 0.0f;
-    public  float _horizontalSensitivity = 1.0f;
+    public float _horizontalSensitivity = 1.0f;
     public float _verticalSensitivity = 1.0f;
     private bool _paused;
     public float _smooth = 8.0f;
@@ -45,13 +47,13 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
             GameManager.Instance.RemovePauseable(this);
         }
     }
-    
+
     // Update is called once per frame
     private void Update()
-    {        
-        _yaw += _horizontalSensitivity * Input.GetAxis("Mouse X");
-        _pitch -= _verticalSensitivity * Input.GetAxis("Mouse Y");
-        
+    {
+        _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
+        _pitch -= _verticalSensitivity * Input.GetAxis(_cameraYAxis);
+
         if (_pitch > 85)
         {
             _pitch = 85;
@@ -60,7 +62,7 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
         {
             _pitch = -70;
         }
-        
+
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
 
@@ -71,15 +73,15 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
         //float lerpedDist = Mathf.Lerp(_distance, _tempDistance, Time.deltaTime / 2);
 
         Vector3 dir = new Vector3(0, 0, -_tempDistance);
-       
+
         transform.position = _lookAt.position + rotation * dir;
-          
+
         transform.LookAt(_lookAt.position);
     }
 
     private float CheckCollision(float tDistance)
     {
-        tDistance = _distance;         
+        tDistance = _distance;
         RaycastHit hit;
 
         if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, ~_ignoredLayer))
@@ -88,7 +90,7 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
             _cameraBlocked = true;
-        }  
+        }
 
         return tDistance;
     }

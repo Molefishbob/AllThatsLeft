@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
 
     public float _speed;
-    [Range(0,1)]
+    [Range(0, 1)]
     public float _backwardMultiplier;
     public float _strafeSpeed;
     private CharacterController _controller;
@@ -48,8 +48,8 @@ public class PlayerMovement : MonoBehaviour
             _canJump = true;
         }
 
-        _yaw += Input.GetAxis("Mouse X");
-        Quaternion rotation = Quaternion.Euler( 0, _yaw, 0);
+        _yaw += Input.GetAxis("Camera X");
+        Quaternion rotation = Quaternion.Euler(0, _yaw, 0);
         transform.rotation = rotation;
         //transform.eulerAngles = new Vector3(0, _yaw, 0);
 
@@ -75,15 +75,15 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _jump += (Physics.gravity * Time.deltaTime);
-        
+
         Vector3 movement = (forward + sideWays + _jump) * Time.deltaTime;
 
         movement = transform.TransformDirection(movement);
-        
+
         _controller.Move(movement);
 
         Vector3 platformMoveDist = Vector3.zero;
-     
+
         if (Physics.SphereCast(transform.position, _controller.radius * 0.9f, new Vector3(0, -1, 0), out hit, 3, platformLayerMask))
         {
             Vector3 newPlatformPosition = hit.transform.position;
@@ -102,6 +102,6 @@ public class PlayerMovement : MonoBehaviour
         {
             platformMoveDist = Vector3.zero;
             isOnPlatform = false;
-        } 
+        }
     }
 }
