@@ -87,11 +87,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e372b3bd96f6645b591351c63b46cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lookAt: {fileID: 0}
-  _camTransform: {fileID: 5459540576229880259}
-  _distance: 5
-  _sensitivityX: 2
-  _sensitivityY: 2
+  _ignoredLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  _lookAt: {fileID: 1214044774675275346, guid: de82d5bc12a940a4bb21840c856e1f80, type: 3}
+  _distance: 10
+  _cameraXAxis: Camera X
+  _cameraYAxis: Camera Y
+  _horizontalSensitivity: 1
+  _verticalSensitivity: 1
+  _smooth: 8
 --- !u!81 &5459540576229880262
 AudioListener:
   m_ObjectHideFlags: 0

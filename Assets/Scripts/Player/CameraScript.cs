@@ -8,17 +8,18 @@ public class CameraScript : MonoBehaviour
 
     void Start()
     {
-         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-        _pitch -= PlayerMovement.Sensitivity * Input.GetAxis("Mouse Y");
-       
-        if(_pitch <= -90)
+        _pitch -= PlayerMovement.Sensitivity * Input.GetAxis("Camera Y");
+
+        if (_pitch <= -90)
         {
             _pitch = -90;
-        } else if(_pitch >= 90)
+        }
+        else if (_pitch >= 90)
         {
             _pitch = 90;
         }
