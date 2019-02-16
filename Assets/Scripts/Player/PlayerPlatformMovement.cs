@@ -48,43 +48,49 @@ public class PlayerPlatformMovement : MonoBehaviour, IPauseable
         if (!_paused)
         {
             RaycastHit hit;
-            if (_player._controller.isGrounded &&
-                    Physics.SphereCast(
-                            transform.position + Vector3.up * _player._controller.radius,
-                            _player._controller.radius,
-                            Physics.gravity,
-                            out hit,
-                            _player._controller.skinWidth * 1.1f,
-                            _platformLayerMask))
+            if (_player._controller.isGrounded)
             {
-                if (_platform == null)
+                if (Physics.SphereCast(
+                        transform.position + Vector3.up * _player._controller.radius,
+                        _player._controller.radius,
+                        Physics.gravity,
+                        out hit,
+                        _player._controller.skinWidth * 1.1f,
+                        _platformLayerMask))
                 {
-                    _platform = hit.transform;
+                    if (_platform == null)
+                    {
+                        _platform = hit.transform;
+                    }
+                    else
+                    {
+                        _currentPlatformMove = _platform.position - _lastPlatformPos;
+                        _player._externalMove += _currentPlatformMove;
+                    }
+
+                    _lastPlatformPos = _platform.position;
                 }
                 else
                 {
-                    _currentPlatformMove = _platform.position - _lastPlatformPos;
+                    _platform = null;
+                    _currentPlatformMove = Vector3.zero;
                 }
-                _lastPlatformPos = _platform.position;
             }
             else
             {
                 _platform = null;
 
                 Vector3 drag = -_currentPlatformMove.normalized * _linearDrag * Time.deltaTime;
+
                 if (_currentPlatformMove.magnitude > drag.magnitude)
                 {
                     _currentPlatformMove += drag;
+                    _player._externalMove += _currentPlatformMove;
                 }
                 else
                 {
                     _currentPlatformMove = Vector3.zero;
                 }
-            }
-
-            if (_currentPlatformMove.magnitude > 0.0f)
-            {
-                _player._externalMove += _currentPlatformMove;
             }
         }
     }
