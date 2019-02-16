@@ -64,8 +64,26 @@ public class ThirdPersonPlayerMovement : MonoBehaviour, IPauseable
             float vertical = Input.GetAxisRaw(_verticalAxis);
 
             float maxSpeed = _speed * Time.deltaTime;
-            float accelerationMagnitude = maxSpeed / _accelerationTime;
-            float decelerationMagnitude = maxSpeed / _decelerationTime;
+            float accelerationMagnitude;
+            float decelerationMagnitude;
+
+            if (_accelerationTime > 0)
+            {
+                accelerationMagnitude = maxSpeed / _accelerationTime;
+            }
+            else
+            {
+                accelerationMagnitude = _speed;
+            }
+
+            if (_decelerationTime > 0)
+            {
+                decelerationMagnitude = maxSpeed / _decelerationTime;
+            }
+            else
+            {
+                decelerationMagnitude = _speed;
+            }
 
             if (horizontal != 0.0f || vertical != 0.0f)
             {
