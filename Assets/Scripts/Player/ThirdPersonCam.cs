@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ThirdPersonCam : MonoBehaviour, IPauseable
 {
-    public LayerMask _ignoredLayer;
+    public LayerMask _wallLayer;
+    public LayerMask _groundLayer;
     public Transform _lookAt;
     public float _distance = 5.0f;
     public string _cameraXAxis = "Camera X";
@@ -36,7 +37,6 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
         _tempDistance = _distance;
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
         _paused = GameManager.Instance.GamePaused;
@@ -50,8 +50,7 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
             GameManager.Instance.RemovePauseable(this);
         }
     }
-
-    // Update is called once per frame
+    
     private void Update()
     {
         _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
@@ -68,27 +67,28 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
 
-        
+        if (_zooming)
+        {
+            _lerperHelper += 0.1f;
+            _lerpDistance = Mathf.Lerp(_oldDistance, _tempDistance, _lerperHelper);
+        }
+
         if (!_zooming)
         {
             _oldDistance = _tempDistance;
             _tempDistance = CheckCollision(_tempDistance);
+            _lerpDistance = Mathf.Lerp(_oldDistance, _tempDistance, _lerperHelper);
         }
-        //Debug.Log("olddistance " + _oldDistance + "newDistance " + _tempDistance);
-        _lerpDistance = Mathf.Lerp(_oldDistance, _tempDistance, _lerperHelper);
-
-        if (_zooming)
+        
+        if (_lerperHelper > 1.01f)
         {
-            _lerperHelper += 0.1f;
-        }
-
-        if (_lerperHelper > 1)
-        {
+            
             _zooming = false;
             _lerperHelper = 0;
-        }
 
-        Debug.Log(_lerperHelper);
+        }
+        Debug.Log(_lerperHelper + "d" + _zooming);
+
         Vector3 dir = new Vector3(0, 0, -_lerpDistance);
         
         transform.position = _lookAt.position + rotation * dir;
@@ -97,14 +97,24 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
 
     private float CheckCollision(float tDistance)
     {
-        tDistance = _distance;
+        
         RaycastHit hit;
 
-        if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, ~_ignoredLayer))
+        if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, _wallLayer))
         {
             Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
+            _zooming = true;
+        } else if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
+        {
+            Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
+            float newDistance = Vector3.Distance(hit.point, _lookAt.position);
+            tDistance = newDistance;
+        }
+        else
+        {
+            tDistance = _distance;
             _zooming = true;
         }
 
