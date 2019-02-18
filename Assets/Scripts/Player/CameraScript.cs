@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-
-    public float _verticalSensitivity;
     private float _pitch = 0.0f;
 
     void Start()
     {
-         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-        _pitch -= _verticalSensitivity * Input.GetAxis("Mouse Y");
-       
-        if(_pitch <= -90)
+        _pitch -= PlayerMovement.Sensitivity * Input.GetAxis("Camera Y");
+
+        if (_pitch <= -90)
         {
             _pitch = -90;
-        } else if(_pitch >= 90)
+        }
+        else if (_pitch >= 90)
         {
             _pitch = 90;
         }
