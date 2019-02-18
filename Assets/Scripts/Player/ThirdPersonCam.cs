@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ThirdPersonCam : MonoBehaviour, IPauseable
 {
-    public LayerMask _ignoredLayer;
+    public LayerMask _wallLayer;
+    public LayerMask _groundLayer;
     public Transform _lookAt;
     public float _distance = 5.0f;
     public string _cameraXAxis = "Camera X";
@@ -15,8 +16,10 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
     public float _verticalSensitivity = 1.0f;
     private bool _paused;
     public float _smooth = 8.0f;
-    private bool _cameraBlocked;
-    private float _tempDistance;
+    private float _tempDistance, _oldDistance;
+    private float _lerpDistance;
+    private float _lerperHelper = 0;
+    private bool _zooming = false;
 
     public void Pause()
     {
@@ -31,9 +34,9 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        _tempDistance = _distance;
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
         _paused = GameManager.Instance.GamePaused;
@@ -47,8 +50,7 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
             GameManager.Instance.RemovePauseable(this);
         }
     }
-
-    // Update is called once per frame
+    
     private void Update()
     {
         _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
@@ -63,33 +65,56 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
             _pitch = -70;
         }
 
-
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
 
-        _tempDistance = 0;
+        if (_zooming)
+        {
+            _lerperHelper += 0.2f;
+            _lerpDistance = Mathf.Lerp(_oldDistance, _tempDistance, _lerperHelper);
+        }
 
-        _tempDistance = CheckCollision(_tempDistance);
+        if (!_zooming)
+        {
+            _oldDistance = _tempDistance;
+            _tempDistance = CheckCollision(_tempDistance);
+            _lerpDistance = Mathf.Lerp(_oldDistance, _tempDistance, _lerperHelper);
+        }
+        
+        if (_lerperHelper > 1.01f)
+        {
+            
+            _zooming = false;
+            _lerperHelper = 0;
 
-        //float lerpedDist = Mathf.Lerp(_distance, _tempDistance, Time.deltaTime / 2);
+        }
 
-        Vector3 dir = new Vector3(0, 0, -_tempDistance);
-
+        Vector3 dir = new Vector3(0, 0, -_lerpDistance);
+        
         transform.position = _lookAt.position + rotation * dir;
-
         transform.LookAt(_lookAt.position);
     }
 
     private float CheckCollision(float tDistance)
     {
-        tDistance = _distance;
+        
         RaycastHit hit;
 
-        if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, ~_ignoredLayer))
+        if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, _wallLayer))
         {
             Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
-            _cameraBlocked = true;
+            _zooming = true;
+        } else if (Physics.Raycast(_lookAt.position, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
+        {
+            Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
+            float newDistance = Vector3.Distance(hit.point, _lookAt.position);
+            tDistance = newDistance;
+        }
+        else
+        {
+            tDistance = _distance;
+            _zooming = true;
         }
 
         return tDistance;
