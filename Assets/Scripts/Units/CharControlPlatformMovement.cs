@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPlatformMovement : MonoBehaviour, IPauseable
+public class CharControlPlatformMovement : MonoBehaviour, IPauseable
 {
-    public float _linearDrag;
-    public LayerMask _platformLayerMask;
+    [Tooltip("Momentum decay speed")]
+    public float _linearDrag = 0.01f;
+    public LayerMask _platformLayerMask = 1 << 13;
 
     private Transform _platform;
     private Vector3 _lastPlatformPos;
     private Vector3 _currentPlatformMove;
-    private ThirdPersonPlayerMovement _player;
+    private CharControlBase _character;
 
     private bool _paused;
 
@@ -26,7 +27,7 @@ public class PlayerPlatformMovement : MonoBehaviour, IPauseable
 
     private void Awake()
     {
-        _player = GetComponent<ThirdPersonPlayerMovement>();
+        _character = GetComponent<CharControlBase>();
     }
 
     private void Start()
@@ -48,14 +49,14 @@ public class PlayerPlatformMovement : MonoBehaviour, IPauseable
         if (!_paused)
         {
             RaycastHit hit;
-            if (_player._controller.isGrounded)
+            if (_character.IsGrounded)
             {
                 if (Physics.SphereCast(
-                        transform.position + Vector3.up * _player._controller.radius,
-                        _player._controller.radius,
+                        transform.position + Vector3.up * _character.Radius,
+                        _character.Radius,
                         Physics.gravity,
                         out hit,
-                        _player._controller.skinWidth * 1.1f,
+                        _character.SkinWidth * 1.1f,
                         _platformLayerMask))
                 {
                     if (_platform == null)
@@ -65,7 +66,7 @@ public class PlayerPlatformMovement : MonoBehaviour, IPauseable
                     else
                     {
                         _currentPlatformMove = _platform.position - _lastPlatformPos;
-                        _player._externalMove += _currentPlatformMove;
+                        _character.AddDirectMovement(_currentPlatformMove);
                     }
 
                     _lastPlatformPos = _platform.position;
@@ -85,7 +86,7 @@ public class PlayerPlatformMovement : MonoBehaviour, IPauseable
                 if (_currentPlatformMove.magnitude > drag.magnitude)
                 {
                     _currentPlatformMove += drag;
-                    _player._externalMove += _currentPlatformMove;
+                    _character.AddDirectMovement(_currentPlatformMove);
                 }
                 else
                 {

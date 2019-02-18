@@ -45,7 +45,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
     {
         if (!_paused)
         {
-            if (_player._controller.isGrounded)
+            if (_player.IsGrounded)
             {
                 _jumping = Input.GetButton(_jumpButton);
             }
@@ -53,7 +53,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
             if (_jumping)
             {
                 Vector3 jumpForce = -Physics.gravity.normalized * Mathf.Sqrt(2f * _jumpHeight * Physics.gravity.magnitude);
-                _player._externalMove += jumpForce * Time.deltaTime;
+                _player.AddDirectMovement(jumpForce * Time.deltaTime);
             }
         }
     }
