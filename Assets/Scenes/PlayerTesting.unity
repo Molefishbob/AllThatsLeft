@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -197,8 +197,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 23648726}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.66, y: 1.5, z: -16.86}
-  m_LocalScale: {x: 10, y: 3, z: 1}
+  m_LocalPosition: {x: 4.66, y: 1.5, z: -25.7}
+  m_LocalScale: {x: 100, y: 5, z: 15}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
@@ -742,16 +742,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6011697700877466058, guid: de82d5bc12a940a4bb21840c856e1f80,
-        type: 3}
-      propertyPath: m_Name
-      value: 3rdP_Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6999025468149588197, guid: de82d5bc12a940a4bb21840c856e1f80,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.56
-      objectReference: {fileID: 0}
     - target: {fileID: 1214044774675275346, guid: de82d5bc12a940a4bb21840c856e1f80,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -807,15 +797,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6361875651433932180, guid: de82d5bc12a940a4bb21840c856e1f80,
+    - target: {fileID: 6011697700877466058, guid: de82d5bc12a940a4bb21840c856e1f80,
         type: 3}
-      propertyPath: _jumpForce
-      value: 2
+      propertyPath: m_Name
+      value: 3rdP_Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6999025468149588197, guid: de82d5bc12a940a4bb21840c856e1f80,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.56
       objectReference: {fileID: 0}
     - target: {fileID: 2262639783887716210, guid: de82d5bc12a940a4bb21840c856e1f80,
         type: 3}
       propertyPath: _speed
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361875651433932180, guid: de82d5bc12a940a4bb21840c856e1f80,
+        type: 3}
+      propertyPath: _jumpForce
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6856660245567785116, guid: de82d5bc12a940a4bb21840c856e1f80,
         type: 3}

@@ -69,7 +69,7 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
 
         if (_zooming)
         {
-            _lerperHelper += 0.1f;
+            _lerperHelper += 0.2f;
             _lerpDistance = Mathf.Lerp(_oldDistance, _tempDistance, _lerperHelper);
         }
 
@@ -87,7 +87,6 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
             _lerperHelper = 0;
 
         }
-        Debug.Log(_lerperHelper + "d" + _zooming);
 
         Vector3 dir = new Vector3(0, 0, -_lerpDistance);
         
