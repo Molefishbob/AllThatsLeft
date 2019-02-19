@@ -36,6 +36,10 @@ public class Console : GenericHackable
         {
             case Status.BeingHacked:
                 _currentStatus = Status.Hacked;
+                for (int a = 0; a < _hackers.Count; a++) {
+                    _hackers[a].ResetBot();
+                }
+                _hackers.Clear();
                 HackAction();
                 break;
             default:

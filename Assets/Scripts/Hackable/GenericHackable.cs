@@ -27,6 +27,7 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
     protected int _botsHacking = 0;
     protected IButtonInteraction _hTarget;
     protected OneShotTimer _timer;
+    protected List<HackerBot> _hackers;
 
     protected void Awake()
     {
@@ -63,12 +64,14 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
 
     protected void OnTriggerEnter(Collider other)
     {
+        _hackers.Add(other.GetComponent<HackerBot>());
         _botsHacking++;
         StartHack();
     }
 
     protected void OnTriggerExit(Collider other)
     {
+        _hackers.Remove(other.GetComponent<HackerBot>());
         _botsHacking--;
         if (_botsHacking <= 0)
         {
