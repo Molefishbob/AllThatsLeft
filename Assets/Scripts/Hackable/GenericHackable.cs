@@ -16,8 +16,6 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
     private MonoBehaviour _hackTarget = null;
     [SerializeField, Tooltip("The amount of time needed to hack")]
     protected float _duration = 0.5f;
-    [SerializeField, Tooltip("DO NOT TOUCH IF YOU DO NOT KNOW WHAT YOU ARE DOING")]
-    protected int _hackerBotLayer = 14;
     public Status _currentStatus
     {
         get;
