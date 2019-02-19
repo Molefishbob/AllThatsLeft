@@ -58,7 +58,7 @@ public class HackerBot : GenericBot
         _fCheckTime = 0;
     }
 
-    protected override void ResetBot(){
+    public override void ResetBot(){
         base.ResetBot();
         _goClosestObject = null;
     }

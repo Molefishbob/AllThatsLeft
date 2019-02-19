@@ -51,7 +51,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
         _lifeTimeTimer.StartTimer(_fLifetime);
     }
 
-    protected virtual void ResetBot()
+    public virtual void ResetBot()
     {
         _bMoving = false;
         _lifeTimeTimer.StopTimer();
