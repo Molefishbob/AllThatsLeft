@@ -36,7 +36,6 @@ public class Console : GenericHackable
         {
             case Status.BeingHacked:
                 _currentStatus = Status.Hacked;
-                Debug.Log("currentstatus:" + _currentStatus);
                 HackAction();
                 break;
             default:
