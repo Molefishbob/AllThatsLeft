@@ -43,6 +43,9 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
         }
         
     }
+    protected void Start() {
+        _timer.SetTimerTarget(this);
+    }
     protected bool StartTimer(float duration)
     {
         if (!_timer.IsRunning)
@@ -60,12 +63,14 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
 
     protected void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Enter");
         _botsHacking++;
         StartHack();
     }
 
     protected void OnTriggerExit(Collider other)
     {
+        Debug.Log("Exit");
         _botsHacking--;
         if (_botsHacking <= 0)
         {
