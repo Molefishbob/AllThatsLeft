@@ -16,6 +16,18 @@ public class Console : GenericHackable
     protected override void StopHack()
     {
         _timer.StopTimer();
+        switch (_currentStatus)
+        {
+            case Status.BeingHacked:
+                _currentStatus = Status.NotHacked;
+                _timer.StopTimer();
+                break;
+        }
+    }
+
+    protected override void HackAction()
+    {
+        _hTarget.ButtonDown();
     }
 
     public override void TimedAction()
@@ -24,26 +36,11 @@ public class Console : GenericHackable
         {
             case Status.BeingHacked:
                 _currentStatus = Status.Hacked;
+                HackAction();
                 break;
             default:
-                Debug.LogError("Current Status:" + _currentStatus + " Timer completed even though it shouldn't!");
+                Debug.LogError("Current Status:" + _currentStatus + " Timer completed even though it shouldn't! ree");
                 break;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        _botsHacking++;
-        StartHack();
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        _botsHacking--;
-        if (_botsHacking <= 0)
-        {
-            _botsHacking = 0;
-            StopHack();
         }
     }
 }

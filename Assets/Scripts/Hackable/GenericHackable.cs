@@ -13,11 +13,11 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
     [SerializeField,Tooltip("The starting status of the hackable object")]
     protected Status _startingStatus;
     [SerializeField, Tooltip("The target that will be called once hacked.\nTarget HAS TO IMPLEMENT IButtonInteraction!")]
-    protected MonoBehaviour _hackTarget;
+    private MonoBehaviour _hackTarget = null;
     [SerializeField, Tooltip("The amount of time needed to hack")]
     protected float _duration = 0.5f;
     [SerializeField, Tooltip("DO NOT TOUCH IF YOU DO NOT KNOW WHAT YOU ARE DOING")]
-    protected int _hackerBotLayer = 18;
+    protected int _hackerBotLayer = 14;
     public Status _currentStatus
     {
         get;
@@ -57,7 +57,25 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
 
     }
 
+
+    protected void OnTriggerEnter(Collider other)
+    {
+        _botsHacking++;
+        StartHack();
+    }
+
+    protected void OnTriggerExit(Collider other)
+    {
+        _botsHacking--;
+        if (_botsHacking <= 0)
+        {
+            _botsHacking = 0;
+            StopHack();
+        }
+    }
+
     protected abstract void StartHack();
     protected abstract void StopHack();
+    protected abstract void HackAction();
     public abstract void TimedAction();
 }

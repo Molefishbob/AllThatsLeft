@@ -6,7 +6,7 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
 {
     private const int PlayerLayer = 10;
     [SerializeField, Tooltip("Add the object that is affected by the button being pressed.\nMust Implement IButtonIntercation -Interface!")]
-    private MonoBehaviour _target;
+    private MonoBehaviour _target = null;
     [SerializeField]
     private float _cooldownDuration = 1;
     private IButtonInteraction _tInt;
