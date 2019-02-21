@@ -8,13 +8,14 @@ public class TrampBot : GenericBot
     [SerializeField, Tooltip("Has no function, only shows number, which is not accurate lol")]
     private float _fDistanceTraveled;
     public float _fJumpDuration = 1;
+    public float _fMaxJumpHeight = 10;
     private float jumpTimer;
     const int _iPlayerLayer = 10;
     private CharControlBase _PlayerMover;
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (_PlayerMover != null){
+        if (_PlayerMover != null && _fDistanceTraveled < _fMaxJumpHeight){
             jumpTimer += Time.deltaTime;
             Vector3 tmp = Vector3.zero;
             float reminder = jumpTimer / _fJumpDuration;
@@ -24,8 +25,9 @@ public class TrampBot : GenericBot
             _PlayerMover.AddDirectMovement(tmp);
             if (jumpTimer > _fJumpDuration){
                 _PlayerMover = null;
-                jumpTimer = 0;
             }
+        } else if (_fMaxJumpHeight < _fDistanceTraveled){
+            _PlayerMover = null;
         }
     }
 
@@ -34,6 +36,7 @@ public class TrampBot : GenericBot
         if (other.gameObject.layer == _iPlayerLayer){
             _PlayerMover = other.GetComponent<CharControlBase>();
             _fDistanceTraveled = 0;
+            jumpTimer = 0;
         }
     }
 }
