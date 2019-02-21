@@ -5,6 +5,7 @@ using UnityEngine;
 public class HackerBot : GenericBot
 {
     public float _fDetectRadius = 3f;
+    [SerializeField]
     private float _fStopRange = 2f;
     public LayerMask _lHackableLayer;
     private float _fCheckTimer = 0.25f;
@@ -28,10 +29,10 @@ public class HackerBot : GenericBot
             _fCheckTime += Time.deltaTime;
 
             if(_goClosestObject != null){
+                _lifeTimeTimer.StopTimer();
                 TurnTowards(_goClosestObject);
                 if((transform.position - _goClosestObject.transform.position).magnitude < _fStopRange){
                     _bMoving = false;
-                    _lifeTimeTimer.StopTimer();
                     // say to the console im here maybe
                 }
             }
@@ -58,7 +59,7 @@ public class HackerBot : GenericBot
         _fCheckTime = 0;
     }
 
-    protected override void ResetBot(){
+    public override void ResetBot(){
         base.ResetBot();
         _goClosestObject = null;
     }
