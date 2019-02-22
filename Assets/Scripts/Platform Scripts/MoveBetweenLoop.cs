@@ -12,15 +12,16 @@ public class MoveBetweenLoop: GenericMover
     {
         if (_activated)
         {
-            float currLength = _timer.NormalizedTimeElapsed * _length;
+            float currLength = (_timer.TimeElapsed) / (_timer.Duration) * _length;
 
             for (int i = 0; i < _currentObjectNum; ++i)
             {
                 currLength -= (_transform[i].position - _transform[i + 1].position).magnitude;
             }
+
             _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude;
 
-            transform.position = 
+            transform.position =
                                 Vector3.Lerp(_transform[_currentObjectNum].position
                                             , _transform[_nextObjectNum].position, _fracTime);
 
@@ -36,7 +37,6 @@ public class MoveBetweenLoop: GenericMover
     /// </summary>
     private void ChangeTarget()
     {
-
         _currentObjectNum = _nextObjectNum;
         _nextObjectNum = _currentObjectNum + 1;
         if (_nextObjectNum >= _transform.Count)
@@ -44,27 +44,24 @@ public class MoveBetweenLoop: GenericMover
             _nextObjectNum = 0;
         }
     }
-
+    /// <summary>
+    /// Initializes the script.
+    /// 
+    /// Adds the distance between the last and the first object to the complete length.
+    /// </summary>
     public override void Init()
     {
         base.Init();
         _length += (_transform[0].position - _transform[_amountOfTransforms].position).magnitude;
     }
+    /// <summary>
+    /// Called when the timer is completed.
+    /// 
+    /// Defines what happens when the timer has completed.
+    /// </summary>
     public override void TimedAction()
     {
         _nextObjectNum = 1;
         _currentObjectNum = 0;
-    }
-
-    public override void ButtonDown()
-    {
-        _activated = true;
-        _timer.ResumeTimer();
-    }
-
-    public override void ButtonUp()
-    {
-        _activated = false;
-        _timer.StopTimer();
     }
 }

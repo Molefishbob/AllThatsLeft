@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericHackable : MonoBehaviour, ITimedAction
+public abstract class GenericHackable : MonoBehaviour
 {
     public enum Status
     {
@@ -14,26 +14,19 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
     protected Status _startingStatus;
     [SerializeField, Tooltip("The target that will be called once hacked.\nTarget HAS TO IMPLEMENT IButtonInteraction!")]
     private MonoBehaviour _hackTarget = null;
-    [SerializeField, Tooltip("The amount of time needed to hack")]
-    protected float _duration = 0.5f;
-    [SerializeField, Tooltip("DO NOT TOUCH IF YOU DO NOT KNOW WHAT YOU ARE DOING")]
-    protected int _hackerBotLayer = 14;
     public Status _currentStatus
     {
         get;
         protected set;
     }
-
-    protected int _botsHacking = 0;
+    
     protected IButtonInteraction _hTarget;
-    protected OneShotTimer _timer;
     protected List<HackerBot> _hackers;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
-
+        _hackers = new List<HackerBot>();
         _currentStatus = _startingStatus;
-        _timer = GetComponent<OneShotTimer>();
         try
         {
             _hTarget = (IButtonInteraction)_hackTarget;
@@ -44,44 +37,42 @@ public abstract class GenericHackable : MonoBehaviour, ITimedAction
         }
         
     }
-    protected void Start() {
-        _timer.SetTimerTarget(this);
-    }
-    protected bool StartTimer(float duration)
-    {
-        if (!_timer.IsRunning)
-        {
-            _timer.StartTimer(duration);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
 
-    }
-
-
-    protected void OnTriggerEnter(Collider other)
+    /// <summary>
+    /// Called when an object enters the triggers collision area
+    /// </summary>
+    /// <param name="other"></param>
+    protected virtual void OnTriggerEnter(Collider other)
     {
         _hackers.Add(other.GetComponent<HackerBot>());
-        _botsHacking++;
         StartHack();
     }
 
-    protected void OnTriggerExit(Collider other)
+    /// <summary>
+    /// Called when an object leaves the triggers collision area
+    /// </summary>
+    /// <param name="other"></param>
+    protected virtual void OnTriggerExit(Collider other)
     {
         _hackers.Remove(other.GetComponent<HackerBot>());
-        _botsHacking--;
-        if (_botsHacking <= 0)
+        if (_hackers.Count <= 0)
         {
-            _botsHacking = 0;
             StopHack();
         }
     }
-
+    /// <summary>
+    /// Determines the actions when something starts to hack the object.
+    /// By default this is called when something enters the trigger.
+    /// </summary>
     protected abstract void StartHack();
+    /// <summary>
+    /// Determines the actions when something stops to hack the object.
+    /// By default this is called when something leaves the trigger and there is nothing else hacking the console.
+    /// </summary>
     protected abstract void StopHack();
+    /// <summary>
+    /// Determines what the console does when it is being hacked or has been hacked.
+    /// For example you can call the targets methods here.
+    /// </summary>
     protected abstract void HackAction();
-    public abstract void TimedAction();
 }
