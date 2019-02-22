@@ -21,6 +21,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     public bool IsGrounded { get { return _controller.isGrounded; } }
     public float SkinWidth { get { return _controller.skinWidth; } }
     public float Radius { get { return _controller.radius; } }
+    public float Height { get { return _controller.height; } }
     public float CurrentGravity { get { return _currentGravity.magnitude; } }
 
     public virtual void Pause()
