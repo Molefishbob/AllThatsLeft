@@ -76,4 +76,9 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
         _activated = true;
         Init();
     }
+
+    public void ButtonUp()
+    {
+
+    }
 }
