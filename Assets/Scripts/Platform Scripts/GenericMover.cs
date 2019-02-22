@@ -36,6 +36,12 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
         }
     }
 
+    /// <summary>
+    /// Initializes the script.
+    /// 
+    /// Gets all the checkpoints and counts the complete length of the trip.
+    /// The length is later used to calculate the speed between objects.
+    /// </summary>
     public virtual void Init()
     {
         _timer.SetTimerTarget(this);
@@ -56,12 +62,18 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
             _length += (_transform[a].position - _transform[a + 1].position).magnitude;
         }
     }
-
+    /// <summary>
+    /// Called when the timer is completed.
+    /// 
+    /// Defines what happens when the timer has completed.
+    /// </summary>
     public virtual void TimedAction() { }
+    /// <summary>
+    /// Defines what happens when a connected console is hacked
+    /// </summary>
     public virtual void ButtonDown()
     {
         _activated = true;
         Init();
     }
-    public virtual void ButtonUp() { }
 }

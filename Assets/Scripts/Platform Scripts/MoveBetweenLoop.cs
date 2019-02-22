@@ -44,12 +44,21 @@ public class MoveBetweenLoop: GenericMover
             _nextObjectNum = 0;
         }
     }
-
+    /// <summary>
+    /// Initializes the script.
+    /// 
+    /// Adds the distance between the last and the first object to the complete length.
+    /// </summary>
     public override void Init()
     {
         base.Init();
         _length += (_transform[0].position - _transform[_amountOfTransforms].position).magnitude;
     }
+    /// <summary>
+    /// Called when the timer is completed.
+    /// 
+    /// Defines what happens when the timer has completed.
+    /// </summary>
     public override void TimedAction()
     {
         _nextObjectNum = 1;

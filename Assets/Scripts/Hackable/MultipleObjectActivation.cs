@@ -35,6 +35,12 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
         }
     }
 
+    /// <summary>
+    /// Called when a connected console is hacked
+    /// 
+    /// Checks if every console in the list of consoles have been hacked.
+    /// If they are hacked the method calls every single targets ButtonDown method.
+    /// </summary>
     public void ButtonDown()
     {
         bool hacked = true;
