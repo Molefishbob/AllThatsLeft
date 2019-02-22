@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonPlayerMovement : CharControlBase
+public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
 {
     public string _horizontalAxis = "Horizontal";
     public string _verticalAxis = "Vertical";
@@ -37,5 +37,10 @@ public class ThirdPersonPlayerMovement : CharControlBase
         inputDirection = inputDirection.normalized * desiredSpeed;
 
         return inputDirection;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Debug.Log("Player died");
     }
 }
