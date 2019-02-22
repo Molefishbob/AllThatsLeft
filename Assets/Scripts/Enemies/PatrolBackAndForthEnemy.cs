@@ -17,11 +17,11 @@ public class PatrolBackAndForthEnemy : CharControlBase
         Init();
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (transform.position.x - _transforms[_targetCounter].position.x < 0.2f && transform.position.z - _transforms[_targetCounter].position.z < 0.2f
-            && transform.position.x - _transforms[_targetCounter].position.x > -0.2f && transform.position.z - _transforms[_targetCounter].position.z > -0.2f)
+        if (other.gameObject.layer == 22)
         {
+            //Todo: fix first target hit so it does not "drift"
             if (_goingForward)
             {
                 _targetCounter++;
@@ -36,13 +36,13 @@ public class PatrolBackAndForthEnemy : CharControlBase
                 _goingForward = false;
                 _targetCounter = _transforms.Count - 2;
 
-            }else if (_targetCounter < 0)
+            }
+            else if (_targetCounter < 0)
             {
                 _goingForward = true;
                 _targetCounter = 0;
-            }  
+            }
         }
-        
     }
 
     public virtual void Init()
