@@ -118,13 +118,16 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
             if (_controller.isGrounded)
             {
                 // character controller isn't grounded if it doesn't hit the ground every move method call
-                _currentGravity = Physics.gravity * Time.deltaTime * Time.deltaTime;
+                ResetGravity();
             }
             else
             {
                 // gravity is weird, have to multiply with deltatime twice
                 _currentGravity += Physics.gravity * Time.deltaTime * Time.deltaTime;
             }
+
+            // apply deltaTime to external movement
+            _externalMove *= Time.deltaTime;
 
             // make character controller move with all combined moves
             _controller.Move(_externalMove + _internalMove + _currentGravity);
@@ -143,9 +146,17 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     /// <summary>
     /// Add a movement vector for character controller's move in the next FixedUpdate.
     /// </summary>
-    /// <param name="move">Movement, remember deltaTime if applicable</param>
+    /// <param name="move">movement without deltaTime</param>
     public void AddDirectMovement(Vector3 move)
     {
         _externalMove += move;
+    }
+
+    /// <summary>
+    /// Resets the current effect of gravity akin to hitting the ground.
+    /// </summary>
+    public void ResetGravity()
+    {
+        _currentGravity = Physics.gravity * Time.deltaTime * Time.deltaTime;
     }
 }

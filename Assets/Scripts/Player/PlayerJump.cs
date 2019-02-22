@@ -7,6 +7,7 @@ public class PlayerJump : MonoBehaviour, IPauseable
     public float _jumpHeight;
     public string _jumpButton = "Jump";
 
+    private Vector3 _currentJumpForce;
     private bool _jumping;
     private ThirdPersonPlayerMovement _player;
 
@@ -52,9 +53,21 @@ public class PlayerJump : MonoBehaviour, IPauseable
 
             if (_jumping)
             {
-                Vector3 jumpForce = -Physics.gravity.normalized * Mathf.Sqrt(2f * _jumpHeight * Physics.gravity.magnitude);
-                _player.AddDirectMovement(jumpForce * Time.deltaTime);
+                _currentJumpForce = GetJumpForce(_jumpHeight);
+                _player.AddDirectMovement(_currentJumpForce);
             }
         }
+    }
+
+    private Vector3 GetJumpForce(float height)
+    {
+        return -Physics.gravity.normalized * Mathf.Sqrt(2f * height * Physics.gravity.magnitude);
+    }
+
+    public void ForceJump(float height)
+    {
+        _player.ResetGravity();
+        _currentJumpForce = GetJumpForce(height);
+        _player.AddDirectMovement(_currentJumpForce);
     }
 }
