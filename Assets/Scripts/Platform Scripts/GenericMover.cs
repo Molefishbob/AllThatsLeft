@@ -30,7 +30,10 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     // Start is called before the first frame update
     void Start()
     {
-        Init();
+        if (_activated)
+        {
+            Init();
+        }
     }
 
     public virtual void Init()
@@ -55,6 +58,10 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     }
 
     public virtual void TimedAction() { }
-    public virtual void ButtonDown() { }
+    public virtual void ButtonDown()
+    {
+        _activated = true;
+        Init();
+    }
     public virtual void ButtonUp() { }
 }
