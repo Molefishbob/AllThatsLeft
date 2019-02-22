@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class ThirdPersonCam : MonoBehaviour, IPauseable
 {
-    public LayerMask _wallLayer;
-    public LayerMask _groundLayer;
-    public Transform _lookAt;
+    public LayerMask _wallLayer, _groundLayer;
+    private Transform _lookAt;
     public float _distance = 5.0f;
     public string _cameraXAxis = "Camera X";
     public string _cameraYAxis = "Camera Y";
@@ -15,7 +14,6 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
     public float _horizontalSensitivity = 1.0f;
     public float _verticalSensitivity = 1.0f;
     private bool _paused;
-    public float _smooth = 8.0f;
     private float _tempDistance, _oldDistance;
     private float _lerpDistance;
     private float _lerperHelper = 0;
@@ -35,6 +33,7 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
     {
         Cursor.lockState = CursorLockMode.Locked;
         _tempDistance = _distance;
+        _lookAt = gameObject.transform.parent;
     }
 
     private void Start()
@@ -119,13 +118,4 @@ public class ThirdPersonCam : MonoBehaviour, IPauseable
 
         return tDistance;
     }
-
-    /*IEnumerator reeeeeeeee()
-    {
-        for (int i = 0; i <= 100; i++)
-        {
-            yield return new WaitForSeconds(0.01f);
-            Mathf.Lerp(_distance, _tempDistance, i / 100);
-        }
-    }*/
 }
