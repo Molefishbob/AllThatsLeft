@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2733173651223602513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1471334110273695885}
+  - component: {fileID: 4038174636439144786}
+  - component: {fileID: 288385808125445704}
+  m_Layer: 0
+  m_Name: Bot Deploy Hold
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1471334110273695885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2733173651223602513}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4038174636439144786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2733173651223602513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a04cb68a16afd9449829343de7c8f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scrollButton: Scroll
+  _selectBot1Button: Bot1
+  _selectBot2Button: Bot2
+  _selectBot3Button: Bot3
+  _deployBotButton: Deploy Bot
+  _buttonDelay: 0.1
+  _deployDelay: 2
+  _deployTarget: {fileID: 2097698275950785963, guid: d992fffd01cfd9041bfb22e34b2970ee,
+    type: 3}
+  _extraSpaceRequired: 0.2
+  _deployCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 110592
+  _deployableTerrain:
+    serializedVersion: 2
+    m_Bits: 12288
+  _startingBotAmount: 10
+  _blueMaterial: {fileID: 2100000, guid: 382c0ebb119387840a835da365267ab5, type: 2}
+  _redMaterial: {fileID: 2100000, guid: 21f11a5ba58207149b40663d4c3cd3c9, type: 2}
+  _hackBot: {fileID: 4991703228675708496, guid: 4cd2893161ca1ae49adc12feee3f860d,
+    type: 3}
+  _bombBot: {fileID: 225399781754807981, guid: 305ba640e5722414cb61f5a2d661a3c6, type: 3}
+--- !u!114 &288385808125445704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2733173651223602513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
