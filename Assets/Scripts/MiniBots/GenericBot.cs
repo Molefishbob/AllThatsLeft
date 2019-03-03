@@ -15,6 +15,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     [SerializeField]
     private LayerMask _lPlatformLayer = 1 << 13;
     private GameObject _Platform;
+    private Transform _tPool;
     private Vector3 _PlatformLastPos;
     protected CharacterController _charCon;
     protected OneShotTimer _lifeTimeTimer;
@@ -23,6 +24,8 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     {
         _charCon = GetComponent<CharacterController>();
         _lifeTimeTimer = GetComponent<OneShotTimer>();
+        if(!_bDebug)
+            _tPool = transform.parent;
     }
 
     protected virtual void Start()
@@ -59,7 +62,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
         }
     }
 
-    protected virtual void StartMovement()
+    public virtual void StartMovement()
     {
         _bMoving = true;
         _lifeTimeTimer.SetTimerTarget(this);
@@ -71,7 +74,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
         _bMoving = false;
         _lifeTimeTimer.StopTimer();
         gameObject.SetActive(false);
-        // TODO: Return to pool
+        transform.parent = _tPool;
     }
 
     public void Pause()
