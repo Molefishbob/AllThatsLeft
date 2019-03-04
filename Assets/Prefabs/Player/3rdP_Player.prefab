@@ -279,6 +279,7 @@ GameObject:
   - component: {fileID: 2262639783887716210}
   - component: {fileID: 6361875651433932180}
   - component: {fileID: 8480785135076828658}
+  - component: {fileID: 6667332518330453696}
   m_Layer: 10
   m_Name: 3rdP_Player
   m_TagString: Untagged
@@ -352,6 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jumpHeight: 2.5
   _jumpButton: Jump
+  _jumpButtonLeeway: 0.2
 --- !u!114 &8480785135076828658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,6 +370,18 @@ MonoBehaviour:
   _platformLayerMask:
     serializedVersion: 2
     m_Bits: 8192
+--- !u!114 &6667332518330453696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6011697700877466058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9166840705227343364
 GameObject:
   m_ObjectHideFlags: 0
