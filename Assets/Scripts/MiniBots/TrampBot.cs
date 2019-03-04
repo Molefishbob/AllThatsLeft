@@ -7,10 +7,6 @@ public class TrampBot : GenericBot
     public float _fMaxJumpHeight = 10;
     const int _iPlayerLayer = 10;
     private PlayerJump _PlayerMover;
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-    }
 
     void OnTriggerEnter(Collider other)
     {

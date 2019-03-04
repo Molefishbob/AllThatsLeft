@@ -43,4 +43,7 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
     {
         Debug.Log("Player died");
     }
+
+    public void Die(){
+    }
 }

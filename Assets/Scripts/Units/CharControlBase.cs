@@ -138,8 +138,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
             // reset external movement
             _externalMove = Vector3.zero;
+
+            FixedUpdateAdditions();
         }
     }
+
+    protected virtual void FixedUpdateAdditions() { }
 
     /// <summary>
     /// Return a vector with a magnitude of [0,1]f to move.
