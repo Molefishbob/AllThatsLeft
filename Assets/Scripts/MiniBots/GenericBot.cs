@@ -35,6 +35,9 @@ public abstract class GenericBot : CharControlBase, ITimedAction
 
     public virtual void ResetBot()
     {
+        _bMoving = false;
+        _lifeTimeTimer.StopTimer();
+        transform.parent = _tPool;
         gameObject.SetActive(false);
     }
 
@@ -57,12 +60,6 @@ public abstract class GenericBot : CharControlBase, ITimedAction
     void OnEnable(){
         if(_bDebug)
             StartMovement();
-    }
-
-    void OnDisable(){
-        _bMoving = false;
-        _lifeTimeTimer.StopTimer();
-        transform.parent = _tPool;
     }
 
     protected override Vector3 InternalMovement()
