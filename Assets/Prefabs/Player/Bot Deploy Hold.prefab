@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1471334110273695885}
   - component: {fileID: 4038174636439144786}
   - component: {fileID: 288385808125445704}
+  - component: {fileID: 2480832646136565052}
   m_Layer: 0
   m_Name: Bot Deploy Hold
   m_TagString: Untagged
@@ -49,7 +50,7 @@ MonoBehaviour:
   _selectBot2Button: Bot2
   _selectBot3Button: Bot3
   _deployBotButton: Deploy Bot
-  _buttonDelay: 0.1
+  _takeOutBotButton: Take Out Bot
   _deployDelay: 2
   _deployTarget: {fileID: 2097698275950785963, guid: d992fffd01cfd9041bfb22e34b2970ee,
     type: 3}
@@ -60,13 +61,25 @@ MonoBehaviour:
   _deployableTerrain:
     serializedVersion: 2
     m_Bits: 12288
-  _startingBotAmount: 10
+  _deployHeightRange: 1
+  _botAmount: 5
+  _numTypes: 3
+  _automaticPutAwayDelay: 10
   _blueMaterial: {fileID: 2100000, guid: 382c0ebb119387840a835da365267ab5, type: 2}
   _redMaterial: {fileID: 2100000, guid: 21f11a5ba58207149b40663d4c3cd3c9, type: 2}
-  _hackBot: {fileID: 4991703228675708496, guid: 4cd2893161ca1ae49adc12feee3f860d,
-    type: 3}
-  _bombBot: {fileID: 225399781754807981, guid: 305ba640e5722414cb61f5a2d661a3c6, type: 3}
 --- !u!114 &288385808125445704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2733173651223602513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2480832646136565052
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
