@@ -163,4 +163,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     {
         _currentGravity = Physics.gravity * Time.deltaTime * Time.deltaTime;
     }
+
+    /// <summary>
+    /// Activates/deactivates character controller.
+    /// </summary>
+    public void SetControllerActive(bool active)
+    {
+        _controller.enabled = active;
+    }
 }

@@ -23,18 +23,18 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     // temporary
     public Material _blueMaterial;
     public Material _redMaterial;
-    public GenericBot _hackBot;
-    public GenericBot _bombBot;
-    //public GameObject _jumpBot;
 
     private bool _paused = false;
     private int _selectedBot = 0;
     private int _numTypes = 3;
     private ThirdPersonPlayerMovement _player;
     private OneShotTimer _timer;
-    private GenericBot _heldBot; //TODO: change this to base bot type
     private Renderer _indicator;
     private Vector3 _deployStartPosition;
+    private GenericBot _heldBot;
+    private HackPool _hackBotPool;
+    private BombPool _bombBotPool;
+    private TrampPool _jumpBotPool;
 
     public int BotAmount
     {
@@ -67,19 +67,6 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                 if (_player.IsGrounded)
                 {
                     RaycastHit hit;
-                    /* if (!Physics.CheckCapsule(
-                            _deployTarget.position + Vector3.up * (_heldBot.Radius + _extraSpaceRequired),
-                            _deployTarget.position + Vector3.up * (_heldBot.Height - _heldBot.Radius - _extraSpaceRequired),
-                            _heldBot.Radius + _extraSpaceRequired,
-                            _deployCollisionLayers
-                            ) &&
-                        Physics.SphereCast(
-                            _deployTarget.position + Vector3.up * _heldBot.Radius,
-                            _heldBot.Radius,
-                            Physics.gravity,
-                            out hit,
-                            _heldBot.SkinWidth + _deployTarget.localPosition.y,
-                            _deployableTerrain)) */
                     CharacterController heldController = _heldBot.GetComponent<CharacterController>();
                     Vector3 upVector = -Physics.gravity.normalized;
                     if (Physics.Raycast(
@@ -106,7 +93,8 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                                 _heldBot.transform.parent = null;
                                 _heldBot.transform.position = _deployTarget.position;
                                 _heldBot.transform.rotation = _deployTarget.rotation;
-                                //_heldBot.StartMovement();
+                                _heldBot.StartMovement();
+                                _heldBot.SetControllerActive(true);
                                 _heldBot = null;
                                 BotAmount--;
                                 _timer.StartTimer(_deployDelay);
@@ -153,11 +141,11 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                 {
                     selection = 1;
                 }
-                /* else if (Input.GetButtonDown(_selectBot3Button))
+                else if (Input.GetButtonDown(_selectBot3Button))
                 {
                     selection = 2;
                 }
-                else if (Input.GetButtonDown(_selectBot4Button))
+                /* else if (Input.GetButtonDown(_selectBot4Button))
                 {
                     selection = 3;
                 }
@@ -188,28 +176,27 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
 
                     if (_heldBot != null)
                     {
-                        // TODO: remove temporary destroy
-                        //_heldBot.gameObject.SetActive(false);
-                        Destroy(_heldBot.gameObject);
+                        _heldBot.ResetBot();
                         _heldBot = null;
                     }
 
                     switch (_selectedBot)
                     {
-                        // TODO: use bot pools
                         case 0:
-                            //_heldBot = ObjectPool<CharControlBase>.Instance.GetObject();
-                            _heldBot = Instantiate(_hackBot);
+                            _heldBot = _hackBotPool.GetObject();
                             break;
                         case 1:
-                            //_heldBot = ObjectPool<CharControlBase>.Instance.GetObject();
-                            _heldBot = Instantiate(_bombBot);
+                            _heldBot = _bombBotPool.GetObject();
+                            break;
+                        case 2:
+                            _heldBot = _jumpBotPool.GetObject();
                             break;
                         default:
                             Debug.LogError("INVALID BOT ID");
                             break;
                     }
 
+                    _heldBot.SetControllerActive(false);
                     _heldBot.transform.parent = transform;
                     _heldBot.transform.position = transform.position;
                     _heldBot.transform.rotation = transform.rotation;
