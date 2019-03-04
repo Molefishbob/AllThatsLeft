@@ -48,6 +48,9 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         _player = GetComponentInParent<ThirdPersonPlayerMovement>();
         _timer = GetComponent<OneShotTimer>();
         _indicator = _deployTarget.GetComponentInChildren<Renderer>();
+        _hackBotPool = FindObjectOfType<HackPool>();
+        _bombBotPool = FindObjectOfType<BombPool>();
+        _jumpBotPool = FindObjectOfType<TrampPool>();
     }
 
     private void Start()
