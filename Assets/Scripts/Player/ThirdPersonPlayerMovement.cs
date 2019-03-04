@@ -18,8 +18,8 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
     protected override Vector3 InternalMovement()
     {
         // read input
-        float horizontal = Input.GetAxisRaw(_horizontalAxis);
-        float vertical = Input.GetAxisRaw(_verticalAxis);
+        float horizontal = Input.GetAxis(_horizontalAxis);
+        float vertical = Input.GetAxis(_verticalAxis);
 
         // create combined vector of input
         Vector3 inputDirection = new Vector3(horizontal, 0, vertical);
