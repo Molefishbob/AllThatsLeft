@@ -24,8 +24,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     {
         _charCon = GetComponent<CharacterController>();
         _lifeTimeTimer = GetComponent<OneShotTimer>();
-        if(!_bDebug)
-            _tPool = transform.parent;
+        _tPool = transform.parent;
     }
 
     protected virtual void Start()
@@ -71,10 +70,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
 
     public virtual void ResetBot()
     {
-        _bMoving = false;
-        _lifeTimeTimer.StopTimer();
         gameObject.SetActive(false);
-        transform.parent = _tPool;
     }
 
     public void Pause()
@@ -122,5 +118,11 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     void OnEnable(){
         if(_bDebug)
             StartMovement();
+    }
+
+    void OnDisable(){
+        _bMoving = false;
+        _lifeTimeTimer.StopTimer();
+        transform.parent = _tPool;
     }
 }
