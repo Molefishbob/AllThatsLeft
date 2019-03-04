@@ -12,7 +12,7 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
     protected override void Awake()
     {
         base.Awake();
-        _cameraTransform = FindObjectOfType<ThirdPersonCam>().transform;
+        _cameraTransform = FindObjectOfType<NoZoomThirdPersonCam>().transform;
     }
 
     protected override Vector3 InternalMovement()

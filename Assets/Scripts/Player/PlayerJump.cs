@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJump : MonoBehaviour, IPauseable
+public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 {
     public float _jumpHeight;
     public string _jumpButton = "Jump";
+    public float _jumpButtonLeeway;
 
     private Vector3 _currentJumpForce;
     private bool _jumping;
     private bool _forcedJumping;
     private ThirdPersonPlayerMovement _player;
+    private OneShotTimer _timer;
+    private bool _pressedJump;
 
     private bool _paused;
 
@@ -27,12 +30,14 @@ public class PlayerJump : MonoBehaviour, IPauseable
     private void Awake()
     {
         _player = GetComponent<ThirdPersonPlayerMovement>();
+        _timer = GetComponent<OneShotTimer>();
     }
 
     private void Start()
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
+        _timer.SetTimerTarget(this);
     }
 
     private void OnDestroy()
@@ -47,18 +52,27 @@ public class PlayerJump : MonoBehaviour, IPauseable
     {
         if (!_paused)
         {
+            if (Input.GetButtonDown(_jumpButton))
+            {
+                _pressedJump = true;
+                _timer.StartTimer(_jumpButtonLeeway);
+            }
+
             if (_forcedJumping)
             {
                 _forcedJumping = false;
                 _jumping = true;
-                _player.AddDirectMovement(_currentJumpForce);
             }
             else if (_player.IsGrounded)
             {
-                _jumping = Input.GetButton(_jumpButton);
-                if (_jumping)
+                if (_pressedJump)
                 {
+                    _jumping = true;
                     _currentJumpForce = GetJumpForce(_jumpHeight);
+                }
+                else
+                {
+                    _jumping = false;
                 }
             }
 
@@ -83,5 +97,10 @@ public class PlayerJump : MonoBehaviour, IPauseable
         _player.ResetGravity();
         _currentJumpForce = GetJumpForce(height);
         _forcedJumping = true;
+    }
+
+    public void TimedAction()
+    {
+        _pressedJump = false;
     }
 }
