@@ -44,7 +44,7 @@ public class BombBot : GenericBot
         }
     }
 
-    protected override void StartMovement(){
+    public override void StartMovement(){
         base.StartMovement();
         _bIsChecking = true;
     }
