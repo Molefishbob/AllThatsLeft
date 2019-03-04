@@ -73,10 +73,7 @@ public class FrogEnemy : CharControlBase, ITimedAction
         }else if(_backToPrevious && x < 0.1f && x > -0.1f && z < 0.1f && z > -0.1f)
         {
             _backToPrevious = false;
-        }
-
-        Debug.Log(_backToPrevious);
-        
+        }       
 
         Vector3 move = new Vector3(x,y,z);
         

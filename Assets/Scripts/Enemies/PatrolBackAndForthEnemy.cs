@@ -8,25 +8,23 @@ public class PatrolBackAndForthEnemy : CharControlBase
     private int _targetCounter;
     private bool _goingForward;
 
-    //TODO: make everything better
-
     protected override void Start()
     {
         _targetCounter = 0;
-        _goingForward = false;
+        _goingForward = true;
         Init();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.layer == 22)
         {
-            //Todo: fix first target hit so it does not "drift"
             if (_goingForward)
             {
                 _targetCounter++;
             }
-            else
+            else if(!_goingForward && _targetCounter > 0)
             {
                 _targetCounter--;
             }
@@ -37,10 +35,9 @@ public class PatrolBackAndForthEnemy : CharControlBase
                 _targetCounter = _transforms.Count - 2;
 
             }
-            else if (_targetCounter < 0)
+            else if (_targetCounter == 0)
             {
                 _goingForward = true;
-                _targetCounter = 0;
             }
         }
     }
@@ -56,6 +53,7 @@ public class PatrolBackAndForthEnemy : CharControlBase
                 _transforms.Add(child);
             }
         }
+      
     }
 
     protected override Vector3 InternalMovement()
