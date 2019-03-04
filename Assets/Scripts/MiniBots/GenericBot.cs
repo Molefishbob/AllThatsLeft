@@ -12,6 +12,11 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     public bool _bMoving;
     public bool _bDebug;
     protected bool _bPaused;
+    [SerializeField]
+    private LayerMask _lPlatformLayer = 1 << 13;
+    private GameObject _Platform;
+    private Transform _tPool;
+    private Vector3 _PlatformLastPos;
     protected CharacterController _charCon;
     protected OneShotTimer _lifeTimeTimer;
 
@@ -19,6 +24,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     {
         _charCon = GetComponent<CharacterController>();
         _lifeTimeTimer = GetComponent<OneShotTimer>();
+        _tPool = transform.parent;
     }
 
     protected virtual void Start()
@@ -32,19 +38,30 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     {
         if (!_bPaused)
         {
+            Vector3 movement = Vector3.zero;
+            movement += Physics.gravity * Time.deltaTime;
+            RaycastHit hit;
+            if (Physics.SphereCast(transform.position, _charCon.radius * 1.1f, -transform.up, out hit, _charCon.height * 0.6f, _lPlatformLayer)){
+                if(hit.collider.gameObject == _Platform){
+                    movement += _Platform.transform.position - _PlatformLastPos;
+                }
+                _Platform = hit.collider.gameObject;
+                _PlatformLastPos = _Platform.transform.position;
+            } else {
+                _Platform = null;
+            }
             if (_bMoving)
             {
-                Vector3 movement = transform.forward * _fSpeed * Time.deltaTime;
-                movement += Physics.gravity * Time.deltaTime;
-                _charCon.Move(movement);
+                movement += transform.forward * _fSpeed * Time.deltaTime;
                 if((_charCon.collisionFlags & CollisionFlags.CollidedSides) != 0){
                     _bMoving = false;
                 }
             }
+            _charCon.Move(movement);
         }
     }
 
-    protected virtual void StartMovement()
+    public virtual void StartMovement()
     {
         _bMoving = true;
         _lifeTimeTimer.SetTimerTarget(this);
@@ -53,10 +70,7 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
 
     public virtual void ResetBot()
     {
-        _bMoving = false;
-        _lifeTimeTimer.StopTimer();
         gameObject.SetActive(false);
-        // TODO: Return to pool
     }
 
     public void Pause()
@@ -104,5 +118,11 @@ public class GenericBot : MonoBehaviour, IPauseable, ITimedAction
     void OnEnable(){
         if(_bDebug)
             StartMovement();
+    }
+
+    void OnDisable(){
+        _bMoving = false;
+        _lifeTimeTimer.StopTimer();
+        transform.parent = _tPool;
     }
 }
