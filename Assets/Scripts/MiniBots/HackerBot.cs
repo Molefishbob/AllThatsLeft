@@ -19,22 +19,18 @@ public class HackerBot : GenericBot
         base.Start();
     }
 
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        if(!_bPaused){
-            if(_fCheckTime >= _fCheckTimer && _bIsChecking){
-                CheckSurroundings();
-            }
-            _fCheckTime += Time.deltaTime;
+    protected override void FixedUpdateAdditions(){
+        if(_fCheckTime >= _fCheckTimer && _bIsChecking){
+            CheckSurroundings();
+        }
+        _fCheckTime += Time.deltaTime;
 
-            if(_goClosestObject != null){
-                _lifeTimeTimer.StopTimer();
-                TurnTowards(_goClosestObject);
-                if((transform.position - _goClosestObject.transform.position).magnitude < _fStopRange){
-                    _bMoving = false;
-                    // say to the console im here maybe
-                }
+        if(_goClosestObject != null){
+            _lifeTimeTimer.StopTimer();
+            TurnTowards(_goClosestObject);
+            if((transform.position - _goClosestObject.transform.position).magnitude < _fStopRange){
+                _bMoving = false;
+                // say to the console im here maybe
             }
         }
     }

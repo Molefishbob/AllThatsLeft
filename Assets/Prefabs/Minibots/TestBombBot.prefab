@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 225399781754807981}
   - component: {fileID: 225399781754807980}
   - component: {fileID: 5280323333214255233}
+  - component: {fileID: 477012257307009174}
   m_Layer: 9
   m_Name: TestBombBot
   m_TagString: Untagged
@@ -123,14 +124,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27342a2793936b14a8e941aa058bb381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fSpeed: 2
+  _speed: 3
+  _turningSpeed: 540
+  _accelerationTime: 10
   _fTurnSpeed: 2
   _fLifetime: 10
   _bMoving: 0
   _bDebug: 0
-  _lPlatformLayer:
-    serializedVersion: 2
-    m_Bits: 8192
   _fExplosionRadius: 3
   _fExplodeTimer: 1
   _lUnignoredLayers:
@@ -166,3 +166,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &477012257307009174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225399781754807979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5938e84cdbaa47f47b878d9aa6d5cdbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _linearDrag: 0.02
+  _platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 8192
