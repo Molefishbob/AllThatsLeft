@@ -317,7 +317,7 @@ CharacterController:
   m_Height: 1.75
   m_Radius: 0.4375
   m_SlopeLimit: 30
-  m_StepOffset: 0.1
+  m_StepOffset: 0.4375
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.875, z: 0}
@@ -532,11 +532,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5186895985301270249}
     m_Modifications:
-    - target: {fileID: 2733173651223602513, guid: 04eea635a96722840ad5743e44216d4f,
-        type: 3}
-      propertyPath: m_Name
-      value: Bot Deploy Hold
-      objectReference: {fileID: 0}
     - target: {fileID: 1471334110273695885, guid: 04eea635a96722840ad5743e44216d4f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -607,6 +602,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2733173651223602513, guid: 04eea635a96722840ad5743e44216d4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Bot Deploy Hold
+      objectReference: {fileID: 0}
     - target: {fileID: 4038174636439144786, guid: 04eea635a96722840ad5743e44216d4f,
         type: 3}
       propertyPath: _deployTarget
@@ -627,11 +627,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1214044774675275346}
     m_Modifications:
-    - target: {fileID: 1962981936171047779, guid: d992fffd01cfd9041bfb22e34b2970ee,
-        type: 3}
-      propertyPath: m_Name
-      value: Bot Deploy Target
-      objectReference: {fileID: 0}
     - target: {fileID: 2097698275950785963, guid: d992fffd01cfd9041bfb22e34b2970ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -686,6 +681,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1962981936171047779, guid: d992fffd01cfd9041bfb22e34b2970ee,
+        type: 3}
+      propertyPath: m_Name
+      value: Bot Deploy Target
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d992fffd01cfd9041bfb22e34b2970ee, type: 3}
