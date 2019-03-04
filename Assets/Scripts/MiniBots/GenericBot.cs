@@ -29,6 +29,7 @@ public abstract class GenericBot : CharControlBase, ITimedAction
     public virtual void StartMovement()
     {
         _bMoving = true;
+        SetControllerActive(true);
         _lifeTimeTimer.SetTimerTarget(this);
         _lifeTimeTimer.StartTimer(_fLifetime);
     }
@@ -58,6 +59,7 @@ public abstract class GenericBot : CharControlBase, ITimedAction
     }
 
     void OnEnable(){
+        SetControllerActive(false);
         if(_bDebug)
             StartMovement();
     }
