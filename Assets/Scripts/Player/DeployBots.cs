@@ -97,7 +97,6 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                                 _heldBot.transform.position = _deployTarget.position;
                                 _heldBot.transform.rotation = _deployTarget.rotation;
                                 _heldBot.StartMovement();
-                                _heldBot.SetControllerActive(true);
                                 _heldBot = null;
                                 BotAmount--;
                                 _timer.StartTimer(_deployDelay);
@@ -199,7 +198,6 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                             break;
                     }
 
-                    _heldBot.SetControllerActive(false);
                     _heldBot.transform.parent = transform;
                     _heldBot.transform.position = transform.position;
                     _heldBot.transform.rotation = transform.rotation;
