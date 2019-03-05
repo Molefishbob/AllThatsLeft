@@ -24,27 +24,23 @@ public class BombBot : GenericBot
         base.Start();
     }
 
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        if(!_bPaused){
-            if(_fCheckTime > _fCheckTimer && _bIsChecking){
-                CheckSurroundings();
-            } else if (_bIsExploding && _fCheckTime > _fExplodeTimer){
-                Explode();
-            }
-            if((_charCon.collisionFlags & CollisionFlags.CollidedSides) != 0 && !_bIsChecking)
-                Explode();
-
-            if(_goClosestObject != null){
-                TurnTowards(_goClosestObject);
-            }
-            
-            _fCheckTime += Time.deltaTime;
+    protected override void FixedUpdateAdditions(){
+        if(_fCheckTime > _fCheckTimer && _bIsChecking){
+            CheckSurroundings();
+        } else if (_bIsExploding && _fCheckTime > _fExplodeTimer){
+            Explode();
         }
+        if((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0 && !_bIsChecking)
+            Explode();
+
+        if(_goClosestObject != null){
+            TurnTowards(_goClosestObject);
+        }
+        
+        _fCheckTime += Time.deltaTime;
     }
 
-    protected override void StartMovement(){
+    public override void StartMovement(){
         base.StartMovement();
         _bIsChecking = true;
     }

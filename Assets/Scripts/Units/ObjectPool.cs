@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ObjectPool<T> : Singleton<ObjectPool<T>> where T : MonoBehaviour
+public abstract class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField]
     protected T _prefab;
@@ -20,6 +20,7 @@ public abstract class ObjectPool<T> : Singleton<ObjectPool<T>> where T : MonoBeh
             T obj = Spawn();
             obj.gameObject.SetActive(false);
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     /// <summary>

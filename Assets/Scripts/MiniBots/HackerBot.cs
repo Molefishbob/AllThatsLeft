@@ -5,6 +5,7 @@ using UnityEngine;
 public class HackerBot : GenericBot
 {
     public float _fDetectRadius = 3f;
+    [SerializeField]
     private float _fStopRange = 2f;
     public LayerMask _lHackableLayer;
     private float _fCheckTimer = 0.25f;
@@ -18,27 +19,23 @@ public class HackerBot : GenericBot
         base.Start();
     }
 
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-        if(!_bPaused){
-            if(_fCheckTime >= _fCheckTimer && _bIsChecking){
-                CheckSurroundings();
-            }
-            _fCheckTime += Time.deltaTime;
+    protected override void FixedUpdateAdditions(){
+        if(_fCheckTime >= _fCheckTimer && _bIsChecking){
+            CheckSurroundings();
+        }
+        _fCheckTime += Time.deltaTime;
 
-            if(_goClosestObject != null){
-                TurnTowards(_goClosestObject);
-                if((transform.position - _goClosestObject.transform.position).magnitude < _fStopRange){
-                    _bMoving = false;
-                    _lifeTimeTimer.StopTimer();
-                    // say to the console im here maybe
-                }
+        if(_goClosestObject != null){
+            _lifeTimeTimer.StopTimer();
+            TurnTowards(_goClosestObject);
+            if((transform.position - _goClosestObject.transform.position).magnitude < _fStopRange){
+                _bMoving = false;
+                // say to the console im here maybe
             }
         }
     }
 
-    protected override void StartMovement(){
+    public override void StartMovement(){
         base.StartMovement();
         _bIsChecking = true;
     }
