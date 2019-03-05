@@ -21,7 +21,10 @@ public abstract class ScaledTimer : Timer, IPauseable
             {
                 _timer = Duration;
                 CompletedTimer();
-                _timedObject.TimedAction();
+                if (IsTargeted)
+                {
+                    _timedObject.TimedAction();
+                }
             }
         }
     }
