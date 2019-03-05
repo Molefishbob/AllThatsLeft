@@ -89,7 +89,6 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     protected virtual void OnDrawGizmosSelected() {
         
         _transform = new List<Transform>(transform.parent.childCount);
-        float sinTime = Mathf.Sin(Time.time);
 
         foreach (Transform child in transform.parent) {
             if (child != transform) {
@@ -99,7 +98,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
         for (int a  = 0; a < _transform.Count;a++) 
         {
             if (a + 1 != _transform.Count) {
-                Gizmos.color = Color.Lerp(Color.magenta,Color.white,sinTime);
+                Gizmos.color = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f),1);
                 Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
                 }
         }
