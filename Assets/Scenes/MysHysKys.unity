@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -665,11 +665,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6011697700877466058, guid: de82d5bc12a940a4bb21840c856e1f80,
-        type: 3}
-      propertyPath: m_Name
-      value: 3rdP_Player
-      objectReference: {fileID: 0}
     - target: {fileID: 1214044774675275346, guid: de82d5bc12a940a4bb21840c856e1f80,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -724,6 +719,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6011697700877466058, guid: de82d5bc12a940a4bb21840c856e1f80,
+        type: 3}
+      propertyPath: m_Name
+      value: 3rdP_Player
       objectReference: {fileID: 0}
     - target: {fileID: 2048741064143737893, guid: de82d5bc12a940a4bb21840c856e1f80,
         type: 3}
@@ -878,6 +878,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoveBetweenObjectsBackForth_EXAMPLE
       objectReference: {fileID: 0}
+    - target: {fileID: 9103827202256837322, guid: a5bcba67f37210242b6577655149223f,
+        type: 3}
+      propertyPath: _activated
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9103827201842976810, guid: a5bcba67f37210242b6577655149223f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -932,11 +937,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9103827202256837322, guid: a5bcba67f37210242b6577655149223f,
-        type: 3}
-      propertyPath: _activated
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5bcba67f37210242b6577655149223f, type: 3}
@@ -1103,7 +1103,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1856805238}
   m_LocalRotation: {x: 0.0029386207, y: 0.008009189, z: 0.001841588, w: 0.9999619}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -0.05, z: -0.06}
   m_LocalScale: {x: 50, y: 4, z: 50}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1293,6 +1293,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoveBetweenObjectsLoop_EXAMPLE
       objectReference: {fileID: 0}
+    - target: {fileID: 7281724848398870854, guid: afa1e3652aa5cc4409caec5b496944c2,
+        type: 3}
+      propertyPath: _activated
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7281724848377874318, guid: afa1e3652aa5cc4409caec5b496944c2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1366,11 +1371,6 @@ PrefabInstance:
     - target: {fileID: 7281724847263494925, guid: afa1e3652aa5cc4409caec5b496944c2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7281724848398870854, guid: afa1e3652aa5cc4409caec5b496944c2,
-        type: 3}
-      propertyPath: _activated
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1538,6 +1538,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Console_EXAMPLE
       objectReference: {fileID: 0}
+    - target: {fileID: 2011995365629210976, guid: 19f5e74fee2878e429c26ca50b551bf2,
+        type: 3}
+      propertyPath: _hackTarget
+      value: 
+      objectReference: {fileID: 2063425525}
     - target: {fileID: 2011995365629210983, guid: 19f5e74fee2878e429c26ca50b551bf2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1608,11 +1613,6 @@ PrefabInstance:
       propertyPath: m_isInputParsingRequired
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2011995365629210976, guid: 19f5e74fee2878e429c26ca50b551bf2,
-        type: 3}
-      propertyPath: _hackTarget
-      value: 
-      objectReference: {fileID: 2063425525}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19f5e74fee2878e429c26ca50b551bf2, type: 3}
 --- !u!1001 &6327807004613286877
@@ -1711,6 +1711,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: MultipleActivationTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 8125836142281123931, guid: 1b6d26c7aded2d54e955225404e1e9d3,
+        type: 3}
+      propertyPath: _consoles.Array.data[0]
+      value: 
+      objectReference: {fileID: 1123558561}
+    - target: {fileID: 8125836142281123931, guid: 1b6d26c7aded2d54e955225404e1e9d3,
+        type: 3}
+      propertyPath: _targets.Array.data[0]
+      value: 
+      objectReference: {fileID: 784011417}
+    - target: {fileID: 8125836142281123931, guid: 1b6d26c7aded2d54e955225404e1e9d3,
+        type: 3}
+      propertyPath: _targets.Array.data[1]
+      value: 
+      objectReference: {fileID: 895108203}
     - target: {fileID: 8125836142281123928, guid: 1b6d26c7aded2d54e955225404e1e9d3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1766,20 +1781,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8125836142281123931, guid: 1b6d26c7aded2d54e955225404e1e9d3,
-        type: 3}
-      propertyPath: _consoles.Array.data[0]
-      value: 
-      objectReference: {fileID: 1123558561}
-    - target: {fileID: 8125836142281123931, guid: 1b6d26c7aded2d54e955225404e1e9d3,
-        type: 3}
-      propertyPath: _targets.Array.data[0]
-      value: 
-      objectReference: {fileID: 784011417}
-    - target: {fileID: 8125836142281123931, guid: 1b6d26c7aded2d54e955225404e1e9d3,
-        type: 3}
-      propertyPath: _targets.Array.data[1]
-      value: 
-      objectReference: {fileID: 895108203}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b6d26c7aded2d54e955225404e1e9d3, type: 3}
