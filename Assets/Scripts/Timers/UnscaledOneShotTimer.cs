@@ -13,7 +13,10 @@ public class UnscaledOneShotTimer : Timer
             {
                 _timer = Duration;
                 CompletedTimer();
-                _timedObject.TimedAction();
+                if (IsTargeted)
+                {
+                    _timedObject.TimedAction();
+                }
             }
         }
     }
