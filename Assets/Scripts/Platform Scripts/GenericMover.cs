@@ -25,7 +25,6 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     private void Awake()
     {
         _timer = GetComponent<RepeatingTimer>();
-        _transform.Clear();
     }
 
     // Start is called before the first frame update
