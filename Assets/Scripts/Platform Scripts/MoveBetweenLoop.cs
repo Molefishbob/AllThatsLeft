@@ -64,4 +64,27 @@ public class MoveBetweenLoop: GenericMover
         _nextObjectNum = 1;
         _currentObjectNum = 0;
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    protected override void OnDrawGizmosSelected() {
+        
+        _transform = new List<Transform>(transform.parent.childCount);
+
+        foreach (Transform child in transform.parent) {
+            if (child != transform) {
+                _transform.Add(child);
+            }
+        }
+        for (int a  = 0; a < _transform.Count;a++) 
+        {
+            if (a + 1 != _transform.Count) {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
+                } else 
+                {
+                    Gizmos.DrawLine(_transform[a].position,_transform[0].position);
+                }
+        }
+    }
 }

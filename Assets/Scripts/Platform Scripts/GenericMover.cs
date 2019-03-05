@@ -25,6 +25,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     private void Awake()
     {
         _timer = GetComponent<RepeatingTimer>();
+        _transform.Clear();
     }
 
     // Start is called before the first frame update
@@ -80,5 +81,23 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     public void ButtonUp()
     {
 
+    }
+
+    protected virtual void OnDrawGizmosSelected() {
+        
+        _transform = new List<Transform>(transform.parent.childCount);
+
+        foreach (Transform child in transform.parent) {
+            if (child != transform) {
+                _transform.Add(child);
+            }
+        }
+        for (int a  = 0; a < _transform.Count;a++) 
+        {
+            if (a + 1 != _transform.Count) {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
+                }
+        }
     }
 }
