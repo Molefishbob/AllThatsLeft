@@ -11,7 +11,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     [Tooltip("NOT in seconds")]
     public float _accelerationTime = 10;
     [SerializeField,Tooltip("The y position on which the unit dies")]
-    private float _minYPosition = 0;
+    private float _minYPosition = -10;
 
     protected CharacterController _controller;
     protected bool _paused;
