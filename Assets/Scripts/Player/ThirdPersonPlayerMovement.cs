@@ -41,9 +41,12 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Player died");
+        Die();
     }
 
-    public void Die(){
+    public void Die()
+    {
+        Debug.Log("Player died");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

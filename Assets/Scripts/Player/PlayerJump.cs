@@ -11,7 +11,6 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private Vector3 _currentJumpForce;
     private bool _jumping;
     private bool _forcedJumping;
-    private ThirdPersonPlayerMovement _player;
     private OneShotTimer _timer;
     private bool _pressedJump;
 
@@ -29,7 +28,6 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 
     private void Awake()
     {
-        _player = GetComponent<ThirdPersonPlayerMovement>();
         _timer = GetComponent<OneShotTimer>();
     }
 
@@ -63,7 +61,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                 _forcedJumping = false;
                 _jumping = true;
             }
-            else if (_player.IsGrounded)
+            else if (GameManager.Instance.Player.IsGrounded)
             {
                 if (_pressedJump)
                 {
@@ -78,7 +76,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 
             if (_jumping)
             {
-                _player.AddDirectMovement(_currentJumpForce);
+                GameManager.Instance.Player.AddDirectMovement(_currentJumpForce);
             }
         }
     }
@@ -94,7 +92,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     /// <param name="height">height in meters</param>
     public void ForceJump(float height)
     {
-        _player.ResetGravity();
+        GameManager.Instance.Player.ResetGravity();
         _currentJumpForce = GetJumpForce(height);
         _forcedJumping = true;
     }

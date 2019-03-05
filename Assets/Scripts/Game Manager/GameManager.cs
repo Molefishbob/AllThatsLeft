@@ -13,6 +13,19 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public bool GamePaused { get; private set; }
 
+    private ThirdPersonPlayerMovement _player;
+    public ThirdPersonPlayerMovement Player
+    {
+        get
+        {
+            if (_player == null)
+            {
+                _player = FindObjectOfType<ThirdPersonPlayerMovement>();
+            }
+            return _player;
+        }
+    }
+
     private float _timeScaleBeforePause = 1.0f;
 
     private void Awake()

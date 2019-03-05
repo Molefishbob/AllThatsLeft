@@ -7,13 +7,18 @@ public class TrampBot : GenericBot
     public float _fMaxJumpHeight = 10;
     const int _iPlayerLayer = 10;
     private PlayerJump _PlayerMover;
+    private ThirdPersonPlayerMovement _Player;
     private bool _bCanBounce = false;
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == _iPlayerLayer && _bCanBounce){
-            _PlayerMover = other.GetComponent<PlayerJump>();
-            _PlayerMover.ForceJump(_fMaxJumpHeight);
+            if (_PlayerMover == null) {
+                _PlayerMover = other.GetComponent<PlayerJump>();
+                _Player = other.GetComponent<ThirdPersonPlayerMovement>();
+            }
+            if (!_Player.IsGrounded)
+                _PlayerMover.ForceJump(_fMaxJumpHeight);
         }
     }
 
