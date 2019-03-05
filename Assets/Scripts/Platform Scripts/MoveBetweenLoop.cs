@@ -44,6 +44,7 @@ public class MoveBetweenLoop: GenericMover
             _nextObjectNum = 0;
         }
     }
+
     /// <summary>
     /// Initializes the script.
     /// 
@@ -54,6 +55,7 @@ public class MoveBetweenLoop: GenericMover
         base.Init();
         _length += (_transform[0].position - _transform[_amountOfTransforms].position).magnitude;
     }
+
     /// <summary>
     /// Called when the timer is completed.
     /// 
@@ -64,12 +66,14 @@ public class MoveBetweenLoop: GenericMover
         _nextObjectNum = 1;
         _currentObjectNum = 0;
     }
+
     /// <summary>
-    /// 
+    /// Draws lines between the checkpoints that the platform moves through.
     /// </summary>
     protected override void OnDrawGizmosSelected() {
         
         _transform = new List<Transform>(transform.parent.childCount);
+        float sinTime = Mathf.Sin(Time.time);
 
         foreach (Transform child in transform.parent) {
             if (child != transform) {
@@ -79,7 +83,7 @@ public class MoveBetweenLoop: GenericMover
         for (int a  = 0; a < _transform.Count;a++) 
         {
             if (a + 1 != _transform.Count) {
-                Gizmos.color = Color.red;
+                Gizmos.color = Color.Lerp(Color.magenta,Color.white,sinTime);
                 Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
                 } else 
                 {

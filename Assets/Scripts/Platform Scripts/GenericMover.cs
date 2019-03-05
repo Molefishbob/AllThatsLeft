@@ -83,9 +83,13 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
 
     }
 
+    /// <summary>
+    /// Draws lines between the checkpoints that the platform moves through.
+    /// </summary>
     protected virtual void OnDrawGizmosSelected() {
         
         _transform = new List<Transform>(transform.parent.childCount);
+        float sinTime = Mathf.Sin(Time.time);
 
         foreach (Transform child in transform.parent) {
             if (child != transform) {
@@ -95,7 +99,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
         for (int a  = 0; a < _transform.Count;a++) 
         {
             if (a + 1 != _transform.Count) {
-                Gizmos.color = Color.red;
+                Gizmos.color = Color.Lerp(Color.magenta,Color.white,sinTime);
                 Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
                 }
         }
