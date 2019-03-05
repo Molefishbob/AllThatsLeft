@@ -28,7 +28,6 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
 
     private bool _paused = false;
     private int _selectedBot = 0;
-    private ThirdPersonPlayerMovement _player;
     private OneShotTimer _deployDelayTimer;
     private OneShotTimer _autoAwayTimer;
     private bool _scrollUsable = true;
@@ -41,7 +40,6 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
 
     private void Awake()
     {
-        _player = GetComponentInParent<ThirdPersonPlayerMovement>();
         OneShotTimer[] timers = GetComponents<OneShotTimer>();
         _deployDelayTimer = timers[0];
         _autoAwayTimer = timers[1];
@@ -148,7 +146,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
             {
                 HideIndicator();
             }
-            else if (_player.IsGrounded)
+            else if (GameManager.Instance.Player.IsGrounded)
             {
                 RaycastHit hit;
                 Vector3 upVector = -Physics.gravity.normalized;
