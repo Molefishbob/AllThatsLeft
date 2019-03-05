@@ -25,6 +25,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     private void Awake()
     {
         _timer = GetComponent<RepeatingTimer>();
+        _transform.Clear();
     }
 
     // Start is called before the first frame update
@@ -80,5 +81,26 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     public void ButtonUp()
     {
 
+    }
+
+    /// <summary>
+    /// Draws lines between the checkpoints that the platform moves through.
+    /// </summary>
+    protected virtual void OnDrawGizmosSelected() {
+        
+        _transform = new List<Transform>(transform.parent.childCount);
+
+        foreach (Transform child in transform.parent) {
+            if (child != transform) {
+                _transform.Add(child);
+            }
+        }
+        for (int a  = 0; a < _transform.Count;a++) 
+        {
+            if (a + 1 != _transform.Count) {
+                Gizmos.color = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f),1);
+                Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
+                }
+        }
     }
 }

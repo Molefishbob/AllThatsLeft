@@ -5,9 +5,9 @@ using UnityEngine;
 public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
 {
     [SerializeField]
-    private List<MonoBehaviour> _consoles;
+    private List<MonoBehaviour> _consoles = null;
     [SerializeField]
-    private List<MonoBehaviour> _targets;
+    private List<MonoBehaviour> _targets = null;
 
     private void Start()
     {
