@@ -21,13 +21,11 @@ public abstract class GenericEnvironmentDanger : MonoBehaviour, ITimedAction
         
     }
 
-    protected abstract void DoDamage(Collider other);
-    protected abstract void StopDamage();
-
-    protected virtual void OnTriggerStay(Collider other)
+    protected void DoDamage(Collider other)
     {
-        DoDamage(other);
+        other.GetComponent<IDamageReceiver>().TakeDamage(100);
     }
+    protected abstract void StopDamage();
 
     protected virtual void OnTriggerExit(Collider other)
     {

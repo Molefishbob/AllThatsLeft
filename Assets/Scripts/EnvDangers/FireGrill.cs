@@ -43,18 +43,13 @@ public class FireGrill : GenericEnvironmentDanger
             _currentStatus = Status.NoFire;
         }
     }
-
-    protected override void DoDamage(Collider other)
-    {
-        other.GetComponent<IDamageReceiver>().TakeDamage(100);
-    }
-
+    
     protected override void StopDamage()
     {
         throw new System.NotImplementedException();
     }
 
-    protected override void OnTriggerStay(Collider other)
+    protected void OnTriggerStay(Collider other)
     {
         if (_currentStatus == Status.Fire)
         {
