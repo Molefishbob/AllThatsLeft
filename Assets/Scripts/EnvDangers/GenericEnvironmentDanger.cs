@@ -2,17 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericEnvironmentDanger : MonoBehaviour
+public abstract class GenericEnvironmentDanger : MonoBehaviour, ITimedAction
 {
-    // Start is called before the first frame update
-    void Start()
+    protected OneShotTimer _timer;
+
+    protected virtual void Awake()
+    {
+        _timer = UnityEngineExtensions.GetOrAddComponent<OneShotTimer>(gameObject);
+    }
+
+    protected virtual void Start()
+    {
+        _timer.SetTimerTarget(this);
+    }
+
+    protected virtual void FixedUpdate()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    protected abstract void DoDamage(Collider other);
+    protected abstract void StopDamage();
+
+    protected virtual void OnTriggerStay(Collider other)
     {
-        
+        DoDamage(other);
     }
+
+    protected virtual void OnTriggerExit(Collider other)
+    {
+        StopDamage();
+    }
+
+    /// <summary>
+    /// What happens after the timer has run out
+    /// </summary>
+    public abstract void TimedAction();
 }

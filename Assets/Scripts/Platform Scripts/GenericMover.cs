@@ -22,7 +22,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
 
     protected virtual void Awake()
     {
-        _timer = GetComponent<RepeatingTimer>();
+        _timer = UnityEngineExtensions.GetOrAddComponent<RepeatingTimer>(gameObject);
         _transform = new List<Transform>(transform.parent.childCount);
 
         foreach (Transform child in transform.parent) {
