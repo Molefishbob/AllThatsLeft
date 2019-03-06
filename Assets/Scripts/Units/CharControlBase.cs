@@ -10,6 +10,8 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     public float _turningSpeed = 540;
     [Tooltip("NOT in seconds")]
     public float _accelerationTime = 10;
+    [SerializeField,Tooltip("The y position on which the unit dies")]
+    private float _minYPosition = -10;
 
     protected CharacterController _controller;
     protected bool _paused;
@@ -18,6 +20,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     private Vector3 _internalMove = Vector3.zero;
     private Vector3 _currentGravity = Vector3.zero;
     private bool _controllerEnabled = true;
+    private IDamageReceiver _damageReceiver = null;
 
     public bool IsGrounded { get { return _controller.isGrounded; } }
     public float SkinWidth { get { return _controller.skinWidth; } }
@@ -37,6 +40,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
     protected virtual void Awake()
     {
+        _damageReceiver = GetComponent<IDamageReceiver>();
         _controller = GetComponent<CharacterController>();
     }
 
@@ -58,6 +62,11 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     {
         if (!_paused)
         {
+            if(transform.position.y <= _minYPosition) 
+            {
+            _damageReceiver.Die();
+            }
+            
             if (_controllerEnabled)
             {
                 float maxSpeed = _speed * Time.deltaTime;

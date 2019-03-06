@@ -2,59 +2,70 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBetweenBackForth : GenericMover {
-    
+public class MoveBetweenBackForth : GenericMover
+{
+
+    [SerializeField,Tooltip("The amount of time the platform is still at the ends of the route")]
+    protected float _stopTime;
     private bool _backwards;
     private bool _stop;
     private float _stopCounter;
-	
-	// FixedUpdate is called once per physics update
-	void FixedUpdate ()
+
+    protected override void Awake() {
+        base.Awake();
+        _duration += _stopTime;
+    }
+
+    // FixedUpdate is called once per physics update
+    void FixedUpdate()
     {
-        if (_timer.TimeElapsed > _stopTime)
+        if (_activated)
         {
-            float currLength = (_timer.TimeElapsed - _stopTime) / (_timer.Duration - _stopTime) * _length;
-
-            if (!_backwards)
+            if (_timer.TimeElapsed > _stopTime)
             {
-                for (int i = 0; i < _currentObjectNum; ++i)
+                float currLength = (_timer.TimeElapsed - _stopTime) / (_timer.Duration - _stopTime) * _length;
+
+                if (!_backwards)
                 {
-                    currLength -= (_transform[i].position - _transform[i + 1].position).magnitude;
+                    for (int i = 0; i < _currentObjectNum; ++i)
+                    {
+                        currLength -= (_transform[i].position - _transform[i + 1].position).magnitude;
+                    }
+                    _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_currentObjectNum + 1].position).magnitude;
                 }
-                _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_currentObjectNum + 1].position).magnitude;
-            }
-            else
-            {
-                for (int i = _transform.Count - 1; i > _currentObjectNum; --i)
+                else
                 {
-                    currLength -= (_transform[i].position - _transform[i - 1].position).magnitude;
+                    for (int i = _transform.Count - 1; i > _currentObjectNum; --i)
+                    {
+                        currLength -= (_transform[i].position - _transform[i - 1].position).magnitude;
+                    }
+                    _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_currentObjectNum - 1].position).magnitude;
                 }
-                _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_currentObjectNum - 1].position).magnitude;
-            }
 
 
-            if (!_backwards)
-            {
+                if (!_backwards)
+                {
 
-                transform.position =
-                                    Vector3.Lerp(_transform[_currentObjectNum].position
-                                                , _transform[_currentObjectNum + 1].position, _fracTime);
-
-
-            }
-            else
-            {
-
-                transform.position =
-                                    Vector3.Lerp(_transform[_currentObjectNum].position
-                                                , _transform[_currentObjectNum - 1].position, _fracTime);
+                    transform.position =
+                                        Vector3.Lerp(_transform[_currentObjectNum].position
+                                                    , _transform[_currentObjectNum + 1].position, _fracTime);
 
 
-            }
+                }
+                else
+                {
 
-            if (_fracTime >= 1)
-            {
-                ChangeTarget();
+                    transform.position =
+                                        Vector3.Lerp(_transform[_currentObjectNum].position
+                                                    , _transform[_currentObjectNum - 1].position, _fracTime);
+
+
+                }
+
+                if (_fracTime >= 1)
+                {
+                    ChangeTarget();
+                }
             }
         }
     }
@@ -68,7 +79,7 @@ public class MoveBetweenBackForth : GenericMover {
 
         if (!_backwards)
         {
-            if (_currentObjectNum < _transform.Count -1)
+            if (_currentObjectNum < _transform.Count - 1)
             {
                 _currentObjectNum++;
             }
@@ -76,11 +87,11 @@ public class MoveBetweenBackForth : GenericMover {
         }
         else
         {
-            if (_currentObjectNum > 0 )
+            if (_currentObjectNum > 0)
             {
                 _currentObjectNum--;
             }
-            
+
         }
     }
     /// <summary>

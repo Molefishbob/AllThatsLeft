@@ -7,8 +7,6 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
 
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
-    [SerializeField,Tooltip("The amount of time the platform is still at the ends of the route")]
-    protected float _stopTime;
     protected float _eventTime;
     protected List<Transform> _transform;
     protected float _fracTime;
@@ -22,14 +20,24 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     [SerializeField]
     protected bool _activated = true;
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        _timer = GetComponent<RepeatingTimer>();
+        _timer = UnityEngineExtensions.GetOrAddComponent<RepeatingTimer>(gameObject);
+        _transform = new List<Transform>(transform.parent.childCount);
+
+        foreach (Transform child in transform.parent) {
+            if (child != transform) {
+                _transform.Add(child);
+            }
+        }
+        
+        _amountOfTransforms = _transform.Count - 1;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = _transform[0].position;
         if (_activated)
         {
             Init();
@@ -44,18 +52,10 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     /// </summary>
     public virtual void Init()
     {
+        _length = 0;
+
         _timer.SetTimerTarget(this);
-        _timer.StartTimer(_duration + _stopTime);
-
-        _transform = new List<Transform>(transform.parent.childCount);
-
-        foreach (Transform child in transform.parent) {
-            if (child != transform) {
-                _transform.Add(child);
-            }
-        }
-        
-        _amountOfTransforms = _transform.Count - 1;
+        _timer.StartTimer(_duration);
 
         for (int a = 0; a < _transform.Count-1; a++)
         {
@@ -73,12 +73,35 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     /// </summary>
     public virtual void ButtonDown()
     {
-        _activated = true;
-        Init();
+        if (!_activated) {
+            _activated = true;
+            Init();
+        }
     }
 
     public void ButtonUp()
     {
 
+    }
+
+    /// <summary>
+    /// Draws lines between the checkpoints that the platform moves through.
+    /// </summary>
+    protected virtual void OnDrawGizmosSelected() {
+        
+        _transform = new List<Transform>(transform.parent.childCount);
+
+        foreach (Transform child in transform.parent) {
+            if (child != transform) {
+                _transform.Add(child);
+            }
+        }
+        for (int a  = 0; a < _transform.Count;a++) 
+        {
+            if (a + 1 != _transform.Count) {
+                Gizmos.color = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f),1);
+                Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
+                }
+        }
     }
 }
