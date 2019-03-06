@@ -14,6 +14,10 @@ public class GameManager : Singleton<GameManager>
     public bool GamePaused { get; private set; }
 
     private ThirdPersonPlayerMovement _player;
+
+    /// <summary>
+    /// Reference of the player.
+    /// </summary>
     public ThirdPersonPlayerMovement Player
     {
         get
@@ -21,6 +25,10 @@ public class GameManager : Singleton<GameManager>
             if (_player == null)
             {
                 _player = FindObjectOfType<ThirdPersonPlayerMovement>();
+                if (_player == null)
+                {
+                    Debug.LogError("Scene doesn't have an instance of the player.");
+                }
             }
             return _player;
         }
