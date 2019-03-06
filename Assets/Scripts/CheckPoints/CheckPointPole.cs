@@ -1,0 +1,22 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CheckPointPole : MonoBehaviour
+{
+    [SerializeField]
+    private LayerMask _PlayerLayer = 1 << 10;
+    private Transform _SpawnPoint;
+    public Transform SpawnPoint{get{return _SpawnPoint;}}
+
+    void Awake()
+    {
+        _SpawnPoint = transform.GetChild(0);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (1 << other.gameObject.layer == _PlayerLayer)
+            CheckpointManager.Instance.SetCheckPoint(this);
+    }
+}
