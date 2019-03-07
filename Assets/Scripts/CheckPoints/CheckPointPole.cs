@@ -7,7 +7,11 @@ public class CheckPointPole : MonoBehaviour
     [SerializeField]
     private LayerMask _PlayerLayer = 1 << 10;
     private Transform _SpawnPoint;
-    public Transform SpawnPoint{get{return _SpawnPoint;}}
+    /// <summary>
+    /// The spawnpoint of the pole. Needs to be set in editor
+    /// </summary>
+    /// <value></value>
+    public Transform SpawnPoint { get { return _SpawnPoint; } }
 
     void Awake()
     {
@@ -17,6 +21,6 @@ public class CheckPointPole : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (1 << other.gameObject.layer == _PlayerLayer)
-            CheckpointManager.Instance.SetCheckPoint(this);
+            GameManager.Instance.LevelManager._currentCheckPoint = this;
     }
 }

@@ -34,6 +34,31 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private LevelManager _levelManager;
+
+    /// <summary>
+    /// Reference of the LevelManager.
+    /// </summary>
+    public LevelManager LevelManager
+    {
+        get
+        {
+            if (_levelManager == null)
+            {
+                Debug.LogError("LEVELMANAGER MISSING!!!!");
+            }
+            return _levelManager;
+        }
+        set
+        {
+            _levelManager = value;
+        }
+    }
+
+    public BombPool BombPool;
+    public TrampPool TrampPool;
+    public HackPool HackPool;
+
     private float _timeScaleBeforePause = 1.0f;
 
     private void Awake()
