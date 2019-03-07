@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogEnemy : CharControlBase, ITimedAction
+public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
@@ -48,7 +48,6 @@ public class FrogEnemy : CharControlBase, ITimedAction
             x = goBack.x;
             y = 0;
             z = goBack.z;
-            Debug.Log(goBack);
         }
         else 
         {
@@ -116,5 +115,23 @@ public class FrogEnemy : CharControlBase, ITimedAction
             _followPlayer = false;
             _backToPrevious = true;
         }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.gameObject.layer == 10)
+        {
+            hit.gameObject.GetComponent<ThirdPersonPlayerMovement>().TakeDamage(0);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+
+    }
+
+    public void Die()
+    {
+
     }
 }

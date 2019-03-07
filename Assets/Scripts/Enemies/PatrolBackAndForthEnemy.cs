@@ -65,4 +65,12 @@ public class PatrolBackAndForthEnemy : CharControlBase
 
         return moveDirection;
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.layer == 10)
+        {
+            hit.gameObject.GetComponent<ThirdPersonPlayerMovement>().TakeDamage(0);
+        }
+    }
 }
