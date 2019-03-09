@@ -57,7 +57,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         _deployStartPosition = _deployTarget.localPosition;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (!_paused)
         {

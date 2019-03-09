@@ -52,7 +52,6 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
         {
             if (Input.GetButtonDown(_jumpButton))
             {
-                Debug.Log("I AM JUMPING");
                 _pressedJump = true;
                 _timer.StartTimer(_jumpButtonLeeway);
             }
