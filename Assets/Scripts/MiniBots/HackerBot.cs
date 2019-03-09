@@ -12,6 +12,7 @@ public class HackerBot : GenericBot
     private float _fCheckTime = 0.25f;
     private bool _bIsChecking = false;
     private GameObject _goClosestObject = null;
+    private GenericHackable.Status _sTerminal = GenericHackable.Status.NotHacked;
     
     
     protected override void Start()
@@ -28,9 +29,13 @@ public class HackerBot : GenericBot
         if(_goClosestObject != null){
             _lifeTimeTimer.StopTimer();
             TurnTowards(_goClosestObject);
+            // Lets stop somewhere closeish
             if((transform.position - _goClosestObject.transform.position).magnitude < _fStopRange){
                 _bMoving = false;
-                // say to the console im here maybe
+                // If terminal is hacked reset
+                if (_sTerminal == GenericHackable.Status.Hacked){
+                    ResetBot();
+                }
             }
         }
     }
@@ -49,6 +54,7 @@ public class HackerBot : GenericBot
             if(shortestDistance > Vector3.Distance(o.transform.position, transform.position) && tmp == _lHackableLayer){
                 shortestDistance = Vector3.Distance(o.transform.position, transform.position);
                 _goClosestObject = o.gameObject;
+                _sTerminal = o.GetComponent<GenericHackable>()._currentStatus;
             }
             _bIsChecking = false;
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericBot : CharControlBase, ITimedAction
+public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceiver
 {
     public float _fTurnSpeed = 2;
     [Tooltip("Lifetime in seconds")]
@@ -69,5 +69,16 @@ public abstract class GenericBot : CharControlBase, ITimedAction
         if (_bMoving)
             return transform.forward;
         return Vector3.zero;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Debug.Log("Bot died due to damage");
+        Die();
+    }
+
+    public void Die()
+    {
+        ResetBot();
     }
 }
