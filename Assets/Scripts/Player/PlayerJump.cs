@@ -46,16 +46,23 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (!_paused)
         {
             if (Input.GetButtonDown(_jumpButton))
             {
+                Debug.Log("I AM JUMPING");
                 _pressedJump = true;
                 _timer.StartTimer(_jumpButtonLeeway);
             }
+        }
+    }
 
+    private void FixedUpdate()
+    {
+        if (!_paused)
+        {
             if (_forcedJumping)
             {
                 _forcedJumping = false;
@@ -65,6 +72,8 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
             {
                 if (_pressedJump)
                 {
+                    _timer.StopTimer();
+                    TimedAction();
                     _jumping = true;
                     _currentJumpForce = GetJumpForce(_jumpHeight);
                 }

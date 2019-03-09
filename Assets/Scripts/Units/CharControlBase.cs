@@ -10,7 +10,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     public float _turningSpeed = 540;
     [Tooltip("NOT in seconds")]
     public float _accelerationTime = 10;
-    [SerializeField,Tooltip("The y position on which the unit dies")]
+    [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
 
     protected CharacterController _controller;
@@ -19,6 +19,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     private Vector3 _externalMove = Vector3.zero;
     private Vector3 _internalMove = Vector3.zero;
     private Vector3 _currentGravity = Vector3.zero;
+    private bool _resetGravity = false;
     private bool _controllerEnabled = true;
     private IDamageReceiver _damageReceiver = null;
 
@@ -62,11 +63,11 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     {
         if (!_paused)
         {
-            if(transform.position.y <= _minYPosition) 
+            if (transform.position.y <= _minYPosition)
             {
-            _damageReceiver.Die();
+                _damageReceiver.Die();
             }
-            
+
             if (_controllerEnabled)
             {
                 float maxSpeed = _speed * Time.deltaTime;
@@ -132,10 +133,11 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 Vector3 gravityDelta = Physics.gravity * Time.deltaTime * Time.deltaTime;
 
                 // reset or apply gravity
-                if (_controller.isGrounded)
+                if (_controller.isGrounded || _resetGravity)
                 {
                     // character controller isn't grounded if it doesn't hit the ground every move method call
-                    ResetGravity();
+                    _currentGravity = gravityDelta;
+                    _resetGravity = false;
                 }
                 else
                 {
@@ -178,7 +180,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     /// </summary>
     public void ResetGravity()
     {
-        _currentGravity = Physics.gravity * Time.deltaTime * Time.deltaTime;
+        _resetGravity = true;
     }
 
     /// <summary>
