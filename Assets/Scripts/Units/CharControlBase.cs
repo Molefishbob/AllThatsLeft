@@ -157,10 +157,10 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 {
                     _slopeChecked = false;
                 }
-            }
 
-            // reset external movement
-            _externalMove = Vector3.zero;
+                // reset external movement
+                _externalMove = Vector3.zero;
+            }
 
             FixedUpdateAdditions();
         }
@@ -214,5 +214,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     {
         _controller.enabled = active;
         _controllerEnabled = active;
+
+        if (active)
+        {
+            _internalMove = Vector3.zero;
+            _externalMove = Vector3.zero;
+            ResetGravity();
+        }
     }
 }
