@@ -53,8 +53,7 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     public void TimedAction()
     {
         //Used for dying
-        _bMoving = false;
-        Invoke("ResetBot", 0.3f);
+        ResetBot();
         //Play animations explode
     }
 
