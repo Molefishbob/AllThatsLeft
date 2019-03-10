@@ -67,7 +67,6 @@ public class LevelManager : MonoBehaviour
         {
             _currentCheckPoint = cp;
         }
-        Debug.Log(_currentCheckPoint.id);
     }
 
     private CheckPointPole[] SortCheckpoints(CheckPointPole[] _cp)
