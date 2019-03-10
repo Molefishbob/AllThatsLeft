@@ -21,6 +21,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     private Vector3 _currentGravity = Vector3.zero;
     private Vector3 _slopeDirection = Vector3.down;
     private bool _onSlope = false;
+    private bool _slopeChecked = false;
     private bool _resetGravity = false;
     private bool _controllerEnabled = true;
     private IDamageReceiver _damageReceiver = null;
@@ -135,7 +136,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 Vector3 gravityDelta = Physics.gravity * Time.deltaTime * Time.deltaTime;
 
                 // reset or apply gravity
-                if (IsGrounded || _resetGravity)
+                if ((IsGrounded && _slopeChecked) || _resetGravity)
                 {
                     // character controller isn't grounded if it doesn't hit the ground every move method call
                     _currentGravity = gravityDelta;
@@ -156,6 +157,11 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
             // reset external movement
             _externalMove = Vector3.zero;
 
+            if (!_controller.isGrounded)
+            {
+                _slopeChecked = false;
+            }
+
             FixedUpdateAdditions();
         }
     }
@@ -172,6 +178,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
             {
                 _slopeDirection = Vector3.Cross(Vector3.Cross(upVector, hit.normal), hit.normal).normalized * slopeAngle / 90f;
             }
+            _slopeChecked = true;
         }
     }
 
