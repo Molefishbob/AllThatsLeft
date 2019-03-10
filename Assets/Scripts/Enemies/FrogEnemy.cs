@@ -6,14 +6,16 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
-    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious;
+    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow;
     private OneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
+    public LayerMask _groundLayer;
 
 
     protected override void Awake()
     {
         base.Awake();
+        _canFollow = true;
         _timer = GetComponent<OneShotTimer>();
         _timer.SetTimerTarget(this);
         _stopMoving = false;
@@ -21,6 +23,17 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
         _nextStopZ = false;
         _followPlayer = false;
         _backToPrevious = false;
+    }
+
+    private void Update()
+    {
+        RaycastHit hit;
+        if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
+        {
+            _canFollow = false;
+            _followPlayer = false;
+            _backToPrevious = true;
+        }
     }
 
     protected override Vector3 InternalMovement()
@@ -71,6 +84,7 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
             _timer.StartTimer(_idleTime);   
         }else if(_backToPrevious && x < 0.1f && x > -0.1f && z < 0.1f && z > -0.1f)
         {
+            _canFollow= true;
             _backToPrevious = false;
         }       
 
@@ -87,7 +101,7 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
     // When player enters aggro area start chasing, and save the previous position, so frog can return when not chasing anymore
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 10)
+        if (other.gameObject.layer == 10 && _canFollow)
         {
             _followPlayer = true;
             if (!_backToPrevious)
@@ -100,7 +114,7 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.layer == 10)
+        if(other.gameObject.layer == 10 && _canFollow)
         {
             _followPlayer = true;
             _playerPosition = other.gameObject.transform.position;
