@@ -6,6 +6,7 @@ public class CheckPointPole : MonoBehaviour
 {
     [SerializeField]
     private LayerMask _PlayerLayer = 1 << 10;
+    public int id;
     private Transform _SpawnPoint;
     /// <summary>
     /// The spawnpoint of the pole. Needs to be set in editor
@@ -21,6 +22,6 @@ public class CheckPointPole : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (1 << other.gameObject.layer == _PlayerLayer)
-            GameManager.Instance.LevelManager._currentCheckPoint = this;
+            GameManager.Instance.LevelManager.SetCheckpoint(this);
     }
 }

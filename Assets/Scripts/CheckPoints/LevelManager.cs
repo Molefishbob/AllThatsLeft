@@ -8,7 +8,8 @@ public class LevelManager : MonoBehaviour
     /// Current checkpoint
     /// </summary>
     /// <value></value>
-    public CheckPointPole _currentCheckPoint { get; set; }
+    public CheckPointPole _currentCheckPoint { get; private set; }
+    private CheckPointPole[] _allLevelCheckPoints;
     /// <summary>
     /// The pool prefab
     /// </summary>
@@ -40,6 +41,8 @@ public class LevelManager : MonoBehaviour
         {
             GameManager.Instance.HackPool = Instantiate(_hackPoolPrefab);
         }
+        _allLevelCheckPoints = FindObjectsOfType<CheckPointPole>();
+        _allLevelCheckPoints = SortCheckpoints(_allLevelCheckPoints);
     }
 
     /// <summary>
@@ -52,5 +55,45 @@ public class LevelManager : MonoBehaviour
             return Vector3.zero;
         else
             return _currentCheckPoint.SpawnPoint.position;
+    }
+
+    public void SetCheckpoint(CheckPointPole cp)
+    {
+        if (_currentCheckPoint == null)
+        {
+            _currentCheckPoint = cp;
+        }
+        else if (_currentCheckPoint.id < cp.id)
+        {
+            _currentCheckPoint = cp;
+        }
+        Debug.Log(_currentCheckPoint.id);
+    }
+
+    private CheckPointPole[] SortCheckpoints(CheckPointPole[] _cp)
+    {
+        bool sorted = false;
+        while (!sorted)
+        {
+            bool swapped = false;
+            for (int i = 0; i < _cp.Length - 1; i++)
+            {
+                if (_cp[i].id > _cp[i+1].id)
+                {
+                    CheckPointPole tmp = _cp[i];
+                    _cp[i] = _cp[i+1];
+                    _cp[i+1] = tmp;
+                    swapped = true;
+                } 
+                else if (_cp[i].id == _cp[i+1].id)
+                {
+                    Debug.LogError("THERE ARE 2 OR MORE CHECKPOINTS WITH SAME ID!! FIX!!");
+                    swapped = false;
+                    break;
+                }
+            }
+            sorted = !swapped;
+        }
+        return null;
     }
 }
