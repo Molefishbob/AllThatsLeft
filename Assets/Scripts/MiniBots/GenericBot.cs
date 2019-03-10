@@ -28,10 +28,16 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
 
     public virtual void StartMovement()
     {
-        _bMoving = true;
         SetControllerActive(true);
         _lifeTimeTimer.SetTimerTarget(this);
         _lifeTimeTimer.StartTimer(_fLifetime);
+        _bMoving = true;
+    }
+
+    protected override void FixedUpdateAdditions()
+    {
+        if ((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0)
+            _bMoving = false;
     }
 
     public virtual void ResetBot()
@@ -39,13 +45,16 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
         _bMoving = false;
         _lifeTimeTimer.StopTimer();
         transform.parent = _tPool;
+        transform.position = Vector3.zero;
+        ResetGravity();
         gameObject.SetActive(false);
     }
 
     public void TimedAction()
     {
         //Used for dying
-        ResetBot();
+        _bMoving = false;
+        Invoke("ResetBot", 0.3f);
         //Play animations explode
     }
 
@@ -68,7 +77,7 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
 
     protected override Vector3 InternalMovement()
     {
-        if (_bMoving)
+        if (_bMoving && _controller.isGrounded)
             return transform.forward;
         return Vector3.zero;
     }

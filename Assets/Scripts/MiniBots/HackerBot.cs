@@ -11,6 +11,7 @@ public class HackerBot : GenericBot
     private float _fCheckTimer = 0.25f;
     private float _fCheckTime = 0.25f;
     private bool _bIsChecking = false;
+    private bool _bTimerRefreshed = false;
     private GameObject _goClosestObject = null;
     private GenericHackable.Status _sTerminal = GenericHackable.Status.NotHacked;
 
@@ -22,6 +23,7 @@ public class HackerBot : GenericBot
 
     protected override void FixedUpdateAdditions()
     {
+        base.FixedUpdateAdditions();
         if (_fCheckTime >= _fCheckTimer && _bIsChecking)
         {
             CheckSurroundings();
@@ -31,10 +33,17 @@ public class HackerBot : GenericBot
         if (_goClosestObject != null)
         {
             _lifeTimeTimer.StopTimer();
+            // If the bot gets stuck against a wall that is between it and the console
+            if (!_bTimerRefreshed)
+                {
+                    _lifeTimeTimer.StartTimer(_fLifetime);
+                    _bTimerRefreshed = true;
+                }
             TurnTowards(_goClosestObject);
             // Lets stop somewhere closeish
             if ((transform.position - _goClosestObject.transform.position).magnitude < _fStopRange)
             {
+                _lifeTimeTimer.StopTimer();
                 _bMoving = false;
                 // If terminal is hacked reset
                 if (_sTerminal == GenericHackable.Status.Hacked)
@@ -71,7 +80,9 @@ public class HackerBot : GenericBot
 
     public override void ResetBot()
     {
-        base.ResetBot();
+        _bIsChecking = false;
+        _bTimerRefreshed = false;
         _goClosestObject = null;
+        base.ResetBot();
     }
 }

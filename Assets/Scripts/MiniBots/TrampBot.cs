@@ -35,10 +35,4 @@ public class TrampBot : GenericBot
         base.ResetBot();
         _bCanBounce = false;
     }
-
-    protected override void FixedUpdateAdditions()
-    {
-        if ((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0)
-            _bMoving = false;
-    }
 }
