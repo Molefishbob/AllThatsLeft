@@ -15,7 +15,8 @@ public class BombBot : GenericBot
     public float _fExplodeTimer = 1f;
     [Tooltip("Put in enemy and other interactables here if needed")]
     public LayerMask _lUnignoredLayers;
-    protected override void Awake(){
+    protected override void Awake()
+    {
         base.Awake();
     }
 
@@ -24,33 +25,41 @@ public class BombBot : GenericBot
         base.Start();
     }
 
-    protected override void FixedUpdateAdditions(){
-        if(_fCheckTime > _fCheckTimer && _bIsChecking){
+    protected override void FixedUpdateAdditions()
+    {
+        if (_fCheckTime > _fCheckTimer && _bIsChecking)
+        {
             CheckSurroundings();
-        } else if (_bIsExploding && _fCheckTime > _fExplodeTimer){
+        }
+        else if (_bIsExploding && _fCheckTime > _fExplodeTimer)
+        {
             Explode();
         }
-        if((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0 && !_bIsChecking)
+        if ((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0 && !_bIsChecking)
             Explode();
 
-        if(_goClosestObject != null){
+        if (_goClosestObject != null)
+        {
             TurnTowards(_goClosestObject);
         }
-        
+
         _fCheckTime += Time.deltaTime;
     }
 
-    public override void StartMovement(){
+    public override void StartMovement()
+    {
         base.StartMovement();
         _bIsChecking = true;
     }
 
-    void CheckSurroundings(){
+    void CheckSurroundings()
+    {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, _fExplosionRadius, _lUnignoredLayers);
         float shortestDistance = float.MaxValue;
-        foreach (Collider o in hitColliders){
-            Debug.DrawLine(transform.position, o.transform.position, Color.red, 5f);
-            if(shortestDistance > Vector3.Distance(o.transform.position, transform.position) && o.gameObject.layer == 15){
+        foreach (Collider o in hitColliders)
+        {
+            if (shortestDistance > Vector3.Distance(o.transform.position, transform.position) && o.gameObject.layer == 15)
+            {
                 shortestDistance = Vector3.Distance(o.transform.position, transform.position);
                 _goClosestObject = o.gameObject;
             }
@@ -60,10 +69,11 @@ public class BombBot : GenericBot
         _fCheckTime = 0;
     }
 
-    private void Explode(){
+    private void Explode()
+    {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, _fExplosionRadius, _lUnignoredLayers);
-        foreach (Collider o in hitColliders){
-            Debug.DrawLine(transform.position, o.transform.position, Color.red, 5f);
+        foreach (Collider o in hitColliders)
+        {
             o.gameObject.SetActive(false); // Do something smarter here Kill enemies and push walls
         }
         _bIsExploding = false;

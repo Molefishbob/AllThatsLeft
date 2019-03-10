@@ -12,8 +12,10 @@ public class TrampBot : GenericBot
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == _iPlayerLayer && _bCanBounce){
-            if (_PlayerMover == null) {
+        if (other.gameObject.layer == _iPlayerLayer && _bCanBounce)
+        {
+            if (_PlayerMover == null)
+            {
                 _PlayerMover = other.GetComponent<PlayerJump>();
                 _Player = other.GetComponent<ThirdPersonPlayerMovement>();
             }
@@ -22,18 +24,15 @@ public class TrampBot : GenericBot
         }
     }
 
-    public override void StartMovement(){
+    public override void StartMovement()
+    {
         base.StartMovement();
         _bCanBounce = true;
     }
 
-    public override void ResetBot(){
+    public override void ResetBot()
+    {
         base.ResetBot();
         _bCanBounce = false;
-    }
-
-    protected override void FixedUpdateAdditions(){
-        if((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0)
-            _bMoving = false;
     }
 }
