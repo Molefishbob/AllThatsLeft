@@ -12,7 +12,7 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     private Transform _tPool;
     protected OneShotTimer _lifeTimeTimer;
 
-    protected override void Awake()  
+    protected override void Awake()
     {
         base.Awake();
         _lifeTimeTimer = GetComponent<OneShotTimer>();
@@ -22,7 +22,7 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     protected override void Start()
     {
         base.Start();
-        if(_bDebug)
+        if (_bDebug)
             StartMovement();
     }
 
@@ -49,7 +49,8 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
         //Play animations explode
     }
 
-    protected void TurnTowards(GameObject target){
+    protected void TurnTowards(GameObject target)
+    {
         Vector3 v3TurnDirection = target.transform.position - transform.position;
         v3TurnDirection = v3TurnDirection.normalized;
         v3TurnDirection.y = 0;
@@ -58,9 +59,10 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
         transform.rotation = qLimitedRotation;
     }
 
-    void OnEnable(){
+    void OnEnable()
+    {
         SetControllerActive(false);
-        if(_bDebug)
+        if (_bDebug)
             StartMovement();
     }
 
