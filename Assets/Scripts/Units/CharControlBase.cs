@@ -152,15 +152,15 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
                 // make character controller move with all combined moves
                 _controller.Move(_externalMove + _internalMove + (_onSlope ? _slopeDirection * _currentGravity.magnitude : _currentGravity));
+
+                if (!_controller.isGrounded)
+                {
+                    _slopeChecked = false;
+                }
             }
 
             // reset external movement
             _externalMove = Vector3.zero;
-
-            if (!_controller.isGrounded)
-            {
-                _slopeChecked = false;
-            }
 
             FixedUpdateAdditions();
         }
@@ -212,6 +212,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     /// </summary>
     public void SetControllerActive(bool active)
     {
+        _controller.enabled = active;
         _controllerEnabled = active;
     }
 }
