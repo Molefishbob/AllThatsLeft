@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7013265379018812351}
+  - component: {fileID: 434196647105784828}
   m_Layer: 0
   m_Name: PatrolEnemy
   m_TagString: Untagged
@@ -34,6 +35,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &434196647105784828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212436966276047290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 822df50f8e9bbd14ab10b6bf3bf11e32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1404025000627014276
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,6 +142,11 @@ MonoBehaviour:
   _speed: 6
   _turningSpeed: 540
   _accelerationTime: 10
+  _minYPosition: -10
+  _walkableTerrain:
+    serializedVersion: 2
+    m_Bits: 12288
+  _groundedDistance: 0.1
 --- !u!143 &757937887894797205
 CharacterController:
   m_ObjectHideFlags: 0

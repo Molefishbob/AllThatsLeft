@@ -115,8 +115,16 @@ MonoBehaviour:
   _speed: 3
   _turningSpeed: 540
   _accelerationTime: 1
+  _minYPosition: -10
+  _walkableTerrain:
+    serializedVersion: 2
+    m_Bits: 12288
+  _groundedDistance: 0.1
   _circleRadius: 2
   _idleTime: 2
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &8538956537336883094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +161,6 @@ GameObject:
   - component: {fileID: 8538956537974067260}
   - component: {fileID: 8538956537974067263}
   - component: {fileID: 8538956537974067262}
-  - component: {fileID: 8538956537974067261}
   m_Layer: 11
   m_Name: Capsule
   m_TagString: Untagged
@@ -220,17 +227,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &8538956537974067261
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8538956537974067251}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

@@ -101,7 +101,7 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
     // When player enters aggro area start chasing, and save the previous position, so frog can return when not chasing anymore
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 10 && _canFollow)
+        if (other.gameObject.layer == 10)
         {
             _followPlayer = true;
             if (!_backToPrevious)
@@ -116,7 +116,6 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
     {
         if(other.gameObject.layer == 10 && _canFollow)
         {
-            _followPlayer = true;
             _playerPosition = other.gameObject.transform.position;
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolBackAndForthEnemy : CharControlBase
+public class PatrolEnemyMover : CharControlBase, IDamageReceiver
 {
     private List<Transform> _transforms;
     private int _targetCounter;
@@ -53,7 +53,6 @@ public class PatrolBackAndForthEnemy : CharControlBase
                 _transforms.Add(child);
             }
         }
-      
     }
 
     protected override Vector3 InternalMovement()
@@ -72,5 +71,15 @@ public class PatrolBackAndForthEnemy : CharControlBase
         {
             hit.gameObject.GetComponent<ThirdPersonPlayerMovement>().TakeDamage(0);
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+
+    }
+
+    public void Die()
+    {
+
     }
 }
