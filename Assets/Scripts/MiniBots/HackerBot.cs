@@ -32,7 +32,6 @@ public class HackerBot : GenericBot
 
         if (_goClosestObject != null)
         {
-            _lifeTimeTimer.StopTimer();
             // If the bot gets stuck against a wall that is between it and the console
             if (!_bTimerRefreshed)
                 {
