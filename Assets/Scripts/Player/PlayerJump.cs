@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 {
-    public float _jumpHeight;
+    public float _jumpHeight = 2.5f;
     public string _jumpButton = "Jump";
-    public float _jumpButtonLeeway;
+    public float _leewayTimeAfterLeavingGround = 0.1f;
+    public float _leewayTimeBeforeHittingGround = 0.1f;
 
     private Vector3 _currentJumpForce;
     private bool _jumping;
     private bool _forcedJumping;
-    private OneShotTimer _timer;
-    private bool _pressedJump;
+    private OneShotTimer _afterTimer;
+    private OneShotTimer _beforeTimer;
+    private bool _canJump;
 
     private bool _paused;
 
@@ -28,14 +30,16 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 
     private void Awake()
     {
-        _timer = GetComponent<OneShotTimer>();
+        OneShotTimer[] timers = GetComponents<OneShotTimer>();
+        _afterTimer = timers[0];
+        _beforeTimer = timers[1];
     }
 
     private void Start()
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
-        _timer.SetTimerTarget(this);
+        _afterTimer.SetTimerTarget(this);
     }
 
     private void OnDestroy()
@@ -52,8 +56,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
         {
             if (Input.GetButtonDown(_jumpButton))
             {
-                _pressedJump = true;
-                _timer.StartTimer(_jumpButtonLeeway);
+                _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
             }
         }
     }
@@ -67,19 +70,30 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                 _forcedJumping = false;
                 _jumping = true;
             }
-            else if (GameManager.Instance.Player.IsGrounded)
+            else if (_beforeTimer.IsRunning)
             {
-                if (_pressedJump)
+                if (GameManager.Instance.Player.IsGrounded)
                 {
-                    _timer.StopTimer();
-                    TimedAction();
+                    _canJump = true;
+                }
+
+                if (_canJump)
+                {
+                    _beforeTimer.StopTimer();
                     _jumping = true;
+                    GameManager.Instance.Player.ResetGravity();
                     _currentJumpForce = GetJumpForce(_jumpHeight);
                 }
-                else
-                {
-                    _jumping = false;
-                }
+            }
+            else if (_currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
+            {
+                GameManager.Instance.Player.ResetGravity();
+                _jumping = false;
+            }
+
+            if (!GameManager.Instance.Player.IsGrounded && _canJump == true && !_afterTimer.IsRunning)
+            {
+                _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
             }
 
             if (_jumping)
@@ -107,6 +121,6 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 
     public void TimedAction()
     {
-        _pressedJump = false;
+        _canJump = false;
     }
 }
