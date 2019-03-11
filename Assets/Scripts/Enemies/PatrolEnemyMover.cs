@@ -75,7 +75,7 @@ public class PatrolEnemyMover : CharControlBase, IDamageReceiver
 
     public void TakeDamage(int damage)
     {
-
+        Die();
     }
 
     public void Die()

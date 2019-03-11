@@ -140,7 +140,7 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
 
     public void TakeDamage(int damage)
     {
-
+        Die();
     }
 
     public void Die()
