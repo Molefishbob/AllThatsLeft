@@ -70,30 +70,30 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                 _forcedJumping = false;
                 _jumping = true;
             }
-            else if (_beforeTimer.IsRunning)
+            else
             {
                 if (GameManager.Instance.Player.IsGrounded)
                 {
                     _canJump = true;
                 }
 
-                if (_canJump)
+                if (_canJump && _beforeTimer.IsRunning)
                 {
                     _beforeTimer.StopTimer();
                     _jumping = true;
                     GameManager.Instance.Player.ResetGravity();
                     _currentJumpForce = GetJumpForce(_jumpHeight);
                 }
-            }
-            else if (_jumping && _currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
-            {
-                GameManager.Instance.Player.ResetGravity();
-                _jumping = false;
-            }
+                else if (_jumping && _currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
+                {
+                    GameManager.Instance.Player.ResetGravity();
+                    _jumping = false;
+                }
 
-            if (!GameManager.Instance.Player.IsGrounded && _canJump == true && !_afterTimer.IsRunning)
-            {
-                _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
+                if (!GameManager.Instance.Player.IsGrounded && _canJump == true && !_afterTimer.IsRunning)
+                {
+                    _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
+                }
             }
 
             if (_jumping)
