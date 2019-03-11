@@ -22,7 +22,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
 
     protected virtual void Awake()
     {
-        _timer = GetComponent<RepeatingTimer>();
+        _timer = UnityEngineExtensions.GetOrAddComponent<RepeatingTimer>(gameObject);
         _transform = new List<Transform>(transform.parent.childCount);
 
         foreach (Transform child in transform.parent) {
@@ -103,5 +103,8 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
                 Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
                 }
         }
+        Gizmos.color = new Color(0,0,0,1);
+        Gizmos.DrawCube(_transform[0].position,new Vector3(3,0.5f,2));
+        Gizmos.DrawCube(_transform[_transform.Count -1].position,new Vector3(3,0.5f,2));
     }
 }

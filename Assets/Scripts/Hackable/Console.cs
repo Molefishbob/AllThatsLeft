@@ -12,7 +12,7 @@ public class Console : GenericHackable, ITimedAction
     protected override void Awake()
     {
         base.Awake();
-        _timer = GetComponent<OneShotTimer>();
+        _timer = UnityEngineExtensions.GetOrAddComponent<OneShotTimer>(gameObject);
     }
     private void Start()
     {
