@@ -162,7 +162,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 }
 
                 // reset or apply gravity
-                if ((IsGrounded && _onSlope) || _resetGravity)
+                if ((_controller.isGrounded && !_onSlope) || _resetGravity)
                 {
                     // character controller isn't grounded if it doesn't hit the ground every move method call
                     _currentGravity = gravityDelta;
