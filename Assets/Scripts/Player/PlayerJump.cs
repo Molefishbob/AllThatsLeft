@@ -85,7 +85,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     _currentJumpForce = GetJumpForce(_jumpHeight);
                 }
             }
-            else if (_currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
+            else if (_jumping && _currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
             {
                 GameManager.Instance.Player.ResetGravity();
                 _jumping = false;
