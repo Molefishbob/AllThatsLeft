@@ -5,13 +5,11 @@ using UnityEngine;
 public class GenericEnemy : CharControlBase, IDamageReceiver
 {
     protected EnemySpawner _spawner;
-    private Transform _pool;
 
     protected override void Awake()
     {
         base.Awake();
         _spawner = GetComponent<EnemySpawner>();
-        _pool = transform.parent;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -35,9 +33,14 @@ public class GenericEnemy : CharControlBase, IDamageReceiver
     public void Die()
     {
         _spawner.StartTime();
-        transform.parent = _pool;
-        transform.position = Vector3.zero;
-        ResetGravity();
-        gameObject.SetActive(false);
+        if (transform.parent != null)
+        {
+            transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+        
     }
 }

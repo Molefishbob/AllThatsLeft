@@ -34,7 +34,6 @@ public class FrogEnemy : GenericEnemy, ITimedAction
             Die();
         }
 
-
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
