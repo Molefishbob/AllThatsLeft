@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
+public class FrogEnemy : GenericEnemy, ITimedAction
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
@@ -11,6 +11,8 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
     private Vector3 _goBackPosition, _playerPosition;
     public LayerMask _groundLayer;
 
+    //only for testing
+    public bool _die = false;
 
     protected override void Awake()
     {
@@ -27,6 +29,12 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
 
     private void Update()
     {
+        if (_die)
+        {
+            Die();
+        }
+
+
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
@@ -128,23 +136,5 @@ public class FrogEnemy : CharControlBase, ITimedAction, IDamageReceiver
             _followPlayer = false;
             _backToPrevious = true;
         }
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if(hit.gameObject.layer == 10)
-        {
-            hit.gameObject.GetComponent<ThirdPersonPlayerMovement>().TakeDamage(0);
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        Die();
-    }
-
-    public void Die()
-    {
-
     }
 }

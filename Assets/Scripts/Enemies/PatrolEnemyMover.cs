@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolEnemyMover : CharControlBase, IDamageReceiver
+public class PatrolEnemyMover : GenericEnemy
 {
     private List<Transform> _transforms;
     private int _targetCounter;
     private bool _goingForward;
-    private EnemySpawner _spawner;
     
+    
+    //only for testing
     public bool _die = false;
 
     protected override void Start()
@@ -73,24 +74,5 @@ public class PatrolEnemyMover : CharControlBase, IDamageReceiver
         moveDirection.y = 0;
 
         return moveDirection;
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.gameObject.layer == 10)
-        {
-            hit.gameObject.GetComponent<ThirdPersonPlayerMovement>().TakeDamage(0);
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        Die();
-    }
-
-    public void Die()
-    {
-        _spawner.StartTime();
-        gameObject.SetActive(false);
     }
 }

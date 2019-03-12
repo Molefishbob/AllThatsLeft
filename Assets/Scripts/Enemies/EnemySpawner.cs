@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour, IPauseable, ITimedAction
         _frogPool = FindObjectOfType<FrogEnemyPool>();
         _patrolPool = FindObjectOfType<PatrolEnemyPool>();
         _timer = GetComponent<OneShotTimer>();
-        _timer.SetTimerTarget(this);
+        _timer.SetTimerTarget(this); 
     }
 
     private void Start()
