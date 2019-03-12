@@ -8,13 +8,13 @@ public class UIManager : MonoBehaviour
 {
     public string BotAmountFormat = "{0} / {1}";
     [SerializeField]
-    private TMP_Text _botAmount;
+    private TMP_Text _botAmount = null;
     [SerializeField]
-    private Image _miniBotImage;
-    private MiniBotType _currentBot;
+    private Image _miniBotImage = null;
+    private MiniBotType _currentBot = MiniBotType.HackBot;
     [SerializeField]
-    private Sprite _HackBot, _BombBot, _TrampBot;
-    private int _maxBotAmount, _currentBotAmount;
+    private Sprite _HackBot = null, _BombBot = null, _TrampBot = null;
+    private int _maxBotAmount = 0, _currentBotAmount = 0;
 
     // Start is called before the first frame update
     void Awake()
@@ -28,7 +28,8 @@ public class UIManager : MonoBehaviour
         _currentBot = GameManager.Instance.CurrentBot;
     }
 
-    private void Start() {
+    private void Start()
+    {
         SetBotAmount(_currentBotAmount);
         SetCurrentBot(_currentBot);
         SetMaxBotAmount(_maxBotAmount);
@@ -37,22 +38,25 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    void SetBotAmount(int amount) {
+    void SetBotAmount(int amount)
+    {
         _currentBotAmount = amount;
-        _botAmount.text = string.Format(BotAmountFormat, amount,_maxBotAmount);
+        _botAmount.text = string.Format(BotAmountFormat, amount, _maxBotAmount);
     }
-    void SetCurrentBot(MiniBotType bot) {
+    void SetCurrentBot(MiniBotType bot)
+    {
         _currentBot = bot;
 
-        switch (bot) {
-            case MiniBotType.BombBot:
-                _miniBotImage.sprite = _BombBot;
-                break;
+        switch (bot)
+        {
             case MiniBotType.HackBot:
                 _miniBotImage.sprite = _HackBot;
+                break;
+            case MiniBotType.BombBot:
+                _miniBotImage.sprite = _BombBot;
                 break;
             case MiniBotType.TrampBot:
                 _miniBotImage.sprite = _TrampBot;
@@ -60,14 +64,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void SetMaxBotAmount(int amount) {
+    void SetMaxBotAmount(int amount)
+    {
         _maxBotAmount = amount;
-        _botAmount.text = string.Format(BotAmountFormat, _currentBotAmount,amount);
+        _botAmount.text = string.Format(BotAmountFormat, _currentBotAmount, amount);
     }
 
-    private void OnDestroy() {
-        GameManager.Instance.OnBotAmountChanged -= SetBotAmount;
-        GameManager.Instance.OnCurrentBotChanged -= SetCurrentBot;
-        GameManager.Instance.OnMaximumBotAmountChanged -= SetMaxBotAmount;
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnBotAmountChanged -= SetBotAmount;
+            GameManager.Instance.OnCurrentBotChanged -= SetCurrentBot;
+            GameManager.Instance.OnMaximumBotAmountChanged -= SetMaxBotAmount;
+        }
     }
 }
