@@ -4,24 +4,40 @@ using UnityEngine;
 
 public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
 {
-    public string _scrollButton = "Scroll";
-    public string _selectBot1Button = "Bot1";
-    public string _selectBot2Button = "Bot2";
-    public string _selectBot3Button = "Bot3";
-    //public string _selectBot4Button = "Bot4";
-    //public string _selectBot5Button = "Bot5";
-    public string _deployBotButton = "Deploy Bot";
-    public string _takeOutBotButton = "Take Out Bot";
-    public float _deployDelay = 2.0f;
-    public Transform _deployTarget;
-    public float _extraSpaceRequired = 0.1f;
-    public LayerMask _deployCollisionLayers;
-    public LayerMask _deployableTerrain;
-    public float _deployHeightRange = 1.0f;
-    public int _botAmount = 5;
-    public int _numTypes = 3;
-    public float _automaticPutAwayDelay = 10.0f;
-    public string _botAssCheeks = "LowerBody";
+    [SerializeField]
+    private string _scrollButton = "Scroll";
+    [SerializeField]
+    private string _selectBot1Button = "Bot1";
+    [SerializeField]
+    private string _selectBot2Button = "Bot2";
+    [SerializeField]
+    private string _selectBot3Button = "Bot3";
+    [SerializeField]
+    private string _deployBotButton = "Deploy Bot";
+    [SerializeField]
+    private string _takeOutBotButton = "Take Out Bot";
+    [SerializeField]
+    private float _deployDelay = 2.0f;
+    [SerializeField]
+    private Transform _deployTarget = null;
+    [SerializeField]
+    private float _extraSpaceRequired = 0.1f;
+    [SerializeField]
+    private LayerMask _deployCollisionLayers = 0;
+    [SerializeField]
+    private LayerMask _deployableTerrain = 0;
+    [SerializeField]
+    private float _deployHeightRange = 1.0f;
+    [SerializeField]
+    private int _startingBotAmount = 10;
+    [SerializeField]
+    private int _startingMaxBotAmount = 10;
+    [SerializeField]
+    private float _automaticPutAwayDelay = 10.0f;
+    [SerializeField]
+    private string _botAssCheeks = "LowerBody";
+    [SerializeField]
+    private MiniBotType[] _botOrder = { MiniBotType.HackBot, MiniBotType.BombBot, MiniBotType.TrampBot };
 
     // temporary
     public Material _blueMaterial;
@@ -40,6 +56,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     private HackPool _hackBotPool;
     private BombPool _bombBotPool;
     private TrampPool _jumpBotPool;
+    private HashSet<MiniBotType> _unlockedBotTypes = new HashSet<MiniBotType>();
 
     private void Awake()
     {
@@ -50,144 +67,180 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         _hackBotPool = FindObjectOfType<HackPool>();
         _bombBotPool = FindObjectOfType<BombPool>();
         _jumpBotPool = FindObjectOfType<TrampPool>();
+
+        //TODO: remove unlocks
+        if (_hackBotPool != null) UnlockBot(MiniBotType.HackBot);
+        if (_bombBotPool != null) UnlockBot(MiniBotType.BombBot);
+        if (_jumpBotPool != null) UnlockBot(MiniBotType.TrampBot);
     }
 
     private void Start()
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
+
         _autoAwayTimer.SetTimerTarget(this);
         _deployStartPosition = _deployTarget.localPosition;
+
+        GameManager.Instance.CurrentBotAmount = _startingBotAmount;
+        GameManager.Instance.MaximumBotAmount = _startingMaxBotAmount;
+        GameManager.Instance.CurrentBot = MiniBotType.HackBot;
+
+        HideIndicator();
     }
 
     private void Update()
     {
         if (!_paused)
         {
-            bool buttonPressed = false;
-            int selection = -1;
+            if (_unlockedBotTypes.Count > 0)
+            {
+                bool buttonPressed = false;
+                int selection = -1;
 
-            if (Input.GetButtonDown(_selectBot1Button))
-            {
-                selection = 0;
-            }
-            else if (Input.GetButtonDown(_selectBot2Button))
-            {
-                selection = 1;
-            }
-            else if (Input.GetButtonDown(_selectBot3Button))
-            {
-                selection = 2;
-            }
-            /* else if (Input.GetButtonDown(_selectBot4Button))
-            {
-                selection = 3;
-            }
-            else if (Input.GetButtonDown(_selectBot5Button))
-            {
-                selection = 4;
-            } */
-
-            float currentScroll = Input.GetAxis(_scrollButton);
-
-            if (_scrollUsable)
-            {
-                if (currentScroll > 0.5f)
+                if (Input.GetButtonDown(_selectBot1Button))
                 {
-                    selection = _selectedBot + 1;
-                    if (selection >= _numTypes)
+                    selection = 0;
+                }
+                else if (Input.GetButtonDown(_selectBot2Button))
+                {
+                    selection = 1;
+                }
+                else if (Input.GetButtonDown(_selectBot3Button))
+                {
+                    selection = 2;
+                }
+
+                if (selection != -1 && !_unlockedBotTypes.Contains(_botOrder[selection]))
+                {
+                    selection = -1;
+                }
+
+                float currentScroll = Input.GetAxis(_scrollButton);
+
+                if (_scrollUsable)
+                {
+                    if (currentScroll > 0.5f)
                     {
-                        selection = 0;
+                        selection = _selectedBot + 1;
+                        if (selection >= _botOrder.Length)
+                        {
+                            selection = 0;
+                        }
+                        while (!_unlockedBotTypes.Contains(_botOrder[selection]))
+                        {
+                            selection++;
+                            if (selection >= _botOrder.Length)
+                            {
+                                selection = 0;
+                            }
+                        }
+
+                        _scrollUsable = false;
                     }
-                    _scrollUsable = false;
-                }
-                else if (currentScroll < -0.5f)
-                {
-                    selection = _selectedBot - 1;
-                    if (selection < 0)
+                    else if (currentScroll < -0.5f)
                     {
-                        selection = _numTypes - 1;
+                        selection = _selectedBot - 1;
+                        if (selection < 0)
+                        {
+                            selection = _botOrder.Length - 1;
+                        }
+                        while (!_unlockedBotTypes.Contains(_botOrder[selection]))
+                        {
+                            selection--;
+                            if (selection < 0)
+                            {
+                                selection = _botOrder.Length - 1;
+                            }
+                        }
+
+                        _scrollUsable = false;
                     }
-                    _scrollUsable = false;
                 }
-            }
-            else if (Mathf.Abs(currentScroll) <= 0.2f)
-            {
-                _scrollUsable = true;
-            }
-
-            if (selection != -1)
-            {
-                buttonPressed = true;
-                _selectedBot = selection;
-
-                PutAwayBot();
-            }
-            else if (_heldBot == null && _botAmount > 0 && Input.GetButtonDown(_takeOutBotButton))
-            {
-                buttonPressed = true;
-                switch (_selectedBot)
+                else if (Mathf.Abs(currentScroll) <= 0.2f)
                 {
-                    case 0:
-                        _heldBot = _hackBotPool.GetObject();
-                        break;
-                    case 1:
-                        _heldBot = _bombBotPool.GetObject();
-                        break;
-                    case 2:
-                        _heldBot = _jumpBotPool.GetObject();
-                        break;
-                    default:
-                        Debug.LogError("INVALID BOT ID");
-                        break;
+                    _scrollUsable = true;
                 }
 
-                Animator animi = _heldBot.GetComponentInChildren<Animator>();
-                if (animi != null)
+                if (selection != -1)
                 {
-                    _heldBotAssCheeks = animi.transform.GetChild(0).Find(_botAssCheeks);
+                    buttonPressed = true;
+                    _selectedBot = selection;
+                    GameManager.Instance.CurrentBot = _botOrder[_selectedBot];
+
+                    PutAwayBot();
                 }
-                if (_heldBotAssCheeks == null)
+                else if (_heldBot == null && GameManager.Instance.CurrentBotAmount > 0 && !_deployDelayTimer.IsRunning && Input.GetButtonDown(_takeOutBotButton))
                 {
-                    _heldBotAssCheeks = _heldBot.transform;
-                }
-
-                _autoAwayTimer.StartTimer(_automaticPutAwayDelay);
-            }
-
-            if (_heldBot == null)
-            {
-                HideIndicator();
-            }
-            else if (GameManager.Instance.Player.IsGrounded)
-            {
-                RaycastHit hit;
-                Vector3 upVector = -Physics.gravity.normalized;
-                if (Physics.Raycast(
-                        _deployTarget.parent.TransformPoint(_deployStartPosition) + upVector * _deployHeightRange,
-                        Physics.gravity,
-                        out hit,
-                        2 * _deployHeightRange,
-                        _deployableTerrain))
-                {
-                    _deployTarget.position = hit.point;
-
-                    if (Physics.CheckCapsule(
-                        _deployTarget.position + upVector * (_heldBot.Radius + _heldBot.SkinWidth + _extraSpaceRequired),
-                        _deployTarget.position + upVector * (_heldBot.Height - _heldBot.Radius - _extraSpaceRequired),
-                        _heldBot.Radius + _extraSpaceRequired,
-                        _deployCollisionLayers))
+                    buttonPressed = true;
+                    switch (GameManager.Instance.CurrentBot)
                     {
-                        ShowInvalidIndicator();
+                        case MiniBotType.HackBot:
+                            _heldBot = _hackBotPool.GetObject();
+                            break;
+                        case MiniBotType.BombBot:
+                            _heldBot = _bombBotPool.GetObject();
+                            break;
+                        case MiniBotType.TrampBot:
+                            _heldBot = _jumpBotPool.GetObject();
+                            break;
+                        default:
+                            Debug.LogError("INVALID BOT ID");
+                            break;
                     }
-                    else if (!buttonPressed && !_deployDelayTimer.IsRunning && Input.GetButtonDown(_deployBotButton))
+
+                    Animator animi = _heldBot.GetComponentInChildren<Animator>();
+                    if (animi != null)
                     {
-                        _shouldDeployBot = true;
-                        HideIndicator();
+                        _heldBotAssCheeks = animi.transform.GetChild(0).Find(_botAssCheeks);
+                    }
+                    if (_heldBotAssCheeks == null)
+                    {
+                        _heldBotAssCheeks = _heldBot.transform;
+                    }
+
+                    _autoAwayTimer.StartTimer(_automaticPutAwayDelay);
+                }
+
+                if (_heldBot == null)
+                {
+                    HideIndicator();
+                }
+                else if (GameManager.Instance.Player.IsGrounded)
+                {
+                    RaycastHit hit;
+                    Vector3 upVector = -Physics.gravity.normalized;
+                    if (Physics.Raycast(
+                            _deployTarget.parent.TransformPoint(_deployStartPosition) + upVector * _deployHeightRange,
+                            Physics.gravity,
+                            out hit,
+                            2 * _deployHeightRange,
+                            _deployableTerrain))
+                    {
+                        _deployTarget.position = hit.point;
+
+                        if (Physics.CheckCapsule(
+                            _deployTarget.position + upVector * (_heldBot.Radius + _heldBot.SkinWidth + _extraSpaceRequired),
+                            _deployTarget.position + upVector * (_heldBot.Height - _heldBot.Radius - _extraSpaceRequired),
+                            _heldBot.Radius + _extraSpaceRequired,
+                            _deployCollisionLayers))
+                        {
+                            ShowInvalidIndicator();
+                        }
+                        else if (!buttonPressed && !_deployDelayTimer.IsRunning && Input.GetButtonDown(_deployBotButton))
+                        {
+                            _shouldDeployBot = true;
+                            HideIndicator();
+                        }
+                        else
+                        {
+                            ShowValidIndicator();
+                        }
                     }
                     else
                     {
-                        ShowValidIndicator();
+                        _deployTarget.localPosition = _deployStartPosition;
+                        ShowInvalidIndicator();
                     }
                 }
                 else
@@ -195,11 +248,6 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                     _deployTarget.localPosition = _deployStartPosition;
                     ShowInvalidIndicator();
                 }
-            }
-            else
-            {
-                _deployTarget.localPosition = _deployStartPosition;
-                ShowInvalidIndicator();
             }
         }
     }
@@ -265,7 +313,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         _heldBot.StartMovement();
         _heldBot = null;
         _heldBotAssCheeks = null;
-        //_botAmount--; //TODO: remove commenting when dispensers are implemented
+        //GameManager.Instance.CurrentBotAmount--; //TODO: remove commenting when dispensers are implemented
         _deployDelayTimer.StartTimer(_deployDelay, false);
     }
 
@@ -293,6 +341,35 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         {
             renderer.enabled = false;
         }
+    }
 
+    /// <summary>
+    /// Restocks minibots by an amount.
+    /// </summary>
+    /// <param name="amount">Amount to add</param>
+    public void Restock(int amount)
+    {
+        GameManager.Instance.CurrentBotAmount = Mathf.Clamp(GameManager.Instance.CurrentBotAmount + amount, 0, GameManager.Instance.MaximumBotAmount);
+    }
+
+    /// <summary>
+    /// Restocks minibots to full.
+    /// </summary>
+    public void Restock()
+    {
+        GameManager.Instance.CurrentBotAmount = GameManager.Instance.MaximumBotAmount;
+    }
+
+    /// <summary>
+    /// Unlocks the given bot type to be usable.
+    /// </summary>
+    /// <param name="type">MiniBotType</param>
+    public void UnlockBot(MiniBotType type)
+    {
+        _unlockedBotTypes.Add(type);
+        if (_unlockedBotTypes.Count == 1)
+        {
+            GameManager.Instance.CurrentBot = type;
+        }
     }
 }
