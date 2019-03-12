@@ -82,7 +82,6 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
         if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
         {
-            Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
         }
