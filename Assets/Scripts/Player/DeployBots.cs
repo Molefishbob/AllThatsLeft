@@ -21,6 +21,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     public int _botAmount = 5;
     public int _numTypes = 3;
     public float _automaticPutAwayDelay = 10.0f;
+    public string _botAssCheeks = "LowerBody";
 
     // temporary
     public Material _blueMaterial;
@@ -35,6 +36,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     private Renderer[] _indicators;
     private Vector3 _deployStartPosition;
     private GenericBot _heldBot;
+    private Transform _heldBotAssCheeks;
     private HackPool _hackBotPool;
     private BombPool _bombBotPool;
     private TrampPool _jumpBotPool;
@@ -140,6 +142,16 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                         break;
                 }
 
+                Animator animi = _heldBot.GetComponentInChildren<Animator>();
+                if (animi != null)
+                {
+                    _heldBotAssCheeks = animi.transform.GetChild(0).Find(_botAssCheeks);
+                }
+                if (_heldBotAssCheeks == null)
+                {
+                    _heldBotAssCheeks = _heldBot.transform;
+                }
+
                 _autoAwayTimer.StartTimer(_automaticPutAwayDelay);
             }
 
@@ -192,6 +204,15 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         }
     }
 
+    private void LateUpdate()
+    {
+        if (_heldBot != null)
+        {
+            _heldBot.transform.position = transform.position - _heldBotAssCheeks.position + _heldBot.transform.position;
+            _heldBot.transform.rotation = transform.rotation;
+        }
+    }
+
     private void FixedUpdate()
     {
         if (!_paused)
@@ -199,11 +220,6 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
             if (_shouldDeployBot)
             {
                 DeployBot();
-            }
-            else if (_heldBot != null)
-            {
-                _heldBot.transform.position = transform.position;
-                _heldBot.transform.rotation = transform.rotation;
             }
         }
     }
@@ -237,6 +253,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         {
             _heldBot.ResetBot();
             _heldBot = null;
+            _heldBotAssCheeks = null;
         }
     }
 
@@ -247,6 +264,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         _heldBot.transform.rotation = _deployTarget.rotation;
         _heldBot.StartMovement();
         _heldBot = null;
+        _heldBotAssCheeks = null;
         //_botAmount--; //TODO: remove commenting when dispensers are implemented
         _deployDelayTimer.StartTimer(_deployDelay, false);
     }
