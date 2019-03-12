@@ -7,18 +7,28 @@ public class PatrolEnemyMover : CharControlBase, IDamageReceiver
     private List<Transform> _transforms;
     private int _targetCounter;
     private bool _goingForward;
+    private EnemySpawner _spawner;
+    
+    public bool _die = false;
 
     protected override void Start()
     {
+        _spawner = GetComponentInParent<EnemySpawner>();
         _targetCounter = 0;
         _goingForward = true;
         Init();
     }
 
+    private void Update()
+    {
+        if (_die)
+            Die();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         
-        if (other.gameObject.layer == 22)
+        if (other.gameObject.layer == 23)
         {
             if (_goingForward)
             {
@@ -80,6 +90,7 @@ public class PatrolEnemyMover : CharControlBase, IDamageReceiver
 
     public void Die()
     {
-
+        _spawner.StartTime();
+        gameObject.SetActive(false);
     }
 }
