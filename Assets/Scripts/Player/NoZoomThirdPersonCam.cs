@@ -13,6 +13,10 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     private float _pitch = 0.0f;
     public float _horizontalSensitivity = 1.0f;
     public float _verticalSensitivity = 1.0f;
+    [Tooltip("How low the camera can go")]
+    public float _minPitch = -70;
+    [Tooltip("How high the camera can go")]
+    public float maxPitch = 85;
     private bool _paused;
     private float _newDistance;
 
@@ -52,13 +56,13 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
         _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
         _pitch -= _verticalSensitivity * Input.GetAxis(_cameraYAxis);
 
-        if (_pitch > 85)
+        if (_pitch > maxPitch)
         {
-            _pitch = 85;
+            _pitch = maxPitch;
         }
-        else if (_pitch < -70)
+        else if (_pitch < _minPitch)
         {
-            _pitch = -70;
+            _pitch = _minPitch;
         }
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
@@ -76,9 +80,8 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
         RaycastHit hit;
 
-        if (Physics.SphereCast(_lookAt.position, 0.5f, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
+        if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
         {
-            Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
         }
