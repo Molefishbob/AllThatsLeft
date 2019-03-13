@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour, IPauseable, ITimedAction
+public class EnemySpawner : MonoBehaviour, IPauseable
 {
     private bool _paused = false;
     private FrogEnemyPool _frogPool;
     private PatrolEnemyPool _patrolPool;
-    private FrogEnemy _frogEnemy;
-    private PatrolEnemy _patrolEnemy;
-    public float _spawnTime = 10f;
-    private OneShotTimer _timer;
+    private GenericEnemy _enemy;
     public SpawnedEnemy _spawnedEnemy;
 
     public enum SpawnedEnemy
@@ -23,27 +20,27 @@ public class EnemySpawner : MonoBehaviour, IPauseable, ITimedAction
     {
         _frogPool = FindObjectOfType<FrogEnemyPool>();
         _patrolPool = FindObjectOfType<PatrolEnemyPool>();
-        _timer = GetComponent<OneShotTimer>();
-        _timer.SetTimerTarget(this); 
     }
 
     private void Start()
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
-        Spawn();
+        
     }
 
     public void Spawn()
     {
         if (_spawnedEnemy == SpawnedEnemy.Frog)
         {
-            _frogEnemy = _frogPool.GetObject();
+            _enemy = _frogPool.GetObject();
         }
         else if (_spawnedEnemy == SpawnedEnemy.Patrol)
         {
-            _patrolEnemy = _patrolPool.GetObject();
+            _enemy = _patrolPool.GetObject();
         }
+        _enemy.transform.position = transform.position;
+        _enemy.SetControllerActive(true);
     }
 
     public void Pause()
@@ -64,13 +61,11 @@ public class EnemySpawner : MonoBehaviour, IPauseable, ITimedAction
         }
     }
 
-    public void TimedAction()
+    private void OnTriggerEnter(Collider other)
     {
-        Spawn();
-    }
-
-    public void StartTime()
-    {
-        _timer.StartTimer(_spawnTime);
+        if(other.gameObject.layer == 10)
+        {
+            Spawn();
+        }
     }
 }

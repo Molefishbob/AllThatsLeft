@@ -9,6 +9,7 @@ public class GenericEnemy : CharControlBase, IDamageReceiver
     protected override void Awake()
     {
         base.Awake();
+        SetControllerActive(false);
         _spawner = GetComponent<EnemySpawner>();
     }
 
@@ -32,7 +33,6 @@ public class GenericEnemy : CharControlBase, IDamageReceiver
 
     public void Die()
     {
-        _spawner.StartTime();
         if (transform.parent != null)
         {
             transform.parent.gameObject.SetActive(false);
