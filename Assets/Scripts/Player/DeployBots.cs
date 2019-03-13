@@ -26,12 +26,13 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     public Material _blueMaterial;
     public Material _redMaterial;
 
+    private bool _shouldDeployBot = false;
     private bool _paused = false;
     private int _selectedBot = 0;
     private OneShotTimer _deployDelayTimer;
     private OneShotTimer _autoAwayTimer;
     private bool _scrollUsable = true;
-    private Renderer _indicator;
+    private Renderer[] _indicators;
     private Vector3 _deployStartPosition;
     private GenericBot _heldBot;
     private HackPool _hackBotPool;
@@ -43,7 +44,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         OneShotTimer[] timers = GetComponents<OneShotTimer>();
         _deployDelayTimer = timers[0];
         _autoAwayTimer = timers[1];
-        _indicator = _deployTarget.GetComponentInChildren<Renderer>();
+        _indicators = _deployTarget.GetComponentsInChildren<Renderer>();
         _hackBotPool = FindObjectOfType<HackPool>();
         _bombBotPool = FindObjectOfType<BombPool>();
         _jumpBotPool = FindObjectOfType<TrampPool>();
@@ -169,12 +170,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                     }
                     else if (!buttonPressed && !_deployDelayTimer.IsRunning && Input.GetButtonDown(_deployBotButton))
                     {
-                        _heldBot.transform.position = _deployTarget.position;
-                        _heldBot.transform.rotation = _deployTarget.rotation;
-                        _heldBot.StartMovement();
-                        _heldBot = null;
-                        _botAmount--;
-                        _deployDelayTimer.StartTimer(_deployDelay, false);
+                        _shouldDeployBot = true;
                         HideIndicator();
                     }
                     else
@@ -192,6 +188,22 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
             {
                 _deployTarget.localPosition = _deployStartPosition;
                 ShowInvalidIndicator();
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (!_paused)
+        {
+            if (_shouldDeployBot)
+            {
+                DeployBot();
+            }
+            else if (_heldBot != null)
+            {
+                _heldBot.transform.position = transform.position;
+                _heldBot.transform.rotation = transform.rotation;
             }
         }
     }
@@ -228,26 +240,41 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         }
     }
 
+    private void DeployBot()
+    {
+        _shouldDeployBot = false;
+        _heldBot.transform.position = _deployTarget.position;
+        _heldBot.transform.rotation = _deployTarget.rotation;
+        _heldBot.StartMovement();
+        _heldBot = null;
+        //_botAmount--; //TODO: remove commenting when dispensers are implemented
+        _deployDelayTimer.StartTimer(_deployDelay, false);
+    }
+
     private void ShowValidIndicator()
     {
-        _indicator.enabled = true;
-        _indicator.material = _blueMaterial;
-
-        _heldBot.transform.position = transform.position;
-        _heldBot.transform.rotation = transform.rotation;
+        foreach (Renderer renderer in _indicators)
+        {
+            renderer.enabled = true;
+            renderer.material = _blueMaterial;
+        }
     }
 
     private void ShowInvalidIndicator()
     {
-        _indicator.enabled = true;
-        _indicator.material = _redMaterial;
-
-        _heldBot.transform.position = transform.position;
-        _heldBot.transform.rotation = transform.rotation;
+        foreach (Renderer renderer in _indicators)
+        {
+            renderer.enabled = true;
+            renderer.material = _redMaterial;
+        }
     }
 
     private void HideIndicator()
     {
-        _indicator.enabled = false;
+        foreach (Renderer renderer in _indicators)
+        {
+            renderer.enabled = false;
+        }
+
     }
 }
