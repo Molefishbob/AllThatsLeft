@@ -31,7 +31,10 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         {
             _canFollow = false;
             _followPlayer = false;
-            _backToPrevious = true;
+            if (_time > 0.5f)
+            {
+                _backToPrevious = true;
+            }
         }
     }
 
@@ -89,7 +92,6 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         }       
 
         Vector3 move = new Vector3(x,y,z);
-        
         return move;
     }
 
