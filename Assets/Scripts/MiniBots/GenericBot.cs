@@ -42,6 +42,14 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     {
         if ((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0)
             _bMoving = false;
+        RaycastHit hit;
+        int tmpLayerMask = 1 << 12;
+        if (Physics.SphereCast(transform.position + new Vector3(0,_controller.height,0) + transform.forward, 0.1f, Vector3.down, out hit, _controller.height * 1.1f, tmpLayerMask))
+        {}
+        else if (_bMoving)
+        {
+            _bMoving = false;
+        }
     }
 
     public virtual void ResetBot()
