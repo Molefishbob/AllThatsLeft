@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7181744646978947807}
   - component: {fileID: 1548654265513761093}
-  - component: {fileID: 4205431451771122724}
+  - component: {fileID: 7177146061121739271}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -44,18 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449561258a299c4989cdfd7c08be96d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawnTime: 10
   _spawnedEnemy: 0
---- !u!136 &4205431451771122724
-CapsuleCollider:
+--- !u!114 &7177146061121739271
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 82288006638000068}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 25
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

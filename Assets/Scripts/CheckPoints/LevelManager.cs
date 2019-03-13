@@ -22,21 +22,9 @@ public class LevelManager : MonoBehaviour
     /// The pool prefab
     /// </summary>
     public HackPool _hackPoolPrefab;
-    /// <summary>
-    /// The pool prefab
-    /// </summary>
-    public FrogEnemyPool _frogPoolPrefab;
-    /// <summary>
-    /// The pool prefab
-    /// </summary>
-    public PatrolEnemyPool _patrolEnemyPoolPrefab;
-
-
     public bool _levelNeedsBombBots;
     public bool _levelNeedsTrampBots;
     public bool _levelNeedsHackBots;
-    public bool _levelNeedsFrogEnemies;
-    public bool _levelNeedsPatrolEnemies;
 
     void Awake()
     {
@@ -52,14 +40,6 @@ public class LevelManager : MonoBehaviour
         if (_levelNeedsHackBots && GameManager.Instance.HackPool == null)
         {
             GameManager.Instance.HackPool = Instantiate(_hackPoolPrefab);
-        }
-        if(_levelNeedsFrogEnemies && GameManager.Instance.FrogEnemyPool == null)
-        {
-            GameManager.Instance.FrogEnemyPool = Instantiate(_frogPoolPrefab);
-        }
-        if (_levelNeedsPatrolEnemies && GameManager.Instance.PatrolEnemyPool == null)
-        {
-            GameManager.Instance.PatrolEnemyPool = Instantiate(_patrolEnemyPoolPrefab);
         }
         _allLevelCheckPoints = FindObjectsOfType<CheckPointPole>();
         _allLevelCheckPoints = SortCheckpoints(_allLevelCheckPoints);

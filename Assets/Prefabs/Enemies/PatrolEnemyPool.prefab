@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 836223935359141074}
   - component: {fileID: 5096614545507695761}
+  - component: {fileID: 6959965145670669451}
+  - component: {fileID: 6559404669139291665}
   m_Layer: 0
   m_Name: PatrolEnemyPool
   m_TagString: Untagged
@@ -46,3 +48,29 @@ MonoBehaviour:
   _prefab: {fileID: 434196647105784828, guid: 07ca5bcb2c4529c41b74f1a0ce0f4614, type: 3}
   _poolSize: 1
   _willGrow: 0
+--- !u!114 &6959965145670669451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741684272580549177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3449561258a299c4989cdfd7c08be96d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnTime: 10
+  _spawnedEnemy: 1
+--- !u!114 &6559404669139291665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741684272580549177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
