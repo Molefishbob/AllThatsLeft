@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 {
-    public float _jumpHeight = 2.5f;
-    public string _jumpButton = "Jump";
-    public float _leewayTimeAfterLeavingGround = 0.1f;
-    public float _leewayTimeBeforeHittingGround = 0.1f;
+    [SerializeField]
+    private float _maxHeight = 2.5f;
+    [SerializeField]
+    private float _minHeight = 1.0f;
+    [SerializeField]
+    private string _jumpButton = "Jump";
+    [SerializeField]
+    private float _leewayTimeAfterLeavingGround = 0.1f;
+    [SerializeField]
+    private float _leewayTimeBeforeHittingGround = 0.1f;
+    [SerializeField]
+    private float _holdTimeForMaxHeight = 0.5f;
 
     private Vector3 _currentJumpForce;
     private bool _jumping;
@@ -58,6 +66,10 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
             {
                 _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
             }
+            if (Input.GetButtonUp(_jumpButton) && _afterTimer.IsRunning && _jumping)
+            {
+                _currentJumpForce = GetJumpForce(_minHeight);
+            }
         }
     }
 
@@ -65,12 +77,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     {
         if (!_paused)
         {
-            if (_forcedJumping)
-            {
-                _forcedJumping = false;
-                _jumping = true;
-            }
-            else
+            if (!_forcedJumping)
             {
                 if (GameManager.Instance.Player.IsGrounded)
                 {
@@ -82,23 +89,29 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     _beforeTimer.StopTimer();
                     _jumping = true;
                     GameManager.Instance.Player.ResetGravity();
-                    _currentJumpForce = GetJumpForce(_jumpHeight);
-                }
-                else if (_jumping && _currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
-                {
-                    GameManager.Instance.Player.ResetGravity();
-                    _jumping = false;
+                    _currentJumpForce = GetJumpForce(_maxHeight);
+                    _afterTimer.StartTimer(_holdTimeForMaxHeight, false);
                 }
 
-                if (!GameManager.Instance.Player.IsGrounded && _canJump == true && !_afterTimer.IsRunning)
+                if (!GameManager.Instance.Player.IsGrounded && _canJump == true && !_afterTimer.IsRunning && !_jumping)
                 {
                     _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
                 }
             }
 
-            if (_jumping)
+            if (_jumping || _forcedJumping)
             {
-                GameManager.Instance.Player.AddDirectMovement(_currentJumpForce);
+
+                if (_currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
+                {
+                    GameManager.Instance.Player.ResetGravity();
+                    _jumping = false;
+                    _forcedJumping = false;
+                }
+                else
+                {
+                    GameManager.Instance.Player.AddDirectMovement(_currentJumpForce);
+                }
             }
         }
     }
