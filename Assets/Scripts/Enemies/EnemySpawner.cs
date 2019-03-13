@@ -16,14 +16,10 @@ public class EnemySpawner : MonoBehaviour, IPauseable
         Patrol
     };
 
-    private void Awake()
+    private void Start()
     {
         _frogPool = FindObjectOfType<FrogEnemyPool>();
         _patrolPool = FindObjectOfType<PatrolEnemyPool>();
-    }
-
-    private void Start()
-    {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
         

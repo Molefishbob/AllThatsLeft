@@ -11,9 +11,6 @@ public class FrogEnemy : GenericEnemy, ITimedAction
     private Vector3 _goBackPosition, _playerPosition;
     public LayerMask _groundLayer;
 
-    //only for testing
-    public bool _die = false;
-
     protected override void Awake()
     {
         base.Awake();
@@ -29,11 +26,6 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 
     private void Update()
     {
-        if (_die)
-        {
-            Die();
-        }
-
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
