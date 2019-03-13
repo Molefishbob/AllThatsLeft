@@ -22,6 +22,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private bool _forcedJumping;
     private OneShotTimer _afterTimer;
     private OneShotTimer _beforeTimer;
+    private OneShotTimer _holdTimer;
     private bool _canJump;
 
     private bool _paused;
@@ -41,6 +42,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
         OneShotTimer[] timers = GetComponents<OneShotTimer>();
         _afterTimer = timers[0];
         _beforeTimer = timers[1];
+        _holdTimer = timers[2];
     }
 
     private void Start()
@@ -62,13 +64,16 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     {
         if (!_paused)
         {
-            if (Input.GetButtonDown(_jumpButton))
+            if (_jumping)
+            {
+                if (Input.GetButtonUp(_jumpButton) && _holdTimer.IsRunning)
+                {
+                    _currentJumpForce = GetJumpForce(_minHeight);
+                }
+            }
+            else if (Input.GetButtonDown(_jumpButton))
             {
                 _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
-            }
-            if (Input.GetButtonUp(_jumpButton) && _afterTimer.IsRunning && _jumping)
-            {
-                _currentJumpForce = GetJumpForce(_minHeight);
             }
         }
     }
@@ -79,23 +84,27 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
         {
             if (!_forcedJumping)
             {
-                if (GameManager.Instance.Player.IsGrounded)
+                if (!_jumping)
                 {
-                    _canJump = true;
+                    if (GameManager.Instance.Player.IsGrounded)
+                    {
+                        _canJump = true;
+                    }
+                    else if (_canJump == true && !_afterTimer.IsRunning)
+                    {
+                        _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
+                    }
                 }
 
                 if (_canJump && _beforeTimer.IsRunning)
                 {
                     _beforeTimer.StopTimer();
                     _jumping = true;
+                    TimedAction();
+                    _afterTimer.StopTimer();
                     GameManager.Instance.Player.ResetGravity();
                     _currentJumpForce = GetJumpForce(_maxHeight);
-                    _afterTimer.StartTimer(_holdTimeForMaxHeight, false);
-                }
-
-                if (!GameManager.Instance.Player.IsGrounded && _canJump == true && !_afterTimer.IsRunning && !_jumping)
-                {
-                    _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
+                    _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
                 }
             }
 
