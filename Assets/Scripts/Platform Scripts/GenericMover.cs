@@ -104,7 +104,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
                 }
         }
         Gizmos.color = new Color(0,0,0,1);
-        Gizmos.DrawCube(_transform[0].position,new Vector3(3,0.5f,2));
-        Gizmos.DrawCube(_transform[_transform.Count -1].position,new Vector3(3,0.5f,2));
+        Gizmos.DrawWireCube(_transform[0].position,new Vector3(3,0.5f,2));
+        Gizmos.DrawWireCube(_transform[_transform.Count -1].position,new Vector3(3,0.5f,2));;
     }
 }
