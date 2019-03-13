@@ -4,26 +4,33 @@ using UnityEngine;
 
 public class PatrolEnemyMover : GenericEnemy
 {
-    private List<Transform> _transforms;
+    private List<Transform> _transforms = new List<Transform>();
     private int _targetCounter;
     private bool _goingForward;
     
-    
-    //only for testing
-    public bool _die = false;
+    protected override void Awake()
+    {
+        base.Awake();
+        _targetCounter = 0;
+        _goingForward = true;
+        Initialize();
+        
+    }
 
     protected override void Start()
     {
-        _spawner = GetComponentInParent<EnemySpawner>();
-        _targetCounter = 0;
-        _goingForward = true;
-        Init();
+        SetControllerActive(true);
     }
 
-    private void Update()
+    private void Initialize()
     {
-        if (_die)
-            Die();
+        foreach (Transform child in transform.parent)
+        {
+            if (child != transform)
+            {
+                _transforms.Add(child);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,21 +60,9 @@ public class PatrolEnemyMover : GenericEnemy
         }
     }
 
-    public virtual void Init()
-    {
-        _transforms = new List<Transform>(transform.parent.childCount);
-
-        foreach (Transform child in transform.parent)
-        {
-            if (child != transform)
-            {
-                _transforms.Add(child);
-            }
-        }
-    }
-
     protected override Vector3 InternalMovement()
     {
+        //Debug.Log(_targetCounter + " jeejee " + _transforms.Count);
 
         Vector3 moveDirection = _transforms[_targetCounter].position - transform.position;
 
