@@ -37,6 +37,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 
     protected override Vector3 InternalMovement()
     {
+
         float x, y, z;
 
         if (!_stopMoving && !_followPlayer && !_backToPrevious)

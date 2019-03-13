@@ -9,10 +9,13 @@ public class GenericEnemy : CharControlBase, IDamageReceiver
     protected override void Awake()
     {
         base.Awake();
-        SetControllerActive(false);
         _spawner = GetComponent<EnemySpawner>();
     }
-
+    protected override void Start()
+    {
+        base.Start();
+        SetControllerActive(false);
+    }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.layer == 10)

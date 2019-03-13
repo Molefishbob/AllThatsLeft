@@ -22,7 +22,6 @@ public class EnemySpawner : MonoBehaviour, IPauseable
         _patrolPool = FindObjectOfType<PatrolEnemyPool>();
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
-        
     }
 
     public void Spawn()
@@ -37,6 +36,7 @@ public class EnemySpawner : MonoBehaviour, IPauseable
         }
         _enemy.transform.position = transform.position;
         _enemy.SetControllerActive(true);
+        
     }
 
     public void Pause()
