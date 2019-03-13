@@ -36,6 +36,8 @@ public class HackerBot : GenericBot
             if (!_bTimerRefreshed)
                 {
                     _lifeTimeTimer.StartTimer(_fLifetime);
+                    _animator.SetTrigger("Hop");
+                    _animator.SetTrigger("Run");
                     _bTimerRefreshed = true;
                 }
             TurnTowards(_goClosestObject);
@@ -44,6 +46,7 @@ public class HackerBot : GenericBot
             {
                 _lifeTimeTimer.StopTimer();
                 _bMoving = false;
+                _animator.SetTrigger("Stop");
                 // If terminal is hacked reset
                 if (_sTerminal == GenericHackable.Status.Hacked)
                 {
