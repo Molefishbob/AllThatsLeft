@@ -10,11 +10,11 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
     protected int _poolSize = 4;
     [SerializeField]
     protected bool _willGrow = true;
-    protected List<T> _pool;
+    protected HashSet<T> _pool;
 
     private void Awake()
     {
-        _pool = new List<T>(_poolSize);
+        _pool = new HashSet<T>();
         for (int i = 0; i < _poolSize; ++i)
         {
             T obj = Spawn();

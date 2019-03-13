@@ -2,10 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void ValueChanged( int amount );
+public delegate void BotChanged( MiniBotType bot );
+public enum MiniBotType {
+        HackBot,
+        BombBot,
+        TrampBot
+    }
 public class GameManager : Singleton<GameManager>
 {
     // (Optional) Prevent non-singleton constructor use.
     protected GameManager() { }
+    public event ValueChanged OnBotAmountChanged;
+    public event ValueChanged OnMaximumBotAmountChanged;
+    public event BotChanged OnCurrentBotChanged;
     private HashSet<IPauseable> _pauseables = new HashSet<IPauseable>();
 
     /// <summary>
@@ -14,6 +24,57 @@ public class GameManager : Singleton<GameManager>
     public bool GamePaused { get; private set; }
 
     private ThirdPersonPlayerMovement _player;
+
+    public int CurrentBotAmount {
+        get 
+        { 
+            return _currentBotAmount; 
+        }
+        set 
+        {
+            _currentBotAmount = value;
+
+            if (OnBotAmountChanged != null) {
+                OnBotAmountChanged(_currentBotAmount);
+            }
+        }
+    }
+
+    private int _currentBotAmount;
+
+    public MiniBotType  CurrentBot {
+        get 
+        { 
+            return _currentBot; 
+        }
+        set 
+        {
+            _currentBot = value;
+
+            if (OnCurrentBotChanged != null) {
+                OnCurrentBotChanged(_currentBot);
+            }
+        }
+    }
+
+    private MiniBotType _currentBot;
+    
+    public int MaximumBotAmount {
+        get 
+        { 
+            return _maximumBotAmount; 
+        }
+        set 
+        {
+            _maximumBotAmount = value;
+
+            if (OnMaximumBotAmountChanged != null) {
+                OnMaximumBotAmountChanged(_maximumBotAmount);
+            }
+        }
+    }
+
+    private int _maximumBotAmount;
 
     /// <summary>
     /// Reference of the player.
@@ -33,6 +94,31 @@ public class GameManager : Singleton<GameManager>
             return _player;
         }
     }
+
+    private LevelManager _levelManager;
+
+    /// <summary>
+    /// Reference of the LevelManager.
+    /// </summary>
+    public LevelManager LevelManager
+    {
+        get
+        {
+            if (_levelManager == null)
+            {
+                Debug.LogError("LEVELMANAGER MISSING!!!!");
+            }
+            return _levelManager;
+        }
+        set
+        {
+            _levelManager = value;
+        }
+    }
+
+    public BombPool BombPool;
+    public TrampPool TrampPool;
+    public HackPool HackPool;
 
     private float _timeScaleBeforePause = 1.0f;
 
