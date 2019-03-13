@@ -95,6 +95,8 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public bool CanRestockBots = false;
+
     private LevelManager _levelManager;
 
     /// <summary>
