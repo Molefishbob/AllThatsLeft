@@ -29,10 +29,10 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
-            _canFollow = false;
-            _followPlayer = false;
             if (_time > 0.5f)
             {
+                _canFollow = false;
+                _followPlayer = false;
                 _backToPrevious = true;
             }
         }
@@ -101,34 +101,28 @@ public class FrogEnemy : GenericEnemy, ITimedAction
     }
 
     // When player enters aggro area start chasing, and save the previous position, so frog can return when not chasing anymore
-    private void OnTriggerEnter(Collider other)
+    public void AggroEnter()
     {
-        if (other.gameObject.layer == 10)
-        {
             _followPlayer = true;
             if (!_backToPrevious)
             {
                 _goBackPosition = transform.position;
             }
             _backToPrevious = false;
-        }
     }
 
-    private void OnTriggerStay(Collider other)
+    public void AggroStay(Transform other)
     {
-        if(other.gameObject.layer == 10 && _canFollow)
+        if (_canFollow)
         {
             _playerPosition = other.gameObject.transform.position;
         }
     }
 
     //when player exits aggro area, go back to previous position
-    private void OnTriggerExit(Collider other)
+    public void AggroExit()
     {
-        if (other.gameObject.layer == 10)
-        {
             _followPlayer = false;
             _backToPrevious = true;
-        }
     }
 }
