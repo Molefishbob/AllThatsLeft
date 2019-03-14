@@ -17,7 +17,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     [SerializeField]
     private float _holdTimeForMaxHeight = 0.5f;
     [SerializeField]
-    private SingleSFXSound _sound;
+    private RandomSFXSound _sound;
 
     private Vector3 _currentJumpForce;
     private bool _jumping;
