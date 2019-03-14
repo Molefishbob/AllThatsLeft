@@ -13,13 +13,13 @@ public class PatrolEnemyMover : GenericEnemy
         base.Awake();
         _targetCounter = 0;
         _goingForward = true;
-        Initialize();
-        
     }
 
     protected override void Start()
     {
+        
         SetControllerActive(true);
+        Initialize();
     }
 
     private void Initialize()
@@ -45,6 +45,10 @@ public class PatrolEnemyMover : GenericEnemy
             else if(!_goingForward && _targetCounter > 0)
             {
                 _targetCounter--;
+            } else if (!_goingForward && _targetCounter == 0)
+            {
+                _targetCounter++;
+                _goingForward = true;
             }
 
             if (_targetCounter > _transforms.Count - 1)

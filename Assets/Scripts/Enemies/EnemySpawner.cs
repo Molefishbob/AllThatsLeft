@@ -7,7 +7,8 @@ public class EnemySpawner : MonoBehaviour, IPauseable
     private bool _paused = false;
     private FrogEnemyPool _frogPool;
     private PatrolEnemyPool _patrolPool;
-    private GenericEnemy _enemy;
+    private FrogEnemy _frogEnemy;
+    private PatrolEnemy _patrolEnemy;
     public int _maxSpawnAmount;
     private int _spawnedCount = 0;
     private bool _hasSpawnedEnough;
@@ -31,15 +32,19 @@ public class EnemySpawner : MonoBehaviour, IPauseable
     {
         if (_spawnedEnemy == SpawnedEnemy.Frog)
         {
-            _enemy = _frogPool.GetObject();
+            _frogEnemy = _frogPool.GetObject();
+            _frogEnemy.transform.position = transform.position;
+            _frogEnemy.SetControllerActive(true);
+            _spawnedCount++;
         }
         else if (_spawnedEnemy == SpawnedEnemy.Patrol)
         {
-            _enemy = _patrolPool.GetObject();
+            _patrolEnemy = _patrolPool.GetObject();
+            _patrolEnemy.transform.position = transform.position;
+
+            _spawnedCount++;
         }
-        _enemy.transform.position = transform.position;
-        _enemy.SetControllerActive(true);
-        _spawnedCount++;
+        
     }
 
     public void Pause()

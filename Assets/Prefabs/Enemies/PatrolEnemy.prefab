@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7013265379018812351}
   - component: {fileID: 434196647105784828}
-  - component: {fileID: 3915947562067248573}
   m_Layer: 11
   m_Name: PatrolEnemy
   m_TagString: Untagged
@@ -32,7 +31,6 @@ Transform:
   - {fileID: 4127240490338789713}
   - {fileID: 8905923967841659792}
   - {fileID: 4215529257362755989}
-  - {fileID: 4066402815863017617}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,33 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 822df50f8e9bbd14ab10b6bf3bf11e32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 6
-  _turningSpeed: 540
-  _accelerationTime: 10
-  _minYPosition: -10
-  _walkableTerrain:
-    serializedVersion: 2
-    m_Bits: 12288
-  _groundedDistance: 0.1
-  _die: 0
---- !u!143 &3915947562067248573
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 212436966276047290}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1404025000627014276
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +146,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 12288
   _groundedDistance: 0.1
-  _die: 0
 --- !u!143 &757937887894797205
 CharacterController:
   m_ObjectHideFlags: 0
@@ -193,50 +163,6 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &3035947929850151152
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4066402815863017617}
-  - component: {fileID: 6771320988677259615}
-  m_Layer: 23
-  m_Name: Target (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4066402815863017617
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3035947929850151152}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.43, y: 0, z: -1.64}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 7013265379018812351}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6771320988677259615
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3035947929850151152}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5645055107069093028
 GameObject:
@@ -340,7 +266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6580228279474884761}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.27, y: 0, z: -9.85}
+  m_LocalPosition: {x: 10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7013265379018812351}
@@ -384,7 +310,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7178140805994953068}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.27, y: 0, z: 6.23}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7013265379018812351}
