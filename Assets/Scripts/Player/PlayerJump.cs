@@ -16,6 +16,8 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private float _leewayTimeBeforeHittingGround = 0.1f;
     [SerializeField]
     private float _holdTimeForMaxHeight = 0.5f;
+    [SerializeField]
+    private SingleSFXSound _sound;
 
     private Vector3 _currentJumpForce;
     private bool _jumping;
@@ -105,6 +107,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     GameManager.Instance.Player.ResetGravity();
                     _currentJumpForce = GetJumpForce(_maxHeight);
                     _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
+                    _sound.PlaySound();
                 }
             }
 
