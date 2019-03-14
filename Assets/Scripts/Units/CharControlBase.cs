@@ -195,7 +195,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     /// <summary>
     /// Add a movement vector for character controller's move in the next FixedUpdate.
     /// </summary>
-    /// <param name="move">movement without deltaTime</param>
+    /// <param name="move">exact movement vector, add deltaTime when necessary</param>
     public void AddDirectMovement(Vector3 move)
     {
         _externalMove += move;
