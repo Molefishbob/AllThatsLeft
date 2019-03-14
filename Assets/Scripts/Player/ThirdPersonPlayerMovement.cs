@@ -7,9 +7,9 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
     public string _horizontalAxis = "Horizontal";
     public string _verticalAxis = "Vertical";
     [SerializeField]
-    private RandomSFXSound _walkSound;
+    private RandomSFXSound _walkSound = null;
     [SerializeField]
-    private RandomSFXSound _landingSound;
+    private RandomSFXSound _landingSound = null;
 
     private Transform _cameraTransform;
     private bool _airBorne = false;
