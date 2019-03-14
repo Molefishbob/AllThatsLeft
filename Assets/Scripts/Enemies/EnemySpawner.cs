@@ -8,6 +8,9 @@ public class EnemySpawner : MonoBehaviour, IPauseable
     private FrogEnemyPool _frogPool;
     private PatrolEnemyPool _patrolPool;
     private GenericEnemy _enemy;
+    public int _maxSpawnAmount;
+    private int _spawnedCount = 0;
+    private bool _hasSpawnedEnough;
     public SpawnedEnemy _spawnedEnemy;
 
     public enum SpawnedEnemy
@@ -36,7 +39,7 @@ public class EnemySpawner : MonoBehaviour, IPauseable
         }
         _enemy.transform.position = transform.position;
         _enemy.SetControllerActive(true);
-        
+        _spawnedCount++;
     }
 
     public void Pause()
@@ -61,7 +64,10 @@ public class EnemySpawner : MonoBehaviour, IPauseable
     {
         if(other.gameObject.layer == 10)
         {
-            Spawn();
+            if (_spawnedCount < _maxSpawnAmount)
+            {
+                Spawn();
+            }
         }
     }
 }
