@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CharControlPlatformMovement : MonoBehaviour, IPauseable
 {
-    //[Tooltip("Momentum decay speed")]
-    //public float _linearDrag = 0.02f;
     public LayerMask _platformLayerMask = 1 << 13;
     public float _attachDistance = 0.2f;
     public float _disconnectDistance = 2.5f;
@@ -74,7 +72,7 @@ public class CharControlPlatformMovement : MonoBehaviour, IPauseable
                 else
                 {
                     Vector3 currentPlatformMove = _platform.position - _lastPlatformPos;
-                    _character.transform.position += currentPlatformMove;
+                    _character.AddDirectMovement(currentPlatformMove);
                 }
 
                 if (_platform != null)
@@ -87,22 +85,6 @@ public class CharControlPlatformMovement : MonoBehaviour, IPauseable
                 _platform = null;
                 _currentAttachDistance = _attachDistance;
             }
-            /* else
-            {
-                _platform = null;
-
-                Vector3 drag = -_currentPlatformMove.normalized * _linearDrag * Time.deltaTime;
-
-                if (_currentPlatformMove.magnitude > drag.magnitude)
-                {
-                    _currentPlatformMove += drag;
-                    _character.transform.position += _currentPlatformMove;
-                }
-                else
-                {
-                    _currentPlatformMove = Vector3.zero;
-                }
-            } */
         }
     }
 }

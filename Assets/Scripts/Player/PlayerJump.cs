@@ -122,7 +122,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                 }
                 else
                 {
-                    GameManager.Instance.Player.AddDirectMovement(_currentJumpForce);
+                    GameManager.Instance.Player.AddDirectMovement(_currentJumpForce * Time.deltaTime);
                 }
             }
         }
