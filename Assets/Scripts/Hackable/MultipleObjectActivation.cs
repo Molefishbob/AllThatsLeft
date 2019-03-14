@@ -19,7 +19,7 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
             }
             catch
             {
-                Debug.Log("Consoles have to inherit GenericHackable script!");
+                Debug.LogError("Consoles have to inherit GenericHackable script!");
             }
         }
         foreach (MonoBehaviour target in _targets)
@@ -30,7 +30,7 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
             }
             catch
             {
-                Debug.Log("Targets have to implement IButtonInteraction script!");
+                Debug.LogError("Targets have to implement IButtonInteraction script!");
             }
         }
     }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4529178344236584706}
   - component: {fileID: 467573720229125999}
   m_Layer: 14
-  m_Name: TestHackBot
+  m_Name: HackBot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,11 +51,15 @@ MonoBehaviour:
   _turningSpeed: 540
   _accelerationTime: 10
   _minYPosition: -10
-  _fTurnSpeed: 2
+  _walkableTerrain:
+    serializedVersion: 2
+    m_Bits: 12288
+  _groundedDistance: 0.1
+  _fTurnSpeed: 10
   _fLifetime: 10
   _bMoving: 0
   _bDebug: 0
-  _fDetectRadius: 3
+  _fDetectRadius: 0.3
   _fStopRange: 2
   _lHackableLayer:
     serializedVersion: 2
@@ -102,10 +106,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5938e84cdbaa47f47b878d9aa6d5cdbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _linearDrag: 0.02
   _platformLayerMask:
     serializedVersion: 2
     m_Bits: 8192
+  _attachDistance: 0.2
+  _disconnectDistance: 2.5
 --- !u!1001 &3533249719394289563
 PrefabInstance:
   m_ObjectHideFlags: 0
