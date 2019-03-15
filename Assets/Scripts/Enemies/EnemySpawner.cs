@@ -34,7 +34,6 @@ public class EnemySpawner : MonoBehaviour, IPauseable
         {
             _frogEnemy = _frogPool.GetObject();
             _frogEnemy.transform.position = transform.position;
-            _frogEnemy.SetControllerActive(true);
             _spawnedCount++;
         }
         else if (_spawnedEnemy == SpawnedEnemy.Patrol)
