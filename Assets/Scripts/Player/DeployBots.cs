@@ -320,7 +320,7 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         _heldBot = null;
         _heldBotAssCheeks = null;
         GameManager.Instance.CurrentBotAmount--;
-        _deployDelayTimer.StartTimer(_deployDelay, false);
+        if(_deployDelay > 0.0f) _deployDelayTimer.StartTimer(_deployDelay, false);
     }
 
     private void ShowValidIndicator()
