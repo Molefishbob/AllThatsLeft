@@ -11,6 +11,7 @@ public abstract class VolumeControl : MonoBehaviour
         Interface
     }
 
+    [SerializeField]
     protected AudioSource _audioSource;
     private float _fullVolume;
     protected SoundType _soundType;
@@ -25,7 +26,11 @@ public abstract class VolumeControl : MonoBehaviour
     protected virtual void Awake()
     {
         SetSoundType();
-        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null)
+        {
+            _audioSource = GetComponent<AudioSource>();
+            Debug.LogWarning("Audio Source not set, defaulting to first Audio Source in this object.");
+        }
     }
 
     protected virtual void Start()

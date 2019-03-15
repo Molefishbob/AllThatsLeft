@@ -6,13 +6,23 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
 {
     public string _horizontalAxis = "Horizontal";
     public string _verticalAxis = "Vertical";
+    [SerializeField]
+    private RandomSFXSound _walkSound = null;
+    [SerializeField]
+    private RandomSFXSound _landingSound = null;
 
     private Transform _cameraTransform;
+    private bool _airBorne = false;
 
     protected override void Awake()
     {
         base.Awake();
         _cameraTransform = FindObjectOfType<NoZoomThirdPersonCam>().transform;
+    }
+
+    protected override void Start()
+    {
+        _airBorne = !IsGrounded;
     }
 
     protected override Vector3 InternalMovement()
@@ -36,7 +46,25 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
         // apply magnitude
         inputDirection = inputDirection.normalized * desiredSpeed;
 
+        if (inputDirection.magnitude > 0 && IsGrounded && !_walkSound.IsPlaying)
+        {
+            _walkSound.PlaySound();
+        }
+
         return inputDirection;
+    }
+
+    protected override void FixedUpdateAdditions()
+    {
+        if (!_airBorne && !IsGrounded)
+        {
+            _airBorne = true;
+        }
+        else if (_airBorne && IsGrounded)
+        {
+            _airBorne = false;
+            _landingSound.PlaySound();
+        }
     }
 
     public void TakeDamage(int damage)
