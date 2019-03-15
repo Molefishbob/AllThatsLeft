@@ -6,7 +6,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
-    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow;
+    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow, _canSpit;
     private OneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
     public LayerMask _groundLayer;
@@ -22,6 +22,11 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         _nextStopZ = false;
         _followPlayer = false;
         _backToPrevious = false;
+    }
+
+    protected override void Start()
+    {
+        SetControllerActive(true);
     }
 
     private void Update()
@@ -103,12 +108,13 @@ public class FrogEnemy : GenericEnemy, ITimedAction
     // When player enters aggro area start chasing, and save the previous position, so frog can return when not chasing anymore
     public void AggroEnter()
     {
-            _followPlayer = true;
-            if (!_backToPrevious)
-            {
-                _goBackPosition = transform.position;
-            }
-            _backToPrevious = false;
+        _followPlayer = true;
+        if (!_backToPrevious)
+        {
+            _goBackPosition = transform.position;
+        }
+        _backToPrevious = false;
+        _canSpit = true;
     }
 
     public void AggroStay(Transform other)
@@ -122,7 +128,8 @@ public class FrogEnemy : GenericEnemy, ITimedAction
     //when player exits aggro area, go back to previous position
     public void AggroExit()
     {
-            _followPlayer = false;
-            _backToPrevious = true;
+        _followPlayer = false;
+        _backToPrevious = true;
+        _canSpit = false;
     }
 }
