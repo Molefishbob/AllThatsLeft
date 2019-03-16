@@ -173,9 +173,6 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                     _currentGravity += gravityDelta;
                 }
 
-                // apply deltaTime to external movement
-                _externalMove *= Time.deltaTime;
-
                 // make character controller move with all combined moves
                 _controller.Move(_externalMove + _internalMove + (_onSlope ? _slopeDirection * _currentGravity.magnitude : _currentGravity));
 
