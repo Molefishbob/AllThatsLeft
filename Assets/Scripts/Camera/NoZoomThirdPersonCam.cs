@@ -23,6 +23,9 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     private bool _zooming;
     private float _newDistance;
 
+    [SerializeField]
+    private string _cameraTargetName = "CameraTarget";
+
     public void Pause()
     {
         _paused = true;
@@ -43,7 +46,7 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
-        GetInstantNewTarget(GameManager.Instance.Player.transform.Find("CameraTarget"));
+        GetInstantNewTarget(GameManager.Instance.Player.transform.Find(_cameraTargetName));
     }
 
     private void OnDestroy()
@@ -112,6 +115,12 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
     public void GetNewTarget(Transform trans)
     {
+        Transform tf = trans.Find(_cameraTargetName);
+        if (tf != null)
+        {
+            trans = tf;
+        }
+
         if (trans != _lookAt)
         {
             _oldTarget = _lookAt;
@@ -126,6 +135,12 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
     public void GetInstantNewTarget(Transform trans)
     {
+        Transform tf = trans.Find(_cameraTargetName);
+        if (tf != null)
+        {
+            trans = tf;
+        }
+
         _lookAt = trans;  
     }
 }

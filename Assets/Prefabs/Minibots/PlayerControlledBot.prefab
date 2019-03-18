@@ -80,10 +80,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 12288
   _groundedDistanceBonus: 0.04
-  _horizontalAxis: Horizontal
-  _verticalAxis: Vertical
   _walkSound: {fileID: 581487429148358395}
   _landingSound: {fileID: 1143756402394380694}
+  _animatorParameterRunning: Run
+  _animatorParameterAirborne: Airborne
+  _animator: {fileID: 0}
+  _horizontalAxis: Horizontal
+  _verticalAxis: Vertical
+  _animatorParameterDeath: Dying
 --- !u!114 &6361875651433932180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +107,7 @@ MonoBehaviour:
   _leewayTimeBeforeHittingGround: 0.1
   _holdTimeForMaxHeight: 0.2
   _sound: {fileID: 3284715457507252405}
+  _animatorParameterJumping: Jump
 --- !u!114 &8480785135076828658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +174,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fDetectRadius: 2
+  _lHackableLayer:
+    serializedVersion: 2
+    m_Bits: 262144
   _sHackButton: Use Object
   _sExplodeButton: Cancel
   _bActive: 0
@@ -334,6 +342,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1214044774675275346}
     m_Modifications:
+    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_Name
+      value: hackbot
+      objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -378,10 +390,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
-      propertyPath: m_Name
-      value: hackbot
-      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 570806b2ff5ce544b9c99935ce7bc476, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
 --- !u!4 &2217285306020990845 stripped

@@ -122,6 +122,8 @@ public class GameManager : Singleton<GameManager>
     public TrampPool TrampPool;
     public HackPool HackPool;
 
+    public ControlledBotPool BotPool;
+
     public PatrolEnemyPool PatrolEnemyPool;
     public FrogEnemyPool FrogEnemyPool;
 
