@@ -4,16 +4,29 @@ using UnityEngine;
 
 public abstract class CharControlBase : MonoBehaviour, IPauseable
 {
-    [Tooltip("Meters per second")]
-    public float _speed = 6;
-    [Tooltip("Degrees per second")]
-    public float _turningSpeed = 540;
-    [Tooltip("NOT in seconds")]
-    public float _accelerationTime = 10;
+    [SerializeField, Tooltip("Meters per second")]
+    private float _speed = 6;
+    [SerializeField, Tooltip("Degrees per second")]
+    private float _turningSpeed = 540;
+    [SerializeField, Tooltip("NOT in seconds")]
+    private float _accelerationTime = 10;
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
-    public LayerMask _walkableTerrain = (1 << 12) + (1 << 13);
-    public float _groundedDistanceBonus = 0.04f;
+    [SerializeField]
+    private LayerMask _walkableTerrain = (1 << 12) + (1 << 13);
+    [SerializeField]
+    private float _groundedDistanceBonus = 0.04f;
+    [SerializeField]
+    private RandomSFXSound _walkSound = null;
+    [SerializeField]
+    private RandomSFXSound _landingSound = null;
+    [SerializeField]
+    private string _animatorParameterRunning = "Run";
+    [SerializeField]
+    private string _animatorParameterAirborne = "Airborne";
+
+    [HideInInspector]
+    public Animator _animator;
 
     protected CharacterController _controller;
     protected bool _paused;
@@ -26,6 +39,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     private bool _resetGravity = false;
     private bool _controllerEnabled = true;
     private IDamageReceiver _damageReceiver = null;
+    private bool _airBorne = false;
 
     public bool IsGrounded { get; private set; }
     public float SkinWidth { get { return _controller.skinWidth; } }
@@ -47,12 +61,14 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     {
         _damageReceiver = GetComponent<IDamageReceiver>();
         _controller = GetComponent<CharacterController>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     protected virtual void Start()
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
+        _airBorne = !IsGrounded;
     }
 
     protected virtual void OnDestroy()
@@ -94,6 +110,8 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
                 if (inputDirection.magnitude > 0.0f)
                 {
+                    _animator.SetBool(_animatorParameterRunning, true);
+
                     // convert input direction to a rotation
                     Quaternion inputRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
 
@@ -127,10 +145,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 else if (_internalMove.magnitude > decelerationMagnitude)
                 {
                     _internalMove -= _internalMove.normalized * decelerationMagnitude;
+                    _animator.SetBool(_animatorParameterRunning, false);
                 }
                 else
                 {
                     _internalMove = Vector3.zero;
+                    _animator.SetBool(_animatorParameterRunning, false);
                 }
 
                 // gravity is weird, have to multiply with deltatime twice
@@ -167,6 +187,10 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                     // character controller isn't grounded if it doesn't hit the ground every move method call
                     _currentGravity = gravityDelta;
                     _resetGravity = false;
+                    if (!_resetGravity && !_walkSound.IsPlaying)
+                    {
+                        _walkSound.PlaySound();
+                    }
                 }
                 else
                 {
@@ -184,7 +208,18 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
         }
     }
 
-    protected virtual void FixedUpdateAdditions() { }
+    protected virtual void FixedUpdateAdditions()
+    {
+        if (!_airBorne && !IsGrounded)
+        {
+            _airBorne = true;
+        }
+        else if (_airBorne && IsGrounded)
+        {
+            _airBorne = false;
+            _landingSound.PlaySound();
+        }
+    }
 
     /// <summary>
     /// Return a vector with a magnitude of [0,1]f to move.
