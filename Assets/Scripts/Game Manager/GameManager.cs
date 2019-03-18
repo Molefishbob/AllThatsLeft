@@ -125,6 +125,8 @@ public class GameManager : Singleton<GameManager>
     public PatrolEnemyPool PatrolEnemyPool;
     public FrogEnemyPool FrogEnemyPool;
 
+    public NoZoomThirdPersonCam Camera;
+
     private float _timeScaleBeforePause = 1.0f;
 
     private void Awake()
