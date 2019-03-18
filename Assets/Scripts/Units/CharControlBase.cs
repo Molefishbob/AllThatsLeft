@@ -13,7 +13,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
     public LayerMask _walkableTerrain = (1 << 12) + (1 << 13);
-    public float _groundedDistance = 0.1f;
+    public float _groundedDistanceBonus = 0.04f;
 
     protected CharacterController _controller;
     protected bool _paused;
@@ -140,11 +140,11 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 Vector3 upVector = -Physics.gravity.normalized;
                 RaycastHit hit;
                 if (Physics.SphereCast(
-                        transform.position + upVector * _controller.radius,
+                        transform.position + _controller.center,
                         _controller.radius,
                         Physics.gravity.normalized,
                         out hit,
-                        _groundedDistance,
+                        (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
                         _walkableTerrain))
                 {
                     float slopeAngle = Vector3.Angle(upVector, hit.normal);
@@ -195,7 +195,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     /// <summary>
     /// Add a movement vector for character controller's move in the next FixedUpdate.
     /// </summary>
-    /// <param name="move">movement without deltaTime</param>
+    /// <param name="move">exact movement vector, add deltaTime when necessary</param>
     public void AddDirectMovement(Vector3 move)
     {
         _externalMove += move;
