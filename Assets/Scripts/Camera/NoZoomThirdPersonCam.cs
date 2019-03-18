@@ -5,7 +5,7 @@ using UnityEngine;
 public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 {
     public LayerMask _groundLayer;
-    private Transform _lookAt;
+    private Transform _lookAt, _oldTarget;
     public float _distance = 5.0f;
     public string _cameraXAxis = "Camera X";
     public string _cameraYAxis = "Camera Y";
@@ -17,7 +17,10 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     public float _minPitch = -70;
     [Tooltip("How high the camera can go")]
     public float maxPitch = 85;
+    public float _zoomSpeed = 1;
+    private float _lerperHelper = 0;
     private bool _paused;
+    private bool _zooming;
     private float _newDistance;
 
     public void Pause()
@@ -34,7 +37,6 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     {
         Cursor.lockState = CursorLockMode.Locked;
         _newDistance = _distance;
-        _lookAt = gameObject.transform.parent;
     }
 
     private void Start()
@@ -53,26 +55,40 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
     private void Update()
     {
-        _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
-        _pitch -= _verticalSensitivity * Input.GetAxis(_cameraYAxis);
-
-        if (_pitch > maxPitch)
+        if (!_zooming)
         {
-            _pitch = maxPitch;
+            _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
+            _pitch -= _verticalSensitivity * Input.GetAxis(_cameraYAxis);
+
+            if (_pitch > maxPitch)
+            {
+                _pitch = maxPitch;
+            }
+            else if (_pitch < _minPitch)
+            {
+                _pitch = _minPitch;
+            }
+
+            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+
+            _newDistance = CheckCollision(_newDistance);
+
+            Vector3 dir = new Vector3(0, 0, -_newDistance);
+
+            transform.position = _lookAt.position + rotation * dir;
+            transform.LookAt(_lookAt.position);
         }
-        else if (_pitch < _minPitch)
+        else
         {
-            _pitch = _minPitch;
+            transform.position = Vector3.Lerp(_oldTarget.position, _lookAt.position, _lerperHelper);
+            _lerperHelper += 0.1f * _zoomSpeed;
+
+            if(_lerperHelper >= 1)
+            {
+                _zooming = false;
+                _lerperHelper = 0;
+            }
         }
-
-        Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-
-        _newDistance = CheckCollision(_newDistance);
-
-        Vector3 dir = new Vector3(0, 0, -_newDistance);
-
-        transform.position = _lookAt.position + rotation * dir;
-        transform.LookAt(_lookAt.position);
     }
 
     private float CheckCollision(float tDistance)
@@ -91,5 +107,24 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
         }
 
         return tDistance;
+    }
+
+    public void GetNewTarget(Transform trans)
+    {
+        if (trans != _lookAt)
+        {
+            _oldTarget = _lookAt;
+            _lookAt = trans;
+            _zooming = true;
+        }
+        if(_oldTarget == null)
+        {
+            _oldTarget = trans;
+        }
+    }
+
+    public void GetInstantNewTarget(Transform trans)
+    {
+        _lookAt = trans;  
     }
 }

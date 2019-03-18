@@ -31,6 +31,8 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
 
+    public NoZoomThirdPersonCam _cameraPrefab;
+
 
     public bool _levelNeedsBombBots;
     public bool _levelNeedsTrampBots;
@@ -60,6 +62,9 @@ public class LevelManager : MonoBehaviour
         if (_levelNeedsPatrolEnemies && GameManager.Instance.PatrolEnemyPool == null)
         {
             GameManager.Instance.PatrolEnemyPool = Instantiate(_patrolEnemyPoolPrefab);
+        }
+        if(GameManager.Instance.Camera == null) {
+            GameManager.Instance.Camera = Instantiate(_cameraPrefab);
         }
         _allLevelCheckPoints = FindObjectsOfType<CheckPointPole>();
         _allLevelCheckPoints = SortCheckpoints(_allLevelCheckPoints);
