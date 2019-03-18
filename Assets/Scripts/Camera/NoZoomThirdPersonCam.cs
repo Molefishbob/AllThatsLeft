@@ -22,7 +22,6 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     private bool _paused;
     private bool _zooming;
     private float _newDistance;
-    private CameraTargeter t;
 
     public void Pause()
     {
@@ -38,8 +37,6 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     {
         Cursor.lockState = CursorLockMode.Locked;
         _newDistance = _distance;
-        t = GameObject.Find("3rdP_Player").GetComponentInChildren<CameraTargeter>();
-        GetNewTarget(t.transform);
     }
 
     private void Start()
