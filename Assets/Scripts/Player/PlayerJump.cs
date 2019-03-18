@@ -18,6 +18,8 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private float _holdTimeForMaxHeight = 0.5f;
     [SerializeField]
     private RandomSFXSound _sound = null;
+    [SerializeField]
+    private string _animatorParameterJumping = "Jump";
 
     private Vector3 _currentJumpForce;
     private bool _jumping;
@@ -91,6 +93,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     if (GameManager.Instance.Player.IsGrounded)
                     {
                         _canJump = true;
+                        GameManager.Instance.Player._animator.SetBool(_animatorParameterJumping, false);
                     }
                     else if (_canJump == true && !_afterTimer.IsRunning)
                     {
@@ -108,6 +111,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     _currentJumpForce = GetJumpForce(_maxHeight);
                     _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
                     _sound.PlaySound();
+                    GameManager.Instance.Player._animator.SetBool(_animatorParameterJumping, true);
                 }
             }
 

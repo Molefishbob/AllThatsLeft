@@ -40,6 +40,8 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     private string _botAssCheeks = "LowerBody";
     [SerializeField]
     private MiniBotType[] _botOrder = { MiniBotType.HackBot, MiniBotType.BombBot, MiniBotType.TrampBot };
+    [SerializeField]
+    private string _animatorParameterDeploy = "Deploy";
 
     // temporary
     public Material _blueMaterial;
