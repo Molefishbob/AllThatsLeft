@@ -45,6 +45,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     public float SkinWidth { get { return _controller.skinWidth; } }
     public float Radius { get { return _controller.radius; } }
     public float Height { get { return _controller.height; } }
+    public Vector3 Center { get { return _controller.center; } }
     public float CurrentGravity { get { return _currentGravity.magnitude; } }
 
     public virtual void Pause()

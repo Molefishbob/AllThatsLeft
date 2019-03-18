@@ -48,12 +48,14 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
             {
                 if (Input.GetButtonDown(_detachButton))
                 {
-                    if (GameManager.Instance.Player.ControlsDisabled)
+                    if (this != GameManager.Instance.Player)
                     {
                         GameManager.Instance.Player.ControlsDisabled = false;
                         GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
+                        ControlsDisabled = true;
+                        PlayerBotInteractions bot = GetComponent<PlayerBotInteractions>();
+                        if (bot != null) bot._bActive = false;
                     }
-                    ControlsDisabled = true;
                 }
             }
         }

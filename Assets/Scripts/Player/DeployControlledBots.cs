@@ -84,6 +84,7 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
         PlayerBotInteractions bot = GameManager.Instance.BotPool.GetObject();
         bot.transform.position = _deployTarget.position;
         bot.transform.rotation = _deployTarget.rotation;
+        bot._bActive = true;
         GameManager.Instance.Player.ControlsDisabled = true;
         GameManager.Instance.Camera.GetNewTarget(bot.transform);
     }
