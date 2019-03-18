@@ -43,6 +43,7 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
+        GetInstantNewTarget(GameManager.Instance.Player.transform.Find("CameraTarget"));
     }
 
     private void OnDestroy()
