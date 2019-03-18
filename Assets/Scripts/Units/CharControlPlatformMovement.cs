@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CharControlPlatformMovement : MonoBehaviour, IPauseable
 {
-    [Tooltip("Momentum decay speed")]
-    public float _linearDrag = 0.02f;
     public LayerMask _platformLayerMask = 1 << 13;
+    public float _attachDistance = 0.2f;
+    public float _disconnectDistance = 2.5f;
 
     private Transform _platform;
     private Vector3 _lastPlatformPos;
-    private Vector3 _currentPlatformMove;
     private CharControlBase _character;
+    private float _currentAttachDistance;
 
     private bool _paused;
 
@@ -28,6 +28,7 @@ public class CharControlPlatformMovement : MonoBehaviour, IPauseable
     private void Awake()
     {
         _character = GetComponent<CharControlBase>();
+        _currentAttachDistance = _attachDistance;
     }
 
     private void Start()
@@ -53,43 +54,36 @@ public class CharControlPlatformMovement : MonoBehaviour, IPauseable
             if (Physics.SphereCast(
                     transform.position + Vector3.up * _character.Radius,
                     _character.Radius,
-                    Physics.gravity,
+                    Physics.gravity.normalized,
                     out hit,
-                    _character.SkinWidth * 4.0f,
+                    _currentAttachDistance,
                     _platformLayerMask))
             {
                 if (_platform == null)
                 {
                     _platform = hit.transform;
+                    _currentAttachDistance = _disconnectDistance;
+                }
+                else if (_platform != hit.transform)
+                {
+                    _platform = null;
+                    _currentAttachDistance = _attachDistance;
                 }
                 else
                 {
-                    _currentPlatformMove = _platform.position - _lastPlatformPos;
-                    _character.transform.position += _currentPlatformMove;
+                    Vector3 currentPlatformMove = _platform.position - _lastPlatformPos;
+                    _character.AddDirectMovement(currentPlatformMove);
                 }
 
-                _lastPlatformPos = _platform.position;
-            }
-            else if (_character.IsGrounded)
-            {
-                _platform = null;
-                _currentPlatformMove = Vector3.zero;
+                if (_platform != null)
+                {
+                    _lastPlatformPos = _platform.position;
+                }
             }
             else
             {
                 _platform = null;
-
-                Vector3 drag = -_currentPlatformMove.normalized * _linearDrag * Time.deltaTime;
-
-                if (_currentPlatformMove.magnitude > drag.magnitude)
-                {
-                    _currentPlatformMove += drag;
-                    _character.transform.position += _currentPlatformMove;
-                }
-                else
-                {
-                    _currentPlatformMove = Vector3.zero;
-                }
+                _currentAttachDistance = _attachDistance;
             }
         }
     }

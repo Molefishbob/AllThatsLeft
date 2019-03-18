@@ -27,6 +27,7 @@ public class BombBot : GenericBot
 
     protected override void FixedUpdateAdditions()
     {
+        base.FixedUpdateAdditions();
         if (_fCheckTime > _fCheckTimer && _bIsChecking)
         {
             CheckSurroundings();

@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4529178344236584707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4529178344236584719}
+  - component: {fileID: 4529178344236584704}
+  - component: {fileID: 4529178344236584705}
+  - component: {fileID: 4529178344236584706}
+  - component: {fileID: 467573720229125999}
+  m_Layer: 14
+  m_Name: HackBot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4529178344236584719
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529178344236584707}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.61, y: 1.46, z: -7.07}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3533249719393901835}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4529178344236584704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529178344236584707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c92841cd2c4c06243b11e9e7f971b87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 3
+  _turningSpeed: 540
+  _accelerationTime: 10
+  _minYPosition: -10
+  _walkableTerrain:
+    serializedVersion: 2
+    m_Bits: 12288
+  _groundedDistance: 0.1
+  _fTurnSpeed: 10
+  _fLifetime: 10
+  _bMoving: 0
+  _bDebug: 0
+  _fDetectRadius: 0.3
+  _fStopRange: 2
+  _lHackableLayer:
+    serializedVersion: 2
+    m_Bits: 262144
+--- !u!143 &4529178344236584705
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529178344236584707}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 1
+  m_Radius: 0.25
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &4529178344236584706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529178344236584707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &467573720229125999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4529178344236584707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5938e84cdbaa47f47b878d9aa6d5cdbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  _attachDistance: 0.2
+  _disconnectDistance: 2.5
+--- !u!1001 &3533249719394289563
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4529178344236584719}
+    m_Modifications:
+    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_Name
+      value: hackbot
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 570806b2ff5ce544b9c99935ce7bc476, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+--- !u!4 &3533249719393901835 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 3533249719394289563}
+  m_PrefabAsset: {fileID: 0}

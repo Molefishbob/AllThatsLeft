@@ -11,12 +11,14 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     public bool _bDebug;
     private Transform _tPool;
     protected OneShotTimer _lifeTimeTimer;
+    protected Animator _animator;
 
     protected override void Awake()
     {
         base.Awake();
         _lifeTimeTimer = GetComponent<OneShotTimer>();
         _tPool = transform.parent;
+        _animator = GetComponentInChildren<Animator>();
     }
 
     protected override void Start()
@@ -32,12 +34,22 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
         _lifeTimeTimer.SetTimerTarget(this);
         _lifeTimeTimer.StartTimer(_fLifetime);
         _bMoving = true;
+        if (_animator != null)
+            _animator.SetTrigger("Run");
     }
 
     protected override void FixedUpdateAdditions()
     {
         if ((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0)
             _bMoving = false;
+        RaycastHit hit;
+        int tmpLayerMask = 1 << 12;
+        if (Physics.SphereCast(transform.position + new Vector3(0,_controller.height,0) + transform.forward, 0.1f, Vector3.down, out hit, _controller.height * 1.1f, tmpLayerMask))
+        {}
+        else if (_bMoving)
+        {
+            _bMoving = false;
+        }
     }
 
     public virtual void ResetBot()
@@ -46,6 +58,7 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
         _lifeTimeTimer.StopTimer();
         transform.parent = _tPool;
         transform.position = Vector3.zero;
+        SetControllerActive(false);
         ResetGravity();
         gameObject.SetActive(false);
     }
@@ -72,12 +85,16 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
         SetControllerActive(false);
         if (_bDebug)
             StartMovement();
+        if (_animator != null)
+            _animator.SetTrigger("Held");
     }
 
     protected override Vector3 InternalMovement()
     {
         if (_bMoving && _controller.isGrounded)
+        {
             return transform.forward;
+        }
         return Vector3.zero;
     }
 
