@@ -5,9 +5,7 @@ using UnityEngine;
 public class Door : MonoBehaviour, IButtonInteraction
 {
     [Tooltip("The name of the 'opening' trigger parameter in the animator")]
-    public string _openTrigger = "Open";
-    [Tooltip("The name of the 'closing' trigger parameter in the animator")]
-    public string _closeTrigger = "Close";
+    public string _openBool = "Open";
     private Animator _anim;
 
     // Awake is called before the first frame update
@@ -18,11 +16,11 @@ public class Door : MonoBehaviour, IButtonInteraction
 
     public void ButtonDown()
     {
-        _anim.SetTrigger(_openTrigger);
+        _anim.SetBool(_openBool,true);
     }
 
     public void ButtonUp()
     {
-        _anim.SetTrigger(_closeTrigger);
+        _anim.SetBool(_openBool,false);
     }
 }
