@@ -21,11 +21,11 @@ public abstract class GenericHackable : MonoBehaviour
     }
     
     protected IButtonInteraction _hTarget;
-    protected List<HackerBot> _hackers;
+    protected List<GenericBot> _hackers;
 
     protected virtual void Awake()
     {
-        _hackers = new List<HackerBot>();
+        _hackers = new List<GenericBot>();
         _currentStatus = _startingStatus;
         try
         {
@@ -39,22 +39,22 @@ public abstract class GenericHackable : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when an object enters the triggers collision area
+    /// Called when a minibot enters the hacking radius of the console
     /// </summary>
-    /// <param name="other"></param>
-    protected virtual void OnTriggerEnter(Collider other)
+    /// <param name="bot">The minibot that entered the radius</param>
+    public virtual void TimeToStart(GenericBot bot)
     {
-        _hackers.Add(other.GetComponent<HackerBot>());
+        _hackers.Add(bot);
         StartHack();
     }
 
     /// <summary>
-    /// Called when an object leaves the triggers collision area
+    /// Called when the minibot leaves the hacking radius of the console
     /// </summary>
-    /// <param name="other"></param>
-    protected virtual void OnTriggerExit(Collider other)
+    /// <param name="bot">The minibot that entered the radius</param>
+    public virtual void TimeToLeave(GenericBot bot)
     {
-        _hackers.Remove(other.GetComponent<HackerBot>());
+        _hackers.Remove(bot);
         if (_hackers.Count <= 0)
         {
             StopHack();
