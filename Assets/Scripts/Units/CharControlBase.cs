@@ -21,9 +21,9 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     [SerializeField]
     private RandomSFXSound _landingSound = null;
     [SerializeField]
-    private string _animatorParameterRunning = "Run";
+    private string _animatorBoolRunning = "Run";
     [SerializeField]
-    private string _animatorParameterAirborne = "Airborne";
+    private string _animatorBoolAirborne = "Airborne";
 
     [HideInInspector]
     public Animator _animator;
@@ -111,7 +111,11 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
                 if (inputDirection.magnitude > 0.0f)
                 {
-                    _animator.SetBool(_animatorParameterRunning, true);
+                    _animator.SetBool(_animatorBoolRunning, true);
+                    if (IsGrounded && !_walkSound.IsPlaying)
+                    {
+                        _walkSound.PlaySound();
+                    }
 
                     // convert input direction to a rotation
                     Quaternion inputRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
@@ -146,12 +150,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 else if (_internalMove.magnitude > decelerationMagnitude)
                 {
                     _internalMove -= _internalMove.normalized * decelerationMagnitude;
-                    _animator.SetBool(_animatorParameterRunning, false);
+                    _animator.SetBool(_animatorBoolRunning, false);
                 }
                 else
                 {
                     _internalMove = Vector3.zero;
-                    _animator.SetBool(_animatorParameterRunning, false);
+                    _animator.SetBool(_animatorBoolRunning, false);
                 }
 
                 // gravity is weird, have to multiply with deltatime twice
@@ -188,10 +192,6 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                     // character controller isn't grounded if it doesn't hit the ground every move method call
                     _currentGravity = gravityDelta;
                     _resetGravity = false;
-                    if (!_resetGravity && !_walkSound.IsPlaying)
-                    {
-                        _walkSound.PlaySound();
-                    }
                 }
                 else
                 {
@@ -214,10 +214,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
         if (!_airBorne && !IsGrounded)
         {
             _airBorne = true;
+            _animator.SetBool(_animatorBoolAirborne, true);
         }
         else if (_airBorne && IsGrounded)
         {
             _airBorne = false;
+            _animator.SetBool(_animatorBoolAirborne, false);
             _landingSound.PlaySound();
         }
     }

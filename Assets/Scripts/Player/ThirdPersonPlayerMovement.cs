@@ -9,7 +9,7 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
     [SerializeField]
     private string _verticalAxis = "Vertical";
     [SerializeField]
-    private string _animatorParameterDeath = "Dying";
+    private string _animatorTriggerDeath = "Dying";
 
     [HideInInspector]
     public bool ControlsDisabled
@@ -99,5 +99,6 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
     {
         //Debug.Log("Player died");
         //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        _animator.SetTrigger(_animatorTriggerDeath);
     }
 }

@@ -19,7 +19,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     [SerializeField]
     private RandomSFXSound _sound = null;
     [SerializeField]
-    private string _animatorParameterJumping = "Jump";
+    private string _animatorTriggerJump = "Jump";
 
     [HideInInspector]
     public bool ControlsDisabled
@@ -116,7 +116,6 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     if (_character.IsGrounded)
                     {
                         _canJump = true;
-                        _character._animator.SetBool(_animatorParameterJumping, false);
                     }
                     else if (_canJump == true && !_afterTimer.IsRunning)
                     {
@@ -134,7 +133,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     _currentJumpForce = GetJumpForce(_maxHeight);
                     _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
                     _sound.PlaySound();
-                    _character._animator.SetBool(_animatorParameterJumping, true);
+                    _character._animator.SetTrigger(_animatorTriggerJump);
                 }
             }
 
