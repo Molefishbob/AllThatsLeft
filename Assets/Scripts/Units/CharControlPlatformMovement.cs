@@ -52,11 +52,11 @@ public class CharControlPlatformMovement : MonoBehaviour, IPauseable
             RaycastHit hit;
 
             if (Physics.SphereCast(
-                    transform.position + _character.Center,
-                    _character.Radius,
+                    transform.position + _character._controller.center,
+                    _character._controller.radius,
                     Physics.gravity.normalized,
                     out hit,
-                    (_character.Height / 2.0f) + _character.SkinWidth + _currentAttachDistance,
+                    (_character._controller.height / 2.0f) + _character._controller.skinWidth + _currentAttachDistance,
                     _platformLayerMask))
             {
                 if (_platform == null)

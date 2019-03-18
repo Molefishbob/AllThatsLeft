@@ -27,8 +27,9 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
     [HideInInspector]
     public Animator _animator;
+    [HideInInspector]
+    public CharacterController _controller;
 
-    protected CharacterController _controller;
     protected bool _paused;
 
     private Vector3 _externalMove = Vector3.zero;
@@ -42,10 +43,6 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     private bool _airBorne = false;
 
     public bool IsGrounded { get; private set; }
-    public float SkinWidth { get { return _controller.skinWidth; } }
-    public float Radius { get { return _controller.radius; } }
-    public float Height { get { return _controller.height; } }
-    public Vector3 Center { get { return _controller.center; } }
     public float CurrentGravity { get { return _currentGravity.magnitude; } }
 
     public virtual void Pause()
