@@ -95,6 +95,8 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public bool CanRestockBots = false;
+
     private LevelManager _levelManager;
 
     /// <summary>
@@ -119,6 +121,9 @@ public class GameManager : Singleton<GameManager>
     public BombPool BombPool;
     public TrampPool TrampPool;
     public HackPool HackPool;
+
+    public PatrolEnemyPool PatrolEnemyPool;
+    public FrogEnemyPool FrogEnemyPool;
 
     private float _timeScaleBeforePause = 1.0f;
 
