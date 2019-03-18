@@ -21,11 +21,9 @@ public abstract class GenericHackable : MonoBehaviour
     }
     
     protected IButtonInteraction _hTarget;
-    protected List<GenericBot> _hackers;
-
+    
     protected virtual void Awake()
     {
-        _hackers = new List<GenericBot>();
         _currentStatus = _startingStatus;
         try
         {
@@ -42,9 +40,8 @@ public abstract class GenericHackable : MonoBehaviour
     /// Called when a minibot enters the hacking radius of the console
     /// </summary>
     /// <param name="bot">The minibot that entered the radius</param>
-    public virtual void TimeToStart(GenericBot bot)
+    public virtual void TimeToStart()
     {
-        _hackers.Add(bot);
         StartHack();
     }
 
@@ -52,13 +49,9 @@ public abstract class GenericHackable : MonoBehaviour
     /// Called when the minibot leaves the hacking radius of the console
     /// </summary>
     /// <param name="bot">The minibot that entered the radius</param>
-    public virtual void TimeToLeave(GenericBot bot)
+    public virtual void TimeToLeave()
     {
-        _hackers.Remove(bot);
-        if (_hackers.Count <= 0)
-        {
-            StopHack();
-        }
+        StopHack();
     }
     /// <summary>
     /// Determines the actions when something starts to hack the object.
