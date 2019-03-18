@@ -11,7 +11,6 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     public bool _bDebug;
     private Transform _tPool;
     protected OneShotTimer _lifeTimeTimer;
-    protected Animator _animator;
 
     protected override void Awake()
     {
