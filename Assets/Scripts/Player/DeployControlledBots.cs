@@ -13,9 +13,8 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
     [SerializeField]
     private float _deployHeightRange = 1.0f;
     [SerializeField]
-    private string _animatorParameterDeploy = "Deploy";
+    private string _animatorTriggerDeploy = "Deploy";
 
-    private bool _shouldDeployBot = false;
     private bool _paused = false;
     private Vector3 _deployStartPosition;
 
@@ -43,19 +42,8 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
                         _deployableTerrain))
                 {
                     _deployTarget.position = hit.point;
-                    _shouldDeployBot = true;
+                    DeployBot();
                 }
-            }
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (!_paused)
-        {
-            if (_shouldDeployBot)
-            {
-                DeployBot();
             }
         }
     }
@@ -80,12 +68,12 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
 
     private void DeployBot()
     {
-        _shouldDeployBot = false;
         PlayerBotInteractions bot = GameManager.Instance.BotPool.GetObject();
         bot.transform.position = _deployTarget.position;
         bot.transform.rotation = _deployTarget.rotation;
         bot._bActive = true;
         GameManager.Instance.Player.ControlsDisabled = true;
+        GameManager.Instance.Player._animator.SetTrigger(_animatorTriggerDeploy);
         GameManager.Instance.Camera.GetNewTarget(bot.transform);
     }
 }
