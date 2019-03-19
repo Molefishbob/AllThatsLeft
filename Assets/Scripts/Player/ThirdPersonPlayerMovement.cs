@@ -99,6 +99,6 @@ public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
     {
         //Debug.Log("Player died");
         //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-        _animator.SetTrigger(_animatorTriggerDeath);
+        _animator?.SetTrigger(_animatorTriggerDeath);
     }
 }
