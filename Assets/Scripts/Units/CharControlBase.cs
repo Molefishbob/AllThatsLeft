@@ -4,18 +4,32 @@ using UnityEngine;
 
 public abstract class CharControlBase : MonoBehaviour, IPauseable
 {
-    [Tooltip("Meters per second")]
-    public float _speed = 6;
-    [Tooltip("Degrees per second")]
-    public float _turningSpeed = 540;
-    [Tooltip("NOT in seconds")]
-    public float _accelerationTime = 10;
+    [SerializeField, Tooltip("Meters per second")]
+    private float _speed = 6;
+    [SerializeField, Tooltip("Degrees per second")]
+    private float _turningSpeed = 540;
+    [SerializeField, Tooltip("NOT in seconds")]
+    private float _accelerationTime = 10;
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
-    public LayerMask _walkableTerrain = (1 << 12) + (1 << 13);
-    public float _groundedDistance = 0.1f;
+    [SerializeField]
+    private LayerMask _walkableTerrain = (1 << 12) + (1 << 13);
+    [SerializeField]
+    private float _groundedDistanceBonus = 0.04f;
+    [SerializeField]
+    private RandomSFXSound _walkSound = null;
+    [SerializeField]
+    private RandomSFXSound _landingSound = null;
+    [SerializeField]
+    private string _animatorBoolRunning = "Run";
+    [SerializeField]
+    private string _animatorBoolAirborne = "Airborne";
 
-    protected CharacterController _controller;
+    [HideInInspector]
+    public Animator _animator;
+    [HideInInspector]
+    public CharacterController _controller;
+
     protected bool _paused;
 
     private Vector3 _externalMove = Vector3.zero;
@@ -26,11 +40,9 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     private bool _resetGravity = false;
     private bool _controllerEnabled = true;
     private IDamageReceiver _damageReceiver = null;
+    private bool _airBorne = false;
 
     public bool IsGrounded { get; private set; }
-    public float SkinWidth { get { return _controller.skinWidth; } }
-    public float Radius { get { return _controller.radius; } }
-    public float Height { get { return _controller.height; } }
     public float CurrentGravity { get { return _currentGravity.magnitude; } }
 
     public virtual void Pause()
@@ -47,12 +59,14 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     {
         _damageReceiver = GetComponent<IDamageReceiver>();
         _controller = GetComponent<CharacterController>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     protected virtual void Start()
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
+        _airBorne = !IsGrounded;
     }
 
     protected virtual void OnDestroy()
@@ -94,6 +108,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
                 if (inputDirection.magnitude > 0.0f)
                 {
+                    _animator?.SetBool(_animatorBoolRunning, true);
+                    if (_walkSound != null && IsGrounded && !_walkSound.IsPlaying)
+                    {
+                        _walkSound.PlaySound();
+                    }
+
                     // convert input direction to a rotation
                     Quaternion inputRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
 
@@ -127,10 +147,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 else if (_internalMove.magnitude > decelerationMagnitude)
                 {
                     _internalMove -= _internalMove.normalized * decelerationMagnitude;
+                    _animator?.SetBool(_animatorBoolRunning, false);
                 }
                 else
                 {
                     _internalMove = Vector3.zero;
+                    _animator?.SetBool(_animatorBoolRunning, false);
                 }
 
                 // gravity is weird, have to multiply with deltatime twice
@@ -140,11 +162,11 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 Vector3 upVector = -Physics.gravity.normalized;
                 RaycastHit hit;
                 if (Physics.SphereCast(
-                        transform.position + upVector * _controller.radius,
+                        transform.position + _controller.center,
                         _controller.radius,
                         Physics.gravity.normalized,
                         out hit,
-                        _groundedDistance,
+                        (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
                         _walkableTerrain))
                 {
                     float slopeAngle = Vector3.Angle(upVector, hit.normal);
@@ -173,9 +195,6 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                     _currentGravity += gravityDelta;
                 }
 
-                // apply deltaTime to external movement
-                _externalMove *= Time.deltaTime;
-
                 // make character controller move with all combined moves
                 _controller.Move(_externalMove + _internalMove + (_onSlope ? _slopeDirection * _currentGravity.magnitude : _currentGravity));
 
@@ -187,7 +206,20 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
         }
     }
 
-    protected virtual void FixedUpdateAdditions() { }
+    protected virtual void FixedUpdateAdditions()
+    {
+        if (!_airBorne && !IsGrounded)
+        {
+            _airBorne = true;
+            _animator?.SetBool(_animatorBoolAirborne, true);
+        }
+        else if (_airBorne && IsGrounded)
+        {
+            _airBorne = false;
+            _animator?.SetBool(_animatorBoolAirborne, false);
+            _landingSound?.PlaySound();
+        }
+    }
 
     /// <summary>
     /// Return a vector with a magnitude of [0,1]f to move.
@@ -198,7 +230,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     /// <summary>
     /// Add a movement vector for character controller's move in the next FixedUpdate.
     /// </summary>
-    /// <param name="move">movement without deltaTime</param>
+    /// <param name="move">exact movement vector, add deltaTime when necessary</param>
     public void AddDirectMovement(Vector3 move)
     {
         _externalMove += move;

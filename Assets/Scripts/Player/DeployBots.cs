@@ -17,6 +17,8 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     [SerializeField]
     private string _takeOutBotButton = "Take Out Bot";
     [SerializeField]
+    private string _useObjectButton = "Use Object";
+    [SerializeField]
     private float _deployDelay = 2.0f;
     [SerializeField]
     private Transform _deployTarget = null;
@@ -93,7 +95,11 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
     {
         if (!_paused)
         {
-            if (_unlockedBotTypes.Count > 0)
+            if (Input.GetButtonDown(_useObjectButton) && GameManager.Instance.CanRestockBots)
+            {
+                Restock();
+            }
+            else if (_unlockedBotTypes.Count > 0)
             {
                 bool buttonPressed = false;
                 int selection = -1;
@@ -220,9 +226,9 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
                         _deployTarget.position = hit.point;
 
                         if (Physics.CheckCapsule(
-                            _deployTarget.position + upVector * (_heldBot.Radius + _heldBot.SkinWidth + _extraSpaceRequired),
-                            _deployTarget.position + upVector * (_heldBot.Height - _heldBot.Radius - _extraSpaceRequired),
-                            _heldBot.Radius + _extraSpaceRequired,
+                            _deployTarget.position + upVector * (_heldBot._controller.radius + _heldBot._controller.skinWidth + _extraSpaceRequired),
+                            _deployTarget.position + upVector * (_heldBot._controller.height - _heldBot._controller.radius - _extraSpaceRequired),
+                            _heldBot._controller.radius + _extraSpaceRequired,
                             _deployCollisionLayers))
                         {
                             ShowInvalidIndicator();
@@ -313,8 +319,8 @@ public class DeployBots : MonoBehaviour, IPauseable, ITimedAction
         _heldBot.StartMovement();
         _heldBot = null;
         _heldBotAssCheeks = null;
-        //GameManager.Instance.CurrentBotAmount--; //TODO: remove commenting when dispensers are implemented
-        _deployDelayTimer.StartTimer(_deployDelay, false);
+        GameManager.Instance.CurrentBotAmount--;
+        if (_deployDelay > 0.0f) _deployDelayTimer.StartTimer(_deployDelay, false);
     }
 
     private void ShowValidIndicator()

@@ -35,14 +35,6 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
     }
 
     /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    void Update()
-    {
-
-    }
-
-    /// <summary>
     /// What happens when the button is pressed down
     /// </summary>
     public void ButtonDown()
@@ -68,25 +60,19 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction, ITimedAction
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.layer == PlayerLayer)
+        if (!_isButtonPressed && _cooldownDone)
         {
-            if (!_isButtonPressed && _cooldownDone)
-            {
-                ButtonDown();
-                _isButtonPressed = true;
-            }
+            ButtonDown();
+            _isButtonPressed = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == PlayerLayer)
+        if (_isButtonPressed )
         {
-            if (_isButtonPressed )
-            {
-                ButtonUp();
-                _isButtonPressed = false;
-            }
+            ButtonUp();
+            _isButtonPressed = false;
         }
     }
 

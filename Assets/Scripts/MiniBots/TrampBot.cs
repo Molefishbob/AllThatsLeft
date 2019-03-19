@@ -8,31 +8,24 @@ public class TrampBot : GenericBot
     const int _iPlayerLayer = 10;
     private PlayerJump _PlayerMover;
     private ThirdPersonPlayerMovement _Player;
-    private bool _bCanBounce = false;
+    //private bool _bCanBounce = false;
+    private TopOfThetramp tott;
 
-    void OnTriggerEnter(Collider other)
+    protected override void Awake()
     {
-        if (other.gameObject.layer == _iPlayerLayer && _bCanBounce)
-        {
-            if (_PlayerMover == null)
-            {
-                _PlayerMover = other.GetComponent<PlayerJump>();
-                _Player = other.GetComponent<ThirdPersonPlayerMovement>();
-            }
-            if (!_Player.IsGrounded)
-                _PlayerMover.ForceJump(_fMaxJumpHeight);
-        }
+        base.Awake();
+        tott = GetComponentInChildren<TopOfThetramp>();
+        tott.MaxJumpHeight = _fMaxJumpHeight;
     }
-
     public override void StartMovement()
     {
         base.StartMovement();
-        _bCanBounce = true;
+        tott.CanBounce = true;
     }
 
     public override void ResetBot()
     {
         base.ResetBot();
-        _bCanBounce = false;
+        tott.CanBounce = false;
     }
 }

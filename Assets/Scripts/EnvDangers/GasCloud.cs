@@ -19,10 +19,12 @@ public class GasCloud : GenericEnvironmentDanger
         _timer.StopTimer();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        _timer.StartTimer(_timeUntilOof);
-        _other = other;
+        if (!_timer.IsRunning) {
+            _timer.StartTimer(_timeUntilOof);
+            _other = other;
+        }
     }
 
     protected override void OnTriggerExit(Collider other)
