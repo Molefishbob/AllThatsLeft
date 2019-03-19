@@ -108,8 +108,8 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
 
                 if (inputDirection.magnitude > 0.0f)
                 {
-                    _animator.SetBool(_animatorBoolRunning, true);
-                    if (IsGrounded && !_walkSound.IsPlaying)
+                    _animator?.SetBool(_animatorBoolRunning, true);
+                    if (_walkSound != null && IsGrounded && !_walkSound.IsPlaying)
                     {
                         _walkSound.PlaySound();
                     }
@@ -147,12 +147,12 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
                 else if (_internalMove.magnitude > decelerationMagnitude)
                 {
                     _internalMove -= _internalMove.normalized * decelerationMagnitude;
-                    _animator.SetBool(_animatorBoolRunning, false);
+                    _animator?.SetBool(_animatorBoolRunning, false);
                 }
                 else
                 {
                     _internalMove = Vector3.zero;
-                    _animator.SetBool(_animatorBoolRunning, false);
+                    _animator?.SetBool(_animatorBoolRunning, false);
                 }
 
                 // gravity is weird, have to multiply with deltatime twice
@@ -211,13 +211,13 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
         if (!_airBorne && !IsGrounded)
         {
             _airBorne = true;
-            _animator.SetBool(_animatorBoolAirborne, true);
+            _animator?.SetBool(_animatorBoolAirborne, true);
         }
         else if (_airBorne && IsGrounded)
         {
             _airBorne = false;
-            _animator.SetBool(_animatorBoolAirborne, false);
-            _landingSound.PlaySound();
+            _animator?.SetBool(_animatorBoolAirborne, false);
+            _landingSound?.PlaySound();
         }
     }
 
