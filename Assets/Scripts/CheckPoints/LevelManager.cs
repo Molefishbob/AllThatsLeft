@@ -10,18 +10,11 @@ public class LevelManager : MonoBehaviour
     /// <value></value>
     public CheckPointPole _currentCheckPoint { get; private set; }
     private CheckPointPole[] _allLevelCheckPoints;
+    public NoZoomThirdPersonCam _cameraPrefab;
     /// <summary>
     /// The pool prefab
     /// </summary>
-    public BombPool _bombPoolPrefab;
-    /// <summary>
-    /// The pool prefab
-    /// </summary>
-    public TrampPool _trampPoolPrefab;
-    /// <summary>
-    /// The pool prefab
-    /// </summary>
-    public HackPool _hackPoolPrefab;
+    public ControlledBotPool _botPoolPrefab;
     /// <summary>
     /// The pool prefab
     /// </summary>
@@ -31,29 +24,24 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
 
-
-    public bool _levelNeedsBombBots;
-    public bool _levelNeedsTrampBots;
-    public bool _levelNeedsHackBots;
     public bool _levelNeedsFrogEnemies;
     public bool _levelNeedsPatrolEnemies;
 
     void Awake()
     {
         GameManager.Instance.LevelManager = this;
-        if (_levelNeedsBombBots && GameManager.Instance.BombPool == null)
+
+        if (GameManager.Instance.BotPool == null)
         {
-            GameManager.Instance.BombPool = Instantiate(_bombPoolPrefab);
+            GameManager.Instance.BotPool = Instantiate(_botPoolPrefab);
         }
-        if (_levelNeedsTrampBots && GameManager.Instance.TrampPool == null)
+
+        if (GameManager.Instance.Camera == null)
         {
-            GameManager.Instance.TrampPool = Instantiate(_trampPoolPrefab);
+            GameManager.Instance.Camera = Instantiate(_cameraPrefab);
         }
-        if (_levelNeedsHackBots && GameManager.Instance.HackPool == null)
-        {
-            GameManager.Instance.HackPool = Instantiate(_hackPoolPrefab);
-        }
-        if(_levelNeedsFrogEnemies && GameManager.Instance.FrogEnemyPool == null)
+
+        if (_levelNeedsFrogEnemies && GameManager.Instance.FrogEnemyPool == null)
         {
             GameManager.Instance.FrogEnemyPool = Instantiate(_frogPoolPrefab);
         }
@@ -61,6 +49,7 @@ public class LevelManager : MonoBehaviour
         {
             GameManager.Instance.PatrolEnemyPool = Instantiate(_patrolEnemyPoolPrefab);
         }
+
         _allLevelCheckPoints = FindObjectsOfType<CheckPointPole>();
         _allLevelCheckPoints = SortCheckpoints(_allLevelCheckPoints);
     }
@@ -97,14 +86,14 @@ public class LevelManager : MonoBehaviour
             bool swapped = false;
             for (int i = 0; i < _cp.Length - 1; i++)
             {
-                if (_cp[i].id > _cp[i+1].id)
+                if (_cp[i].id > _cp[i + 1].id)
                 {
                     CheckPointPole tmp = _cp[i];
-                    _cp[i] = _cp[i+1];
-                    _cp[i+1] = tmp;
+                    _cp[i] = _cp[i + 1];
+                    _cp[i + 1] = tmp;
                     swapped = true;
-                } 
-                else if (_cp[i].id == _cp[i+1].id)
+                }
+                else if (_cp[i].id == _cp[i + 1].id)
                 {
                     Debug.LogError("THERE ARE 2 OR MORE CHECKPOINTS WITH SAME ID!! FIX!!");
                     swapped = false;
