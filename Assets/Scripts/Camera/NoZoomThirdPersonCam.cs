@@ -59,6 +59,7 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
     private void Update()
     {
+        //Debug.Log(_lookAt.position);
         if (!_zooming)
         {
             _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
@@ -84,7 +85,10 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
         }
         else
         {
-            transform.position = Vector3.Lerp(_oldTarget.position, _lookAt.position, _lerperHelper);
+            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+            Vector3 dir = new Vector3(0, 0, -_newDistance);
+
+            transform.position = (Vector3.Lerp(_oldTarget.position, _lookAt.position, _lerperHelper)) + rotation * dir ;
             _lerperHelper += 0.1f * _zoomSpeed;
 
             if(_lerperHelper >= 1)
@@ -102,6 +106,8 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
         if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
         {
+            //Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
+            
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
         }
