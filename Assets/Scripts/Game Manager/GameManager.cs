@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void ValueChanged( int amount );
-public enum MiniBotType {
-        HackBot,
-        BombBot,
-        TrampBot
+public enum MiniBotAbility {
+        Hack,
+        Bomb,
+        Tramp
     }
 public class GameManager : Singleton<GameManager>
 {
@@ -20,6 +20,9 @@ public class GameManager : Singleton<GameManager>
     /// Is the game currently paused?
     /// </summary>
     public bool GamePaused { get; private set; }
+
+    // TODO: make bot actions check this collection
+    public HashSet<MiniBotAbility> UsableMiniBotAbilities;
 
     public int CurrentBotAmount {
         get 
