@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void ValueChanged( int amount );
-public delegate void BotChanged( MiniBotType bot );
 public enum MiniBotType {
         HackBot,
         BombBot,
@@ -15,7 +14,6 @@ public class GameManager : Singleton<GameManager>
     protected GameManager() { }
     public event ValueChanged OnBotAmountChanged;
     public event ValueChanged OnMaximumBotAmountChanged;
-    public event BotChanged OnCurrentBotChanged;
     private HashSet<IPauseable> _pauseables = new HashSet<IPauseable>();
 
     /// <summary>
@@ -42,23 +40,6 @@ public class GameManager : Singleton<GameManager>
 
     private int _currentBotAmount;
 
-    public MiniBotType  CurrentBot {
-        get 
-        { 
-            return _currentBot; 
-        }
-        set 
-        {
-            _currentBot = value;
-
-            if (OnCurrentBotChanged != null) {
-                OnCurrentBotChanged(_currentBot);
-            }
-        }
-    }
-
-    private MiniBotType _currentBot;
-    
     public int MaximumBotAmount {
         get 
         { 
@@ -95,8 +76,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public bool CanRestockBots = false;
-
     private LevelManager _levelManager;
 
     /// <summary>
@@ -117,10 +96,6 @@ public class GameManager : Singleton<GameManager>
             _levelManager = value;
         }
     }
-
-    public BombPool BombPool;
-    public TrampPool TrampPool;
-    public HackPool HackPool;
 
     public ControlledBotPool BotPool;
 

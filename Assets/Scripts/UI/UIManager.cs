@@ -20,12 +20,10 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         GameManager.Instance.OnBotAmountChanged += SetBotAmount;
-        GameManager.Instance.OnCurrentBotChanged += SetCurrentBot;
         GameManager.Instance.OnMaximumBotAmountChanged += SetMaxBotAmount;
 
         _maxBotAmount = GameManager.Instance.MaximumBotAmount;
         _currentBotAmount = GameManager.Instance.CurrentBotAmount;
-        _currentBot = GameManager.Instance.CurrentBot;
     }
 
     private void Start()
@@ -75,7 +73,6 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnBotAmountChanged -= SetBotAmount;
-            GameManager.Instance.OnCurrentBotChanged -= SetCurrentBot;
             GameManager.Instance.OnMaximumBotAmountChanged -= SetMaxBotAmount;
         }
     }
