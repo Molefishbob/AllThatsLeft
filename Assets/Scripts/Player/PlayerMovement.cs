@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonPlayerMovement : CharControlBase, IDamageReceiver
+public class PlayerMovement : CharControlBase, IDamageReceiver
 {
     [SerializeField]
     private string _horizontalAxis = "Horizontal";

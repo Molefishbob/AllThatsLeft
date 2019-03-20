@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     /// <value></value>
     public CheckPointPole _currentCheckPoint { get; private set; }
     private CheckPointPole[] _allLevelCheckPoints;
+    public PlayerMovement _playerPrefab;
     public NoZoomThirdPersonCam _cameraPrefab;
     /// <summary>
     /// The pool prefab
@@ -36,11 +37,6 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.BotPool = Instantiate(_botPoolPrefab);
         }
 
-        if (GameManager.Instance.Camera == null)
-        {
-            GameManager.Instance.Camera = Instantiate(_cameraPrefab);
-        }
-
         if (_levelNeedsFrogEnemies && GameManager.Instance.FrogEnemyPool == null)
         {
             GameManager.Instance.FrogEnemyPool = Instantiate(_frogPoolPrefab);
@@ -51,7 +47,37 @@ public class LevelManager : MonoBehaviour
         }
 
         _allLevelCheckPoints = FindObjectsOfType<CheckPointPole>();
+
+        if (GameManager.Instance.Player == null)
+        {
+            PlayerMovement player = FindObjectOfType<PlayerMovement>();
+            if (player == null)
+            {
+                player = Instantiate(_playerPrefab);
+            }
+            GameManager.Instance.Player = player;
+        }
+
+        if (GameManager.Instance.Camera == null)
+        {
+            NoZoomThirdPersonCam camera = FindObjectOfType<NoZoomThirdPersonCam>();
+            if (camera == null)
+            {
+                camera = Instantiate(_cameraPrefab);
+            }
+            GameManager.Instance.Camera = camera;
+        }
+    }
+
+    private void Start() {
         _allLevelCheckPoints = SortCheckpoints(_allLevelCheckPoints);
+
+        if (_allLevelCheckPoints != null && _allLevelCheckPoints.Length > 0)
+        {
+            SetCheckpoint(_allLevelCheckPoints[0]);
+        }
+
+        GameManager.Instance.Player.transform.position = GetSpawnLocation();
     }
 
     /// <summary>
@@ -60,7 +86,7 @@ public class LevelManager : MonoBehaviour
     /// <returns>Spawn location</returns>
     public Vector3 GetSpawnLocation()
     {
-        if (_currentCheckPoint = null)
+        if (_currentCheckPoint == null)
             return Vector3.zero;
         else
             return _currentCheckPoint.SpawnPoint.position;

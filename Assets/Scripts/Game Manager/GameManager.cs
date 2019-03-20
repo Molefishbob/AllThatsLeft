@@ -21,8 +21,6 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public bool GamePaused { get; private set; }
 
-    private ThirdPersonPlayerMovement _player;
-
     public int CurrentBotAmount {
         get 
         { 
@@ -60,21 +58,7 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// Reference of the player.
     /// </summary>
-    public ThirdPersonPlayerMovement Player
-    {
-        get
-        {
-            if (_player == null)
-            {
-                _player = FindObjectOfType<ThirdPersonPlayerMovement>();
-                if (_player == null)
-                {
-                    Debug.LogError("Scene doesn't have an instance of the player.");
-                }
-            }
-            return _player;
-        }
-    }
+    public PlayerMovement Player;
 
     private LevelManager _levelManager;
 
@@ -108,7 +92,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-
+        AudioManager.Instance.Init();
     }
 
     /// <summary>
