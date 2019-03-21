@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public delegate void ValueChanged( int amount );
 public enum MiniBotAbility {
@@ -91,6 +92,8 @@ public class GameManager : Singleton<GameManager>
 
     public NoZoomThirdPersonCam Camera;
 
+    public int CurrentLevel { get; private set; } = 1;
+
     private float _timeScaleBeforePause = 1.0f;
 
     private void Awake()
@@ -161,5 +164,33 @@ public class GameManager : Singleton<GameManager>
     public void RemovePauseable(IPauseable pauseable)
     {
         _pauseables.Remove(pauseable);
+    }
+
+    public void QuitGame()
+    {
+        PrefsManager.Instance.Save();
+        Application.Quit();
+    }
+
+    public void ChangeScene(int id)
+    {
+        SceneManager.LoadScene(id);
+    }
+
+    public void ChangeToMainMenu()
+    {
+        ChangeScene(0);
+    }
+
+    public void NextLevel()
+    {
+        CurrentLevel++;
+        ChangeScene(CurrentLevel);
+    }
+
+    public void StartNewGame()
+    {
+        CurrentLevel = 1;
+        ChangeScene(CurrentLevel);
     }
 }
