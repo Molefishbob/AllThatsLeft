@@ -8,50 +8,118 @@ public class Settings : MonoBehaviour
 {
     private const string PercentageFormat = " %";
     [SerializeField]
-    private TMP_Text _sfxText = null, _musicText = null, _UISoundText = null, _masterText = null;
+    private TMP_Text  _musicText = null, _UISoundText = null, _masterText = null;
     [SerializeField]
-    private Slider _sfxSlider = null, _musicSlider = null, _UISoundSlider = null, _masterSlider = null;
+    private Slider _musicSlider = null, _UISoundSlider = null, _masterSlider = null;
+    [SerializeField]
+    private Toggle _musicMute = null, _UIMute = null, _masterMute = null;
     [SerializeField]
     private Toggle _volumeSettings = null, _gameplaySettings = null, _controlSettings = null;
+    [SerializeField]
+    private GameObject _volume = null, _gamePlay = null, _controls = null;
+    [SerializeField]
+    private Toggle _invertedXAxis = null, _invertedYAxis = null;
+    [SerializeField]
+    private TMP_Text _xSensText = null, _ySensText = null, _zoomSpeedText = null, _fovText = null;
+    [SerializeField]
+    private Slider _xSensSlider = null, _ySensSlider = null, _zoomSpeedSlider = null, _fovSlider = null;
+
     private const bool True = true;
     private const bool False = false;
 
     // Start is called before the first frame update
     void Awake()
     {
-        _sfxText.SetText(_sfxSlider.value + PercentageFormat);
+        _musicSlider.value = PrefsManager.Instance.AudioVolumeMusic;
+        _UISoundSlider.value = PrefsManager.Instance.AudioVolumeSFX;
+        _masterSlider.value = PrefsManager.Instance.AudioVolumeMaster;
+
+        _musicMute.isOn = PrefsManager.Instance.AudioMuteMusic;
+        _UIMute.isOn = PrefsManager.Instance.AudioMuteUI;
+        _masterMute.isOn = PrefsManager.Instance.AudioMuteMaster;
+
         _musicText.SetText(_musicSlider.value + PercentageFormat);
         _UISoundText.SetText(_UISoundSlider.value + PercentageFormat);
         _masterText.SetText(_masterSlider.value + PercentageFormat);
-        _volumeSettings.interactable = !True;
+        VolumeSettings();
     }
-
-    public void SFXPercentage() {
-        _sfxText.SetText(_sfxSlider.value + PercentageFormat);
-    }
+    
     public void MusicPercentage() {
         _musicText.SetText(_musicSlider.value + PercentageFormat);
+        PrefsManager.Instance.AudioVolumeMusic =  Mathf.RoundToInt(_musicSlider.value);
     }
     public void UISoundPercentage() {
         _UISoundText.SetText(_UISoundSlider.value + PercentageFormat);
+        PrefsManager.Instance.AudioVolumeSFX = Mathf.RoundToInt(_UISoundSlider.value);
+        PrefsManager.Instance.AudioVolumeUI = Mathf.RoundToInt(_UISoundSlider.value);
     }
     public void MasterSoundPercentage() {
         _masterText.SetText(_masterSlider.value + PercentageFormat);
+        PrefsManager.Instance.AudioVolumeMaster = Mathf.RoundToInt(_masterSlider.value);
+    }
+    public void MuteMusic()
+    {
+        PrefsManager.Instance.AudioMuteMusic = !PrefsManager.Instance.AudioMuteMusic;
+    }
+    public void MuteSound()
+    {
+        PrefsManager.Instance.AudioMuteSFX = !PrefsManager.Instance.AudioMuteSFX;
+        PrefsManager.Instance.AudioMuteUI = !PrefsManager.Instance.AudioMuteUI;
+    }
+    public void MuteMaster()
+    {
+        PrefsManager.Instance.AudioMuteMaster = !PrefsManager.Instance.AudioMuteMaster;
     }
 
     public void VolumeSettings() {
         _volumeSettings.interactable = !True;
         _controlSettings.interactable = !False;
         _gameplaySettings.interactable = !False;
+
+        _volume.SetActive(!False);
+        _controls.SetActive(!True);
+        _gamePlay.SetActive(!True);
+
     }
     public void GameplaySettings() {
         _gameplaySettings.interactable = !True;
         _controlSettings.interactable = !False;
         _volumeSettings.interactable = !False;
+
+        _volume.SetActive(!True);
+        _controls.SetActive(!True);
+        _gamePlay.SetActive(!False);
     }
     public void ControlSettings() {
         _controlSettings.interactable = !True;
         _volumeSettings.interactable = !False;
         _gameplaySettings.interactable = !False;
+
+        _volume.SetActive(!True);
+        _controls.SetActive(!False);
+        _gamePlay.SetActive(!True);
+    }
+    public void InvertedXAxis()
+    {
+        PrefsManager.Instance.InvertedCameraX = _invertedXAxis.isOn;
+    }
+    public void InvertedYAxis()
+    {
+        PrefsManager.Instance.InvertedCameraY = _invertedYAxis.isOn;
+    }
+    public void CameraXSensitivity()
+    {
+        _xSensText.SetText((Mathf.Round((_xSensSlider.value * 100)) / 100).ToString());
+    }
+    public void CameraYSensitivity()
+    {
+        _ySensText.SetText((Mathf.Round((_ySensSlider.value * 100)) / 100).ToString());
+    }
+    public void CameraZoomSpeed()
+    {
+        _zoomSpeedText.SetText((Mathf.Round((_zoomSpeedSlider.value * 100)) / 100).ToString());
+    }public void FieldOfView()
+    {
+        _fovText.SetText(_fovSlider.value.ToString());
     }
 }
