@@ -26,6 +26,8 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
     private bool _paused;
     private bool _movingToTarget;
     private float _newDistance;
+    private int _invertX = 1;
+    private int _invertY = 1;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -44,6 +46,10 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
     {
         Cursor.lockState = CursorLockMode.Locked;
         _newDistance = _distance;
+        PrefsManager.Instance.OnInvertedCameraXChanged += ChangeInvertX;
+        PrefsManager.Instance.OnInvertedCameraYChanged += ChangeInvertY;
+        ChangeInvertX(PrefsManager.Instance.InvertedCameraX);
+        ChangeInvertY(PrefsManager.Instance.InvertedCameraY);
     }
 
     private void Start()
@@ -58,6 +64,11 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
         if (GameManager.Instance != null)
         {
             GameManager.Instance.RemovePauseable(this);
+        }
+        if (PrefsManager.Instance != null)
+        {
+            PrefsManager.Instance.OnInvertedCameraXChanged -= ChangeInvertX;
+            PrefsManager.Instance.OnInvertedCameraYChanged -= ChangeInvertY;
         }
     }
 
@@ -75,8 +86,8 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
                 _distance = _maxDistance;
             }
 
-            _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
-            _pitch += _verticalSensitivity * Input.GetAxis(_cameraYAxis);
+            _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis) * _invertX;
+            _pitch += _verticalSensitivity * Input.GetAxis(_cameraYAxis) * _invertY;
 
             if (_pitch > _maxPitch)
             {
@@ -161,5 +172,15 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
         }
 
         _lookAt = trans;  
+    }
+
+    private void ChangeInvertX(bool b)
+    {
+        _invertX = b ? -1 : 1;
+    }
+
+    private void ChangeInvertY(bool b)
+    {
+        _invertY = b ? -1 : 1;
     }
 }
