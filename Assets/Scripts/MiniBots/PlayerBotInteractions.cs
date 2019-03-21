@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBotInteractions : MonoBehaviour
+public class PlayerBotInteractions : MonoBehaviour , ITimedAction
 {
     [SerializeField]
     private float _fDetectRadius = 2;
@@ -30,14 +30,16 @@ public class PlayerBotInteractions : MonoBehaviour
         [SerializeField]
     private bool _bActing = false;
     private bool _bReleasing = false;
-    private int _iReleaseDelay = 2;
-    private int _iReleaseDelayCounter = 0;
+    [SerializeField]
+    private float _fReleaseDelay = 2;
+    private OneShotTimer _ostRelease;
     private GameObject[] _goTarget = null;
     private PlayerMovement _selfMover;
 
     void Awake()
     {
         _selfMover = GetComponent<PlayerMovement>();
+        _ostRelease = gameObject.AddComponent(typeof(OneShotTimer)) as OneShotTimer;
     }
 
     void Update()
@@ -69,17 +71,6 @@ public class PlayerBotInteractions : MonoBehaviour
                 ReleaseControls();
             }
         }
-
-        if (_bReleasing)
-        {
-            if (_iReleaseDelayCounter >= _iReleaseDelay)
-            {
-                GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
-                _iReleaseDelayCounter = 0;
-                _bReleasing = !_bReleasing;
-            }
-            _iReleaseDelayCounter++;
-        } 
 
         if (Input.GetButtonDown(_sStayButton) && _bActive)
             ReleaseControls();
@@ -135,7 +126,8 @@ public class PlayerBotInteractions : MonoBehaviour
     {
         _selfMover.ControlsDisabled = true;
         _bReleasing = true;
-        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
+        _ostRelease.SetTimerTarget(this);
+        _ostRelease.StartTimer(_fReleaseDelay);
     }
 
     public void StopActing()
@@ -143,9 +135,16 @@ public class PlayerBotInteractions : MonoBehaviour
         if (_bActing)
         {
             _bActing = false;
-            Debug.Log(_goTarget[0].GetComponent<GenericHackable>());
             _goTarget[0].GetComponent<GenericHackable>()?.TimeToLeave();
             _goTarget = null;
         }
+    }
+
+    public void TimedAction()
+    {
+        GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
+        _bactive = false;
+        _bReleasing = !_bReleasing;
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
     }
 }

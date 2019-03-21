@@ -13,7 +13,7 @@ public class BotMovement : PlayerMovement
 
     public override void Die()
     {
-        Debug.Log("beep");
+        // TODO animations
         _pbi.StopActing();
         if (_pbi._bActive) _pbi.ReleaseControls();
     }
