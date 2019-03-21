@@ -45,7 +45,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             if (control != null)
             {
-                control.SetVolume(vol * _volumeMaster);
+                //control.SetVolume(vol * _volumeMaster);
             }
         }
     }
@@ -56,7 +56,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             if (control != null)
             {
-                control.Mute(mute || _muteMaster);
+                //control.Mute(mute || _muteMaster);
             }
         }
     }
@@ -74,7 +74,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             _volumeSFX = Mathf.Clamp(value, 0.0f, 1.0f);
             SetVolumes(SoundsSFX, _volumeSFX);
-            PrefsManager.Instance.AudioVolumeSFX = _volumeSFX;
+            //PrefsManager.Instance.AudioVolumeSFX = _volumeSFX;
         }
     }
 
@@ -91,7 +91,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             _volumeMusic = Mathf.Clamp(value, 0.0f, 1.0f);
             SetVolumes(SoundsMusic, _volumeMusic);
-            PrefsManager.Instance.AudioVolumeMusic = _volumeMusic;
+            //PrefsManager.Instance.AudioVolumeMusic = _volumeMusic;
         }
     }
 
@@ -108,7 +108,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             _volumeUI = Mathf.Clamp(value, 0.0f, 1.0f);
             SetVolumes(SoundsUI, _volumeUI);
-            PrefsManager.Instance.AudioVolumeUI = _volumeUI;
+            //PrefsManager.Instance.AudioVolumeUI = _volumeUI;
         }
     }
 
@@ -127,7 +127,7 @@ public class AudioManager : Singleton<AudioManager>
             SetVolumes(SoundsSFX, _volumeSFX);
             SetVolumes(SoundsMusic, _volumeMusic);
             SetVolumes(SoundsUI, _volumeUI);
-            PrefsManager.Instance.AudioVolumeMaster = _volumeMaster;
+            //PrefsManager.Instance.AudioVolumeMaster = _volumeMaster;
         }
     }
 

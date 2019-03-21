@@ -81,20 +81,12 @@ public abstract class VolumeControl : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Sets audio source volume. Used only through Audio Manager!
-    /// </summary>
-    /// <param name="volume">The volume</param>
-    public void SetVolume(float volume)
+    private void SetVolume(int volume)
     {
-        _audioSource.volume = volume * _fullVolume;
+        _audioSource.volume = (float) volume * _fullVolume / 100f;
     }
 
-    /// <summary>
-    /// Mutes the audio source. Used only through Audio Manager!
-    /// </summary>
-    /// <param name="muted">Mute or not</param>
-    public void Mute(bool muted)
+    private void Mute(bool muted)
     {
         _audioSource.mute = muted;
     }

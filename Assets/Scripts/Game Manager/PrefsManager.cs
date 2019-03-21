@@ -14,6 +14,14 @@ public class PrefsManager : Singleton<PrefsManager>
         keyInvertCameraY = "Invert Camera Y",
         keyInvertCameraX = "Invert Camera X";
 
+    public event ValueChangedInt OnAudioVolumeSFXChanged;
+    public event ValueChangedInt OnAudioVolumeMusicChanged;
+    public event ValueChangedInt OnAudioVolumeUIChanged;
+    public event ValueChangedInt OnAudioVolumeMasterChanged;
+    public event ValueChangedBool OnAudioMuteSFXChanged;
+    public event ValueChangedBool OnAudioMuteMusicChanged;
+    public event ValueChangedBool OnAudioMuteUIChanged;
+    public event ValueChangedBool OnAudioMuteMasterChanged;
     public event ValueChangedBool OnInvertedCameraYChanged;
     public event ValueChangedBool OnInvertedCameraXChanged;
 
@@ -22,11 +30,11 @@ public class PrefsManager : Singleton<PrefsManager>
         PlayerPrefs.Save();
     }
 
-    public float AudioVolumeSFX
+    public int AudioVolumeSFX
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyVolumeSFX, 1.0f);
+            return PlayerPrefs.GetInt(keyVolumeSFX, 100);
         }
         set
         {
@@ -34,11 +42,11 @@ public class PrefsManager : Singleton<PrefsManager>
         }
     }
 
-    public float AudioVolumeMusic
+    public int AudioVolumeMusic
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyVolumeMusic, 1.0f);
+            return PlayerPrefs.GetInt(keyVolumeMusic, 100);
         }
         set
         {
@@ -46,11 +54,11 @@ public class PrefsManager : Singleton<PrefsManager>
         }
     }
 
-    public float AudioVolumeUI
+    public int AudioVolumeUI
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyVolumeUI, 1.0f);
+            return PlayerPrefs.GetInt(keyVolumeUI, 100);
         }
         set
         {
@@ -58,11 +66,11 @@ public class PrefsManager : Singleton<PrefsManager>
         }
     }
 
-    public float AudioVolumeMaster
+    public int AudioVolumeMaster
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyVolumeMaster, 1.0f);
+            return PlayerPrefs.GetInt(keyVolumeMaster, 100);
         }
         set
         {
