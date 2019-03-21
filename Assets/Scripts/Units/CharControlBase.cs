@@ -24,6 +24,8 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
     private string _animatorBoolRunning = "Run";
     [SerializeField]
     private string _animatorBoolAirborne = "Airborne";
+    [SerializeField]
+    private bool _startsActive = false;
 
     [HideInInspector]
     public Animator _animator;
@@ -60,6 +62,7 @@ public abstract class CharControlBase : MonoBehaviour, IPauseable
         _damageReceiver = GetComponent<IDamageReceiver>();
         _controller = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
+        SetControllerActive(_startsActive);
     }
 
     protected virtual void Start()

@@ -24,6 +24,8 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
         GameManager.Instance.AddPauseable(this);
 
         _deployStartPosition = _deployTarget.localPosition;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
