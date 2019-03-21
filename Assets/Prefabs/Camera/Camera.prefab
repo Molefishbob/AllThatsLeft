@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5459540576229880259}
   - component: {fileID: 5459540576229880256}
-  - component: {fileID: 5470186108493842727}
+  - component: {fileID: 7992287912842736978}
   - component: {fileID: 5459540576229880262}
   m_Layer: 0
   m_Name: Camera
@@ -75,7 +75,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &5470186108493842727
+--- !u!114 &7992287912842736978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,13 +91,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 12288
   _distance: 10
+  _maxDistance: 15
+  _minDistance: 5
   _cameraXAxis: Camera X
   _cameraYAxis: Camera Y
-  _horizontalSensitivity: 2
-  _verticalSensitivity: 2
+  _horizontalSensitivity: 1
+  _verticalSensitivity: 1
   _minPitch: -70
-  maxPitch: 85
-  _zoomSpeed: 0.69
+  _maxPitch: 85
+  _zoomSpeed: 1
   _cameraTargetName: CameraTarget
 --- !u!81 &5459540576229880262
 AudioListener:

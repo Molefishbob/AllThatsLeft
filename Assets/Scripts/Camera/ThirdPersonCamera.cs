@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
+public class ThirdPersonCamera : MonoBehaviour, IPauseable
 {
     public LayerMask _groundLayer;
     private Transform _lookAt, _oldTarget;
-    public float _distance = 5.0f;
+    public float _distance = 10.0f;
+    public float _maxDistance = 15.0f;
+    public float _minDistance = 5.0f;
+    public float _zoomSpeed = 0.5f;
     public string _cameraXAxis = "Camera X";
     public string _cameraYAxis = "Camera Y";
     private float _yaw = 0.0f;
@@ -16,12 +19,15 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     [Tooltip("How low the camera can go")]
     public float _minPitch = -70;
     [Tooltip("How high the camera can go")]
-    public float maxPitch = 85;
-    public float _zoomSpeed = 1;
+    public float _maxPitch = 85;
+    [Tooltip("How fast the camera moves to the new target")]
+    public float _targetToTargetSpeed = 1;
     private float _lerperHelper = 0;
     private bool _paused;
-    private bool _zooming;
+    private bool _movingToTarget;
     private float _newDistance;
+    private int _invertX = 1;
+    private int _invertY = 1;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -40,6 +46,10 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     {
         Cursor.lockState = CursorLockMode.Locked;
         _newDistance = _distance;
+        PrefsManager.Instance.OnInvertedCameraXChanged += ChangeInvertX;
+        PrefsManager.Instance.OnInvertedCameraYChanged += ChangeInvertY;
+        ChangeInvertX(PrefsManager.Instance.InvertedCameraX);
+        ChangeInvertY(PrefsManager.Instance.InvertedCameraY);
     }
 
     private void Start()
@@ -55,19 +65,33 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
         {
             GameManager.Instance.RemovePauseable(this);
         }
+        if (PrefsManager.Instance != null)
+        {
+            PrefsManager.Instance.OnInvertedCameraXChanged -= ChangeInvertX;
+            PrefsManager.Instance.OnInvertedCameraYChanged -= ChangeInvertY;
+        }
     }
 
     private void Update()
     {
-        //Debug.Log(_lookAt.position);
-        if (!_zooming)
+        if (!_movingToTarget)
         {
-            _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
-            _pitch -= _verticalSensitivity * Input.GetAxis(_cameraYAxis);
+            _distance += (Input.GetAxis("Scroll")) * _zoomSpeed;
 
-            if (_pitch > maxPitch)
+            if(_distance < _minDistance)
             {
-                _pitch = maxPitch;
+                _distance = _minDistance;
+            }else if (_distance > _maxDistance)
+            {
+                _distance = _maxDistance;
+            }
+
+            _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis) * _invertX;
+            _pitch += _verticalSensitivity * Input.GetAxis(_cameraYAxis) * _invertY;
+
+            if (_pitch > _maxPitch)
+            {
+                _pitch = _maxPitch;
             }
             else if (_pitch < _minPitch)
             {
@@ -89,11 +113,11 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
             Vector3 dir = new Vector3(0, 0, -_newDistance);
 
             transform.position = (Vector3.Lerp(_oldTarget.position, _lookAt.position, _lerperHelper)) + rotation * dir ;
-            _lerperHelper += 0.1f * _zoomSpeed;
+            _lerperHelper += 0.1f * _targetToTargetSpeed;
 
             if(_lerperHelper >= 1)
             {
-                _zooming = false;
+                _movingToTarget = false;
                 _lerperHelper = 0;
             }
         }
@@ -131,7 +155,7 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
         {
             _oldTarget = _lookAt;
             _lookAt = trans;
-            _zooming = true;
+            _movingToTarget = true;
         }
         if(_oldTarget == null)
         {
@@ -148,5 +172,15 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
         }
 
         _lookAt = trans;  
+    }
+
+    private void ChangeInvertX(bool b)
+    {
+        _invertX = b ? -1 : 1;
+    }
+
+    private void ChangeInvertY(bool b)
+    {
+        _invertY = b ? -1 : 1;
     }
 }
