@@ -76,7 +76,7 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
             }
 
             _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
-            _pitch -= _verticalSensitivity * Input.GetAxis(_cameraYAxis);
+            _pitch += _verticalSensitivity * Input.GetAxis(_cameraYAxis);
 
             if (_pitch > _maxPitch)
             {
