@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
+public class ThirdPersonCamera : MonoBehaviour, IPauseable
 {
     public LayerMask _groundLayer;
     private Transform _lookAt, _oldTarget;
-    public float _distance = 5.0f;
+    public float _distance = 10.0f;
+    public float _maxDistance = 15.0f;
+    public float _minDistance = 5.0f;
+    public float _zoomSpeed = 0.5f;
     public string _cameraXAxis = "Camera X";
     public string _cameraYAxis = "Camera Y";
     private float _yaw = 0.0f;
@@ -16,11 +19,12 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
     [Tooltip("How low the camera can go")]
     public float _minPitch = -70;
     [Tooltip("How high the camera can go")]
-    public float maxPitch = 85;
-    public float _zoomSpeed = 1;
+    public float _maxPitch = 85;
+    [Tooltip("How fast the camera moves to the new target")]
+    public float _targetToTargetSpeed = 1;
     private float _lerperHelper = 0;
     private bool _paused;
-    private bool _zooming;
+    private bool _movingToTarget;
     private float _newDistance;
 
     [SerializeField]
@@ -59,15 +63,24 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
 
     private void Update()
     {
-        //Debug.Log(_lookAt.position);
-        if (!_zooming)
+        if (!_movingToTarget)
         {
+            _distance += (Input.GetAxis("Scroll")) * _zoomSpeed;
+
+            if(_distance < _minDistance)
+            {
+                _distance = _minDistance;
+            }else if (_distance > _maxDistance)
+            {
+                _distance = _maxDistance;
+            }
+
             _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);
             _pitch -= _verticalSensitivity * Input.GetAxis(_cameraYAxis);
 
-            if (_pitch > maxPitch)
+            if (_pitch > _maxPitch)
             {
-                _pitch = maxPitch;
+                _pitch = _maxPitch;
             }
             else if (_pitch < _minPitch)
             {
@@ -89,11 +102,11 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
             Vector3 dir = new Vector3(0, 0, -_newDistance);
 
             transform.position = (Vector3.Lerp(_oldTarget.position, _lookAt.position, _lerperHelper)) + rotation * dir ;
-            _lerperHelper += 0.1f * _zoomSpeed;
+            _lerperHelper += 0.1f * _targetToTargetSpeed;
 
             if(_lerperHelper >= 1)
             {
-                _zooming = false;
+                _movingToTarget = false;
                 _lerperHelper = 0;
             }
         }
@@ -131,7 +144,7 @@ public class NoZoomThirdPersonCam : MonoBehaviour, IPauseable
         {
             _oldTarget = _lookAt;
             _lookAt = trans;
-            _zooming = true;
+            _movingToTarget = true;
         }
         if(_oldTarget == null)
         {
