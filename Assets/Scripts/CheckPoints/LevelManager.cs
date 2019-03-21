@@ -70,7 +70,7 @@ public class LevelManager : MonoBehaviour
     }
 
     private void Start() {
-        _allLevelCheckPoints = SortCheckpoints(_allLevelCheckPoints);
+        SortCheckpoints();
 
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.Length > 0)
         {
@@ -78,6 +78,7 @@ public class LevelManager : MonoBehaviour
         }
 
         GameManager.Instance.Player.transform.position = GetSpawnLocation();
+        GameManager.Instance.Player.SetControllerActive(true);
     }
 
     /// <summary>
@@ -104,22 +105,22 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private CheckPointPole[] SortCheckpoints(CheckPointPole[] _cp)
+    private void SortCheckpoints()
     {
         bool sorted = false;
         while (!sorted)
         {
             bool swapped = false;
-            for (int i = 0; i < _cp.Length - 1; i++)
+            for (int i = 0; i < _allLevelCheckPoints.Length - 1; i++)
             {
-                if (_cp[i].id > _cp[i + 1].id)
+                if (_allLevelCheckPoints[i].id > _allLevelCheckPoints[i + 1].id)
                 {
-                    CheckPointPole tmp = _cp[i];
-                    _cp[i] = _cp[i + 1];
-                    _cp[i + 1] = tmp;
+                    CheckPointPole tmp = _allLevelCheckPoints[i];
+                    _allLevelCheckPoints[i] = _allLevelCheckPoints[i + 1];
+                    _allLevelCheckPoints[i + 1] = tmp;
                     swapped = true;
                 }
-                else if (_cp[i].id == _cp[i + 1].id)
+                else if (_allLevelCheckPoints[i].id == _allLevelCheckPoints[i + 1].id)
                 {
                     Debug.LogError("THERE ARE 2 OR MORE CHECKPOINTS WITH SAME ID!! FIX!!");
                     swapped = false;
@@ -128,6 +129,5 @@ public class LevelManager : MonoBehaviour
             }
             sorted = !swapped;
         }
-        return null;
     }
 }
