@@ -1,28 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
     public GameObject _canvas;
+    [SerializeField]
     private GameObject _mainMenuPanel;
+    [SerializeField]
     private GameObject _optionsPanel;
+    [SerializeField]
     private GameObject _quitPanel;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        _mainMenuPanel = _canvas
-.transform.GetChild(1).gameObject;
-        _optionsPanel = _canvas
-.transform.GetChild(2).gameObject;
-        _quitPanel = _canvas
-.transform.GetChild(3).gameObject;
-    }
-
-    void StartGame(){
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    public void StartGame() {
+        GameManager.Instance.StartNewGame();
     }
 
     public void EnableMainMenuPanel()
@@ -46,6 +37,6 @@ public class MenuController : MonoBehaviour
     public void Quit()
     {
         Debug.Log("Quitted");
-        Application.Quit();
+        GameManager.Instance.QuitGame();
     }
 }
