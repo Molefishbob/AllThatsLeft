@@ -2,39 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomSFXSound : SingleSFXSound
+public class RandomSFXSound : RandomUISound
 {
-    [SerializeField]
-    private string _resourceFolder = "";
-    private AudioClip[] _sounds;
-
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
-        _sounds = Resources.LoadAll<AudioClip>(_resourceFolder);
+        base.Start();
+
+        GameManager.Instance.OnGamePauseChanged += Pause;
     }
 
-    public override void PlaySound(bool usePitch)
+    protected override void OnDestroy()
     {
-        PlaySound(usePitch, Random.Range(0, _sounds.Length));
-    }
+        base.OnDestroy();
 
-    public virtual void PlaySound(int index)
-    {
-        PlaySound(true, index);
-    }
-
-    public virtual void PlaySound(bool usePitch, int index)
-    {
-        if (usePitch)
+        if (GameManager.Instance != null)
         {
-            RandomizePitch();
+            GameManager.Instance.OnGamePauseChanged -= Pause;
+        }
+    }
+
+    public virtual void Pause(bool paused)
+    {
+        if (paused)
+        {
+            _audioSource.Pause();
         }
         else
         {
-            _audioSource.pitch = _basePitch;
+            _audioSource.UnPause();
         }
-        index = Mathf.Clamp(index, 0, _sounds.Length);
-        _audioSource.PlayOneShot(_sounds[index]);
     }
 }
