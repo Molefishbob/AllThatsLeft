@@ -5,22 +5,18 @@ public class PrefsManager : Singleton<PrefsManager>
     private const string
         keyVolumeSFX = "SFX Volume",
         keyVolumeMusic = "Music Volume",
-        keyVolumeUI = "UI Volume",
         keyVolumeMaster = "Master Volume",
         keyMuteSFX = "SFX Mute",
         keyMuteMusic = "Music Mute",
-        keyMuteUI = "UI Mute",
         keyMuteMaster = "Master Mute",
         keyInvertCameraY = "Invert Camera Y",
         keyInvertCameraX = "Invert Camera X";
 
     public event ValueChangedInt OnAudioVolumeSFXChanged;
     public event ValueChangedInt OnAudioVolumeMusicChanged;
-    public event ValueChangedInt OnAudioVolumeUIChanged;
     public event ValueChangedInt OnAudioVolumeMasterChanged;
     public event ValueChangedBool OnAudioMuteSFXChanged;
     public event ValueChangedBool OnAudioMuteMusicChanged;
-    public event ValueChangedBool OnAudioMuteUIChanged;
     public event ValueChangedBool OnAudioMuteMasterChanged;
 
     public event ValueChangedBool OnInvertedCameraYChanged;
@@ -59,22 +55,6 @@ public class PrefsManager : Singleton<PrefsManager>
             if (OnAudioVolumeMusicChanged != null)
             {
                 OnAudioVolumeMusicChanged(value);
-            }
-        }
-    }
-
-    public int AudioVolumeUI
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(keyVolumeUI, 100);
-        }
-        set
-        {
-            PlayerPrefs.SetInt(keyVolumeUI, value);
-            if (OnAudioVolumeUIChanged != null)
-            {
-                OnAudioVolumeUIChanged(value);
             }
         }
     }
@@ -123,22 +103,6 @@ public class PrefsManager : Singleton<PrefsManager>
             if (OnAudioMuteMusicChanged != null)
             {
                 OnAudioMuteMusicChanged(value);
-            }
-        }
-    }
-
-    public bool AudioMuteUI
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(keyMuteUI, 0) == 1;
-        }
-        set
-        {
-            PlayerPrefs.SetInt(keyMuteUI, value ? 1 : 0);
-            if (OnAudioMuteUIChanged != null)
-            {
-                OnAudioMuteUIChanged(value);
             }
         }
     }
