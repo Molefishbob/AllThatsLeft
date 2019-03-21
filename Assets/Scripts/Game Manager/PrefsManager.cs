@@ -22,6 +22,7 @@ public class PrefsManager : Singleton<PrefsManager>
     public event ValueChangedBool OnAudioMuteMusicChanged;
     public event ValueChangedBool OnAudioMuteUIChanged;
     public event ValueChangedBool OnAudioMuteMasterChanged;
+
     public event ValueChangedBool OnInvertedCameraYChanged;
     public event ValueChangedBool OnInvertedCameraXChanged;
 
@@ -38,7 +39,11 @@ public class PrefsManager : Singleton<PrefsManager>
         }
         set
         {
-            PlayerPrefs.SetFloat(keyVolumeSFX, value);
+            PlayerPrefs.SetInt(keyVolumeSFX, value);
+            if (OnAudioVolumeSFXChanged != null)
+            {
+                OnAudioVolumeSFXChanged(value);
+            }
         }
     }
 
@@ -50,7 +55,11 @@ public class PrefsManager : Singleton<PrefsManager>
         }
         set
         {
-            PlayerPrefs.SetFloat(keyVolumeMusic, value);
+            PlayerPrefs.SetInt(keyVolumeMusic, value);
+            if (OnAudioVolumeMusicChanged != null)
+            {
+                OnAudioVolumeMusicChanged(value);
+            }
         }
     }
 
@@ -62,7 +71,11 @@ public class PrefsManager : Singleton<PrefsManager>
         }
         set
         {
-            PlayerPrefs.SetFloat(keyVolumeUI, value);
+            PlayerPrefs.SetInt(keyVolumeUI, value);
+            if (OnAudioVolumeUIChanged != null)
+            {
+                OnAudioVolumeUIChanged(value);
+            }
         }
     }
 
@@ -74,7 +87,11 @@ public class PrefsManager : Singleton<PrefsManager>
         }
         set
         {
-            PlayerPrefs.SetFloat(keyVolumeMaster, value);
+            PlayerPrefs.SetInt(keyVolumeMaster, value);
+            if (OnAudioVolumeMasterChanged != null)
+            {
+                OnAudioVolumeMasterChanged(value);
+            }
         }
     }
 
@@ -87,6 +104,10 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyMuteSFX, value ? 1 : 0);
+            if (OnAudioMuteSFXChanged != null)
+            {
+                OnAudioMuteSFXChanged(value);
+            }
         }
     }
 
@@ -99,6 +120,10 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyMuteMusic, value ? 1 : 0);
+            if (OnAudioMuteMusicChanged != null)
+            {
+                OnAudioMuteMusicChanged(value);
+            }
         }
     }
 
@@ -111,6 +136,10 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyMuteUI, value ? 1 : 0);
+            if (OnAudioMuteUIChanged != null)
+            {
+                OnAudioMuteUIChanged(value);
+            }
         }
     }
 
@@ -123,6 +152,10 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyMuteMaster, value ? 1 : 0);
+            if (OnAudioMuteMasterChanged != null)
+            {
+                OnAudioMuteMasterChanged(value);
+            }
         }
     }
 

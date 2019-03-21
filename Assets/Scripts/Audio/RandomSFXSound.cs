@@ -14,11 +14,6 @@ public class RandomSFXSound : SingleSFXSound
         _sounds = Resources.LoadAll<AudioClip>(_resourceFolder);
     }
 
-    public override void PlaySound()
-    {
-        PlaySound(true, Random.Range(0, _sounds.Length));
-    }
-
     public override void PlaySound(bool usePitch)
     {
         PlaySound(usePitch, Random.Range(0, _sounds.Length));
@@ -31,14 +26,15 @@ public class RandomSFXSound : SingleSFXSound
 
     public virtual void PlaySound(bool usePitch, int index)
     {
-        if (!_paused)
+        if (usePitch)
         {
-            if (usePitch)
-            {
-                RandomizePitch();
-            }
-            index = Mathf.Clamp(index, 0, _sounds.Length);
-            _audioSource.PlayOneShot(_sounds[index]);
+            RandomizePitch();
         }
+        else
+        {
+            _audioSource.pitch = _basePitch;
+        }
+        index = Mathf.Clamp(index, 0, _sounds.Length);
+        _audioSource.PlayOneShot(_sounds[index]);
     }
 }

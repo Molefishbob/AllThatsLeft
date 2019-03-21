@@ -20,6 +20,7 @@ public class GameManager : Singleton<GameManager>
     protected GameManager() { }
     public event ValueChangedInt OnBotAmountChanged;
     public event ValueChangedInt OnMaximumBotAmountChanged;
+    public event ValueChangedBool OnGamePauseChanged;
     private HashSet<IPauseable> _pauseables = new HashSet<IPauseable>();
 
     /// <summary>
@@ -30,16 +31,18 @@ public class GameManager : Singleton<GameManager>
     // TODO: make bot actions check this collection
     public HashSet<MiniBotAbility> UsableMiniBotAbilities;
 
-    public int CurrentBotAmount {
-        get 
-        { 
-            return _currentBotAmount; 
+    public int CurrentBotAmount
+    {
+        get
+        {
+            return _currentBotAmount;
         }
-        set 
+        set
         {
             _currentBotAmount = value;
 
-            if (OnBotAmountChanged != null) {
+            if (OnBotAmountChanged != null)
+            {
                 OnBotAmountChanged(_currentBotAmount);
             }
         }
@@ -47,16 +50,18 @@ public class GameManager : Singleton<GameManager>
 
     private int _currentBotAmount;
 
-    public int MaximumBotAmount {
-        get 
-        { 
-            return _maximumBotAmount; 
+    public int MaximumBotAmount
+    {
+        get
+        {
+            return _maximumBotAmount;
         }
-        set 
+        set
         {
             _maximumBotAmount = value;
 
-            if (OnMaximumBotAmountChanged != null) {
+            if (OnMaximumBotAmountChanged != null)
+            {
                 OnMaximumBotAmountChanged(_maximumBotAmount);
             }
         }
@@ -101,11 +106,6 @@ public class GameManager : Singleton<GameManager>
 
     private float _timeScaleBeforePause = 1.0f;
 
-    private void Awake()
-    {
-        AudioManager.Instance.Init();
-    }
-
     /// <summary>
     /// Pauses all in-game objects and sets timescale to 0.
     /// </summary>
@@ -116,6 +116,7 @@ public class GameManager : Singleton<GameManager>
             GamePaused = true;
             _timeScaleBeforePause = Time.timeScale;
             Time.timeScale = 0;
+            OnGamePauseChanged(true);
             foreach (IPauseable item in _pauseables)
             {
                 if (item != null)
@@ -139,6 +140,7 @@ public class GameManager : Singleton<GameManager>
         {
             GamePaused = false;
             Time.timeScale = _timeScaleBeforePause;
+            OnGamePauseChanged(false);
             foreach (IPauseable item in _pauseables)
             {
                 if (item != null)

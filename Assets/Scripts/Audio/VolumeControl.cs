@@ -4,92 +4,31 @@ using UnityEngine;
 
 public abstract class VolumeControl : MonoBehaviour
 {
-    protected enum SoundType
-    {
-        SoundEffect,
-        Music,
-        Interface
-    }
-
-    [SerializeField]
     protected AudioSource _audioSource;
-    private float _fullVolume;
-    protected SoundType _soundType;
+    protected float _fullVolume;
 
     /// <summary>
     /// Is the audio source playing right now (Read Only)?
     /// </summary>
     public bool IsPlaying { get { return _audioSource.isPlaying; } }
 
-    protected abstract void SetSoundType();
-
     protected virtual void Awake()
     {
-        SetSoundType();
-        if (_audioSource == null)
-        {
-            _audioSource = GetComponent<AudioSource>();
-            Debug.LogWarning("Audio Source not set, defaulting to first Audio Source in this object.");
-        }
+        _audioSource = GetComponent<AudioSource>();
     }
 
-    protected virtual void Start()
+    protected void SetVolumeSelf(int volume)
     {
-        _fullVolume = _audioSource.volume;
-        switch (_soundType)
-        {
-            case SoundType.SoundEffect:
-                AudioManager.Instance.SoundsSFX.Add(this);
-                _audioSource.volume = AudioManager.Instance.SFXVolume * AudioManager.Instance.MasterVolume * _fullVolume;
-                _audioSource.mute = AudioManager.Instance.SFXMute || AudioManager.Instance.MasterMute;
-                break;
-            case SoundType.Music:
-                AudioManager.Instance.SoundsMusic.Add(this);
-                _audioSource.volume = AudioManager.Instance.MusicVolume * AudioManager.Instance.MasterVolume * _fullVolume;
-                _audioSource.mute = AudioManager.Instance.MusicMute || AudioManager.Instance.MasterMute;
-                break;
-            case SoundType.Interface:
-                AudioManager.Instance.SoundsUI.Add(this);
-                _audioSource.volume = AudioManager.Instance.UIVolume * AudioManager.Instance.MasterVolume * _fullVolume;
-                _audioSource.mute = AudioManager.Instance.UIMute || AudioManager.Instance.MasterMute;
-                break;
-            default:
-                Debug.LogError("INVALID SOUND TYPE!!!!!");
-                break;
-        }
+        _audioSource.volume = (float)(volume * PrefsManager.Instance.AudioVolumeMaster) * _fullVolume / 10000f;
     }
 
-    protected virtual void OnDestroy()
+    protected void MuteSelf(bool muted)
     {
-        if (AudioManager.Instance != null)
-        {
-            switch (_soundType)
-            {
-                case SoundType.SoundEffect:
-                    AudioManager.Instance.SoundsSFX.Remove(this);
-                    break;
-                case SoundType.Music:
-                    AudioManager.Instance.SoundsMusic.Remove(this);
-                    break;
-                case SoundType.Interface:
-                    AudioManager.Instance.SoundsUI.Remove(this);
-                    break;
-                default:
-                    Debug.LogError("INVALID SOUND TYPE!!!!!");
-                    break;
-            }
-        }
+        _audioSource.mute = muted || PrefsManager.Instance.AudioMuteMaster;
     }
 
-    private void SetVolume(int volume)
-    {
-        _audioSource.volume = (float) volume * _fullVolume / 100f;
-    }
-
-    private void Mute(bool muted)
-    {
-        _audioSource.mute = muted;
-    }
+    protected abstract void SetVolumeMaster(int volume);
+    protected abstract void MuteMaster(bool muted);
 
     /// <summary>
     /// Stop the audio source from playing.

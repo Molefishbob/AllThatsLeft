@@ -2,56 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingleSFXSound : SingleUISound, IPauseable
+public class SingleSFXSound : SingleUISound
 {
-    protected bool _paused;
-
     protected override void Start()
     {
-        base.Start();
-        _paused = GameManager.Instance.GamePaused;
-        if (_paused)
-        {
-            _audioSource.Pause();
-        }
-        GameManager.Instance.AddPauseable(this);
+        _fullVolume = _audioSource.volume;
+        _basePitch = _audioSource.pitch;
+
+        PrefsManager.Instance.OnAudioVolumeSFXChanged += SetVolumeSelf;
+        PrefsManager.Instance.OnAudioVolumeMasterChanged += SetVolumeMaster;
+        PrefsManager.Instance.OnAudioMuteSFXChanged += MuteSelf;
+        PrefsManager.Instance.OnAudioMuteMasterChanged += MuteMaster;
+
+        _audioSource.volume = PrefsManager.Instance.AudioVolumeSFX * PrefsManager.Instance.AudioVolumeMaster * _fullVolume;
+        _audioSource.mute = PrefsManager.Instance.AudioMuteSFX || PrefsManager.Instance.AudioMuteMaster;
+
+        GameManager.Instance.OnGamePauseChanged += Pause;
     }
 
     protected override void OnDestroy()
     {
-        base.OnDestroy();
+        if (PrefsManager.Instance != null)
+        {
+            PrefsManager.Instance.OnAudioVolumeSFXChanged -= SetVolumeMaster;
+            PrefsManager.Instance.OnAudioVolumeMasterChanged -= SetVolumeMaster;
+            PrefsManager.Instance.OnAudioMuteSFXChanged -= MuteMaster;
+            PrefsManager.Instance.OnAudioMuteMasterChanged -= MuteMaster;
+        }
+
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.RemovePauseable(this);
+            GameManager.Instance.OnGamePauseChanged -= Pause;
         }
     }
 
-    /// <summary>
-    /// Plays the sound effect.
-    /// </summary>
-    /// <param name="usePitch">Randomize the pitch</param>
-    public override void PlaySound(bool usePitch)
+    public virtual void Pause(bool paused)
     {
-        if (!_paused)
+        if (paused)
         {
-            base.PlaySound(usePitch);
+            _audioSource.Pause();
         }
-    }
-
-    protected override void SetSoundType()
-    {
-        _soundType = SoundType.SoundEffect;
-    }
-
-    public virtual void Pause()
-    {
-        _paused = true;
-        _audioSource.Pause();
-    }
-
-    public virtual void UnPause()
-    {
-        _paused = false;
-        _audioSource.UnPause();
+        else
+        {
+            _audioSource.UnPause();
+        }
     }
 }
