@@ -31,6 +31,11 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 
     private void Update()
     {
+        if (GameManager.Instance.GamePaused)
+        {
+            return;
+        }
+
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {

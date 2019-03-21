@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonCamera : MonoBehaviour, IPauseable
+public class ThirdPersonCamera : MonoBehaviour
 {
     public LayerMask _groundLayer;
     private Transform _lookAt, _oldTarget;
@@ -23,7 +23,6 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
     [Tooltip("How fast the camera moves to the new target")]
     public float _targetToTargetSpeed = 1;
     private float _lerperHelper = 0;
-    private bool _paused;
     private bool _movingToTarget;
     private float _newDistance;
     private int _invertX = 1;
@@ -31,16 +30,6 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
-
-    public void Pause()
-    {
-        _paused = true;
-    }
-
-    public void UnPause()
-    {
-        _paused = false;
-    }
 
     private void Awake()
     {
@@ -54,17 +43,11 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
 
     private void Start()
     {
-        _paused = GameManager.Instance.GamePaused;
-        GameManager.Instance.AddPauseable(this);
         GetInstantNewTarget(GameManager.Instance.Player.transform.Find(_cameraTargetName));
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RemovePauseable(this);
-        }
         if (PrefsManager.Instance != null)
         {
             PrefsManager.Instance.OnInvertedCameraXChanged -= ChangeInvertX;
@@ -74,6 +57,11 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
 
     private void Update()
     {
+        if (GameManager.Instance.GamePaused)
+        {
+            return;
+        }
+
         if (!_movingToTarget)
         {
             _distance += (Input.GetAxis("Scroll")) * _zoomSpeed;

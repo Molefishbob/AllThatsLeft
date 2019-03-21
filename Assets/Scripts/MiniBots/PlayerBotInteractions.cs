@@ -42,6 +42,11 @@ public class PlayerBotInteractions : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.GamePaused)
+        {
+            return;
+        }
+
         if (Input.GetButtonDown(_sHackButton) && _bActive && !_bActing)
         {
             _goTarget = CheckSurroundings(_lHackableLayer, false);

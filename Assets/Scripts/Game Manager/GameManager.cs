@@ -21,7 +21,6 @@ public class GameManager : Singleton<GameManager>
     public event ValueChangedInt OnBotAmountChanged;
     public event ValueChangedInt OnMaximumBotAmountChanged;
     public event ValueChangedBool OnGamePauseChanged;
-    private HashSet<IPauseable> _pauseables = new HashSet<IPauseable>();
 
     /// <summary>
     /// Is the game currently paused?
@@ -116,13 +115,9 @@ public class GameManager : Singleton<GameManager>
             GamePaused = true;
             _timeScaleBeforePause = Time.timeScale;
             Time.timeScale = 0;
-            OnGamePauseChanged(true);
-            foreach (IPauseable item in _pauseables)
+            if (OnGamePauseChanged != null)
             {
-                if (item != null)
-                {
-                    item.Pause();
-                }
+                OnGamePauseChanged(true);
             }
         }
         else
@@ -140,37 +135,15 @@ public class GameManager : Singleton<GameManager>
         {
             GamePaused = false;
             Time.timeScale = _timeScaleBeforePause;
-            OnGamePauseChanged(false);
-            foreach (IPauseable item in _pauseables)
+            if (OnGamePauseChanged != null)
             {
-                if (item != null)
-                {
-                    item.UnPause();
-                }
+                OnGamePauseChanged(false);
             }
         }
         else
         {
             Debug.LogWarning("Game is already unpaused.");
         }
-    }
-
-    /// <summary>
-    /// Add a pauseable item reference to be paused by PauseGame.
-    /// </summary>
-    /// <param name="pauseable">Class that implements IPauseable.</param>
-    public void AddPauseable(IPauseable pauseable)
-    {
-        _pauseables.Add(pauseable);
-    }
-
-    /// <summary>
-    /// Remove a pauseable item reference.
-    /// </summary>
-    /// <param name="pauseable">Class that implements IPauseable.</param>
-    public void RemovePauseable(IPauseable pauseable)
-    {
-        _pauseables.Remove(pauseable);
     }
 
     public void QuitGame()
