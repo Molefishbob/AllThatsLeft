@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonCam : MonoBehaviour, IPauseable
+public class OldThirdPersonCam : MonoBehaviour, IPauseable
 {
     public LayerMask _wallLayer, _groundLayer;
     private Transform _lookAt;

@@ -11,7 +11,7 @@ public class LevelManager : MonoBehaviour
     public CheckPointPole _currentCheckPoint { get; private set; }
     private CheckPointPole[] _allLevelCheckPoints;
     public PlayerMovement _playerPrefab;
-    public NoZoomThirdPersonCam _cameraPrefab;
+    public ThirdPersonCamera _cameraPrefab;
     /// <summary>
     /// The pool prefab
     /// </summary>
@@ -60,7 +60,7 @@ public class LevelManager : MonoBehaviour
 
         if (GameManager.Instance.Camera == null)
         {
-            NoZoomThirdPersonCam camera = FindObjectOfType<NoZoomThirdPersonCam>();
+            ThirdPersonCamera camera = FindObjectOfType<ThirdPersonCamera>();
             if (camera == null)
             {
                 camera = Instantiate(_cameraPrefab);
