@@ -6,13 +6,6 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField]
-    private Button _resumeButton = null;
-    [SerializeField]
-    private Button _ToMenu = null;
-    [SerializeField]
-    private Button _ToDesktop = null;
-    private int _maxBotAmount = 0, _currentBotAmount = 0;
 
     private void Start()
     {

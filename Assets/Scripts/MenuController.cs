@@ -6,11 +6,11 @@ public class MenuController : MonoBehaviour
 {
     public GameObject _canvas;
     [SerializeField]
-    private GameObject _mainMenuPanel;
+    private GameObject _mainMenuPanel = null;
     [SerializeField]
-    private GameObject _optionsPanel;
+    private GameObject _optionsPanel = null;
     [SerializeField]
-    private GameObject _quitPanel;
+    private GameObject _quitPanel = null;
 
     public void StartGame() {
         GameManager.Instance.StartNewGame();
