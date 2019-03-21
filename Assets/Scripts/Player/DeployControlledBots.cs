@@ -24,6 +24,8 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
         GameManager.Instance.AddPauseable(this);
 
         _deployStartPosition = _deployTarget.localPosition;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
@@ -73,7 +75,7 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
         bot.transform.rotation = _deployTarget.rotation;
         bot._bActive = true;
         GameManager.Instance.Player.ControlsDisabled = true;
-        GameManager.Instance.Player._animator.SetTrigger(_animatorTriggerDeploy);
+        GameManager.Instance.Player._animator?.SetTrigger(_animatorTriggerDeploy);
         GameManager.Instance.Camera.GetNewTarget(bot.transform);
     }
 }

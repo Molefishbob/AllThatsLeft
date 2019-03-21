@@ -17,7 +17,7 @@ public class GenericEnemy : CharControlBase, IDamageReceiver
     {
         if (hit.gameObject.layer == 10)
         {
-            hit.gameObject.GetComponent<ThirdPersonPlayerMovement>().TakeDamage(0);
+            hit.gameObject.GetComponent<IDamageReceiver>().TakeDamage(0);
         }
     }
 

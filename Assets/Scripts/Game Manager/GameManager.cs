@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void ValueChanged( int amount );
-public delegate void BotChanged( MiniBotType bot );
-public enum MiniBotType {
-        HackBot,
-        BombBot,
-        TrampBot
+public enum MiniBotAbility {
+        Hack,
+        Bomb,
+        Tramp
     }
 public class GameManager : Singleton<GameManager>
 {
@@ -15,7 +14,6 @@ public class GameManager : Singleton<GameManager>
     protected GameManager() { }
     public event ValueChanged OnBotAmountChanged;
     public event ValueChanged OnMaximumBotAmountChanged;
-    public event BotChanged OnCurrentBotChanged;
     private HashSet<IPauseable> _pauseables = new HashSet<IPauseable>();
 
     /// <summary>
@@ -23,7 +21,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public bool GamePaused { get; private set; }
 
-    private ThirdPersonPlayerMovement _player;
+    // TODO: make bot actions check this collection
+    public HashSet<MiniBotAbility> UsableMiniBotAbilities;
 
     public int CurrentBotAmount {
         get 
@@ -42,23 +41,6 @@ public class GameManager : Singleton<GameManager>
 
     private int _currentBotAmount;
 
-    public MiniBotType  CurrentBot {
-        get 
-        { 
-            return _currentBot; 
-        }
-        set 
-        {
-            _currentBot = value;
-
-            if (OnCurrentBotChanged != null) {
-                OnCurrentBotChanged(_currentBot);
-            }
-        }
-    }
-
-    private MiniBotType _currentBot;
-    
     public int MaximumBotAmount {
         get 
         { 
@@ -79,23 +61,7 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// Reference of the player.
     /// </summary>
-    public ThirdPersonPlayerMovement Player
-    {
-        get
-        {
-            if (_player == null)
-            {
-                _player = FindObjectOfType<ThirdPersonPlayerMovement>();
-                if (_player == null)
-                {
-                    Debug.LogError("Scene doesn't have an instance of the player.");
-                }
-            }
-            return _player;
-        }
-    }
-
-    public bool CanRestockBots = false;
+    public PlayerMovement Player;
 
     private LevelManager _levelManager;
 
@@ -118,10 +84,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public BombPool BombPool;
-    public TrampPool TrampPool;
-    public HackPool HackPool;
-
     public ControlledBotPool BotPool;
 
     public PatrolEnemyPool PatrolEnemyPool;
@@ -133,7 +95,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-
+        AudioManager.Instance.Init();
     }
 
     /// <summary>

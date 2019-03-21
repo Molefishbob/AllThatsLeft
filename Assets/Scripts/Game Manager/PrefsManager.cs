@@ -17,11 +17,6 @@ public class PrefsManager : Singleton<PrefsManager>
         PlayerPrefs.Save();
     }
 
-    private void OnApplicationQuit()
-    {
-        Save();
-    }
-
     public float AudioVolumeSFX
     {
         get
