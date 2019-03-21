@@ -132,8 +132,8 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     _character.ResetGravity();
                     _currentJumpForce = GetJumpForce(_maxHeight);
                     _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
-                    _sound.PlaySound();
-                    _character._animator.SetTrigger(_animatorTriggerJump);
+                    _sound?.PlaySound();
+                    _character._animator?.SetTrigger(_animatorTriggerJump);
                 }
             }
 
