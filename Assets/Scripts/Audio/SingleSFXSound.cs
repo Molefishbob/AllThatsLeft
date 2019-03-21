@@ -47,4 +47,14 @@ public class SingleSFXSound : SingleUISound
             _audioSource.UnPause();
         }
     }
+
+    protected override void SetVolumeMaster(int volume)
+    {
+        _audioSource.volume = (float)(volume * PrefsManager.Instance.AudioVolumeSFX) * _fullVolume / 10000f;
+    }
+
+    protected override void MuteMaster(bool muted)
+    {
+        _audioSource.mute = muted || PrefsManager.Instance.AudioMuteSFX;
+    }
 }
