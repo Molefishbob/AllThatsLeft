@@ -31,34 +31,10 @@ public class PlayerMovement : CharControlBase, IDamageReceiver
 
     private PlayerJump _playerJump;
 
-    //TEMPO
-    private string _detachButton = "Use Object";
-
     protected override void Awake()
     {
         base.Awake();
         _playerJump = GetComponent<PlayerJump>();
-    }
-
-    private void Update()
-    {
-        if (!_paused)
-        {
-            if (!ControlsDisabled)
-            {
-                if (Input.GetButtonDown(_detachButton))
-                {
-                    if (this != GameManager.Instance.Player)
-                    {
-                        GameManager.Instance.Player.ControlsDisabled = false;
-                        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
-                        ControlsDisabled = true;
-                        PlayerBotInteractions bot = GetComponent<PlayerBotInteractions>();
-                        if (bot != null) bot._bActive = false;
-                    }
-                }
-            }
-        }
     }
 
     protected override Vector3 InternalMovement()
@@ -90,12 +66,12 @@ public class PlayerMovement : CharControlBase, IDamageReceiver
         return inputDirection;
     }
 
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         Die();
     }
 
-    public void Die()
+    public virtual void Die()
     {
         //Debug.Log("Player died");
         //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
