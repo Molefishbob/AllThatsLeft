@@ -8,11 +8,11 @@ public class Settings : MonoBehaviour
 {
     private const string PercentageFormat = " %";
     [SerializeField]
-    private TMP_Text  _musicText = null, _UISoundText = null, _masterText = null;
+    private TMP_Text  _musicText = null, _sFXText = null, _masterText = null;
     [SerializeField]
-    private Slider _musicSlider = null, _UISoundSlider = null, _masterSlider = null;
+    private Slider _musicSlider = null, _sFXSlider = null, _masterSlider = null;
     [SerializeField]
-    private Toggle _musicMute = null, _UIMute = null, _masterMute = null;
+    private Toggle _musicMute = null, _sFXMute = null, _masterMute = null;
     [SerializeField]
     private Toggle _volumeSettings = null, _gameplaySettings = null, _controlSettings = null;
     [SerializeField]
@@ -31,15 +31,15 @@ public class Settings : MonoBehaviour
     void Awake()
     {
         _musicSlider.value = PrefsManager.Instance.AudioVolumeMusic;
-        _UISoundSlider.value = PrefsManager.Instance.AudioVolumeSFX;
+        _sFXSlider.value = PrefsManager.Instance.AudioVolumeSFX;
         _masterSlider.value = PrefsManager.Instance.AudioVolumeMaster;
 
         _musicMute.isOn = PrefsManager.Instance.AudioMuteMusic;
-        _UIMute.isOn = PrefsManager.Instance.AudioMuteUI;
         _masterMute.isOn = PrefsManager.Instance.AudioMuteMaster;
+        _sFXMute.isOn = PrefsManager.Instance.AudioMuteSFX;
 
         _musicText.SetText(_musicSlider.value + PercentageFormat);
-        _UISoundText.SetText(_UISoundSlider.value + PercentageFormat);
+        _sFXText.SetText(_sFXSlider.value + PercentageFormat);
         _masterText.SetText(_masterSlider.value + PercentageFormat);
         VolumeSettings();
     }
@@ -49,9 +49,8 @@ public class Settings : MonoBehaviour
         PrefsManager.Instance.AudioVolumeMusic =  Mathf.RoundToInt(_musicSlider.value);
     }
     public void UISoundPercentage() {
-        _UISoundText.SetText(_UISoundSlider.value + PercentageFormat);
-        PrefsManager.Instance.AudioVolumeSFX = Mathf.RoundToInt(_UISoundSlider.value);
-        PrefsManager.Instance.AudioVolumeUI = Mathf.RoundToInt(_UISoundSlider.value);
+        _sFXText.SetText(_sFXSlider.value + PercentageFormat);
+        PrefsManager.Instance.AudioVolumeSFX = Mathf.RoundToInt(_sFXSlider.value);
     }
     public void MasterSoundPercentage() {
         _masterText.SetText(_masterSlider.value + PercentageFormat);
@@ -64,7 +63,6 @@ public class Settings : MonoBehaviour
     public void MuteSound()
     {
         PrefsManager.Instance.AudioMuteSFX = !PrefsManager.Instance.AudioMuteSFX;
-        PrefsManager.Instance.AudioMuteUI = !PrefsManager.Instance.AudioMuteUI;
     }
     public void MuteMaster()
     {
