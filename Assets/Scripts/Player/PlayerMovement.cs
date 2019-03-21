@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : CharControlBase, IDamageReceiver
+public class PlayerMovement : CharControlBase, IDamageReceiver, ITimedAction
 {
     [SerializeField]
-    private string _horizontalAxis = "Horizontal";
+    protected string _horizontalAxis = "Horizontal";
     [SerializeField]
-    private string _verticalAxis = "Vertical";
+    protected string _verticalAxis = "Vertical";
     [SerializeField]
-    private string _animatorTriggerDeath = "Dying";
+    protected string _animatorBoolDeath = "Dead";
+    [SerializeField]
+    protected float _deathTime = 5.0f;
 
     [HideInInspector]
     public bool ControlsDisabled
@@ -27,14 +29,23 @@ public class PlayerMovement : CharControlBase, IDamageReceiver
             }
         }
     }
-    private bool _controlsDisabled;
 
-    private PlayerJump _playerJump;
+    protected bool _controlsDisabled;
+    protected bool _dead = false;
+    protected OneShotTimer _deathTimer;
+    protected PlayerJump _playerJump;
 
     protected override void Awake()
     {
         base.Awake();
         _playerJump = GetComponent<PlayerJump>();
+        _deathTimer = gameObject.AddComponent<OneShotTimer>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        _deathTimer.SetTimerTarget(this);
     }
 
     protected override Vector3 InternalMovement()
@@ -73,8 +84,22 @@ public class PlayerMovement : CharControlBase, IDamageReceiver
 
     public virtual void Die()
     {
-        //Debug.Log("Player died");
-        //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-        _animator?.SetTrigger(_animatorTriggerDeath);
+        if (!_dead)
+        {
+            _dead = true;
+            ControlsDisabled = true;
+            _animator?.SetBool(_animatorBoolDeath, true);
+            SetControllerActive(false);
+            _deathTimer.StartTimer(_deathTime);
+        }
+    }
+
+    public void TimedAction()
+    {
+        transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
+        _dead = false;
+        ControlsDisabled = false;
+        _animator?.SetBool(_animatorBoolDeath, false);
+        SetControllerActive(true);
     }
 }
