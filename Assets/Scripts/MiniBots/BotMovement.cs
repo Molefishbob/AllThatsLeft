@@ -15,6 +15,6 @@ public class BotMovement : PlayerMovement
     {
         // TODO animations
         _pbi.StopActing();
-        if (_pbi._bActive) _pbi.ReleaseControls();
+        if (_pbi._bActive) _pbi.ReleaseControls(true);
     }
 }

@@ -44,7 +44,8 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
 
     void Update()
     {
-        if (Input.GetButtonDown(_sHackButton) && _bActive && !_bActing)
+        // Hack
+        if (Input.GetButtonDown(_sHackButton) && _bActive && !_bActing && !_bReleasing)
         {
             _goTarget = CheckSurroundings(_lHackableLayer, false);
             if (_goTarget != null)
@@ -54,26 +55,34 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
                 {
                     _bActing = true;
                     ghOther.TimeToStart();
-                    ReleaseControls();
+                    ReleaseControls(true);
                 }
             }
         }
 
-        if (Input.GetButtonDown(_sExplodeButton) && _bActive)
+        // Explode
+        if (Input.GetButtonDown(_sExplodeButton) && _bActive && !_bReleasing)
         {
             _goTarget = CheckSurroundings(_lBombableLayer, true);
             if (_goTarget != null)
             {
+                // TODO fix this
+                // The bot will "charge" for a while
                 foreach (GameObject o in _goTarget)
                 {
-                    o.gameObject.GetComponent<IDamageReceiver>()?.TakeDamage(1);
+                    if (o != gameObject)
+                        o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
                 }
-                ReleaseControls();
+                ReleaseControls(true);
             }
         }
 
+        // Just release
         if (Input.GetButtonDown(_sStayButton) && _bActive)
-            ReleaseControls();
+        {
+            _ostRelease.StopTimer();
+            ReleaseControls(false);
+        }
     }
 
     private GameObject[] CheckSurroundings(LayerMask interLayer, bool isExplosion)
@@ -122,12 +131,21 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
     }
 
     // Release the controls back to the player
-    public void ReleaseControls()
+    public void ReleaseControls(bool withDelay)
     {
-        _selfMover.ControlsDisabled = true;
-        _bReleasing = true;
-        _ostRelease.SetTimerTarget(this);
-        _ostRelease.StartTimer(_fReleaseDelay);
+        if (withDelay)
+        {
+            _selfMover.ControlsDisabled = true;
+            _bReleasing = true;
+            _ostRelease.SetTimerTarget(this);
+            _ostRelease.StartTimer(_fReleaseDelay);
+        }
+        else
+        {
+            _selfMover.ControlsDisabled = true;
+            _bReleasing = true;
+            TimedAction();
+        }
     }
 
     public void StopActing()
