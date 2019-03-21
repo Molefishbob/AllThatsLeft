@@ -38,7 +38,7 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
     {
         if (!_paused)
         {
-            if (!GameManager.Instance.Player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && GameManager.Instance.Player.IsGrounded)
+        if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
             {
                 RaycastHit hit;
                 Vector3 upVector = -Physics.gravity.normalized;
