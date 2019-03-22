@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotMovement : PlayerMovement
+public class BotMovement : PlayerMovement, IDamageReceiver
 {
     private PlayerBotInteractions _pbi;
     protected override void Awake()
@@ -11,7 +11,12 @@ public class BotMovement : PlayerMovement
         _pbi = GetComponent<PlayerBotInteractions>();
     }
 
-    public override void Die()
+    public void TakeDamage(int damage)
+    {
+        Die();
+    }
+
+    public void Die()
     {
         // TODO animations
         _pbi.StopActing();

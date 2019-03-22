@@ -17,11 +17,11 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
 
     private bool _paused = false;
     private Vector3 _deployStartPosition;
-    private PlayerMovement _player;
+    private MainCharMovement _player;
 
     private void Awake()
     {
-        _player = GetComponent<PlayerMovement>();
+        _player = GetComponent<MainCharMovement>();
     }
 
     private void Start()

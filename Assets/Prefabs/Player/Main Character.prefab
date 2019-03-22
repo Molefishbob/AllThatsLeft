@@ -40,15 +40,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1214044774675275346}
   - component: {fileID: 6011697700877466060}
-  - component: {fileID: 2262639783887716210}
+  - component: {fileID: 6340263885475930268}
   - component: {fileID: 6361875651433932180}
   - component: {fileID: 1943571215416783387}
   - component: {fileID: 8480785135076828658}
-  - component: {fileID: 6667332518330453696}
-  - component: {fileID: 7031188198604645384}
-  - component: {fileID: 2873366592727837468}
   m_Layer: 10
-  m_Name: Player Character
+  m_Name: Main Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,7 +88,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.83, z: 0}
---- !u!114 &2262639783887716210
+--- !u!114 &6340263885475930268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,16 +97,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6011697700877466058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 687e8b9e63d9330499769aec9237fe3f, type: 3}
+  m_Script: {fileID: 11500000, guid: 242c99c4473585d4ba6d3609d96f44dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 8
-  _turningSpeed: 1080
+  _turningSpeed: 540
   _accelerationTime: 5
   _minYPosition: -10
   _walkableTerrain:
     serializedVersion: 2
-    m_Bits: 12288
+    m_Bits: 28672
   _groundedDistanceBonus: 0.04
   _walkSound: {fileID: 581487429148358395}
   _landingSound: {fileID: 1143756402394380694}
@@ -178,42 +175,6 @@ MonoBehaviour:
     m_Bits: 8192
   _attachDistance: 0.2
   _disconnectDistance: 2.5
---- !u!114 &6667332518330453696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6011697700877466058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7031188198604645384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6011697700877466058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2873366592727837468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6011697700877466058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8380603309867370344
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,11 +245,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021780559136606628}
     m_Modifications:
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Player Jump
-      objectReference: {fileID: 0}
     - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: _resourceFolder
@@ -298,6 +254,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Player Jump
       objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
@@ -381,11 +342,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021780559136606628}
     m_Modifications:
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Player Land
-      objectReference: {fileID: 0}
     - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: _resourceFolder
@@ -395,6 +351,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Land
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Player Land
       objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
@@ -478,11 +439,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021780559136606628}
     m_Modifications:
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Player Walk
-      objectReference: {fileID: 0}
     - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: _resourceFolder
@@ -492,6 +448,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Walk
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Player Walk
       objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
@@ -575,6 +536,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1214044774675275346}
     m_Modifications:
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Name
+      value: BlobShadowProjector
+      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -619,10 +584,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Name
-      value: BlobShadowProjector
-      objectReference: {fileID: 0}
     - target: {fileID: 11900000, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_IgnoreLayers.m_Bits
       value: 16748343
@@ -654,6 +615,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1214044774675275346}
     m_Modifications:
+    - target: {fileID: 100078, guid: 63b90f7bf38b2e145bb1867be393e913, type: 3}
+      propertyPath: m_Name
+      value: Model
+      objectReference: {fileID: 0}
     - target: {fileID: 400078, guid: 63b90f7bf38b2e145bb1867be393e913, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -697,10 +662,6 @@ PrefabInstance:
     - target: {fileID: 400078, guid: 63b90f7bf38b2e145bb1867be393e913, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100078, guid: 63b90f7bf38b2e145bb1867be393e913, type: 3}
-      propertyPath: m_Name
-      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 63b90f7bf38b2e145bb1867be393e913, type: 3}
       propertyPath: m_Controller
