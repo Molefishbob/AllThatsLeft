@@ -26,8 +26,6 @@ public class DeployControlledBots : MonoBehaviour
     private void Start()
     {
         _deployStartPosition = _deployTarget.localPosition;
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()

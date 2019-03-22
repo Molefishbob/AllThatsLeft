@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public bool GamePaused { get; private set; }
 
-    // TODO: make bot actions check this collection
+    // TODO: make bot actions check this collection or remove ability system entirely
     public HashSet<MiniBotAbility> UsableMiniBotAbilities;
 
     public int CurrentBotAmount
@@ -94,13 +94,29 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    /// <summary>
+    /// Reference of Bot Pool.
+    /// </summary>
     public ControlledBotPool BotPool;
 
+    /// <summary>
+    /// Reference of Patrol Enemy Pool.
+    /// </summary>
     public PatrolEnemyPool PatrolEnemyPool;
+
+    /// <summary>
+    /// Reference of Frog Enemy Pool.
+    /// </summary>
     public FrogEnemyPool FrogEnemyPool;
 
+    /// <summary>
+    /// Reference of the camera.
+    /// </summary>
     public ThirdPersonCamera Camera;
 
+    /// <summary>
+    /// ID of the current level.
+    /// </summary>
     public int CurrentLevel { get; private set; } = 1;
 
     private float _timeScaleBeforePause = 1.0f;
@@ -146,39 +162,62 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    /// <summary>
+    /// Quits the game to desktop.
+    /// </summary>
     public void QuitGame()
     {
         PrefsManager.Instance.Save();
         Application.Quit();
     }
 
+    /// <summary>
+    /// Change scene to given build id.
+    /// </summary>
+    /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
         SceneManager.LoadScene(id);
     }
 
+    /// <summary>
+    /// Changes scene to Main Menu (assuming it is the first scene in build settings).
+    /// </summary>
     public void ChangeToMainMenu()
     {
         ChangeScene(0);
     }
 
+    /// <summary>
+    /// Changes scene to next level.
+    /// </summary>
     public void NextLevel()
     {
         CurrentLevel++;
         ChangeScene(CurrentLevel);
     }
 
+    /// <summary>
+    /// Loads the first level.
+    /// </summary>
     public void StartNewGame()
     {
         CurrentLevel = 1;
         ChangeScene(CurrentLevel);
     }
 
+    /// <summary>
+    /// Reloads the active scene.
+    /// </summary>
     public void ReloadScene()
     {
-        ChangeScene(CurrentLevel);
+        ChangeScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    /// <summary>
+    /// Undoes DontDestroyOnLoad for the given GameObject.
+    /// </summary>
+    /// <param name="go">GameObject in the special DontDestroyOnLoad scene.</param>
     public void UndoDontDestroy(GameObject go)
     {
         SceneManager.MoveGameObjectToScene(go, SceneManager.GetActiveScene());

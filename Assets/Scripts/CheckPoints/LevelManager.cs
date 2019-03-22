@@ -51,6 +51,7 @@ public class LevelManager : MonoBehaviour
             {
                 player = Instantiate(_playerPrefab);
             }
+            DontDestroyOnLoad(player);
             GameManager.Instance.Player = player;
         }
 
@@ -61,6 +62,7 @@ public class LevelManager : MonoBehaviour
             {
                 camera = Instantiate(_cameraPrefab);
             }
+            DontDestroyOnLoad(camera);
             GameManager.Instance.Camera = camera;
         }
     }
