@@ -17,6 +17,12 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
 
     private bool _paused = false;
     private Vector3 _deployStartPosition;
+    private MainCharMovement _player;
+
+    private void Awake()
+    {
+        _player = GetComponent<MainCharMovement>();
+    }
 
     private void Start()
     {
@@ -24,13 +30,15 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
         GameManager.Instance.AddPauseable(this);
 
         _deployStartPosition = _deployTarget.localPosition;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
     {
         if (!_paused)
         {
-            if (!GameManager.Instance.Player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && GameManager.Instance.Player.IsGrounded)
+        if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
             {
                 RaycastHit hit;
                 Vector3 upVector = -Physics.gravity.normalized;
@@ -68,12 +76,13 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
 
     private void DeployBot()
     {
+        _player.ControlsDisabled = true;
+        _player._animator?.SetTrigger(_animatorTriggerDeploy);
+
         PlayerBotInteractions bot = GameManager.Instance.BotPool.GetObject();
         bot.transform.position = _deployTarget.position;
         bot.transform.rotation = _deployTarget.rotation;
         bot._bActive = true;
-        GameManager.Instance.Player.ControlsDisabled = true;
-        GameManager.Instance.Player._animator?.SetTrigger(_animatorTriggerDeploy);
         GameManager.Instance.Camera.GetNewTarget(bot.transform);
     }
 }

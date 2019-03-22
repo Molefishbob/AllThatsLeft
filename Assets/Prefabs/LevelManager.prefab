@@ -27,7 +27,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4834972641057145309}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -43,22 +44,93 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1cc0fa587c287348b5dd71ec291ff7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerPrefab: {fileID: 2262639783887716210, guid: de82d5bc12a940a4bb21840c856e1f80,
+    type: 3}
+  _cameraPrefab: {fileID: 7992287912842736978, guid: b271ec9f65528fb498a9148dffd627db,
+    type: 3}
   _botPoolPrefab: {fileID: 6142502151707164567, guid: 199025da555b8d94f8c1f712c5d7228c,
-    type: 3}
-  _bombPoolPrefab: {fileID: 1603818302871747017, guid: 380c4ea4d5cd4474183ee15c0dbe6096,
-    type: 3}
-  _trampPoolPrefab: {fileID: 7782063337223070416, guid: 0be14dcf92b9d3043895e0965ea2b32b,
-    type: 3}
-  _hackPoolPrefab: {fileID: 425059508802981796, guid: 2e21af095435da644951be18fc123f85,
     type: 3}
   _frogPoolPrefab: {fileID: 676563834317760722, guid: 74c46cf910d96564aaa946121c00ad95,
     type: 3}
   _patrolEnemyPoolPrefab: {fileID: 5096614545507695761, guid: 364322b1cf7d19e498d6976139b8cb59,
     type: 3}
-  _cameraPrefab: {fileID: 5470186108493842727, guid: b271ec9f65528fb498a9148dffd627db,
-    type: 3}
-  _levelNeedsBombBots: 0
-  _levelNeedsTrampBots: 0
-  _levelNeedsHackBots: 0
   _levelNeedsFrogEnemies: 1
   _levelNeedsPatrolEnemies: 1
+--- !u!1 &3593422543410747496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4834972641057145309}
+  - component: {fileID: 5934360568789836997}
+  m_Layer: 0
+  m_Name: Level Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4834972641057145309
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3593422543410747496}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8679641383244738462}
+  m_Father: {fileID: 506859071650718438}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5934360568789836997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3593422543410747496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ecc79340d91734a9d750c0d979596a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PlayerLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  id: 0
+--- !u!1 &7957253039680539651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8679641383244738462}
+  m_Layer: 0
+  m_Name: SpawnLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8679641383244738462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7957253039680539651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4834972641057145309}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
