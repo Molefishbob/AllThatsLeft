@@ -5,15 +5,15 @@ using UnityEngine;
 public abstract class CharControlBase : MonoBehaviour
 {
     [SerializeField, Tooltip("Meters per second")]
-    private float _speed = 6;
+    private float _speed = 8;
     [SerializeField, Tooltip("Degrees per second")]
     private float _turningSpeed = 540;
     [SerializeField, Tooltip("NOT in seconds")]
-    private float _accelerationTime = 10;
+    private float _accelerationTime = 5;
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
     [SerializeField]
-    private LayerMask _walkableTerrain = (1 << 12) + (1 << 13);
+    private LayerMask _walkableTerrain = (1 << 12) + (1 << 13) + (1 << 14);
     [SerializeField]
     private float _groundedDistanceBonus = 0.04f;
     [SerializeField]

@@ -12,9 +12,6 @@ GameObject:
   - component: {fileID: 6011697700877466060}
   - component: {fileID: 6361875651433932180}
   - component: {fileID: 8480785135076828658}
-  - component: {fileID: 6667332518330453696}
-  - component: {fileID: 7031188198604645384}
-  - component: {fileID: 2873366592727837468}
   - component: {fileID: 5108496616270405087}
   - component: {fileID: 885666347225274095}
   m_Layer: 9
@@ -72,8 +69,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e459db916cdcd9f449450530206ce90e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHeight: 2
-  _minHeight: 1
+  _maxHeight: 1
+  _minHeight: 0.5
   _jumpButton: Jump
   _leewayTimeAfterLeavingGround: 0.1
   _leewayTimeBeforeHittingGround: 0.1
@@ -97,42 +94,6 @@ MonoBehaviour:
     m_Bits: 8192
   _attachDistance: 0.15
   _disconnectDistance: 1.75
---- !u!114 &6667332518330453696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6011697700877466058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7031188198604645384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6011697700877466058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2873366592727837468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6011697700877466058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34faee2aed964424bb6271a871273514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5108496616270405087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,6 +117,8 @@ MonoBehaviour:
   _sHackButton: Hack Action
   _sExplodeButton: Bomb Action
   _sStayButton: Stay Action
+  _bActing: 0
+  _fReleaseDelay: 2
 --- !u!114 &885666347225274095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd71cc7508130244b7e24cdda25e8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 4
+  _speed: 3
   _turningSpeed: 540
   _accelerationTime: 5
   _minYPosition: -10
@@ -185,7 +148,6 @@ MonoBehaviour:
   _controller: {fileID: 0}
   _horizontalAxis: Horizontal
   _verticalAxis: Vertical
-  _animatorTriggerDeath: Dying
 --- !u!1 &8582607083486757520
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,15 +218,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021780559136606628}
     m_Modifications:
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Minibot Jump
-      objectReference: {fileID: 0}
     - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_Name
       value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Minibot Jump
       objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
@@ -348,15 +310,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021780559136606628}
     m_Modifications:
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Minibot Land
-      objectReference: {fileID: 0}
     - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_Name
       value: Land
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Minibot Land
       objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
@@ -440,6 +402,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1214044774675275346}
     m_Modifications:
+    - target: {fileID: 100036, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
+      propertyPath: m_Name
+      value: MinibotsFirstRig
+      objectReference: {fileID: 0}
     - target: {fileID: 400036, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -484,10 +450,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100036, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
-      propertyPath: m_Name
-      value: MinibotsFirstRig
-      objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
       propertyPath: m_Controller
       value: 
@@ -511,15 +473,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021780559136606628}
     m_Modifications:
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Minibot Walk
-      objectReference: {fileID: 0}
     - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_Name
       value: Walk
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Minibot Walk
       objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
@@ -603,6 +565,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1214044774675275346}
     m_Modifications:
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Name
+      value: BlobShadowProjector
+      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -646,10 +612,6 @@ PrefabInstance:
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Name
-      value: BlobShadowProjector
       objectReference: {fileID: 0}
     - target: {fileID: 11900000, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_IgnoreLayers.m_Bits

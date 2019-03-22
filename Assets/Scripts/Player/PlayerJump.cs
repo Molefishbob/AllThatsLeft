@@ -46,15 +46,14 @@ public class PlayerJump : MonoBehaviour, ITimedAction
     private OneShotTimer _beforeTimer;
     private OneShotTimer _holdTimer;
     private bool _canJump;
-    private CharControlBase _character;
+    private PlayerMovement _character;
 
     private void Awake()
     {
-        OneShotTimer[] timers = GetComponents<OneShotTimer>();
-        _afterTimer = timers[0];
-        _beforeTimer = timers[1];
-        _holdTimer = timers[2];
-        _character = GetComponent<CharControlBase>();
+        _afterTimer = gameObject.AddComponent<OneShotTimer>();
+        _beforeTimer = gameObject.AddComponent<OneShotTimer>();
+        _holdTimer = gameObject.AddComponent<OneShotTimer>();
+        _character = GetComponent<PlayerMovement>();
     }
 
     private void Start()

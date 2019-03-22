@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : CharControlBase, IDamageReceiver
+public abstract class PlayerMovement : CharControlBase
 {
     [SerializeField]
-    private string _horizontalAxis = "Horizontal";
+    protected string _horizontalAxis = "Horizontal";
     [SerializeField]
-    private string _verticalAxis = "Vertical";
-    [SerializeField]
-    private string _animatorTriggerDeath = "Dying";
+    protected string _verticalAxis = "Vertical";
 
     [HideInInspector]
     public bool ControlsDisabled
@@ -27,9 +25,9 @@ public class PlayerMovement : CharControlBase, IDamageReceiver
             }
         }
     }
-    private bool _controlsDisabled;
 
-    private PlayerJump _playerJump;
+    protected bool _controlsDisabled;
+    protected PlayerJump _playerJump;
 
     protected override void Awake()
     {
@@ -64,17 +62,5 @@ public class PlayerMovement : CharControlBase, IDamageReceiver
         inputDirection = inputDirection.normalized * desiredSpeed;
 
         return inputDirection;
-    }
-
-    public virtual void TakeDamage(int damage)
-    {
-        Die();
-    }
-
-    public virtual void Die()
-    {
-        //Debug.Log("Player died");
-        //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-        _animator?.SetTrigger(_animatorTriggerDeath);
     }
 }
