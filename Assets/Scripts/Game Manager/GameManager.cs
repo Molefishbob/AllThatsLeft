@@ -173,4 +173,14 @@ public class GameManager : Singleton<GameManager>
         CurrentLevel = 1;
         ChangeScene(CurrentLevel);
     }
+
+    public void ReloadScene()
+    {
+        ChangeScene(CurrentLevel);
+    }
+
+    public void UndoDontDestroy(GameObject go)
+    {
+        SceneManager.MoveGameObjectToScene(go, SceneManager.GetActiveScene());
+    }
 }

@@ -41,7 +41,8 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver, ITimedAction
 
     public void TimedAction()
     {
-        transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
+        GameManager.Instance.LevelManager.ResetLevel();
+        //transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
         _dead = false;
         ControlsDisabled = false;
         _animator?.SetBool(_animatorBoolDeath, false);

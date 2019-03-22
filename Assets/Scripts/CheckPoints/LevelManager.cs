@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    /// <summary>
-    /// Current checkpoint
-    /// </summary>
-    /// <value></value>
-    public CheckPointPole _currentCheckPoint { get; private set; }
+    private int _currentCheckPoint = 0;
     private CheckPointPole[] _allLevelCheckPoints;
-    public PlayerMovement _playerPrefab;
+    public MainCharMovement _playerPrefab;
     public ThirdPersonCamera _cameraPrefab;
     /// <summary>
     /// The pool prefab
@@ -74,7 +70,7 @@ public class LevelManager : MonoBehaviour
 
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.Length > 0)
         {
-            SetCheckpoint(_allLevelCheckPoints[0]);
+            SetCheckpoint(0);
         }
 
         GameManager.Instance.Player.transform.position = GetSpawnLocation();
@@ -87,21 +83,17 @@ public class LevelManager : MonoBehaviour
     /// <returns>Spawn location</returns>
     public Vector3 GetSpawnLocation()
     {
-        if (_currentCheckPoint == null)
+        if (_allLevelCheckPoints == null || _allLevelCheckPoints[_currentCheckPoint] == null)
             return Vector3.zero;
         else
-            return _currentCheckPoint.SpawnPoint.position;
+            return _allLevelCheckPoints[_currentCheckPoint].SpawnPoint.position;
     }
 
-    public void SetCheckpoint(CheckPointPole cp)
+    public void SetCheckpoint(int id)
     {
-        if (_currentCheckPoint == null)
+        if (id > _currentCheckPoint)
         {
-            _currentCheckPoint = cp;
-        }
-        else if (_currentCheckPoint.id < cp.id)
-        {
-            _currentCheckPoint = cp;
+            _currentCheckPoint = id;
         }
     }
 
@@ -129,5 +121,17 @@ public class LevelManager : MonoBehaviour
             }
             sorted = !swapped;
         }
+    }
+
+    public void ResetLevel()
+    {
+        GameManager.Instance.BotPool.ResetPool();
+        GameManager.Instance.FrogEnemyPool?.ResetPool();
+        GameManager.Instance.PatrolEnemyPool?.ResetPool();
+        DontDestroyOnLoad(gameObject);
+        GameManager.Instance.ReloadScene();
+        GameManager.Instance.UndoDontDestroy(gameObject);
+        Awake();
+        Start();
     }
 }

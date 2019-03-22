@@ -13,15 +13,17 @@ public class CheckPointPole : MonoBehaviour
     /// </summary>
     /// <value></value>
     public Transform SpawnPoint { get { return _SpawnPoint; } }
+    private Collider _collider;
 
     void Awake()
     {
         _SpawnPoint = transform.GetChild(0);
+        _collider = GetComponent<Collider>();
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (1 << other.gameObject.layer == _PlayerLayer)
-            GameManager.Instance.LevelManager.SetCheckpoint(this);
+        GameManager.Instance.LevelManager.SetCheckpoint(id);
+        _collider.enabled = false;
     }
 }

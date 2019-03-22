@@ -57,4 +57,12 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
         _pool.Add(obj);
         return obj;
     }
+
+    public void ResetPool()
+    {
+        foreach (T item in _pool)
+        {
+            item.gameObject.SetActive(false);
+        }
+    }
 }
