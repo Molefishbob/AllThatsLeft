@@ -2,18 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void ValueChanged( int amount );
-public enum MiniBotAbility {
-        Hack,
-        Bomb,
-        Tramp
-    }
+public delegate void ValueChangedInt(int amount);
+public delegate void ValueChangedFloat(float amount);
+public delegate void ValueChangedBool(bool value);
+
+public enum MiniBotAbility
+{
+    Hack,
+    Bomb,
+    Tramp
+}
+
 public class GameManager : Singleton<GameManager>
 {
     // (Optional) Prevent non-singleton constructor use.
     protected GameManager() { }
-    public event ValueChanged OnBotAmountChanged;
-    public event ValueChanged OnMaximumBotAmountChanged;
+    public event ValueChangedInt OnBotAmountChanged;
+    public event ValueChangedInt OnMaximumBotAmountChanged;
     private HashSet<IPauseable> _pauseables = new HashSet<IPauseable>();
 
     /// <summary>
@@ -89,7 +94,7 @@ public class GameManager : Singleton<GameManager>
     public PatrolEnemyPool PatrolEnemyPool;
     public FrogEnemyPool FrogEnemyPool;
 
-    public NoZoomThirdPersonCam Camera;
+    public ThirdPersonCamera Camera;
 
     private float _timeScaleBeforePause = 1.0f;
 
