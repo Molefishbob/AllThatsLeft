@@ -86,6 +86,7 @@ public class LevelManager : MonoBehaviour
 
         GameManager.Instance.Player.transform.position = GetSpawnLocation();
         GameManager.Instance.Player.SetControllerActive(true);
+        GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
     }
 
     /// <summary>
