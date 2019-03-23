@@ -63,7 +63,6 @@ public abstract class CharControlBase : MonoBehaviour
         if (transform.position.y <= _minYPosition)
         {
             OutOfBounds();
-            return;
         }
 
         if (_controllerEnabled)

@@ -41,6 +41,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver, ITimedAction
 
     public void TimedAction()
     {
+        SetControllerActive(false);
         GameManager.Instance.LevelManager.ResetLevel();
         //transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
         _dead = false;
@@ -55,7 +56,6 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver, ITimedAction
         {
             _dead = true;
             ControlsDisabled = true;
-            SetControllerActive(false);
             _deathTimer.StartTimer(_deathTime);
         }
     }
