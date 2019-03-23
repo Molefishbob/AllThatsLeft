@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericEnvironmentDanger : MonoBehaviour, ITimedAction
+public abstract class GenericEnvironmentDanger : MonoBehaviour
 {
-    protected OneShotTimer _timer;
+    protected PhysicsOneShotTimer _timer;
 
     protected virtual void Awake()
     {
-        _timer = UnityEngineExtensions.GetOrAddComponent<OneShotTimer>(gameObject);
+        _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsOneShotTimer>(gameObject);
     }
 
     protected virtual void Start()
     {
-        _timer.SetTimerTarget(this);
+        _timer.OnTimerCompleted += TimedAction;
     }
 
-    protected virtual void FixedUpdate()
+    protected virtual void OnDestroy()
     {
-        
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= TimedAction;
+        }
     }
 
     protected void DoDamage(Collider other)

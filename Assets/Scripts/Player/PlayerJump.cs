@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
+public class PlayerJump : MonoBehaviour, IPauseable
 {
     [SerializeField]
     private float _maxHeight = 2.5f;
@@ -34,7 +34,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
             _afterTimer.StopTimer();
             _beforeTimer.StopTimer();
             _holdTimer.StopTimer();
-            TimedAction();
+            EndAfterLeeway();
         }
     }
     private bool _controlsDisabled;
@@ -42,9 +42,9 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private Vector3 _currentJumpForce;
     private bool _jumping;
     private bool _forcedJumping;
-    private OneShotTimer _afterTimer;
-    private OneShotTimer _beforeTimer;
-    private OneShotTimer _holdTimer;
+    private ScaledOneShotTimer _afterTimer;
+    private ScaledOneShotTimer _beforeTimer;
+    private ScaledOneShotTimer _holdTimer;
     private bool _canJump;
     private PlayerMovement _character;
 
@@ -62,9 +62,9 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 
     private void Awake()
     {
-        _afterTimer = gameObject.AddComponent<OneShotTimer>();
-        _beforeTimer = gameObject.AddComponent<OneShotTimer>();
-        _holdTimer = gameObject.AddComponent<OneShotTimer>();
+        _afterTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _beforeTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _holdTimer = gameObject.AddComponent<ScaledOneShotTimer>();
         _character = GetComponent<PlayerMovement>();
     }
 
@@ -72,7 +72,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     {
         _paused = GameManager.Instance.GamePaused;
         GameManager.Instance.AddPauseable(this);
-        _afterTimer.SetTimerTarget(this);
+        _afterTimer.OnTimerCompleted += EndAfterLeeway;
     }
 
     private void OnDestroy()
@@ -80,6 +80,10 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
         if (GameManager.Instance != null)
         {
             GameManager.Instance.RemovePauseable(this);
+        }
+        if (_afterTimer != null)
+        {
+            _afterTimer.OnTimerCompleted -= EndAfterLeeway;
         }
     }
 
@@ -98,7 +102,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                 }
                 else if (Input.GetButtonDown(_jumpButton))
                 {
-                    _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
+                    _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround);
                 }
             }
         }
@@ -126,11 +130,11 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                 {
                     _beforeTimer.StopTimer();
                     _jumping = true;
-                    TimedAction();
+                    EndAfterLeeway();
                     _afterTimer.StopTimer();
                     _character.ResetGravity();
                     _currentJumpForce = GetJumpForce(_maxHeight);
-                    _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
+                    _holdTimer.StartTimer(_holdTimeForMaxHeight);
                     _sound?.PlaySound();
                     _character._animator?.SetTrigger(_animatorTriggerJump);
                 }
@@ -169,7 +173,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
         _forcedJumping = true;
     }
 
-    public void TimedAction()
+    public void EndAfterLeeway()
     {
         _canJump = false;
     }

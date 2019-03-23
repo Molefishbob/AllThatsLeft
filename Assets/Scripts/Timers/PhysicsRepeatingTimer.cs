@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RepeatingTimer : ScaledTimer
+public class PhysicsRepeatingTimer : Timer
 {
     /// <summary>
     /// How many times the timer has completed.
@@ -14,9 +14,17 @@ public class RepeatingTimer : ScaledTimer
     /// </summary>
     public float TotalTimeElapsed { get { return TimesCompleted * Duration + TimeElapsed; } }
 
-    protected override void CompletedTimer()
+    private void FixedUpdate()
     {
-        _timer -= Duration;
-        TimesCompleted++;
+        if (GameManager.Instance.GamePaused) return;
+        if (!IsRunning) return;
+
+        _timer += Time.deltaTime;
+        if (_timer >= Duration)
+        {
+            _timer -= Duration;
+            TimesCompleted++;
+            CompletedTimer();
+        }
     }
 }

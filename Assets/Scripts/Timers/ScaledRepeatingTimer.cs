@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnscaledRepeatingTimer : Timer
+public class ScaledRepeatingTimer : Timer
 {
     /// <summary>
     /// How many times the timer has completed.
@@ -14,11 +14,12 @@ public class UnscaledRepeatingTimer : Timer
     /// </summary>
     public float TotalTimeElapsed { get { return TimesCompleted * Duration + TimeElapsed; } }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        if (GameManager.Instance.GamePaused) return;
         if (!IsRunning) return;
 
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
         if (_timer >= Duration)
         {
             _timer -= Duration;

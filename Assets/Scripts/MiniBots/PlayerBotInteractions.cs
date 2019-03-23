@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBotInteractions : MonoBehaviour , ITimedAction
+public class PlayerBotInteractions : MonoBehaviour
 {
     [SerializeField]
     private float _fDetectRadius = 2;
@@ -32,14 +32,27 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
     private bool _bReleasing = false;
     [SerializeField]
     private float _fReleaseDelay = 2;
-    private OneShotTimer _ostRelease;
+    private ScaledOneShotTimer _ostRelease;
     private GameObject[] _goTarget = null;
     private PlayerMovement _selfMover;
 
     void Awake()
     {
         _selfMover = GetComponent<PlayerMovement>();
-        _ostRelease = gameObject.AddComponent(typeof(OneShotTimer)) as OneShotTimer;
+        _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
+    }
+
+    private void Start()
+    {
+        _ostRelease.OnTimerCompleted += ActualRelease;
+    }
+
+    private void OnDestroy()
+    {
+        if (_ostRelease != null)
+        {
+            _ostRelease.OnTimerCompleted -= ActualRelease;
+        }
     }
 
     void Update()
@@ -137,14 +150,13 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
         {
             _selfMover.ControlsDisabled = true;
             _bReleasing = true;
-            _ostRelease.SetTimerTarget(this);
             _ostRelease.StartTimer(_fReleaseDelay);
         }
         else
         {
             _selfMover.ControlsDisabled = true;
             _bReleasing = true;
-            TimedAction();
+            ActualRelease();
         }
     }
 
@@ -158,7 +170,7 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
         }
     }
 
-    public void TimedAction()
+    private void ActualRelease()
     {
         GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
         _bactive = false;

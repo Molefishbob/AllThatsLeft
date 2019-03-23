@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInteraction
+public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 {
 
     [Tooltip("The amount of time it takes to go the whole length")]
@@ -16,13 +16,13 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     protected float _length;
     protected float _ogStartTime;
     protected int _trackRecord = 0;
-    protected RepeatingTimer _timer;
+    protected PhysicsRepeatingTimer _timer;
     [SerializeField]
     protected bool _activated = true;
 
     protected virtual void Awake()
     {
-        _timer = UnityEngineExtensions.GetOrAddComponent<RepeatingTimer>(gameObject);
+        _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsRepeatingTimer>(gameObject);
         _transform = new List<Transform>(transform.parent.childCount);
 
         foreach (Transform child in transform.parent) {
@@ -37,10 +37,19 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     // Start is called before the first frame update
     void Start()
     {
+        _timer.OnTimerCompleted += TimedAction;
         transform.position = _transform[0].position;
         if (_activated)
         {
             Init();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= TimedAction;
         }
     }
 
@@ -54,7 +63,6 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     {
         _length = 0;
 
-        _timer.SetTimerTarget(this);
         _timer.StartTimer(_duration);
 
         for (int a = 0; a < _transform.Count-1; a++)
@@ -67,7 +75,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     /// 
     /// Defines what happens when the timer has completed.
     /// </summary>
-    public virtual void TimedAction() { }
+    protected virtual void TimedAction() { }
     /// <summary>
     /// Defines what happens when a connected console is hacked
     /// </summary>
