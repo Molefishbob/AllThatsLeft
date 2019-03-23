@@ -162,6 +162,16 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void ActivateGame(bool active)
+    {
+        Player?.gameObject.SetActive(active);
+        Camera?.gameObject.SetActive(active);
+        BotPool?.gameObject.SetActive(active);
+        FrogEnemyPool?.gameObject.SetActive(active);
+        PatrolEnemyPool?.gameObject.SetActive(active);
+        Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
     /// <summary>
     /// Quits the game to desktop.
     /// </summary>
@@ -177,7 +187,15 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
-        SceneManager.LoadScene(id);
+        if (id >= SceneManager.sceneCountInBuildSettings)
+        {
+            Debug.LogWarning("No scene with ID: " + id);
+            ChangeToMainMenu();
+        }
+        else
+        {
+            SceneManager.LoadScene(id);
+        }
     }
 
     /// <summary>
@@ -185,6 +203,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ChangeToMainMenu()
     {
+        ActivateGame(false);
         ChangeScene(0);
     }
 
@@ -206,6 +225,9 @@ public class GameManager : Singleton<GameManager>
         ChangeScene(CurrentLevel);
     }
 
+    /// <summary>
+    /// Continue game from a saved checkpoint.
+    /// </summary>
     public void ContinueGame()
     {
         CurrentLevel = PrefsManager.Instance.Level;

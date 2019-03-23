@@ -85,20 +85,31 @@ public class LevelManager : MonoBehaviour
         }
 
         GameManager.Instance.Player.transform.position = GetSpawnLocation();
+        GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
         GameManager.Instance.Player.SetControllerActive(true);
         GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
+
+        GameManager.Instance.ActivateGame(true);
     }
 
     /// <summary>
     /// Gives the spawn location from current checkpoint.
     /// </summary>
     /// <returns>Spawn location</returns>
-    public Vector3 GetSpawnLocation()
+    private Vector3 GetSpawnLocation()
     {
         if (_allLevelCheckPoints == null || _allLevelCheckPoints[_currentCheckPoint] == null)
             return Vector3.zero;
         else
             return _allLevelCheckPoints[_currentCheckPoint].SpawnPoint.position;
+    }
+
+    private Quaternion GetSpawnRotation()
+    {
+        if (_allLevelCheckPoints == null || _allLevelCheckPoints[_currentCheckPoint] == null)
+            return Quaternion.identity;
+        else
+            return _allLevelCheckPoints[_currentCheckPoint].SpawnPoint.rotation;
     }
 
     public void SetCheckpoint(int id)
