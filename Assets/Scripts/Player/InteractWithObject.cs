@@ -7,10 +7,7 @@ public class InteractWithObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         RaycastHit hit;
 

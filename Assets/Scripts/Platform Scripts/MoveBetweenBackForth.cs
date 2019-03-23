@@ -19,10 +19,7 @@ public class MoveBetweenBackForth : GenericMover
     // FixedUpdate is called once per physics update
     void FixedUpdate()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         if (_activated)
         {

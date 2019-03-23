@@ -30,10 +30,7 @@ public class DeployControlledBots : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
         {

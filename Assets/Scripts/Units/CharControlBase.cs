@@ -58,10 +58,7 @@ public abstract class CharControlBase : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         if (transform.position.y <= _minYPosition)
         {

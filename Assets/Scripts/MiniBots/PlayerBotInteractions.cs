@@ -44,10 +44,7 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
 
     void Update()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         // Hack
         if (Input.GetButtonDown(_sHackButton) && _bActive && !_bActing && !_bReleasing)

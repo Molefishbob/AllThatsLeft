@@ -63,10 +63,7 @@ public class PlayerJump : MonoBehaviour, ITimedAction
 
     private void Update()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         if (!ControlsDisabled)
         {
@@ -86,10 +83,7 @@ public class PlayerJump : MonoBehaviour, ITimedAction
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         if (!_forcedJumping)
         {

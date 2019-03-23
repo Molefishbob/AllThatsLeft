@@ -21,10 +21,7 @@ public class CharControlPlatformMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.GamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.GamePaused) return;
 
         RaycastHit hit;
 
