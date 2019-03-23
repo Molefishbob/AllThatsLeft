@@ -5,7 +5,8 @@ using UnityEngine;
 public class ThirdPersonCamera : MonoBehaviour
 {
     public LayerMask _groundLayer;
-    private Transform _lookAt, _oldTarget;
+    private Transform _lookAt;
+    private Vector3 _oldTarget;
     public float _distance = 10.0f;
     public float _maxDistance = 15.0f;
     public float _minDistance = 5.0f;
@@ -100,7 +101,7 @@ public class ThirdPersonCamera : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
             Vector3 dir = new Vector3(0, 0, -_newDistance);
 
-            transform.position = (Vector3.Lerp(_oldTarget.position, _lookAt.position, _lerperHelper)) + rotation * dir ;
+            transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _lerperHelper)) + rotation * dir ;
             _lerperHelper += 0.1f * _targetToTargetSpeed;
 
             if(_lerperHelper >= 1)
@@ -141,13 +142,13 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (trans != _lookAt)
         {
-            _oldTarget = _lookAt;
+            _oldTarget = _lookAt.position;
             _lookAt = trans;
             _movingToTarget = true;
         }
         if(_oldTarget == null)
         {
-            _oldTarget = trans;
+            _oldTarget = trans.position;
         }
     }
 
