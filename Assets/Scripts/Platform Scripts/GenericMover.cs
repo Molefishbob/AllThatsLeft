@@ -88,6 +88,7 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     /// Draws lines between the checkpoints that the platform moves through.
     /// </summary>
     protected virtual void OnDrawGizmosSelected() {
+        if (transform.parent == null) return;
         
         _transform = new List<Transform>(transform.parent.childCount);
 
