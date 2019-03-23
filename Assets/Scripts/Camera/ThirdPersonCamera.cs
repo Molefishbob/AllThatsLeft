@@ -57,7 +57,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnGamePauseChanged += LockCursor;
+            GameManager.Instance.OnGamePauseChanged -= LockCursor;
         }
 
         if (PrefsManager.Instance != null)
