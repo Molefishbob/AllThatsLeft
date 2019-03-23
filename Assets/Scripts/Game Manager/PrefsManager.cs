@@ -12,7 +12,9 @@ public class PrefsManager : Singleton<PrefsManager>
         keyLevel = "Level",
         keyCheckPoint = "Check Point",
         keyInvertCameraY = "Invert Camera Y",
-        keyInvertCameraX = "Invert Camera X";
+        keyInvertCameraX = "Invert Camera X",
+        keyCameraXSensitivity = "Camera X Sensitivity",
+        keyCameraYSensitivity = "Camera Y Sensitivity";
 
     public event ValueChangedInt OnAudioVolumeSFXChanged;
     public event ValueChangedInt OnAudioVolumeMusicChanged;
@@ -23,6 +25,9 @@ public class PrefsManager : Singleton<PrefsManager>
 
     public event ValueChangedBool OnInvertedCameraYChanged;
     public event ValueChangedBool OnInvertedCameraXChanged;
+
+    public event ValueChangedFloat OnCameraXSensitivityChanged;
+    public event ValueChangedFloat OnCameraYSensitivityChanged;
 
     public void Save()
     {
@@ -177,6 +182,38 @@ public class PrefsManager : Singleton<PrefsManager>
             if (OnInvertedCameraXChanged != null)
             {
                 OnInvertedCameraXChanged(value);
+            }
+        }
+    }
+
+    public float CameraXSensitivity
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat(keyCameraXSensitivity, 2.0f);
+        }
+        set
+        {
+            PlayerPrefs.SetFloat(keyCameraXSensitivity, value);
+            if (OnCameraXSensitivityChanged != null)
+            {
+                OnCameraXSensitivityChanged(value);
+            }
+        }
+    }
+
+    public float CameraYSensitivity
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat(keyCameraYSensitivity, 2.0f);
+        }
+        set
+        {
+            PlayerPrefs.SetFloat(keyCameraYSensitivity, value);
+            if (OnCameraYSensitivityChanged != null)
+            {
+                OnCameraYSensitivityChanged(value);
             }
         }
     }
