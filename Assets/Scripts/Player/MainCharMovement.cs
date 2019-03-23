@@ -48,4 +48,15 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver, ITimedAction
         _animator?.SetBool(_animatorBoolDeath, false);
         SetControllerActive(true);
     }
+
+    protected override void OutOfBounds()
+    {
+        if (!_dead)
+        {
+            _dead = true;
+            ControlsDisabled = true;
+            SetControllerActive(false);
+            _deathTimer.StartTimer(_deathTime);
+        }
+    }
 }

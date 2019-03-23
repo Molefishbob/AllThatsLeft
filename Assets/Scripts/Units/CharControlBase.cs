@@ -39,7 +39,6 @@ public abstract class CharControlBase : MonoBehaviour
     private bool _onSlope = false;
     private bool _resetGravity = false;
     private bool _controllerEnabled = true;
-    private IDamageReceiver _damageReceiver = null;
     private bool _airBorne = false;
 
     public bool IsGrounded { get; private set; }
@@ -47,7 +46,6 @@ public abstract class CharControlBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        _damageReceiver = GetComponent<IDamageReceiver>();
         _controller = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
         SetControllerActive(_startsActive);
@@ -67,7 +65,8 @@ public abstract class CharControlBase : MonoBehaviour
 
         if (transform.position.y <= _minYPosition)
         {
-            _damageReceiver.Die();
+            OutOfBounds();
+            return;
         }
 
         if (_controllerEnabled)
@@ -242,4 +241,6 @@ public abstract class CharControlBase : MonoBehaviour
             ResetGravity();
         }
     }
+
+    protected abstract void OutOfBounds();
 }

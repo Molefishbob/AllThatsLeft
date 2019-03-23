@@ -137,4 +137,10 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         _backToPrevious = true;
         _canSpit = false;
     }
+
+    protected override void OutOfBounds()
+    {
+        gameObject.SetActive(false);
+        transform.localPosition = Vector3.zero;
+    }
 }

@@ -22,4 +22,11 @@ public class BotMovement : PlayerMovement, IDamageReceiver
         _pbi.StopActing();
         if (_pbi._bActive) _pbi.ReleaseControls(true);
     }
+
+    protected override void OutOfBounds()
+    {
+        _pbi.ReleaseControls(false);
+        gameObject.SetActive(false);
+        transform.localPosition = Vector3.zero;
+    }
 }

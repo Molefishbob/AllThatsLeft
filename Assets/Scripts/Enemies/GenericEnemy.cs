@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericEnemy : CharControlBase, IDamageReceiver
+public abstract class GenericEnemy : CharControlBase, IDamageReceiver
 {
     protected EnemySpawner _spawner;
 
