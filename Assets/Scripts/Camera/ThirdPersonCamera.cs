@@ -50,6 +50,12 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
         PrefsManager.Instance.OnInvertedCameraYChanged += ChangeInvertY;
         ChangeInvertX(PrefsManager.Instance.InvertedCameraX);
         ChangeInvertY(PrefsManager.Instance.InvertedCameraY);
+
+        PrefsManager.Instance.OnCameraXSensitivityChanged += SetCameraXSensitivity;
+        PrefsManager.Instance.OnCameraYSensitivityChanged += SetCameraYSensitivity;
+        SetCameraXSensitivity(PrefsManager.Instance.CameraXSensitivity);
+        SetCameraYSensitivity(PrefsManager.Instance.CameraYSensitivity);
+
     }
 
     private void Start()
@@ -69,6 +75,8 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
         {
             PrefsManager.Instance.OnInvertedCameraXChanged -= ChangeInvertX;
             PrefsManager.Instance.OnInvertedCameraYChanged -= ChangeInvertY;
+            PrefsManager.Instance.OnCameraXSensitivityChanged -= SetCameraXSensitivity;
+            PrefsManager.Instance.OnCameraYSensitivityChanged -= SetCameraYSensitivity;
         }
     }
 
@@ -182,5 +190,15 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
     private void ChangeInvertY(bool b)
     {
         _invertY = b ? -1 : 1;
+    }
+
+    private void SetCameraXSensitivity(float sens)
+    {
+        _horizontalSensitivity = sens;
+    }
+
+    private void SetCameraYSensitivity(float sens)
+    {
+        _verticalSensitivity = sens;
     }
 }
