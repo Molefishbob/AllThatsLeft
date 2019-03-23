@@ -9,6 +9,8 @@ public class PrefsManager : Singleton<PrefsManager>
         keyMuteSFX = "SFX Mute",
         keyMuteMusic = "Music Mute",
         keyMuteMaster = "Master Mute",
+        keyLevel = "Level",
+        keyCheckPoint = "Check Point",
         keyInvertCameraY = "Invert Camera Y",
         keyInvertCameraX = "Invert Camera X";
 
@@ -120,6 +122,30 @@ public class PrefsManager : Singleton<PrefsManager>
             {
                 OnAudioMuteMasterChanged(value);
             }
+        }
+    }
+
+    public int Level
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyLevel, 1);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyVolumeMaster, value);
+        }
+    }
+
+    public int CheckPoint
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyCheckPoint, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyCheckPoint, value);
         }
     }
 

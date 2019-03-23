@@ -206,6 +206,14 @@ public class GameManager : Singleton<GameManager>
         ChangeScene(CurrentLevel);
     }
 
+    public void ContinueGame()
+    {
+        CurrentLevel = PrefsManager.Instance.Level;
+        ChangeScene(CurrentLevel);
+        LevelManager.SetCheckpoint(PrefsManager.Instance.CheckPoint);
+        LevelManager.ResetLevel();
+    }
+
     /// <summary>
     /// Reloads the active scene.
     /// </summary>

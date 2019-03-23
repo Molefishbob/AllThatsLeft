@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -26,6 +27,9 @@ public class LevelManager : MonoBehaviour
 
     void Awake()
     {
+        PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
+        PrefsManager.Instance.Save();
+
         GameManager.Instance.LevelManager = this;
 
         if (GameManager.Instance.BotPool == null)
@@ -67,12 +71,17 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void Start() {
+    private void Start()
+    {
         SortCheckpoints();
 
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.Length > 0)
         {
             SetCheckpoint(0);
+        }
+        else
+        {
+            Debug.LogError("There are no checkpoints in this level.");
         }
 
         GameManager.Instance.Player.transform.position = GetSpawnLocation();
@@ -96,6 +105,8 @@ public class LevelManager : MonoBehaviour
         if (id > _currentCheckPoint)
         {
             _currentCheckPoint = id;
+            PrefsManager.Instance.CheckPoint = _currentCheckPoint;
+            PrefsManager.Instance.Save();
         }
     }
 
