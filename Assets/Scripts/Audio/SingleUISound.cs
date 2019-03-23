@@ -8,11 +8,14 @@ public class SingleUISound : VolumeControl
     protected float _pitchVariance = 0.25f;
     protected float _basePitch;
 
-    protected virtual void Start()
+    protected override void Awake()
     {
-        _fullVolume = _audioSource.volume;
+        base.Awake();
         _basePitch = _audioSource.pitch;
+    }
 
+    protected virtual void OnEnable()
+    {
         PrefsManager.Instance.OnAudioVolumeSFXChanged += SetVolumeSelf;
         PrefsManager.Instance.OnAudioVolumeMasterChanged += SetVolumeMaster;
         PrefsManager.Instance.OnAudioMuteSFXChanged += MuteSelf;
@@ -22,7 +25,7 @@ public class SingleUISound : VolumeControl
         _audioSource.mute = PrefsManager.Instance.AudioMuteSFX || PrefsManager.Instance.AudioMuteMaster;
     }
 
-    protected virtual void OnDestroy()
+    protected virtual void OnDisable()
     {
         if (PrefsManager.Instance != null)
         {

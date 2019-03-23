@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class SingleSFXSound : SingleUISound
 {
-    protected override void Start()
+    protected override void OnEnable()
     {
-        base.Start();
+        base.OnEnable();
 
         GameManager.Instance.OnGamePauseChanged += Pause;
     }
 
-    protected override void OnDestroy()
+    protected override void OnDisable()
     {
-        base.OnDestroy();
+        base.OnDisable();
 
         if (GameManager.Instance != null)
         {

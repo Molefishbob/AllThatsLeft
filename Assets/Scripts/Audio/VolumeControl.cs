@@ -15,6 +15,7 @@ public abstract class VolumeControl : MonoBehaviour
     protected virtual void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
+        _fullVolume = _audioSource.volume;
     }
 
     protected void SetVolumeSelf(int volume)
