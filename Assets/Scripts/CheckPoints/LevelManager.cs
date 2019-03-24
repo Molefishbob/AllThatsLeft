@@ -10,18 +10,12 @@ public class LevelManager : MonoBehaviour
     /// <value></value>
     public CheckPointPole _currentCheckPoint { get; private set; }
     private CheckPointPole[] _allLevelCheckPoints;
+    public PlayerMovement _playerPrefab;
+    public ThirdPersonCamera _cameraPrefab;
     /// <summary>
     /// The pool prefab
     /// </summary>
-    public BombPool _bombPoolPrefab;
-    /// <summary>
-    /// The pool prefab
-    /// </summary>
-    public TrampPool _trampPoolPrefab;
-    /// <summary>
-    /// The pool prefab
-    /// </summary>
-    public HackPool _hackPoolPrefab;
+    public ControlledBotPool _botPoolPrefab;
     /// <summary>
     /// The pool prefab
     /// </summary>
@@ -31,29 +25,19 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
 
-
-    public bool _levelNeedsBombBots;
-    public bool _levelNeedsTrampBots;
-    public bool _levelNeedsHackBots;
     public bool _levelNeedsFrogEnemies;
     public bool _levelNeedsPatrolEnemies;
 
     void Awake()
     {
         GameManager.Instance.LevelManager = this;
-        if (_levelNeedsBombBots && GameManager.Instance.BombPool == null)
+
+        if (GameManager.Instance.BotPool == null)
         {
-            GameManager.Instance.BombPool = Instantiate(_bombPoolPrefab);
+            GameManager.Instance.BotPool = Instantiate(_botPoolPrefab);
         }
-        if (_levelNeedsTrampBots && GameManager.Instance.TrampPool == null)
-        {
-            GameManager.Instance.TrampPool = Instantiate(_trampPoolPrefab);
-        }
-        if (_levelNeedsHackBots && GameManager.Instance.HackPool == null)
-        {
-            GameManager.Instance.HackPool = Instantiate(_hackPoolPrefab);
-        }
-        if(_levelNeedsFrogEnemies && GameManager.Instance.FrogEnemyPool == null)
+
+        if (_levelNeedsFrogEnemies && GameManager.Instance.FrogEnemyPool == null)
         {
             GameManager.Instance.FrogEnemyPool = Instantiate(_frogPoolPrefab);
         }
@@ -61,8 +45,40 @@ public class LevelManager : MonoBehaviour
         {
             GameManager.Instance.PatrolEnemyPool = Instantiate(_patrolEnemyPoolPrefab);
         }
+
         _allLevelCheckPoints = FindObjectsOfType<CheckPointPole>();
-        _allLevelCheckPoints = SortCheckpoints(_allLevelCheckPoints);
+
+        if (GameManager.Instance.Player == null)
+        {
+            PlayerMovement player = FindObjectOfType<PlayerMovement>();
+            if (player == null)
+            {
+                player = Instantiate(_playerPrefab);
+            }
+            GameManager.Instance.Player = player;
+        }
+
+        if (GameManager.Instance.Camera == null)
+        {
+            ThirdPersonCamera camera = FindObjectOfType<ThirdPersonCamera>();
+            if (camera == null)
+            {
+                camera = Instantiate(_cameraPrefab);
+            }
+            GameManager.Instance.Camera = camera;
+        }
+    }
+
+    private void Start() {
+        SortCheckpoints();
+
+        if (_allLevelCheckPoints != null && _allLevelCheckPoints.Length > 0)
+        {
+            SetCheckpoint(_allLevelCheckPoints[0]);
+        }
+
+        GameManager.Instance.Player.transform.position = GetSpawnLocation();
+        GameManager.Instance.Player.SetControllerActive(true);
     }
 
     /// <summary>
@@ -71,7 +87,7 @@ public class LevelManager : MonoBehaviour
     /// <returns>Spawn location</returns>
     public Vector3 GetSpawnLocation()
     {
-        if (_currentCheckPoint = null)
+        if (_currentCheckPoint == null)
             return Vector3.zero;
         else
             return _currentCheckPoint.SpawnPoint.position;
@@ -89,22 +105,22 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private CheckPointPole[] SortCheckpoints(CheckPointPole[] _cp)
+    private void SortCheckpoints()
     {
         bool sorted = false;
         while (!sorted)
         {
             bool swapped = false;
-            for (int i = 0; i < _cp.Length - 1; i++)
+            for (int i = 0; i < _allLevelCheckPoints.Length - 1; i++)
             {
-                if (_cp[i].id > _cp[i+1].id)
+                if (_allLevelCheckPoints[i].id > _allLevelCheckPoints[i + 1].id)
                 {
-                    CheckPointPole tmp = _cp[i];
-                    _cp[i] = _cp[i+1];
-                    _cp[i+1] = tmp;
+                    CheckPointPole tmp = _allLevelCheckPoints[i];
+                    _allLevelCheckPoints[i] = _allLevelCheckPoints[i + 1];
+                    _allLevelCheckPoints[i + 1] = tmp;
                     swapped = true;
-                } 
-                else if (_cp[i].id == _cp[i+1].id)
+                }
+                else if (_allLevelCheckPoints[i].id == _allLevelCheckPoints[i + 1].id)
                 {
                     Debug.LogError("THERE ARE 2 OR MORE CHECKPOINTS WITH SAME ID!! FIX!!");
                     swapped = false;
@@ -113,6 +129,5 @@ public class LevelManager : MonoBehaviour
             }
             sorted = !swapped;
         }
-        return null;
     }
 }

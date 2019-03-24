@@ -11,7 +11,6 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     public bool _bDebug;
     private Transform _tPool;
     protected OneShotTimer _lifeTimeTimer;
-    protected Animator _animator;
 
     protected override void Awake()
     {
@@ -41,14 +40,30 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     protected override void FixedUpdateAdditions()
     {
         if ((_controller.collisionFlags & CollisionFlags.CollidedSides) != 0)
+        {
             _bMoving = false;
+            if (_animator != null)
+                _animator.SetTrigger("Stop");
+        }
+            
         RaycastHit hit;
-        int tmpLayerMask = 1 << 12;
-        if (Physics.SphereCast(transform.position + new Vector3(0,_controller.height,0) + transform.forward, 0.1f, Vector3.down, out hit, _controller.height * 1.1f, tmpLayerMask))
-        {}
+        int tmpLayerMask = (1 << 12) | (1 << 13);
+        if (_bMoving && Physics.SphereCast(transform.position + new Vector3(0,_controller.height,0) + transform.forward, 
+                                0.1f, Vector3.down, out hit, _controller.height + _controller.stepOffset, tmpLayerMask))
+        {
+            if (hit.transform.gameObject.layer == 13)
+            {
+                transform.position = hit.point;
+                _bMoving = false;
+                if (_animator != null)
+                _animator.SetTrigger("Stop");
+            }
+        }
         else if (_bMoving)
         {
             _bMoving = false;
+            if (_animator != null)
+                _animator.SetTrigger("Stop");
         }
     }
 

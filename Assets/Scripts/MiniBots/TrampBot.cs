@@ -7,8 +7,8 @@ public class TrampBot : GenericBot
     public float _fMaxJumpHeight = 10;
     const int _iPlayerLayer = 10;
     private PlayerJump _PlayerMover;
-    private ThirdPersonPlayerMovement _Player;
-    private bool _bCanBounce = false;
+    private PlayerMovement _Player;
+    //private bool _bCanBounce = false;
     private TopOfThetramp tott;
 
     protected override void Awake()

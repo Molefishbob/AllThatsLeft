@@ -20,7 +20,7 @@ public class AudioManager : Singleton<AudioManager>
     private bool _muteUI;
     private bool _muteMaster;
 
-    private void Awake()
+    public void Init()
     {
         _volumeSFX = PrefsManager.Instance.AudioVolumeSFX;
         _volumeMusic = PrefsManager.Instance.AudioVolumeMusic;

@@ -73,6 +73,7 @@ public class MoveBetweenLoop : GenericMover
     /// </summary>
     protected override void OnDrawGizmosSelected()
     {
+        if (transform.parent == null) return;
 
         _transform = new List<Transform>(transform.parent.childCount);
 

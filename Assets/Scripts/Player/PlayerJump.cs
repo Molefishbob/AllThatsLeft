@@ -18,6 +18,26 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private float _holdTimeForMaxHeight = 0.5f;
     [SerializeField]
     private RandomSFXSound _sound = null;
+    [SerializeField]
+    private string _animatorTriggerJump = "Jump";
+
+    [HideInInspector]
+    public bool ControlsDisabled
+    {
+        get
+        {
+            return _controlsDisabled;
+        }
+        set
+        {
+            _controlsDisabled = value;
+            _afterTimer.StopTimer();
+            _beforeTimer.StopTimer();
+            _holdTimer.StopTimer();
+            TimedAction();
+        }
+    }
+    private bool _controlsDisabled;
 
     private Vector3 _currentJumpForce;
     private bool _jumping;
@@ -26,6 +46,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private OneShotTimer _beforeTimer;
     private OneShotTimer _holdTimer;
     private bool _canJump;
+    private PlayerMovement _character;
 
     private bool _paused;
 
@@ -41,10 +62,10 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 
     private void Awake()
     {
-        OneShotTimer[] timers = GetComponents<OneShotTimer>();
-        _afterTimer = timers[0];
-        _beforeTimer = timers[1];
-        _holdTimer = timers[2];
+        _afterTimer = gameObject.AddComponent<OneShotTimer>();
+        _beforeTimer = gameObject.AddComponent<OneShotTimer>();
+        _holdTimer = gameObject.AddComponent<OneShotTimer>();
+        _character = GetComponent<PlayerMovement>();
     }
 
     private void Start()
@@ -66,16 +87,19 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     {
         if (!_paused)
         {
-            if (_jumping)
+            if (!ControlsDisabled)
             {
-                if (Input.GetButtonUp(_jumpButton) && _holdTimer.IsRunning)
+                if (_jumping)
                 {
-                    _currentJumpForce = GetJumpForce(_minHeight);
+                    if (Input.GetButtonUp(_jumpButton) && _holdTimer.IsRunning)
+                    {
+                        _currentJumpForce = GetJumpForce(_minHeight);
+                    }
                 }
-            }
-            else if (Input.GetButtonDown(_jumpButton))
-            {
-                _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
+                else if (Input.GetButtonDown(_jumpButton))
+                {
+                    _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
+                }
             }
         }
     }
@@ -88,7 +112,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
             {
                 if (!_jumping)
                 {
-                    if (GameManager.Instance.Player.IsGrounded)
+                    if (_character.IsGrounded)
                     {
                         _canJump = true;
                     }
@@ -104,25 +128,26 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
                     _jumping = true;
                     TimedAction();
                     _afterTimer.StopTimer();
-                    GameManager.Instance.Player.ResetGravity();
+                    _character.ResetGravity();
                     _currentJumpForce = GetJumpForce(_maxHeight);
                     _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
-                    _sound.PlaySound();
+                    _sound?.PlaySound();
+                    _character._animator?.SetTrigger(_animatorTriggerJump);
                 }
             }
 
             if (_jumping || _forcedJumping)
             {
 
-                if (_currentJumpForce.magnitude * Time.deltaTime < GameManager.Instance.Player.CurrentGravity)
+                if (_currentJumpForce.magnitude * Time.deltaTime < _character.CurrentGravity)
                 {
-                    GameManager.Instance.Player.ResetGravity();
+                    _character.ResetGravity();
                     _jumping = false;
                     _forcedJumping = false;
                 }
                 else
                 {
-                    GameManager.Instance.Player.AddDirectMovement(_currentJumpForce * Time.deltaTime);
+                    _character.AddDirectMovement(_currentJumpForce * Time.deltaTime);
                 }
             }
         }
@@ -139,7 +164,7 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     /// <param name="height">height in meters</param>
     public void ForceJump(float height)
     {
-        GameManager.Instance.Player.ResetGravity();
+        _character.ResetGravity();
         _currentJumpForce = GetJumpForce(height);
         _forcedJumping = true;
     }
