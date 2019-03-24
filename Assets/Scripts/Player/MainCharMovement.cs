@@ -41,10 +41,22 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver, ITimedAction
 
     public void TimedAction()
     {
-        transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
+        SetControllerActive(false);
+        GameManager.Instance.LevelManager.ResetLevel();
+        //transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
         _dead = false;
         ControlsDisabled = false;
         _animator?.SetBool(_animatorBoolDeath, false);
         SetControllerActive(true);
+    }
+
+    protected override void OutOfBounds()
+    {
+        if (!_dead)
+        {
+            _dead = true;
+            ControlsDisabled = true;
+            _deathTimer.StartTimer(_deathTime);
+        }
     }
 }

@@ -123,4 +123,8 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     {
         ResetBot();
     }
+    protected override void OutOfBounds()
+    {
+        gameObject.SetActive(false);
+    }
 }

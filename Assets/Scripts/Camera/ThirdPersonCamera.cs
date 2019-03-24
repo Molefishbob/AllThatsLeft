@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonCamera : MonoBehaviour, IPauseable
+public class ThirdPersonCamera : MonoBehaviour
 {
     public LayerMask _groundLayer;
-    private Transform _lookAt, _oldTarget;
+    private Transform _lookAt;
+    private Vector3 _oldTarget;
     public float _distance = 10.0f;
     public float _maxDistance = 15.0f;
     public float _minDistance = 5.0f;
@@ -23,7 +24,6 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
     [Tooltip("How fast the camera moves to the new target")]
     public float _targetToTargetSpeed = 1;
     private float _lerperHelper = 0;
-    private bool _paused;
     private bool _movingToTarget;
     private float _newDistance;
     private int _invertX = 1;
@@ -32,20 +32,16 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
 
-    public void Pause()
-    {
-        _paused = true;
-    }
-
-    public void UnPause()
-    {
-        _paused = false;
-    }
-
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         _newDistance = _distance;
+    }
+
+    private void OnEnable()
+    {
+        LockCursor(GameManager.Instance.GamePaused);
+        GameManager.Instance.OnGamePauseChanged += LockCursor;
+
         PrefsManager.Instance.OnInvertedCameraXChanged += ChangeInvertX;
         PrefsManager.Instance.OnInvertedCameraYChanged += ChangeInvertY;
         ChangeInvertX(PrefsManager.Instance.InvertedCameraX);
@@ -55,22 +51,15 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
         PrefsManager.Instance.OnCameraYSensitivityChanged += SetCameraYSensitivity;
         SetCameraXSensitivity(PrefsManager.Instance.CameraXSensitivity);
         SetCameraYSensitivity(PrefsManager.Instance.CameraYSensitivity);
-
     }
 
-    private void Start()
-    {
-        _paused = GameManager.Instance.GamePaused;
-        GameManager.Instance.AddPauseable(this);
-        GetInstantNewTarget(GameManager.Instance.Player.transform.Find(_cameraTargetName));
-    }
-
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.RemovePauseable(this);
+            GameManager.Instance.OnGamePauseChanged -= LockCursor;
         }
+
         if (PrefsManager.Instance != null)
         {
             PrefsManager.Instance.OnInvertedCameraXChanged -= ChangeInvertX;
@@ -82,14 +71,19 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
 
     private void Update()
     {
+        if (GameManager.Instance.GamePaused) return;
+
+        if (_lookAt == null) return;
+
         if (!_movingToTarget)
         {
             _distance += (Input.GetAxis("Scroll")) * _zoomSpeed;
 
-            if(_distance < _minDistance)
+            if (_distance < _minDistance)
             {
                 _distance = _minDistance;
-            }else if (_distance > _maxDistance)
+            }
+            else if (_distance > _maxDistance)
             {
                 _distance = _maxDistance;
             }
@@ -120,10 +114,10 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
             Vector3 dir = new Vector3(0, 0, -_newDistance);
 
-            transform.position = (Vector3.Lerp(_oldTarget.position, _lookAt.position, _lerperHelper)) + rotation * dir ;
+            transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _lerperHelper)) + rotation * dir;
             _lerperHelper += 0.1f * _targetToTargetSpeed;
 
-            if(_lerperHelper >= 1)
+            if (_lerperHelper >= 1)
             {
                 _movingToTarget = false;
                 _lerperHelper = 0;
@@ -139,7 +133,7 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
         if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
         {
             //Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
-            
+
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
         }
@@ -161,13 +155,13 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
 
         if (trans != _lookAt)
         {
-            _oldTarget = _lookAt;
+            _oldTarget = _lookAt.position;
             _lookAt = trans;
             _movingToTarget = true;
         }
-        if(_oldTarget == null)
+        if (_oldTarget == null)
         {
-            _oldTarget = trans;
+            _oldTarget = trans.position;
         }
     }
 
@@ -179,7 +173,7 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
             trans = tf;
         }
 
-        _lookAt = trans;  
+        _lookAt = trans;
     }
 
     private void ChangeInvertX(bool b)
@@ -200,5 +194,10 @@ public class ThirdPersonCamera : MonoBehaviour, IPauseable
     private void SetCameraYSensitivity(float sens)
     {
         _verticalSensitivity = sens;
+    }
+
+    private void LockCursor(bool paused)
+    {
+        Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
     }
 }

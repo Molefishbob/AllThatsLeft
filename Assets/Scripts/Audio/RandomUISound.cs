@@ -14,11 +14,6 @@ public class RandomUISound : SingleUISound
         _sounds = Resources.LoadAll<AudioClip>(_resourceFolder);
     }
 
-    public override void PlaySound()
-    {
-        PlaySound(true, Random.Range(0, _sounds.Length));
-    }
-
     public override void PlaySound(bool usePitch)
     {
         PlaySound(usePitch, Random.Range(0, _sounds.Length));
@@ -34,6 +29,10 @@ public class RandomUISound : SingleUISound
         if (usePitch)
         {
             RandomizePitch();
+        }
+        else
+        {
+            _audioSource.pitch = _basePitch;
         }
         index = Mathf.Clamp(index, 0, _sounds.Length);
         _audioSource.PlayOneShot(_sounds[index]);

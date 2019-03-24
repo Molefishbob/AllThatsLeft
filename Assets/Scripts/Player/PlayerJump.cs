@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
+public class PlayerJump : MonoBehaviour, ITimedAction
 {
     [SerializeField]
     private float _maxHeight = 2.5f;
@@ -48,18 +48,6 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
     private bool _canJump;
     private PlayerMovement _character;
 
-    private bool _paused;
-
-    public void Pause()
-    {
-        _paused = true;
-    }
-
-    public void UnPause()
-    {
-        _paused = false;
-    }
-
     private void Awake()
     {
         _afterTimer = gameObject.AddComponent<OneShotTimer>();
@@ -70,85 +58,73 @@ public class PlayerJump : MonoBehaviour, IPauseable, ITimedAction
 
     private void Start()
     {
-        _paused = GameManager.Instance.GamePaused;
-        GameManager.Instance.AddPauseable(this);
         _afterTimer.SetTimerTarget(this);
-    }
-
-    private void OnDestroy()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RemovePauseable(this);
-        }
     }
 
     private void Update()
     {
-        if (!_paused)
+        if (GameManager.Instance.GamePaused) return;
+
+        if (!ControlsDisabled)
         {
-            if (!ControlsDisabled)
+            if (_jumping)
             {
-                if (_jumping)
+                if (Input.GetButtonUp(_jumpButton) && _holdTimer.IsRunning)
                 {
-                    if (Input.GetButtonUp(_jumpButton) && _holdTimer.IsRunning)
-                    {
-                        _currentJumpForce = GetJumpForce(_minHeight);
-                    }
+                    _currentJumpForce = GetJumpForce(_minHeight);
                 }
-                else if (Input.GetButtonDown(_jumpButton))
-                {
-                    _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
-                }
+            }
+            else if (Input.GetButtonDown(_jumpButton))
+            {
+                _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround, false);
             }
         }
     }
 
     private void FixedUpdate()
     {
-        if (!_paused)
-        {
-            if (!_forcedJumping)
-            {
-                if (!_jumping)
-                {
-                    if (_character.IsGrounded)
-                    {
-                        _canJump = true;
-                    }
-                    else if (_canJump == true && !_afterTimer.IsRunning)
-                    {
-                        _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
-                    }
-                }
+        if (GameManager.Instance.GamePaused) return;
 
-                if (_canJump && _beforeTimer.IsRunning)
+        if (!_forcedJumping)
+        {
+            if (!_jumping)
+            {
+                if (_character.IsGrounded)
                 {
-                    _beforeTimer.StopTimer();
-                    _jumping = true;
-                    TimedAction();
-                    _afterTimer.StopTimer();
-                    _character.ResetGravity();
-                    _currentJumpForce = GetJumpForce(_maxHeight);
-                    _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
-                    _sound?.PlaySound();
-                    _character._animator?.SetTrigger(_animatorTriggerJump);
+                    _canJump = true;
+                }
+                else if (_canJump == true && !_afterTimer.IsRunning)
+                {
+                    _afterTimer.StartTimer(_leewayTimeAfterLeavingGround);
                 }
             }
 
-            if (_jumping || _forcedJumping)
+            if (_canJump && _beforeTimer.IsRunning)
             {
+                _beforeTimer.StopTimer();
+                _jumping = true;
+                TimedAction();
+                _afterTimer.StopTimer();
+                _character.ResetGravity();
+                _currentJumpForce = GetJumpForce(_maxHeight);
+                _holdTimer.StartTimer(_holdTimeForMaxHeight, false);
+                _sound?.PlaySound();
+                _character._animator?.SetTrigger(_animatorTriggerJump);
+            }
+        }
 
-                if (_currentJumpForce.magnitude * Time.deltaTime < _character.CurrentGravity)
-                {
-                    _character.ResetGravity();
-                    _jumping = false;
-                    _forcedJumping = false;
-                }
-                else
-                {
-                    _character.AddDirectMovement(_currentJumpForce * Time.deltaTime);
-                }
+        if (_jumping || _forcedJumping)
+        {
+
+            if (_currentJumpForce.magnitude * Time.deltaTime < _character.CurrentGravity)
+            {
+                _character.ResetGravity();
+                _jumping = false;
+                _forcedJumping = false;
+            }
+            else
+            {
+                _character.AddDirectMovement(_currentJumpForce * Time.deltaTime);
             }
         }
     }

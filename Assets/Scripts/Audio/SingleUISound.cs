@@ -8,10 +8,32 @@ public class SingleUISound : VolumeControl
     protected float _pitchVariance = 0.25f;
     protected float _basePitch;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         _basePitch = _audioSource.pitch;
+    }
+
+    protected virtual void OnEnable()
+    {
+        PrefsManager.Instance.OnAudioVolumeSFXChanged += SetVolumeSelf;
+        PrefsManager.Instance.OnAudioVolumeMasterChanged += SetVolumeMaster;
+        PrefsManager.Instance.OnAudioMuteSFXChanged += MuteSelf;
+        PrefsManager.Instance.OnAudioMuteMasterChanged += MuteMaster;
+
+        _audioSource.volume = PrefsManager.Instance.AudioVolumeSFX * PrefsManager.Instance.AudioVolumeMaster * _fullVolume;
+        _audioSource.mute = PrefsManager.Instance.AudioMuteSFX || PrefsManager.Instance.AudioMuteMaster;
+    }
+
+    protected virtual void OnDisable()
+    {
+        if (PrefsManager.Instance != null)
+        {
+            PrefsManager.Instance.OnAudioVolumeSFXChanged -= SetVolumeSelf;
+            PrefsManager.Instance.OnAudioVolumeMasterChanged -= SetVolumeMaster;
+            PrefsManager.Instance.OnAudioMuteSFXChanged -= MuteSelf;
+            PrefsManager.Instance.OnAudioMuteMasterChanged -= MuteMaster;
+        }
     }
 
     protected void RandomizePitch()
@@ -44,11 +66,20 @@ public class SingleUISound : VolumeControl
         {
             RandomizePitch();
         }
+        else
+        {
+            _audioSource.pitch = _basePitch;
+        }
         _audioSource.Play();
     }
 
-    protected override void SetSoundType()
+    protected override void SetVolumeMaster(int volume)
     {
-        _soundType = SoundType.Interface;
+        _audioSource.volume = (float)(volume * PrefsManager.Instance.AudioVolumeSFX) * _fullVolume / 10000f;
+    }
+
+    protected override void MuteMaster(bool muted)
+    {
+        _audioSource.mute = muted || PrefsManager.Instance.AudioMuteSFX;
     }
 }

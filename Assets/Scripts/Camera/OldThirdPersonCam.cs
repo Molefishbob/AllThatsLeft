@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OldThirdPersonCam : MonoBehaviour, IPauseable
+public class OldThirdPersonCam : MonoBehaviour
 {
     public LayerMask _wallLayer, _groundLayer;
     private Transform _lookAt;
@@ -13,21 +13,10 @@ public class OldThirdPersonCam : MonoBehaviour, IPauseable
     private float _pitch = 0.0f;
     public float _horizontalSensitivity = 1.0f;
     public float _verticalSensitivity = 1.0f;
-    private bool _paused;
     private float _tempDistance, _oldDistance;
     private float _lerpDistance;
     private float _lerperHelper = 0;
     private bool _zooming = false;
-
-    public void Pause()
-    {
-        _paused = true;
-    }
-
-    public void UnPause()
-    {
-        _paused = false;
-    }
 
     private void Awake()
     {
@@ -36,20 +25,6 @@ public class OldThirdPersonCam : MonoBehaviour, IPauseable
         _lookAt = gameObject.transform.parent;
     }
 
-    private void Start()
-    {
-        _paused = GameManager.Instance.GamePaused;
-        GameManager.Instance.AddPauseable(this);
-    }
-
-    private void OnDestroy()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RemovePauseable(this);
-        }
-    }
-    
     private void Update()
     {
         _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis);

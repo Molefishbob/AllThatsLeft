@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour, IPauseable
+public class EnemySpawner : MonoBehaviour
 {
-    private bool _paused = false;
     private FrogEnemyPool _frogPool;
     private PatrolEnemyPool _patrolPool;
     private FrogEnemy _frogEnemy;
@@ -24,8 +23,6 @@ public class EnemySpawner : MonoBehaviour, IPauseable
     {
         _frogPool = FindObjectOfType<FrogEnemyPool>();
         _patrolPool = FindObjectOfType<PatrolEnemyPool>();
-        _paused = GameManager.Instance.GamePaused;
-        GameManager.Instance.AddPauseable(this);
     }
 
     public void Spawn()
@@ -44,24 +41,6 @@ public class EnemySpawner : MonoBehaviour, IPauseable
             _spawnedCount++;
         }
         
-    }
-
-    public void Pause()
-    {
-        _paused = true;
-    }
-
-    public void UnPause()
-    {
-        _paused = false;
-    }
-
-    private void OnDestroy()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RemovePauseable(this);
-        }
     }
 
     private void OnTriggerEnter(Collider other)

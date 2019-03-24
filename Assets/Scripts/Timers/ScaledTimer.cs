@@ -2,19 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ScaledTimer : Timer, IPauseable
+public abstract class ScaledTimer : Timer
 {
-    private bool _paused;
-
-    protected virtual void Start()
-    {
-        _paused = GameManager.Instance.GamePaused;
-        GameManager.Instance.AddPauseable(this);
-    }
-
     private void FixedUpdate()
     {
-        if (IsRunning && !_paused)
+        if (GameManager.Instance.GamePaused)
+        {
+            return;
+        }
+
+        if (IsRunning)
         {
             _timer += Time.deltaTime;
             if (_timer >= Duration)
@@ -27,23 +24,5 @@ public abstract class ScaledTimer : Timer, IPauseable
                 }
             }
         }
-    }
-
-    private void OnDestroy()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RemovePauseable(this);
-        }
-    }
-
-    public void Pause()
-    {
-        _paused = true;
-    }
-
-    public void UnPause()
-    {
-        _paused = false;
     }
 }

@@ -74,4 +74,10 @@ public class PatrolEnemyMover : GenericEnemy
 
         return moveDirection;
     }
+
+    protected override void OutOfBounds()
+    {
+        transform.parent.gameObject.SetActive(false);
+        transform.parent.localPosition = Vector3.zero;
+    }
 }

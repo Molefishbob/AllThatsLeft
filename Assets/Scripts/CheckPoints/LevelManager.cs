@@ -1,16 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    /// <summary>
-    /// Current checkpoint
-    /// </summary>
-    /// <value></value>
-    public CheckPointPole _currentCheckPoint { get; private set; }
+    private int _currentCheckPoint = 0;
     private CheckPointPole[] _allLevelCheckPoints;
-    public PlayerMovement _playerPrefab;
+    public MainCharMovement _playerPrefab;
     public ThirdPersonCamera _cameraPrefab;
     /// <summary>
     /// The pool prefab
@@ -30,6 +27,9 @@ public class LevelManager : MonoBehaviour
 
     void Awake()
     {
+        PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
+        PrefsManager.Instance.Save();
+
         GameManager.Instance.LevelManager = this;
 
         if (GameManager.Instance.BotPool == null)
@@ -55,6 +55,7 @@ public class LevelManager : MonoBehaviour
             {
                 player = Instantiate(_playerPrefab);
             }
+            DontDestroyOnLoad(player);
             GameManager.Instance.Player = player;
         }
 
@@ -65,43 +66,59 @@ public class LevelManager : MonoBehaviour
             {
                 camera = Instantiate(_cameraPrefab);
             }
+            DontDestroyOnLoad(camera);
             GameManager.Instance.Camera = camera;
         }
     }
 
-    private void Start() {
+    private void Start()
+    {
         SortCheckpoints();
 
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.Length > 0)
         {
-            SetCheckpoint(_allLevelCheckPoints[0]);
+            SetCheckpoint(0);
+        }
+        else
+        {
+            Debug.LogError("There are no checkpoints in this level.");
         }
 
         GameManager.Instance.Player.transform.position = GetSpawnLocation();
+        GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
         GameManager.Instance.Player.SetControllerActive(true);
+        GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
+
+        GameManager.Instance.ActivateGame(true);
     }
 
     /// <summary>
     /// Gives the spawn location from current checkpoint.
     /// </summary>
     /// <returns>Spawn location</returns>
-    public Vector3 GetSpawnLocation()
+    private Vector3 GetSpawnLocation()
     {
-        if (_currentCheckPoint == null)
+        if (_allLevelCheckPoints == null || _allLevelCheckPoints[_currentCheckPoint] == null)
             return Vector3.zero;
         else
-            return _currentCheckPoint.SpawnPoint.position;
+            return _allLevelCheckPoints[_currentCheckPoint].SpawnPoint.position;
     }
 
-    public void SetCheckpoint(CheckPointPole cp)
+    private Quaternion GetSpawnRotation()
     {
-        if (_currentCheckPoint == null)
+        if (_allLevelCheckPoints == null || _allLevelCheckPoints[_currentCheckPoint] == null)
+            return Quaternion.identity;
+        else
+            return _allLevelCheckPoints[_currentCheckPoint].SpawnPoint.rotation;
+    }
+
+    public void SetCheckpoint(int id)
+    {
+        if (id > _currentCheckPoint)
         {
-            _currentCheckPoint = cp;
-        }
-        else if (_currentCheckPoint.id < cp.id)
-        {
-            _currentCheckPoint = cp;
+            _currentCheckPoint = id;
+            PrefsManager.Instance.CheckPoint = _currentCheckPoint;
+            PrefsManager.Instance.Save();
         }
     }
 
@@ -129,5 +146,17 @@ public class LevelManager : MonoBehaviour
             }
             sorted = !swapped;
         }
+    }
+
+    public void ResetLevel()
+    {
+        GameManager.Instance.BotPool.ResetPool();
+        GameManager.Instance.FrogEnemyPool?.ResetPool();
+        GameManager.Instance.PatrolEnemyPool?.ResetPool();
+        DontDestroyOnLoad(gameObject);
+        GameManager.Instance.ReloadScene();
+        GameManager.Instance.UndoDontDestroy(gameObject);
+        Awake();
+        Start();
     }
 }

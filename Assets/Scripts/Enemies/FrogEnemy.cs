@@ -31,6 +31,8 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 
     private void Update()
     {
+        if (GameManager.Instance.GamePaused) return;
+
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
@@ -131,5 +133,11 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         _followPlayer = false;
         _backToPrevious = true;
         _canSpit = false;
+    }
+
+    protected override void OutOfBounds()
+    {
+        gameObject.SetActive(false);
+        transform.localPosition = Vector3.zero;
     }
 }

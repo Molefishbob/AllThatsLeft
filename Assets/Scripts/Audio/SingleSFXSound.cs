@@ -2,56 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingleSFXSound : SingleUISound, IPauseable
+public class SingleSFXSound : SingleUISound
 {
-    protected bool _paused;
-
-    protected override void Start()
+    protected override void OnEnable()
     {
-        base.Start();
-        _paused = GameManager.Instance.GamePaused;
-        if (_paused)
+        base.OnEnable();
+
+        GameManager.Instance.OnGamePauseChanged += Pause;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGamePauseChanged -= Pause;
+        }
+    }
+
+    public virtual void Pause(bool paused)
+    {
+        if (paused)
         {
             _audioSource.Pause();
         }
-        GameManager.Instance.AddPauseable(this);
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        if (GameManager.Instance != null)
+        else
         {
-            GameManager.Instance.RemovePauseable(this);
+            _audioSource.UnPause();
         }
-    }
-
-    /// <summary>
-    /// Plays the sound effect.
-    /// </summary>
-    /// <param name="usePitch">Randomize the pitch</param>
-    public override void PlaySound(bool usePitch)
-    {
-        if (!_paused)
-        {
-            base.PlaySound(usePitch);
-        }
-    }
-
-    protected override void SetSoundType()
-    {
-        _soundType = SoundType.SoundEffect;
-    }
-
-    public virtual void Pause()
-    {
-        _paused = true;
-        _audioSource.Pause();
-    }
-
-    public virtual void UnPause()
-    {
-        _paused = false;
-        _audioSource.UnPause();
     }
 }

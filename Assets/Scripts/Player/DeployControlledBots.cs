@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeployControlledBots : MonoBehaviour, IPauseable
+public class DeployControlledBots : MonoBehaviour
 {
     [SerializeField]
     private string _deployBotButton = "Deploy Bot";
@@ -15,7 +15,6 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
     [SerializeField]
     private string _animatorTriggerDeploy = "Deploy";
 
-    private bool _paused = false;
     private Vector3 _deployStartPosition;
     private MainCharMovement _player;
 
@@ -26,52 +25,28 @@ public class DeployControlledBots : MonoBehaviour, IPauseable
 
     private void Start()
     {
-        _paused = GameManager.Instance.GamePaused;
-        GameManager.Instance.AddPauseable(this);
-
         _deployStartPosition = _deployTarget.localPosition;
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Update()
     {
-        if (!_paused)
-        {
+        if (GameManager.Instance.GamePaused) return;
+
         if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
+        {
+            RaycastHit hit;
+            Vector3 upVector = -Physics.gravity.normalized;
+            if (Physics.Raycast(
+                    _deployTarget.parent.TransformPoint(_deployStartPosition) + upVector * _deployHeightRange,
+                    Physics.gravity,
+                    out hit,
+                    2 * _deployHeightRange,
+                    _deployableTerrain))
             {
-                RaycastHit hit;
-                Vector3 upVector = -Physics.gravity.normalized;
-                if (Physics.Raycast(
-                        _deployTarget.parent.TransformPoint(_deployStartPosition) + upVector * _deployHeightRange,
-                        Physics.gravity,
-                        out hit,
-                        2 * _deployHeightRange,
-                        _deployableTerrain))
-                {
-                    _deployTarget.position = hit.point;
-                    DeployBot();
-                }
+                _deployTarget.position = hit.point;
+                DeployBot();
             }
         }
-    }
-
-    private void OnDestroy()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RemovePauseable(this);
-        }
-    }
-
-    public void Pause()
-    {
-        _paused = true;
-    }
-
-    public void UnPause()
-    {
-        _paused = false;
     }
 
     private void DeployBot()
