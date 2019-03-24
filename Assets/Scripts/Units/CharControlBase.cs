@@ -60,11 +60,6 @@ public abstract class CharControlBase : MonoBehaviour
     {
         if (GameManager.Instance.GamePaused) return;
 
-        if (transform.position.y <= _minYPosition)
-        {
-            OutOfBounds();
-        }
-
         if (_controllerEnabled)
         {
             float maxSpeed = _speed * Time.deltaTime;
@@ -182,6 +177,11 @@ public abstract class CharControlBase : MonoBehaviour
         }
 
         FixedUpdateAdditions();
+
+        if (transform.position.y <= _minYPosition)
+        {
+            OutOfBounds();
+        }
     }
 
     protected virtual void FixedUpdateAdditions()
