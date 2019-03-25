@@ -83,10 +83,6 @@ public abstract class CharControlBase : MonoBehaviour
             if (inputDirection.magnitude > 0.0f)
             {
                 _animator?.SetBool(_animatorBoolRunning, true);
-                if (_walkSound != null && IsGrounded && !_walkSound.IsPlaying)
-                {
-                    _walkSound.PlaySound();
-                }
 
                 // convert input direction to a rotation
                 Quaternion inputRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
