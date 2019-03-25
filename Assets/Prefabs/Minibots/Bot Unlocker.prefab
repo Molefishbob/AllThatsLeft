@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1331158884486747112}
   - component: {fileID: 7100712684548281594}
-  - component: {fileID: 8415624483366497001}
+  - component: {fileID: 8678079543552586611}
   m_Layer: 17
   m_Name: Bot Unlocker
   m_TagString: Untagged
@@ -42,11 +42,11 @@ SphereCollider:
   m_GameObject: {fileID: 6849015660973525173}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &8415624483366497001
+--- !u!114 &8678079543552586611
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,7 +58,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d24dfc90cf7de74c87fea024590f9f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ability: 0
 --- !u!1001 &8041388145630175582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,6 +65,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1331158884486747112}
     m_Modifications:
+    - target: {fileID: 100036, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
+      propertyPath: m_Name
+      value: MinibotsFirstRig
+      objectReference: {fileID: 0}
     - target: {fileID: 400036, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -109,10 +112,6 @@ PrefabInstance:
     - target: {fileID: 400036, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100036, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
-      propertyPath: m_Name
-      value: MinibotsFirstRig
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: c46a702bcdc650f479fa718dd8cf19d8, type: 3}
       propertyPath: m_Controller

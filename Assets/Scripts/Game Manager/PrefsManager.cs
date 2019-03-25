@@ -11,6 +11,7 @@ public class PrefsManager : Singleton<PrefsManager>
         keyMuteMaster = "Master Mute",
         keyLevel = "Level",
         keyCheckPoint = "Check Point",
+        keyBotsUnlocked = "Bots Unlocked",
         keyInvertCameraY = "Invert Camera Y",
         keyInvertCameraX = "Invert Camera X",
         keyCameraXSensitivity = "Camera X Sensitivity",
@@ -22,6 +23,8 @@ public class PrefsManager : Singleton<PrefsManager>
     public event ValueChangedBool OnAudioMuteSFXChanged;
     public event ValueChangedBool OnAudioMuteMusicChanged;
     public event ValueChangedBool OnAudioMuteMasterChanged;
+
+    public event ValueChangedBool OnBotsUnlockedChanged;
 
     public event ValueChangedBool OnInvertedCameraYChanged;
     public event ValueChangedBool OnInvertedCameraXChanged;
@@ -126,6 +129,22 @@ public class PrefsManager : Singleton<PrefsManager>
             if (OnAudioMuteMasterChanged != null)
             {
                 OnAudioMuteMasterChanged(value);
+            }
+        }
+    }
+
+    public bool BotsUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyBotsUnlocked, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyBotsUnlocked, value ? 1 : 0);
+            if (OnBotsUnlockedChanged != null)
+            {
+                OnBotsUnlockedChanged(value);
             }
         }
     }
