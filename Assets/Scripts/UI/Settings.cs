@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Settings : MonoBehaviour
 {
     private const string PercentageFormat = " %";
+    [SerializeField]
+    private EventSystem  _eventSystem = null;
+    [SerializeField]
+    private Button _backButton;
     [SerializeField]
     private TMP_Text  _musicText = null, _sFXText = null, _masterText = null;
     [SerializeField]
@@ -14,9 +19,9 @@ public class Settings : MonoBehaviour
     [SerializeField]
     private Toggle _musicMute = null, _sFXMute = null, _masterMute = null;
     [SerializeField]
-    private Toggle _volumeSettings = null, _gameplaySettings = null, _controlSettings = null;
+    private Toggle _volumeSettings = null, _controlSettings = null;
     [SerializeField]
-    private GameObject _volume = null, _gamePlay = null, _controls = null;
+    private GameObject _volume = null, _controls = null;
     [SerializeField]
     private Toggle _invertedXAxis = null, _invertedYAxis = null;
     [SerializeField]
@@ -27,9 +32,8 @@ public class Settings : MonoBehaviour
     private const bool True = true;
     private const bool False = false;
 
-    // Start is called before the first frame update
-    void Awake()
-    {
+    private void OnEnable() {
+        VolumeSettings();
         _musicSlider.value = PrefsManager.Instance.AudioVolumeMusic;
         _sFXSlider.value = PrefsManager.Instance.AudioVolumeSFX;
         _masterSlider.value = PrefsManager.Instance.AudioVolumeMaster;
@@ -41,9 +45,8 @@ public class Settings : MonoBehaviour
         _musicText.SetText(_musicSlider.value + PercentageFormat);
         _sFXText.SetText(_sFXSlider.value + PercentageFormat);
         _masterText.SetText(_masterSlider.value + PercentageFormat);
-        VolumeSettings();
     }
-    
+
     public void MusicPercentage() {
         _musicText.SetText(_musicSlider.value + PercentageFormat);
         PrefsManager.Instance.AudioVolumeMusic =  Mathf.RoundToInt(_musicSlider.value);
@@ -72,34 +75,39 @@ public class Settings : MonoBehaviour
     public void VolumeSettings() {
         _volumeSettings.interactable = !True;
         _controlSettings.interactable = !False;
-        _gameplaySettings.interactable = !False;
 
         _volume.SetActive(!False);
         _controls.SetActive(!True);
-        _gamePlay.SetActive(!True);
 
-    }
-    public void GameplaySettings() {
-        _gameplaySettings.interactable = !True;
-        _controlSettings.interactable = !False;
-        _volumeSettings.interactable = !False;
+        _eventSystem.SetSelectedGameObject(_masterSlider.gameObject);
+        Navigation nav = _backButton.navigation;
 
-        _volume.SetActive(!True);
-        _controls.SetActive(!True);
-        _gamePlay.SetActive(!False);
+        nav.selectOnUp = _controlSettings.GetComponent<Selectable>();
+        nav.selectOnRight = _controlSettings.GetComponent<Selectable>();
+
+        _backButton.navigation = nav;
+
     }
     public void ControlSettings() {
         _controlSettings.interactable = !True;
         _volumeSettings.interactable = !False;
-        _gameplaySettings.interactable = !False;
 
         _volume.SetActive(!True);
         _controls.SetActive(!False);
-        _gamePlay.SetActive(!True);
+
+        _eventSystem.SetSelectedGameObject(_xSensSlider.gameObject);
+
+         Navigation nav = _backButton.navigation;
+
+        nav.selectOnUp = _volumeSettings.GetComponent<Selectable>();
+        nav.selectOnLeft = _volumeSettings.GetComponent<Selectable>();
+
+        _backButton.navigation = nav;
     }
     public void InvertedXAxis()
     {
         PrefsManager.Instance.InvertedCameraX = _invertedXAxis.isOn;
+        
     }
     public void InvertedYAxis()
     {
@@ -107,15 +115,16 @@ public class Settings : MonoBehaviour
     }
     public void CameraXSensitivity()
     {
-        _xSensText.SetText((Mathf.Round((_xSensSlider.value * 100)) / 100).ToString());
+        
+        _xSensText.SetText((Mathf.Round(_xSensSlider.value) / 10f).ToString());
     }
     public void CameraYSensitivity()
     {
-        _ySensText.SetText((Mathf.Round((_ySensSlider.value * 100)) / 100).ToString());
+        _ySensText.SetText((Mathf.Round(_ySensSlider.value) / 10f).ToString());
     }
     public void CameraZoomSpeed()
     {
-        _zoomSpeedText.SetText((Mathf.Round((_zoomSpeedSlider.value * 100)) / 100).ToString());
+        _zoomSpeedText.SetText((Mathf.Round(_zoomSpeedSlider.value) / 10f).ToString());
     }public void FieldOfView()
     {
         _fovText.SetText(_fovSlider.value.ToString());
