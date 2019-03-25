@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1637510364}
   - component: {fileID: 1637510363}
   - component: {fileID: 7786813573970224203}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,8 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be8b63a65f9b93641b3b78377aa3dfd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _openTrigger: Open
-  _closeTrigger: Close
+  _openBool: Open
 --- !u!1 &1446352653129984020
 GameObject:
   m_ObjectHideFlags: 0
@@ -85,7 +84,7 @@ GameObject:
   - component: {fileID: 2231509432496817834}
   - component: {fileID: 8911825171691388847}
   - component: {fileID: 8830117606131987840}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DoorLockInsideF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +161,8 @@ GameObject:
   - component: {fileID: 5206953523866714309}
   - component: {fileID: 4219377402085263670}
   - component: {fileID: 433319118090014748}
-  m_Layer: 0
+  - component: {fileID: 5740147656878637266}
+  m_Layer: 12
   m_Name: walkingRamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,6 +228,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &5740147656878637266
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489526665219024278}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300014, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
 --- !u!1 &3576404173400029187
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +253,8 @@ GameObject:
   - component: {fileID: 8235074696558888337}
   - component: {fileID: 2137447902470436252}
   - component: {fileID: 6682614979186373409}
-  m_Layer: 0
+  - component: {fileID: 8420756482236173357}
+  m_Layer: 12
   m_Name: doorRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,6 +320,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &8420756482236173357
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3576404173400029187}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300010, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
 --- !u!1 &3606990257691289642
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +345,7 @@ GameObject:
   - component: {fileID: 323163560040290219}
   - component: {fileID: 8507644528024167887}
   - component: {fileID: 1506955464703997243}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DoorLockOutisdeF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -393,7 +422,7 @@ GameObject:
   - component: {fileID: 2020595072249369409}
   - component: {fileID: 2862193633690498255}
   - component: {fileID: 3893332312017151622}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DoorContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -470,7 +499,7 @@ GameObject:
   - component: {fileID: 5839852907996995836}
   - component: {fileID: 3190223094513610146}
   - component: {fileID: 8440265055973793921}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: midWalkingPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +576,8 @@ GameObject:
   - component: {fileID: 3680336276804947882}
   - component: {fileID: 8565724159397632202}
   - component: {fileID: 5668655208966488448}
-  m_Layer: 0
+  - component: {fileID: 7047047722014409444}
+  m_Layer: 12
   m_Name: doorLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -613,6 +643,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &7047047722014409444
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5287772661315076887}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300012, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
 --- !u!1 &6060322905832926073
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +668,7 @@ GameObject:
   - component: {fileID: 5150917959213975181}
   - component: {fileID: 6487360892065208838}
   - component: {fileID: 525586608419514678}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DoorLockOutisdeB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +745,7 @@ GameObject:
   - component: {fileID: 642097368361087291}
   - component: {fileID: 274734887888470719}
   - component: {fileID: 456757400665242231}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DoorLockInsideB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
