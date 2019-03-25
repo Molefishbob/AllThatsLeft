@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBotInteractions : MonoBehaviour , ITimedAction
+public class PlayerBotInteractions : MonoBehaviour, ITimedAction
 {
     [SerializeField]
     private float _fDetectRadius = 2;
@@ -23,31 +23,34 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
         {
             _bactive = value;
             _selfMover.ControlsDisabled = !value;
-            _selfMover.SetControllerActive(value);
+            _selfMover.SetControllerActive(true);
         }
     }
     private bool _bactive = false;
-        [SerializeField]
-    private bool _bActing = false;
+    [SerializeField]
+    private bool _bHacking = false;
     private bool _bReleasing = false;
     [SerializeField]
     private float _fReleaseDelay = 2;
     private OneShotTimer _ostRelease;
+    private OneShotTimer _ostDisable;
     private GameObject[] _goTarget = null;
     private PlayerMovement _selfMover;
 
     void Awake()
     {
         _selfMover = GetComponent<PlayerMovement>();
-        _ostRelease = gameObject.AddComponent(typeof(OneShotTimer)) as OneShotTimer;
+        _ostRelease = gameObject.AddComponent<OneShotTimer>();
+        _ostDisable = gameObject.AddComponent<OneShotTimer>();
     }
 
     void Update()
     {
         if (GameManager.Instance.GamePaused) return;
+        if (!_selfMover.IsGrounded) return;
 
         // Hack
-        if (Input.GetButtonDown(_sHackButton) && _bActive && !_bActing && !_bReleasing)
+        if (Input.GetButtonDown(_sHackButton) && _bActive && !_bHacking && !_bReleasing)
         {
             _goTarget = CheckSurroundings(_lHackableLayer, false);
             if (_goTarget != null)
@@ -55,7 +58,7 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
                 GenericHackable ghOther = _goTarget[0].GetComponent<GenericHackable>();
                 if (ghOther._currentStatus == GenericHackable.Status.NotHacked)
                 {
-                    _bActing = true;
+                    _bHacking = true;
                     ghOther.TimeToStart();
                     ReleaseControls(true);
                 }
@@ -65,18 +68,9 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
         // Explode
         if (Input.GetButtonDown(_sExplodeButton) && _bActive && !_bReleasing)
         {
-            _goTarget = CheckSurroundings(_lBombableLayer, true);
-            if (_goTarget != null)
-            {
-                // TODO fix this
-                // The bot will "charge" for a while
-                foreach (GameObject o in _goTarget)
-                {
-                    if (o != gameObject)
-                        o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
-                }
-                ReleaseControls(true);
-            }
+            // TODO Animator implementation
+            ExplodeBot();
+            ReleaseControls(true);
         }
 
         // Just release
@@ -84,6 +78,24 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
         {
             _ostRelease.StopTimer();
             ReleaseControls(false);
+        }
+    }
+
+    /// <summary>
+    /// This will explode the bot and send tell killable things to die
+    /// Maybe called only from animator
+    /// </summary>
+    public void ExplodeBot()
+    {
+        _goTarget = CheckSurroundings(_lBombableLayer, true);
+        if (_goTarget != null)
+        {
+            // TODO fix this
+            foreach (GameObject o in _goTarget)
+            {
+                if (o != gameObject)
+                    o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
+            }
         }
     }
 
@@ -109,6 +121,7 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
             }
         }
 
+
         if (closestObject != null)
         {
             int closestIndex = 0;
@@ -120,7 +133,7 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
                     closestIndex = i;
                 }
                 tmpObject[i] = hitColliders[i].gameObject;
-                Debug.DrawLine(transform.position, tmpObject[i].transform.position,Color.red, 2f);
+                Debug.DrawLine(transform.position, tmpObject[i].transform.position, Color.red, 2f);
             }
             if (closestIndex != 0)
             {
@@ -130,6 +143,13 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
             return tmpObject;
         }
         return null;
+    }
+    public void OnDisable()
+    {
+        _bActive = false;
+        _ostDisable.StopTimer();
+        _ostRelease.StopTimer();
+        _selfMover.SetControllerActive(false);
     }
 
     // Release the controls back to the player
@@ -152,19 +172,30 @@ public class PlayerBotInteractions : MonoBehaviour , ITimedAction
 
     public void StopActing()
     {
-        if (_bActing)
+        if (_bHacking)
         {
-            _bActing = false;
+            _bHacking = false;
             _goTarget[0].GetComponent<GenericHackable>()?.TimeToLeave();
             _goTarget = null;
+            gameObject.SetActive(false);
+
         }
     }
 
     public void TimedAction()
     {
-        GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
-        _bactive = false;
-        _bReleasing = !_bReleasing;
-        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
+        if (!_ostRelease.IsRunning && _bActive)
+        {
+            GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
+            _bActive = false;
+            _bReleasing = !_bReleasing;
+            GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
+            _ostDisable.SetTimerTarget(this);
+            _ostDisable.StartTimer(3f);
+        }
+        else if (!_ostDisable.IsRunning && !_bHacking)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
