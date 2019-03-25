@@ -222,6 +222,7 @@ public class GameManager : Singleton<GameManager>
     public void StartNewGame()
     {
         CurrentLevel = 1;
+        PrefsManager.Instance.BotsUnlocked = false;
         ChangeScene(CurrentLevel);
     }
 

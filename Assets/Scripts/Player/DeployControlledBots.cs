@@ -26,6 +26,16 @@ public class DeployControlledBots : MonoBehaviour
     private void Start()
     {
         _deployStartPosition = _deployTarget.localPosition;
+        PrefsManager.Instance.OnBotsUnlockedChanged += Activate;
+        Activate(PrefsManager.Instance.BotsUnlocked);
+    }
+
+    private void OnDestroy()
+    {
+        if (PrefsManager.Instance != null)
+        {
+            PrefsManager.Instance.OnBotsUnlockedChanged -= Activate;
+        }
     }
 
     private void Update()
@@ -59,5 +69,10 @@ public class DeployControlledBots : MonoBehaviour
         bot.transform.rotation = _deployTarget.rotation;
         bot._bActive = true;
         GameManager.Instance.Camera.GetNewTarget(bot.transform);
+    }
+
+    private void Activate(bool unlock)
+    {
+        enabled = unlock;
     }
 }
