@@ -68,8 +68,7 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
         // Explode
         if (Input.GetButtonDown(_sExplodeButton) && _bActive && !_bReleasing)
         {
-            // TODO Animator implementation
-            ExplodeBot();
+            _selfMover._animator.SetBool("Explode", true);
             ReleaseControls(true);
         }
 
@@ -90,7 +89,6 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
         _goTarget = CheckSurroundings(_lBombableLayer, true);
         if (_goTarget != null)
         {
-            // TODO fix this
             foreach (GameObject o in _goTarget)
             {
                 if (o != gameObject)
@@ -149,6 +147,7 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
         _bActive = false;
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
+        _selfMover._animator.SetBool("Explode", false);
         _selfMover.SetControllerActive(false);
     }
 
