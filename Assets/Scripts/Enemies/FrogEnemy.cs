@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogEnemy : GenericEnemy, ITimedAction
+public class FrogEnemy : CharControlBase, ITimedAction
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
