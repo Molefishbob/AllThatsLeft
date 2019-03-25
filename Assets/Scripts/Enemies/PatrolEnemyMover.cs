@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolEnemyMover : GenericEnemy
+public class PatrolEnemyMover : CharControlBase
 {
     private List<Transform> _transforms = new List<Transform>();
     private int _targetCounter;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogEnemy : GenericEnemy, ITimedAction
+public class FrogEnemy : CharControlBase, ITimedAction
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
@@ -34,7 +34,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         if (GameManager.Instance.GamePaused) return;
 
         RaycastHit hit;
-        if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
+        if (!Physics.SphereCast(transform.position + transform.up + transform.forward , 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
             if (_time > 0.5f)
             {
@@ -52,6 +52,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 
         if (!_stopMoving && !_followPlayer && !_backToPrevious)
         {
+            
             _time += Time.deltaTime / _circleRadius;
 
             x = Mathf.Sin(_time);
@@ -74,6 +75,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         }
         else 
         {
+            
             x = 0;
             y = 0;
             z = 0;
