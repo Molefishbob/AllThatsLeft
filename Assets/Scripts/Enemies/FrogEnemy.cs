@@ -32,7 +32,7 @@ public class FrogEnemy : CharControlBase, ITimedAction
     private void Update()
     {
         RaycastHit hit;
-        if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
+        if (!Physics.SphereCast(transform.position + transform.up + transform.forward , 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
             if (_time > 0.5f)
             {
@@ -50,6 +50,7 @@ public class FrogEnemy : CharControlBase, ITimedAction
 
         if (!_stopMoving && !_followPlayer && !_backToPrevious)
         {
+            
             _time += Time.deltaTime / _circleRadius;
 
             x = Mathf.Sin(_time);
@@ -72,6 +73,7 @@ public class FrogEnemy : CharControlBase, ITimedAction
         }
         else 
         {
+            
             x = 0;
             y = 0;
             z = 0;
