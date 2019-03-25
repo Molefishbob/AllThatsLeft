@@ -22,7 +22,6 @@ public class RotatePickAxis : MonoBehaviour {
 	
 
 	void Update () {
-        if (GameManager.Instance.GamePaused) return;
 
         switch (m_iDirection)
         {
