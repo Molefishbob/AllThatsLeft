@@ -9,11 +9,13 @@ public class GasCloud : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.GetComponent<GassableUnit>().EnterGas(_timeUntilOof);
+        GassableUnit unit = other.GetComponent<GassableUnit>();
+        unit?.EnterGas(_timeUntilOof);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        other.GetComponent<GassableUnit>().ExitGas();
+        GassableUnit unit = other.GetComponent<GassableUnit>();
+        unit?.ExitGas();
     }
 }
