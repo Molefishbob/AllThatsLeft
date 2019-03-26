@@ -61,15 +61,23 @@ public class LevelManager : MonoBehaviour
             }
         }
 
+        MainCharMovement[] players = FindObjectsOfType<MainCharMovement>();
         if (GameManager.Instance.Player == null)
         {
-            PlayerMovement player = FindObjectOfType<PlayerMovement>();
-            if (player == null)
+            if (players == null)
             {
-                player = Instantiate(_playerPrefab);
+                GameManager.Instance.Player = Instantiate(_playerPrefab);
             }
-            DontDestroyOnLoad(player);
-            GameManager.Instance.Player = player;
+            else
+            {
+                GameManager.Instance.Player = players[0];
+            }
+            DontDestroyOnLoad(GameManager.Instance.Player);
+        }
+        foreach (MainCharMovement p in players)
+        {
+            if (p == GameManager.Instance.Player) continue;
+            Destroy(p.gameObject);
         }
 
         if (GameManager.Instance.Camera == null)
@@ -121,7 +129,7 @@ public class LevelManager : MonoBehaviour
 
     public void SetCheckpointByID(int id)
     {
-        if(!_allLevelCheckPoints.ContainsKey(id))
+        if (!_allLevelCheckPoints.ContainsKey(id))
         {
             Debug.LogWarning("That checkpoint ID doesn't exist.");
             return;
