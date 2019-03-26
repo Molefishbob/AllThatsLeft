@@ -234,7 +234,7 @@ public class GameManager : Singleton<GameManager>
     {
         CurrentLevel = PrefsManager.Instance.Level;
         ChangeScene(CurrentLevel);
-        LevelManager.SetCheckpoint(PrefsManager.Instance.CheckPoint);
+        LevelManager.SetCheckpointByID(PrefsManager.Instance.CheckPoint);
         LevelManager.ResetLevel();
     }
 
