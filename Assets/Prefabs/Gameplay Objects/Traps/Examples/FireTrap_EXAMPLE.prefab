@@ -46,9 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dda90122cf430f4aa5e93b6ec684135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentStatus: 0
   _fireInterval: 0
   _fireDuration: 1
+  _startDelay: 0
+  _flames: {fileID: 5100373439016406377}
+  _activated: 1
 --- !u!65 &3058074939920187644
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -108,6 +110,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -163,11 +170,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &5414275266072745706 stripped
@@ -183,6 +185,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -238,11 +245,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &5042109642348393249 stripped
@@ -258,6 +260,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -313,11 +320,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &7886761288521870007 stripped
@@ -333,6 +335,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -388,11 +395,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &7397127191740474184 stripped
@@ -408,6 +410,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -463,11 +470,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &1697917427633016332 stripped
@@ -483,6 +485,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3058074939920187646}
     m_Modifications:
+    - target: {fileID: 100002, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
+      propertyPath: m_Name
+      value: fireTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -527,22 +545,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
-      propertyPath: m_Name
-      value: fireTrap
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e42bc52d0e7447409e0458003645f61, type: 3}
 --- !u!4 &6647562494998558801 stripped
@@ -558,6 +560,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -613,11 +620,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &283487022867019415 stripped
@@ -633,6 +635,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -688,11 +695,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &3736929837885423104 stripped
@@ -708,6 +710,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -763,11 +770,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
 --- !u!4 &2937078569140467463 stripped
@@ -783,6 +785,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2521148448299811618}
     m_Modifications:
+    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
+        type: 3}
+      propertyPath: m_Name
+      value: TorchFlame
+      objectReference: {fileID: 0}
     - target: {fileID: 6751323254619323926, guid: 887f6f12d00dab142aee83a5e00eaca1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -837,11 +844,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8991196624920034941, guid: 887f6f12d00dab142aee83a5e00eaca1,
-        type: 3}
-      propertyPath: m_Name
-      value: TorchFlame
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 887f6f12d00dab142aee83a5e00eaca1, type: 3}
