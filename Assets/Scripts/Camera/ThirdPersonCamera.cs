@@ -88,7 +88,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (!_movingToTarget)
         {
-            _distance += (Input.GetAxis("Scroll")) * _zoomSpeed;
+            _distance -= (Input.GetAxis("Scroll")) * _zoomSpeed;
 
             if (_distance < _minDistance)
             {

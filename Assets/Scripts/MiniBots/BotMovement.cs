@@ -20,13 +20,17 @@ public class BotMovement : PlayerMovement, IDamageReceiver
     {
         // TODO animations
         _pbi.StopActing();
-        if (_pbi._bActive) _pbi.ReleaseControls(true);
+        if (!ControlsDisabled)
+        {
+            _pbi.ReleaseControls(true);
+        }
     }
 
     protected override void OutOfBounds()
     {
-        _pbi.ReleaseControls(false);
-        gameObject.SetActive(false);
-        transform.localPosition = Vector3.zero;
+        if (!ControlsDisabled)
+        {
+            _pbi.ReleaseControls(false);
+        }
     }
 }
