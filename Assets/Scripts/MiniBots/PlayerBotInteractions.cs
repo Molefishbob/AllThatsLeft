@@ -32,6 +32,7 @@ public class PlayerBotInteractions : MonoBehaviour
     private bool _bactive = false;
     [SerializeField]
     private bool _bHacking = false;
+    private bool _bFirstEnable = true;
     [SerializeField]
     private float _fReleaseDelay = 2.0f;
     [SerializeField]
@@ -44,6 +45,21 @@ public class PlayerBotInteractions : MonoBehaviour
     private GameObject[] _goTarget = null;
     private BotMovement _selfMover;
     private Projector _shadowProjector;
+
+    void OnEnable()
+    {
+        if (!_bFirstEnable && _psExplosion != null)
+        {
+            foreach (ParticleSystem o in _psExplosion)
+            {
+                o.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            _bFirstEnable = false;
+        }
+    }
 
     void Awake()
     {
