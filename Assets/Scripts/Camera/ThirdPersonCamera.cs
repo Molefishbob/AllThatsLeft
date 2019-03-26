@@ -38,6 +38,11 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         _newDistance = _distance;
+        
+    }
+
+    private void Start()
+    {
         cam.fieldOfView = _fieldOfView;
     }
 

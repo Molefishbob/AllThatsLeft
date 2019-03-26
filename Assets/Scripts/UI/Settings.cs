@@ -34,6 +34,7 @@ public class Settings : MonoBehaviour
 
     private void OnEnable() {
         VolumeSettings();
+        CanvasScaler s = new CanvasScaler;
         _musicSlider.value = PrefsManager.Instance.AudioVolumeMusic;
         _sFXSlider.value = PrefsManager.Instance.AudioVolumeSFX;
         _masterSlider.value = PrefsManager.Instance.AudioVolumeMaster;
@@ -59,12 +60,8 @@ public class Settings : MonoBehaviour
         _masterText.SetText(_masterSlider.value + PercentageFormat);
     }
 
-    private float RoundTwoDecimals(float value) {
-        return (value / 10f);
-    }
-
     private string FormatToDecimalNumber(float value) {
-        return value.ToString("N1");
+        return (value / 10f).ToString("N1");
     }
 
     public void MusicPercentage() {
@@ -136,17 +133,17 @@ public class Settings : MonoBehaviour
     public void CameraXSensitivity()
     {
         
-        _xSensText.SetText(RoundTwoDecimals(_xSensSlider.value).ToString());
+        _xSensText.SetText(FormatToDecimalNumber(_xSensSlider.value));
         PrefsManager.Instance.CameraXSensitivity = Mathf.RoundToInt(_xSensSlider.value);
     }
     public void CameraYSensitivity()
     {
-        _ySensText.SetText(RoundTwoDecimals(_ySensSlider.value).ToString());
+        _ySensText.SetText(FormatToDecimalNumber(_ySensSlider.value));
         PrefsManager.Instance.CameraYSensitivity = Mathf.RoundToInt(_ySensSlider.value);
     }
     public void CameraZoomSpeed()
     {
-        _zoomSpeedText.SetText(RoundTwoDecimals(_zoomSpeedSlider.value).ToString());
+        _zoomSpeedText.SetText(FormatToDecimalNumber(_zoomSpeedSlider.value));
         PrefsManager.Instance.ZoomSpeed = Mathf.RoundToInt(_zoomSpeedSlider.value);
     }public void FieldOfView()
     {
