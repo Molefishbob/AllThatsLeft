@@ -243,7 +243,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ReloadScene()
     {
-        ChangeScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 
     /// <summary>
