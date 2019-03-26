@@ -11,7 +11,7 @@ public class Settings : MonoBehaviour
     [SerializeField]
     private EventSystem  _eventSystem = null;
     [SerializeField]
-    private Button _backButton;
+    private Button _backButton = null;
     [SerializeField]
     private TMP_Text  _musicText = null, _sFXText = null, _masterText = null;
     [SerializeField]
