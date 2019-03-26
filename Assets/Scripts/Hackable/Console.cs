@@ -14,8 +14,9 @@ public class Console : GenericHackable
         base.Awake();
         _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsOneShotTimer>(gameObject);
     }
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         _timer.OnTimerCompleted += CompleteHack;
     }
 
