@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogEnemy : GenericEnemy, ITimedAction
+public class FrogEnemy : CharControlBase
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
     private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow, _canSpit;
-    private OneShotTimer _timer;
+    private PhysicsOneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
     public LayerMask _groundLayer;
 
@@ -15,8 +15,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
     {
         base.Awake();
         _canFollow = true;
-        _timer = GetComponent<OneShotTimer>();
-        _timer.SetTimerTarget(this);
+        _timer = GetComponent<PhysicsOneShotTimer>();
         _stopMoving = false;
         _nextStopX = true;
         _nextStopZ = false;
@@ -26,13 +25,25 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 
     protected override void Start()
     {
+        base.Start();
         SetControllerActive(true);
+        _timer.OnTimerCompleted += TimedAction;
+    }
+
+    private void OnDestroy()
+    {
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= TimedAction;
+        }
     }
 
     private void Update()
     {
+        if (GameManager.Instance.GamePaused) return;
+
         RaycastHit hit;
-        if (!Physics.SphereCast(transform.position + transform.forward, 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
+        if (!Physics.SphereCast(transform.position + transform.up + transform.forward , 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
             if (_time > 0.5f)
             {
@@ -50,6 +61,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
 
         if (!_stopMoving && !_followPlayer && !_backToPrevious)
         {
+            
             _time += Time.deltaTime / _circleRadius;
 
             x = Mathf.Sin(_time);
@@ -72,6 +84,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         }
         else 
         {
+            
             x = 0;
             y = 0;
             z = 0;
@@ -100,7 +113,7 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         return move;
     }
 
-    public void TimedAction()
+    private void TimedAction()
     {
         _stopMoving = false;
     }
@@ -131,5 +144,11 @@ public class FrogEnemy : GenericEnemy, ITimedAction
         _followPlayer = false;
         _backToPrevious = true;
         _canSpit = false;
+    }
+
+    protected override void OutOfBounds()
+    {
+        gameObject.SetActive(false);
+        transform.localPosition = Vector3.zero;
     }
 }

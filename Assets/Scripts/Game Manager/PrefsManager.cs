@@ -5,16 +5,26 @@ public class PrefsManager : Singleton<PrefsManager>
     private const string
         keyVolumeSFX = "SFX Volume",
         keyVolumeMusic = "Music Volume",
-        keyVolumeUI = "UI Volume",
         keyVolumeMaster = "Master Volume",
         keyMuteSFX = "SFX Mute",
         keyMuteMusic = "Music Mute",
-        keyMuteUI = "UI Mute",
         keyMuteMaster = "Master Mute",
+        keyLevel = "Level",
+        keyCheckPoint = "Check Point",
+        keyBotsUnlocked = "Bots Unlocked",
         keyInvertCameraY = "Invert Camera Y",
         keyInvertCameraX = "Invert Camera X",
         keyCameraXSensitivity = "Camera X Sensitivity",
         keyCameraYSensitivity = "Camera Y Sensitivity";
+
+    public event ValueChangedInt OnAudioVolumeSFXChanged;
+    public event ValueChangedInt OnAudioVolumeMusicChanged;
+    public event ValueChangedInt OnAudioVolumeMasterChanged;
+    public event ValueChangedBool OnAudioMuteSFXChanged;
+    public event ValueChangedBool OnAudioMuteMusicChanged;
+    public event ValueChangedBool OnAudioMuteMasterChanged;
+
+    public event ValueChangedBool OnBotsUnlockedChanged;
 
     public event ValueChangedBool OnInvertedCameraYChanged;
     public event ValueChangedBool OnInvertedCameraXChanged;
@@ -27,51 +37,51 @@ public class PrefsManager : Singleton<PrefsManager>
         PlayerPrefs.Save();
     }
 
-    public float AudioVolumeSFX
+    public int AudioVolumeSFX
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyVolumeSFX, 1.0f);
+            return PlayerPrefs.GetInt(keyVolumeSFX, 100);
         }
         set
         {
-            PlayerPrefs.SetFloat(keyVolumeSFX, value);
+            PlayerPrefs.SetInt(keyVolumeSFX, value);
+            if (OnAudioVolumeSFXChanged != null)
+            {
+                OnAudioVolumeSFXChanged(value);
+            }
         }
     }
 
-    public float AudioVolumeMusic
+    public int AudioVolumeMusic
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyVolumeMusic, 1.0f);
+            return PlayerPrefs.GetInt(keyVolumeMusic, 100);
         }
         set
         {
-            PlayerPrefs.SetFloat(keyVolumeMusic, value);
+            PlayerPrefs.SetInt(keyVolumeMusic, value);
+            if (OnAudioVolumeMusicChanged != null)
+            {
+                OnAudioVolumeMusicChanged(value);
+            }
         }
     }
 
-    public float AudioVolumeUI
+    public int AudioVolumeMaster
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyVolumeUI, 1.0f);
+            return PlayerPrefs.GetInt(keyVolumeMaster, 100);
         }
         set
         {
-            PlayerPrefs.SetFloat(keyVolumeUI, value);
-        }
-    }
-
-    public float AudioVolumeMaster
-    {
-        get
-        {
-            return PlayerPrefs.GetFloat(keyVolumeMaster, 1.0f);
-        }
-        set
-        {
-            PlayerPrefs.SetFloat(keyVolumeMaster, value);
+            PlayerPrefs.SetInt(keyVolumeMaster, value);
+            if (OnAudioVolumeMasterChanged != null)
+            {
+                OnAudioVolumeMasterChanged(value);
+            }
         }
     }
 
@@ -84,6 +94,10 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyMuteSFX, value ? 1 : 0);
+            if (OnAudioMuteSFXChanged != null)
+            {
+                OnAudioMuteSFXChanged(value);
+            }
         }
     }
 
@@ -96,18 +110,10 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyMuteMusic, value ? 1 : 0);
-        }
-    }
-
-    public bool AudioMuteUI
-    {
-        get
-        {
-            return PlayerPrefs.GetInt(keyMuteUI, 0) == 1;
-        }
-        set
-        {
-            PlayerPrefs.SetInt(keyMuteUI, value ? 1 : 0);
+            if (OnAudioMuteMusicChanged != null)
+            {
+                OnAudioMuteMusicChanged(value);
+            }
         }
     }
 
@@ -120,6 +126,50 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyMuteMaster, value ? 1 : 0);
+            if (OnAudioMuteMasterChanged != null)
+            {
+                OnAudioMuteMasterChanged(value);
+            }
+        }
+    }
+
+    public bool BotsUnlocked
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyBotsUnlocked, 0) == 1;
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyBotsUnlocked, value ? 1 : 0);
+            if (OnBotsUnlockedChanged != null)
+            {
+                OnBotsUnlockedChanged(value);
+            }
+        }
+    }
+
+    public int Level
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyLevel, 1);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyVolumeMaster, value);
+        }
+    }
+
+    public int CheckPoint
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyCheckPoint, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyCheckPoint, value);
         }
     }
 

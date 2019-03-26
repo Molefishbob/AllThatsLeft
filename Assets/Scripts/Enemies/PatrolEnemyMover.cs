@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolEnemyMover : GenericEnemy
+public class PatrolEnemyMover : CharControlBase
 {
     private List<Transform> _transforms = new List<Transform>();
     private int _targetCounter;
@@ -73,5 +73,11 @@ public class PatrolEnemyMover : GenericEnemy
         moveDirection.y = 0;
 
         return moveDirection;
+    }
+
+    protected override void OutOfBounds()
+    {
+        transform.parent.gameObject.SetActive(false);
+        transform.parent.localPosition = Vector3.zero;
     }
 }

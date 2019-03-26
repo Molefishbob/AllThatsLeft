@@ -19,6 +19,8 @@ public class MoveBetweenBackForth : GenericMover
     // FixedUpdate is called once per physics update
     void FixedUpdate()
     {
+        if (GameManager.Instance.GamePaused) return;
+
         if (_activated)
         {
             if (_timer.TimeElapsed > _stopTime)
@@ -99,7 +101,7 @@ public class MoveBetweenBackForth : GenericMover
     /// 
     /// Defines what happens when the timer has completed.
     /// </summary>
-    public override void TimedAction()
+    protected override void TimedAction()
     {
         if (!_backwards)
         {

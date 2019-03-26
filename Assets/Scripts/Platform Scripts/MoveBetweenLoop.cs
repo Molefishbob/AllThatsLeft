@@ -10,6 +10,8 @@ public class MoveBetweenLoop : GenericMover
     // FixedUpdate is called once per physics update
     void FixedUpdate()
     {
+        if (GameManager.Instance.GamePaused) return;
+
         if (_activated)
         {
 
@@ -62,7 +64,7 @@ public class MoveBetweenLoop : GenericMover
     /// 
     /// Defines what happens when the timer has completed.
     /// </summary>
-    public override void TimedAction()
+    protected override void TimedAction()
     {
         _nextObjectNum = 1;
         _currentObjectNum = 0;
