@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceiver
+public abstract class GenericBot : CharControlBase, IDamageReceiver
 {
     public float _fTurnSpeed = 2;
     [Tooltip("Lifetime in seconds")]
@@ -10,12 +10,12 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     public bool _bMoving;
     public bool _bDebug;
     private Transform _tPool;
-    protected OneShotTimer _lifeTimeTimer;
+    protected PhysicsOneShotTimer _lifeTimeTimer;
 
     protected override void Awake()
     {
         base.Awake();
-        _lifeTimeTimer = GetComponent<OneShotTimer>();
+        _lifeTimeTimer = GetComponent<PhysicsOneShotTimer>();
         _tPool = transform.parent;
         _animator = GetComponentInChildren<Animator>();
     }
@@ -30,7 +30,6 @@ public abstract class GenericBot : CharControlBase, ITimedAction, IDamageReceive
     public virtual void StartMovement()
     {
         SetControllerActive(true);
-        _lifeTimeTimer.SetTimerTarget(this);
         _lifeTimeTimer.StartTimer(_fLifetime);
         _bMoving = true;
         if (_animator != null)

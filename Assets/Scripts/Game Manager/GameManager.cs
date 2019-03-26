@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public delegate void GenericEvent();
 public delegate void ValueChangedInt(int amount);
 public delegate void ValueChangedFloat(float amount);
 public delegate void ValueChangedBool(bool value);

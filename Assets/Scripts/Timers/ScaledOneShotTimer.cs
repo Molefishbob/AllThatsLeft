@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnscaledOneShotTimer : Timer
+public class ScaledOneShotTimer : Timer
 {
     private void Update()
     {
+        if (GameManager.Instance.GamePaused) return;
         if (!IsRunning) return;
 
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
         if (_timer >= Duration)
         {
             _timer = Duration;

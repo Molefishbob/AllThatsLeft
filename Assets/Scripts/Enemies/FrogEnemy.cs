@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogEnemy : CharControlBase, ITimedAction
+public class FrogEnemy : CharControlBase
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
     private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow, _canSpit;
-    private OneShotTimer _timer;
+    private PhysicsOneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
     public LayerMask _groundLayer;
 
@@ -15,8 +15,7 @@ public class FrogEnemy : CharControlBase, ITimedAction
     {
         base.Awake();
         _canFollow = true;
-        _timer = GetComponent<OneShotTimer>();
-        _timer.SetTimerTarget(this);
+        _timer = GetComponent<PhysicsOneShotTimer>();
         _stopMoving = false;
         _nextStopX = true;
         _nextStopZ = false;
@@ -26,7 +25,17 @@ public class FrogEnemy : CharControlBase, ITimedAction
 
     protected override void Start()
     {
+        base.Start();
         SetControllerActive(true);
+        _timer.OnTimerCompleted += TimedAction;
+    }
+
+    private void OnDestroy()
+    {
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= TimedAction;
+        }
     }
 
     private void Update()
@@ -104,7 +113,7 @@ public class FrogEnemy : CharControlBase, ITimedAction
         return move;
     }
 
-    public void TimedAction()
+    private void TimedAction()
     {
         _stopMoving = false;
     }

@@ -101,7 +101,7 @@ public class MoveBetweenBackForth : GenericMover
     /// 
     /// Defines what happens when the timer has completed.
     /// </summary>
-    public override void TimedAction()
+    protected override void TimedAction()
     {
         if (!_backwards)
         {

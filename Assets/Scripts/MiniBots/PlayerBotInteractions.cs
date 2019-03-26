@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBotInteractions : MonoBehaviour, ITimedAction
+public class PlayerBotInteractions : MonoBehaviour
 {
     [SerializeField]
     private float _fDetectRadius = 2;
@@ -32,16 +32,34 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
     private bool _bReleasing = false;
     [SerializeField]
     private float _fReleaseDelay = 2;
-    private OneShotTimer _ostRelease;
-    private OneShotTimer _ostDisable;
+    private ScaledOneShotTimer _ostRelease;
+    private ScaledOneShotTimer _ostDisable;
     private GameObject[] _goTarget = null;
     private PlayerMovement _selfMover;
 
     void Awake()
     {
         _selfMover = GetComponent<PlayerMovement>();
-        _ostRelease = gameObject.AddComponent<OneShotTimer>();
-        _ostDisable = gameObject.AddComponent<OneShotTimer>();
+        _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
+        _ostDisable = gameObject.AddComponent<ScaledOneShotTimer>();
+    }
+
+    private void Start()
+    {
+        _ostRelease.OnTimerCompleted += ActualRelease;
+        _ostDisable.OnTimerCompleted += DisableSelf;
+    }
+
+    private void OnDestroy()
+    {
+        if (_ostRelease != null)
+        {
+            _ostRelease.OnTimerCompleted -= ActualRelease;
+        }
+        if (_ostDisable != null)
+        {
+            _ostDisable.OnTimerCompleted -= DisableSelf;
+        }
     }
 
     void Update()
@@ -158,14 +176,13 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
         {
             _selfMover.ControlsDisabled = true;
             _bReleasing = true;
-            _ostRelease.SetTimerTarget(this);
             _ostRelease.StartTimer(_fReleaseDelay);
         }
         else
         {
             _selfMover.ControlsDisabled = true;
             _bReleasing = true;
-            TimedAction();
+            ActualRelease();
         }
     }
 
@@ -181,18 +198,21 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
         }
     }
 
-    public void TimedAction()
+    private void ActualRelease()
     {
-        if (!_ostRelease.IsRunning && _bActive)
+        if (_bActive)
         {
             GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
             _bActive = false;
             _bReleasing = !_bReleasing;
             GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
-            _ostDisable.SetTimerTarget(this);
             _ostDisable.StartTimer(3f);
         }
-        else if (!_ostDisable.IsRunning && !_bHacking)
+    }
+
+    private void DisableSelf()
+    {
+        if (!_bHacking)
         {
             gameObject.SetActive(false);
         }
