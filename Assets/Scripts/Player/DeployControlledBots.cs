@@ -77,6 +77,8 @@ public class DeployControlledBots : MonoBehaviour
         _activeBot = GameManager.Instance.BotPool.GetObject();
         _activeBot.transform.position = _deployTarget.position;
         _activeBot.transform.rotation = _deployTarget.rotation;
+        _activeBot.ControlsDisabled = true;
+        _activeBot.SetControllerActive(true);
         GameManager.Instance.Camera.GetNewTarget(_activeBot.transform, _deployDelay);
         _timer.StartTimer(_deployDelay);
     }
@@ -84,7 +86,6 @@ public class DeployControlledBots : MonoBehaviour
     private void ActivateBot()
     {
         _activeBot.ControlsDisabled = false;
-        _activeBot.SetControllerActive(true);
         _activeBot = null;
     }
 
