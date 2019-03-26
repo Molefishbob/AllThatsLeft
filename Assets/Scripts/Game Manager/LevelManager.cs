@@ -64,7 +64,7 @@ public class LevelManager : MonoBehaviour
         MainCharMovement[] players = FindObjectsOfType<MainCharMovement>();
         if (GameManager.Instance.Player == null)
         {
-            if (players == null)
+            if (players == null || players.Length <= 0)
             {
                 GameManager.Instance.Player = Instantiate(_playerPrefab);
             }

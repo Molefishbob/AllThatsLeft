@@ -17,8 +17,6 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField]
     private float _groundedDistanceBonus = 0.04f;
     [SerializeField]
-    private RandomSFXSound _walkSound = null;
-    [SerializeField]
     private RandomSFXSound _landingSound = null;
     [SerializeField]
     private string _animatorBoolRunning = "Run";
