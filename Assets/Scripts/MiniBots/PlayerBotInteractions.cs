@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerBotInteractions : MonoBehaviour
 {
     [SerializeField]
-    private float _fDetectRadius = 2.0f;
-    [SerializeField]
     private float _fExplodeRadius = 4.0f;
     public LayerMask _lHackableLayer = 1 << 18;
     public LayerMask _lBombableLayer = 1 << 11 | 1 << 10 | 1 << 9;
@@ -172,7 +170,9 @@ public class PlayerBotInteractions : MonoBehaviour
         Collider[] hitColliders;
         if (!isExplosion)
         {
-            hitColliders = Physics.OverlapSphere(transform.position, _fDetectRadius, interLayer);
+            Vector3 capsuleCenter = transform.position + _selfMover._controller.center;
+            Vector3 halfHeight = Vector3.up * ((_selfMover._controller.height / 2.0f) - _selfMover._controller.radius);
+            hitColliders = Physics.OverlapCapsule(capsuleCenter - halfHeight, capsuleCenter + halfHeight, _selfMover._controller.radius, interLayer);
         }
         else
         {
@@ -217,6 +217,7 @@ public class PlayerBotInteractions : MonoBehaviour
         _bHacking = false;
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
+        _ostLife.StopTimer();
         _selfMover._animator.SetBool("Explode", false);
         _shadowProjector.enabled = true;
         _selfMover.SetControllerActive(false);
@@ -226,6 +227,12 @@ public class PlayerBotInteractions : MonoBehaviour
     public void ReleaseControls(bool withDelay)
     {
         _selfMover.ControlsDisabled = true;
+        GameObject[] hacks = CheckSurroundings(_lHackableLayer, false);
+        foreach (GameObject item in hacks)
+        {
+            GenericHackable hack = item.GetComponent<GenericHackable>();
+            hack?.ShowPrompt(false);
+        }
         if (withDelay)
         {
             _ostRelease.StartTimer(_fReleaseDelay);
@@ -263,7 +270,7 @@ public class PlayerBotInteractions : MonoBehaviour
                 _goParticleHolder.transform.parent = transform;
                 _goParticleHolder.transform.localPosition = Vector3.zero;
             }
-                
+
             gameObject.SetActive(false);
         }
     }
