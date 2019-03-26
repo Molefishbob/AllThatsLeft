@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerBotInteractions : MonoBehaviour
 {
     [SerializeField]
-    private float _fDetectRadius = 2;
+    private float _fDetectRadius = 2.0f;
     [SerializeField]
-    private float _fExplodeRadius = 4;
+    private float _fExplodeRadius = 4.0f;
     public LayerMask _lHackableLayer = 1 << 18;
     public LayerMask _lBombableLayer = 1 << 11 | 1 << 10 | 1 << 9;
     [SerializeField]
@@ -16,22 +16,13 @@ public class PlayerBotInteractions : MonoBehaviour
     private string _sExplodeButton = "Bomb Action";
     [SerializeField]
     private string _sStayButton = "Stay Action";
-    public bool _bActive
-    {
-        get { return _bactive; }
-        set
-        {
-            _bactive = value;
-            _selfMover.ControlsDisabled = !value;
-            _selfMover.SetControllerActive(true);
-        }
-    }
-    private bool _bactive = false;
     [SerializeField]
     private bool _bHacking = false;
     private bool _bReleasing = false;
     [SerializeField]
-    private float _fReleaseDelay = 2;
+    private float _fReleaseDelay = 2.0f;
+    [SerializeField]
+    private float _transitionTime = 3.0f;
     private ScaledOneShotTimer _ostRelease;
     private ScaledOneShotTimer _ostDisable;
     private GameObject[] _goTarget = null;
@@ -65,10 +56,10 @@ public class PlayerBotInteractions : MonoBehaviour
     void Update()
     {
         if (GameManager.Instance.GamePaused) return;
-        if (!_selfMover.IsGrounded) return;
+        if (!_selfMover.IsGrounded || _selfMover.ControlsDisabled) return;
 
         // Hack
-        if (Input.GetButtonDown(_sHackButton) && _bActive && !_bHacking && !_bReleasing)
+        if (Input.GetButtonDown(_sHackButton))
         {
             _goTarget = CheckSurroundings(_lHackableLayer, false);
             if (_goTarget != null)
@@ -84,14 +75,14 @@ public class PlayerBotInteractions : MonoBehaviour
         }
 
         // Explode
-        if (Input.GetButtonDown(_sExplodeButton) && _bActive && !_bReleasing)
+        if (Input.GetButtonDown(_sExplodeButton))
         {
             _selfMover._animator.SetBool("Explode", true);
             ReleaseControls(true);
         }
 
         // Just release
-        if (Input.GetButtonDown(_sStayButton) && _bActive)
+        if (Input.GetButtonDown(_sStayButton))
         {
             _ostRelease.StopTimer();
             ReleaseControls(false);
@@ -162,7 +153,7 @@ public class PlayerBotInteractions : MonoBehaviour
     }
     public void OnDisable()
     {
-        _bActive = false;
+        _bHacking = false;
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
         _selfMover._animator.SetBool("Explode", false);
@@ -172,16 +163,14 @@ public class PlayerBotInteractions : MonoBehaviour
     // Release the controls back to the player
     public void ReleaseControls(bool withDelay)
     {
+        _selfMover.ControlsDisabled = true;
+        _bReleasing = true;
         if (withDelay)
         {
-            _selfMover.ControlsDisabled = true;
-            _bReleasing = true;
             _ostRelease.StartTimer(_fReleaseDelay);
         }
         else
         {
-            _selfMover.ControlsDisabled = true;
-            _bReleasing = true;
             ActualRelease();
         }
     }
@@ -194,24 +183,19 @@ public class PlayerBotInteractions : MonoBehaviour
             _goTarget[0].GetComponent<GenericHackable>()?.TimeToLeave();
             _goTarget = null;
             gameObject.SetActive(false);
-
         }
     }
 
     private void ActualRelease()
     {
-        if (_bActive)
-        {
-            GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
-            _bActive = false;
-            _bReleasing = !_bReleasing;
-            GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
-            _ostDisable.StartTimer(3f);
-        }
+        _bReleasing = false;
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
+        _ostDisable.StartTimer(_transitionTime);
     }
 
     private void DisableSelf()
     {
+        GameManager.Instance.Player.ControlsDisabled = false;
         if (!_bHacking)
         {
             gameObject.SetActive(false);

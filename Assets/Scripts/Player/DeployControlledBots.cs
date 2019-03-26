@@ -14,27 +14,37 @@ public class DeployControlledBots : MonoBehaviour
     private float _deployHeightRange = 1.0f;
     [SerializeField]
     private string _animatorTriggerDeploy = "Deploy";
+    [SerializeField]
+    private float _deployDelay = 2.0f;
 
     private Vector3 _deployStartPosition;
     private MainCharMovement _player;
+    private BotMovement _activeBot;
+    private ScaledOneShotTimer _timer;
 
     private void Awake()
     {
         _player = GetComponent<MainCharMovement>();
+        _timer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
         _deployStartPosition = _deployTarget.localPosition;
-        PrefsManager.Instance.OnBotsUnlockedChanged += Activate;
-        Activate(PrefsManager.Instance.BotsUnlocked);
+        PrefsManager.Instance.OnBotsUnlockedChanged += ActivateScript;
+        ActivateScript(PrefsManager.Instance.BotsUnlocked);
+        _timer.OnTimerCompleted += ActivateBot;
     }
 
     private void OnDestroy()
     {
         if (PrefsManager.Instance != null)
         {
-            PrefsManager.Instance.OnBotsUnlockedChanged -= Activate;
+            PrefsManager.Instance.OnBotsUnlockedChanged -= ActivateScript;
+        }
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= ActivateBot;
         }
     }
 
@@ -64,14 +74,21 @@ public class DeployControlledBots : MonoBehaviour
         _player.ControlsDisabled = true;
         _player._animator?.SetTrigger(_animatorTriggerDeploy);
 
-        PlayerBotInteractions bot = GameManager.Instance.BotPool.GetObject();
-        bot.transform.position = _deployTarget.position;
-        bot.transform.rotation = _deployTarget.rotation;
-        bot._bActive = true;
-        GameManager.Instance.Camera.GetNewTarget(bot.transform);
+        _activeBot = GameManager.Instance.BotPool.GetObject();
+        _activeBot.transform.position = _deployTarget.position;
+        _activeBot.transform.rotation = _deployTarget.rotation;
+        GameManager.Instance.Camera.GetNewTarget(_activeBot.transform);
+        _timer.StartTimer(_deployDelay);
     }
 
-    private void Activate(bool unlock)
+    private void ActivateBot()
+    {
+        _activeBot.ControlsDisabled = false;
+        _activeBot.SetControllerActive(true);
+        _activeBot = null;
+    }
+
+    private void ActivateScript(bool unlock)
     {
         enabled = unlock;
     }
