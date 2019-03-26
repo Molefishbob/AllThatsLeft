@@ -28,13 +28,17 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
+    private Camera cam;
+    public int _fieldOfView = 60;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
 
     private void Awake()
     {
+        cam = GetComponent<Camera>();
         _newDistance = _distance;
+        cam.fieldOfView = _fieldOfView;
     }
 
     private void OnEnable()
@@ -51,6 +55,11 @@ public class ThirdPersonCamera : MonoBehaviour
         PrefsManager.Instance.OnCameraYSensitivityChanged += SetCameraYSensitivity;
         SetCameraXSensitivity(PrefsManager.Instance.CameraXSensitivity);
         SetCameraYSensitivity(PrefsManager.Instance.CameraYSensitivity);
+
+        PrefsManager.Instance.OnZoomSpeedChanged += SetZoomSpeed;
+        PrefsManager.Instance.OnFieldOfViewChanged += SetFieldOfView;
+        SetZoomSpeed(PrefsManager.Instance.ZoomSpeed);
+        SetFieldOfView(PrefsManager.Instance.FieldOfView);
     }
 
     private void OnDisable()
@@ -199,5 +208,15 @@ public class ThirdPersonCamera : MonoBehaviour
     private void LockCursor(bool paused)
     {
         Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
+    private void SetZoomSpeed(int zSpeed)
+    {
+        _zoomSpeed = zSpeed;
+    }
+
+    private void SetFieldOfView(int fov)
+    {
+        _fieldOfView = fov;
     }
 }

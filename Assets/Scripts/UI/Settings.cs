@@ -42,9 +42,29 @@ public class Settings : MonoBehaviour
         _masterMute.isOn = PrefsManager.Instance.AudioMuteMaster;
         _sFXMute.isOn = PrefsManager.Instance.AudioMuteSFX;
 
+        _xSensSlider.value = PrefsManager.Instance.CameraXSensitivity;
+        _ySensSlider.value = PrefsManager.Instance.CameraYSensitivity;
+        _zoomSpeedSlider.value = PrefsManager.Instance.ZoomSpeed;
+        _fovSlider.value = PrefsManager.Instance.FieldOfView;
+
+        _xSensText.SetText(FormatToDecimalNumber(_xSensSlider.value));
+        _ySensText.SetText(FormatToDecimalNumber(_ySensSlider.value));
+        _zoomSpeedText.SetText(FormatToDecimalNumber(_zoomSpeedSlider.value));
+        _fovText.SetText(_fovSlider.value.ToString());
+        _invertedXAxis.isOn = PrefsManager.Instance.InvertedCameraX;
+        _invertedYAxis.isOn = PrefsManager.Instance.InvertedCameraY;
+
         _musicText.SetText(_musicSlider.value + PercentageFormat);
         _sFXText.SetText(_sFXSlider.value + PercentageFormat);
         _masterText.SetText(_masterSlider.value + PercentageFormat);
+    }
+
+    private float RoundTwoDecimals(float value) {
+        return (value / 10f);
+    }
+
+    private string FormatToDecimalNumber(float value) {
+        return value.ToString("N1");
     }
 
     public void MusicPercentage() {
@@ -116,17 +136,21 @@ public class Settings : MonoBehaviour
     public void CameraXSensitivity()
     {
         
-        _xSensText.SetText((Mathf.Round(_xSensSlider.value) / 10f).ToString());
+        _xSensText.SetText(RoundTwoDecimals(_xSensSlider.value).ToString());
+        PrefsManager.Instance.CameraXSensitivity = Mathf.RoundToInt(_xSensSlider.value);
     }
     public void CameraYSensitivity()
     {
-        _ySensText.SetText((Mathf.Round(_ySensSlider.value) / 10f).ToString());
+        _ySensText.SetText(RoundTwoDecimals(_ySensSlider.value).ToString());
+        PrefsManager.Instance.CameraYSensitivity = Mathf.RoundToInt(_ySensSlider.value);
     }
     public void CameraZoomSpeed()
     {
-        _zoomSpeedText.SetText((Mathf.Round(_zoomSpeedSlider.value) / 10f).ToString());
+        _zoomSpeedText.SetText(RoundTwoDecimals(_zoomSpeedSlider.value).ToString());
+        PrefsManager.Instance.ZoomSpeed = Mathf.RoundToInt(_zoomSpeedSlider.value);
     }public void FieldOfView()
     {
         _fovText.SetText(_fovSlider.value.ToString());
+        PrefsManager.Instance.FieldOfView = Mathf.RoundToInt(_fovSlider.value);
     }
 }

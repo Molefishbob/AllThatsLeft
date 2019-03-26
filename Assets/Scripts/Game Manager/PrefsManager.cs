@@ -15,7 +15,9 @@ public class PrefsManager : Singleton<PrefsManager>
         keyInvertCameraY = "Invert Camera Y",
         keyInvertCameraX = "Invert Camera X",
         keyCameraXSensitivity = "Camera X Sensitivity",
-        keyCameraYSensitivity = "Camera Y Sensitivity";
+        keyCameraYSensitivity = "Camera Y Sensitivity",
+        keyFieldOfView = "Field Of View",
+        keyZoomSpeed = "Zoom Speed";
 
     public event ValueChangedInt OnAudioVolumeSFXChanged;
     public event ValueChangedInt OnAudioVolumeMusicChanged;
@@ -31,6 +33,10 @@ public class PrefsManager : Singleton<PrefsManager>
 
     public event ValueChangedFloat OnCameraXSensitivityChanged;
     public event ValueChangedFloat OnCameraYSensitivityChanged;
+
+    public event ValueChangedInt OnFieldOfViewChanged;
+
+    public event ValueChangedInt OnZoomSpeedChanged;
 
     public void Save()
     {
@@ -233,6 +239,38 @@ public class PrefsManager : Singleton<PrefsManager>
             if (OnCameraYSensitivityChanged != null)
             {
                 OnCameraYSensitivityChanged(value);
+            }
+        }
+    }
+
+    public int FieldOfView
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyFieldOfView, 60);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyFieldOfView, value);
+            if(OnFieldOfViewChanged != null)
+            {
+                OnFieldOfViewChanged(value);
+            }
+        }
+    }
+
+    public int ZoomSpeed
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyZoomSpeed, 1);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyZoomSpeed, value);
+            if (OnZoomSpeedChanged != null)
+            {
+                OnZoomSpeedChanged(value);
             }
         }
     }
