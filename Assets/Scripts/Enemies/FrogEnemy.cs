@@ -6,7 +6,7 @@ public class FrogEnemy : CharControlBase
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
-    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow, _canSpit;
+    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow/* , _canSpit */;
     private PhysicsOneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
     public LayerMask _groundLayer;
@@ -127,7 +127,7 @@ public class FrogEnemy : CharControlBase
             _goBackPosition = transform.position;
         }
         _backToPrevious = false;
-        _canSpit = true;
+        //_canSpit = true;
     }
 
     public void AggroStay(Transform other)
@@ -143,7 +143,7 @@ public class FrogEnemy : CharControlBase
     {
         _followPlayer = false;
         _backToPrevious = true;
-        _canSpit = false;
+        //_canSpit = false;
     }
 
     protected override void OutOfBounds()

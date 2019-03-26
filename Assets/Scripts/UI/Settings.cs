@@ -11,7 +11,7 @@ public class Settings : MonoBehaviour
     [SerializeField]
     private EventSystem  _eventSystem = null;
     [SerializeField]
-    private Button _backButton;
+    private Button _backButton = null;
     [SerializeField]
     private TMP_Text  _musicText = null, _sFXText = null, _masterText = null;
     [SerializeField]
@@ -34,7 +34,6 @@ public class Settings : MonoBehaviour
 
     private void OnEnable() {
         VolumeSettings();
-        CanvasScaler s = new CanvasScaler;
         _musicSlider.value = PrefsManager.Instance.AudioVolumeMusic;
         _sFXSlider.value = PrefsManager.Instance.AudioVolumeSFX;
         _masterSlider.value = PrefsManager.Instance.AudioVolumeMaster;
