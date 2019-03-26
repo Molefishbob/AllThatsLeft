@@ -228,10 +228,13 @@ public class PlayerBotInteractions : MonoBehaviour
     {
         _selfMover.ControlsDisabled = true;
         GameObject[] hacks = CheckSurroundings(_lHackableLayer, false);
-        foreach (GameObject item in hacks)
+        if (hacks != null && hacks.Length > 0)
         {
-            GenericHackable hack = item.GetComponent<GenericHackable>();
-            hack?.ShowPrompt(false);
+            foreach (GameObject item in hacks)
+            {
+                GenericHackable hack = item.GetComponent<GenericHackable>();
+                hack?.ShowPrompt(false);
+            }
         }
         if (withDelay)
         {
