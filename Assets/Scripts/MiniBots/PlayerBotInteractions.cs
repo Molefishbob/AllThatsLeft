@@ -16,6 +16,8 @@ public class PlayerBotInteractions : MonoBehaviour
     private string _sExplodeButton = "Bomb Action";
     [SerializeField]
     private string _sStayButton = "Stay Action";
+    [SerializeField]
+    private GameObject _goParticlePrefab = null;
     public bool _bActive
     {
         get { return _bactive; }
@@ -48,6 +50,11 @@ public class PlayerBotInteractions : MonoBehaviour
     {
         _ostRelease.OnTimerCompleted += ActualRelease;
         _ostDisable.OnTimerCompleted += DisableSelf;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, _fExplodeRadius);
     }
 
     private void OnDestroy()
@@ -87,6 +94,8 @@ public class PlayerBotInteractions : MonoBehaviour
         if (Input.GetButtonDown(_sExplodeButton) && _bActive && !_bReleasing)
         {
             _selfMover._animator.SetBool("Explode", true);
+            // Maybe particle pool is coming lol
+            Instantiate(_goParticlePrefab, transform.position - new Vector3(0,0.5f,0), Quaternion.identity, transform);
             ReleaseControls(true);
         }
 
