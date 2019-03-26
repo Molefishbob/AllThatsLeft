@@ -100,6 +100,7 @@ public class Settings : MonoBehaviour
 
         nav.selectOnUp = _sFXMute.GetComponent<Selectable>();
         nav.selectOnRight = _controlSettings.GetComponent<Selectable>();
+        nav.selectOnLeft = null;
 
         _backButton.navigation = nav;
 
@@ -117,6 +118,7 @@ public class Settings : MonoBehaviour
 
         nav.selectOnUp = _invertedXAxis.GetComponent<Selectable>();
         nav.selectOnLeft = _volumeSettings.GetComponent<Selectable>();
+        nav.selectOnRight = null;
 
         _backButton.navigation = nav;
     }
