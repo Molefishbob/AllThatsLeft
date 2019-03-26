@@ -17,7 +17,7 @@ public class CheckPointPole : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        GameManager.Instance.LevelManager.SetCheckpoint(id);
+        GameManager.Instance.LevelManager.SetCheckpoint(this);
         _collider.enabled = false;
     }
 }
