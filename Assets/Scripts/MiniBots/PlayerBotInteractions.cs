@@ -38,12 +38,14 @@ public class PlayerBotInteractions : MonoBehaviour
     private ScaledOneShotTimer _ostDisable;
     private GameObject[] _goTarget = null;
     private PlayerMovement _selfMover;
+    private Projector _shadowProjector;
 
     void Awake()
     {
         _selfMover = GetComponent<PlayerMovement>();
         _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
         _ostDisable = gameObject.AddComponent<ScaledOneShotTimer>();
+        _shadowProjector = gameObject.GetComponentInChildren<Projector>();
     }
 
     private void Start()
@@ -122,6 +124,7 @@ public class PlayerBotInteractions : MonoBehaviour
                     o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
             }
         }
+    _shadowProjector.enabled = false;
     }
 
     private GameObject[] CheckSurroundings(LayerMask interLayer, bool isExplosion)
@@ -175,6 +178,7 @@ public class PlayerBotInteractions : MonoBehaviour
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
         _selfMover._animator.SetBool("Explode", false);
+        _shadowProjector.enabled = true;
         _selfMover.SetControllerActive(false);
     }
 
