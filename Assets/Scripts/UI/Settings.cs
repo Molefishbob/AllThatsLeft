@@ -82,7 +82,7 @@ public class Settings : MonoBehaviour
         _eventSystem.SetSelectedGameObject(_masterSlider.gameObject);
         Navigation nav = _backButton.navigation;
 
-        nav.selectOnUp = _controlSettings.GetComponent<Selectable>();
+        nav.selectOnUp = _sFXMute.GetComponent<Selectable>();
         nav.selectOnRight = _controlSettings.GetComponent<Selectable>();
 
         _backButton.navigation = nav;
@@ -99,7 +99,7 @@ public class Settings : MonoBehaviour
 
          Navigation nav = _backButton.navigation;
 
-        nav.selectOnUp = _volumeSettings.GetComponent<Selectable>();
+        nav.selectOnUp = _invertedXAxis.GetComponent<Selectable>();
         nav.selectOnLeft = _volumeSettings.GetComponent<Selectable>();
 
         _backButton.navigation = nav;
