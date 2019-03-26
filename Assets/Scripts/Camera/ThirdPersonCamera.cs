@@ -21,15 +21,18 @@ public class ThirdPersonCamera : MonoBehaviour
     public float _minPitch = -70;
     [Tooltip("How high the camera can go")]
     public float _maxPitch = 85;
-    [Tooltip("How fast the camera moves to the new target")]
-    public float _targetToTargetSpeed = 1;
-    private float _lerperHelper = 0;
+    [Tooltip("How fast the camera moves to the new target by default")]
+    public float _defaultTransitionTime = 1;
     private bool _movingToTarget;
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
     private Camera cam;
     public int _fieldOfView = 60;
+    private ScaledOneShotTimer _transitionTimer;
+    public float _horSensMulti = 0.05f;
+    public float _verSensMulti = 0.05f;
+    public float _zoomMulti = 0.01f;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -38,7 +41,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         _newDistance = _distance;
-        
+        _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
@@ -91,7 +94,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_lookAt == null) return;
 
-        if (!_movingToTarget)
+        if (!_transitionTimer.IsRunning)
         {
             _distance -= (Input.GetAxis("Scroll")) * _zoomSpeed;
 
@@ -130,14 +133,7 @@ public class ThirdPersonCamera : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
             Vector3 dir = new Vector3(0, 0, -_newDistance);
 
-            transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _lerperHelper)) + rotation * dir;
-            _lerperHelper += 0.1f * _targetToTargetSpeed;
-
-            if (_lerperHelper >= 1)
-            {
-                _movingToTarget = false;
-                _lerperHelper = 0;
-            }
+            transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
         }
     }
 
@@ -163,6 +159,11 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void GetNewTarget(Transform trans)
     {
+        GetNewTarget(trans, _defaultTransitionTime);
+    }
+
+    public void GetNewTarget(Transform trans, float time)
+    {
         Transform tf = trans.Find(_cameraTargetName);
         if (tf != null)
         {
@@ -173,7 +174,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             _oldTarget = _lookAt.position;
             _lookAt = trans;
-            _movingToTarget = true;
+            _transitionTimer.StartTimer(time);
         }
         if (_oldTarget == null)
         {
@@ -202,14 +203,14 @@ public class ThirdPersonCamera : MonoBehaviour
         _invertY = b ? -1 : 1;
     }
 
-    private void SetCameraXSensitivity(float sens)
+    private void SetCameraXSensitivity(int sens)
     {
-        _horizontalSensitivity = sens;
+        _horizontalSensitivity = (float)sens * _horSensMulti;
     }
 
-    private void SetCameraYSensitivity(float sens)
+    private void SetCameraYSensitivity(int sens)
     {
-        _verticalSensitivity = sens;
+        _verticalSensitivity = (float)sens * _verSensMulti;
     }
 
     private void LockCursor(bool paused)
@@ -219,7 +220,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void SetZoomSpeed(int zSpeed)
     {
-        _zoomSpeed = zSpeed;
+        _zoomSpeed = (float)zSpeed * _zoomMulti;
     }
 
     private void SetFieldOfView(int fov)

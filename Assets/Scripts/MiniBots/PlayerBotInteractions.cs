@@ -32,22 +32,25 @@ public class PlayerBotInteractions : MonoBehaviour
     private bool _bactive = false;
     [SerializeField]
     private bool _bHacking = false;
-    private bool _bReleasing = false;
     [SerializeField]
     private float _fReleaseDelay = 2.0f;
     [SerializeField]
-    private float _transitionTime = 3.0f;
+    private float _transitionTime = 1.0f;
+    [SerializeField]
+    private float _fLifeTime = 30.0f;
     private ScaledOneShotTimer _ostRelease;
     private ScaledOneShotTimer _ostDisable;
+    private PhysicsOneShotTimer _ostLife;
     private GameObject[] _goTarget = null;
-    private PlayerMovement _selfMover;
+    private BotMovement _selfMover;
     private Projector _shadowProjector;
 
     void Awake()
     {
-        _selfMover = GetComponent<PlayerMovement>();
+        _selfMover = GetComponent<BotMovement>();
         _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
         _ostDisable = gameObject.AddComponent<ScaledOneShotTimer>();
+        _ostLife = gameObject.AddComponent<PhysicsOneShotTimer>();
         _shadowProjector = gameObject.GetComponentInChildren<Projector>();
     }
 
@@ -55,6 +58,7 @@ public class PlayerBotInteractions : MonoBehaviour
     {
         _ostRelease.OnTimerCompleted += ActualRelease;
         _ostDisable.OnTimerCompleted += DisableSelf;
+        _ostLife.OnTimerCompleted += _selfMover.Die;
     }
 
     void OnDrawGizmosSelected()
@@ -71,6 +75,10 @@ public class PlayerBotInteractions : MonoBehaviour
         if (_ostDisable != null)
         {
             _ostDisable.OnTimerCompleted -= DisableSelf;
+        }
+        if (_ostLife != null && _selfMover != null)
+        {
+            _ostLife.OnTimerCompleted -= _selfMover.Die;
         }
     }
 
@@ -101,7 +109,7 @@ public class PlayerBotInteractions : MonoBehaviour
             _selfMover._animator.SetBool("Explode", true);
             if (_psExplosion == null)
             {
-                GameObject tmp = Instantiate(_goParticlePrefab, transform.position - new Vector3(0,0.5f,0), Quaternion.identity, transform);
+                GameObject tmp = Instantiate(_goParticlePrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity, transform);
                 _psExplosion = tmp.GetComponentsInChildren<ParticleSystem>(true);
             }
             else
@@ -118,6 +126,7 @@ public class PlayerBotInteractions : MonoBehaviour
         if (Input.GetButtonDown(_sStayButton))
         {
             _ostRelease.StopTimer();
+            _ostLife.StartTimer(_fLifeTime);
             ReleaseControls(false);
         }
     }
@@ -137,7 +146,7 @@ public class PlayerBotInteractions : MonoBehaviour
                     o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
             }
         }
-    _shadowProjector.enabled = false;
+        _shadowProjector.enabled = false;
     }
 
     private GameObject[] CheckSurroundings(LayerMask interLayer, bool isExplosion)
@@ -199,7 +208,6 @@ public class PlayerBotInteractions : MonoBehaviour
     public void ReleaseControls(bool withDelay)
     {
         _selfMover.ControlsDisabled = true;
-        _bReleasing = true;
         if (withDelay)
         {
             _ostRelease.StartTimer(_fReleaseDelay);
@@ -217,21 +225,20 @@ public class PlayerBotInteractions : MonoBehaviour
             _bHacking = false;
             _goTarget[0].GetComponent<GenericHackable>()?.TimeToLeave();
             _goTarget = null;
-            gameObject.SetActive(false);
         }
+        gameObject.SetActive(false);
     }
 
     private void ActualRelease()
     {
-        _bReleasing = false;
-        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTime);
         _ostDisable.StartTimer(_transitionTime);
     }
 
     private void DisableSelf()
     {
         GameManager.Instance.Player.ControlsDisabled = false;
-        if (!_bHacking)
+        if (!_bHacking && !_ostLife.IsRunning)
         {
             gameObject.SetActive(false);
         }

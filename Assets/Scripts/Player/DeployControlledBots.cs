@@ -15,7 +15,7 @@ public class DeployControlledBots : MonoBehaviour
     [SerializeField]
     private string _animatorTriggerDeploy = "Deploy";
     [SerializeField]
-    private float _deployDelay = 2.0f;
+    private float _deployDelay = 1.0f;
 
     private Vector3 _deployStartPosition;
     private MainCharMovement _player;
@@ -77,7 +77,7 @@ public class DeployControlledBots : MonoBehaviour
         _activeBot = GameManager.Instance.BotPool.GetObject();
         _activeBot.transform.position = _deployTarget.position;
         _activeBot.transform.rotation = _deployTarget.rotation;
-        GameManager.Instance.Camera.GetNewTarget(_activeBot.transform);
+        GameManager.Instance.Camera.GetNewTarget(_activeBot.transform, _deployDelay);
         _timer.StartTimer(_deployDelay);
     }
 
