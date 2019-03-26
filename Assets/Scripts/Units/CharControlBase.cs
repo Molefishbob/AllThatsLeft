@@ -80,8 +80,6 @@ public abstract class CharControlBase : MonoBehaviour
 
             if (inputDirection.magnitude > 0.0f)
             {
-                _animator?.SetBool(_animatorBoolRunning, true);
-
                 // convert input direction to a rotation
                 Quaternion inputRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
 
@@ -110,17 +108,36 @@ public abstract class CharControlBase : MonoBehaviour
                 {
                     _internalMove = _internalMove.normalized * maxSpeed;
                 }
+
+                // animation stuff
+                if (_animator != null)
+                {
+                    _animator.SetBool(_animatorBoolRunning, true);
+                    _animator.speed = _internalMove.magnitude / maxSpeed;
+                }
             }
             // no input deceleration
             else if (_internalMove.magnitude > decelerationMagnitude)
             {
                 _internalMove -= _internalMove.normalized * decelerationMagnitude;
-                _animator?.SetBool(_animatorBoolRunning, false);
+
+                // animation stuff
+                if (_animator != null)
+                {
+                    _animator.SetBool(_animatorBoolRunning, true);
+                    _animator.speed = _internalMove.magnitude / maxSpeed;
+                }
             }
             else
             {
                 _internalMove = Vector3.zero;
-                _animator?.SetBool(_animatorBoolRunning, false);
+
+                // animation stuff
+                if (_animator != null)
+                {
+                    _animator.SetBool(_animatorBoolRunning, false);
+                    _animator.speed = 1;
+                }
             }
 
             // gravity is weird, have to multiply with deltatime twice
