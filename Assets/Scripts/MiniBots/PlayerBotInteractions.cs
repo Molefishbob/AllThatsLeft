@@ -18,6 +18,7 @@ public class PlayerBotInteractions : MonoBehaviour
     private string _sStayButton = "Stay Action";
     [SerializeField]
     private GameObject _goParticlePrefab = null;
+    private GameObject _goParticleHolder;
     private ParticleSystem[] _psExplosion = null;
     public bool _bActive
     {
@@ -125,8 +126,8 @@ public class PlayerBotInteractions : MonoBehaviour
             _selfMover._animator.SetBool("Explode", true);
             if (_psExplosion == null)
             {
-                GameObject tmp = Instantiate(_goParticlePrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity, transform);
-                _psExplosion = tmp.GetComponentsInChildren<ParticleSystem>(true);
+                _goParticleHolder = Instantiate(_goParticlePrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity, transform);
+                _psExplosion = _goParticleHolder.GetComponentsInChildren<ParticleSystem>(true);
             }
             else
             {
@@ -162,6 +163,7 @@ public class PlayerBotInteractions : MonoBehaviour
                     o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
             }
         }
+        _goParticleHolder.transform.parent = null;
         _shadowProjector.enabled = false;
     }
 
@@ -256,6 +258,12 @@ public class PlayerBotInteractions : MonoBehaviour
         GameManager.Instance.Player.ControlsDisabled = false;
         if (!_bHacking && !_ostLife.IsRunning)
         {
+            if (_psExplosion != null)
+            {
+                _goParticleHolder.transform.parent = transform;
+                _goParticleHolder.transform.localPosition = Vector3.zero;
+            }
+                
             gameObject.SetActive(false);
         }
     }
