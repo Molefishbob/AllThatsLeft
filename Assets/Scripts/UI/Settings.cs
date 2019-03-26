@@ -34,7 +34,6 @@ public class Settings : MonoBehaviour
 
     private void OnEnable() {
         VolumeSettings();
-        CanvasScaler s = new CanvasScaler;
         _musicSlider.value = PrefsManager.Instance.AudioVolumeMusic;
         _sFXSlider.value = PrefsManager.Instance.AudioVolumeSFX;
         _masterSlider.value = PrefsManager.Instance.AudioVolumeMaster;
