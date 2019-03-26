@@ -59,7 +59,7 @@ public class MenuController : MonoBehaviour
 
     public void Quit()
     {
-        Debug.Log("Quitted");
+        print("Quitted");
         GameManager.Instance.QuitGame();
     }
 }
