@@ -213,9 +213,18 @@ public class ThirdPersonCamera : MonoBehaviour
         _verticalSensitivity = (float)sens * _verSensMulti;
     }
 
-    private void LockCursor(bool paused)
+    private void LockCursor(bool locked)
     {
-        Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     private void SetZoomSpeed(int zSpeed)
