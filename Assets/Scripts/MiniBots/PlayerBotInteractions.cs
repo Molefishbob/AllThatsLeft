@@ -18,6 +18,7 @@ public class PlayerBotInteractions : MonoBehaviour
     private string _sStayButton = "Stay Action";
     [SerializeField]
     private GameObject _goParticlePrefab = null;
+    private ParticleSystem[] _psExplosion = null;
     public bool _bActive
     {
         get { return _bactive; }
@@ -96,8 +97,18 @@ public class PlayerBotInteractions : MonoBehaviour
         if (Input.GetButtonDown(_sExplodeButton) && _bActive && !_bReleasing)
         {
             _selfMover._animator.SetBool("Explode", true);
-            // Maybe particle pool is coming lol
-            Instantiate(_goParticlePrefab, transform.position - new Vector3(0,0.5f,0), Quaternion.identity, transform);
+            if (_psExplosion == null)
+            {
+                GameObject tmp = Instantiate(_goParticlePrefab, transform.position - new Vector3(0,0.5f,0), Quaternion.identity, transform);
+                _psExplosion = tmp.GetComponentsInChildren<ParticleSystem>(true);
+            }
+            else
+            {
+                foreach (ParticleSystem o in _psExplosion)
+                {
+                    o.gameObject.SetActive(true);
+                }
+            }
             ReleaseControls(true);
         }
 
