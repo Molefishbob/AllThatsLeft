@@ -75,6 +75,8 @@ public class ThirdPersonCamera : MonoBehaviour
             PrefsManager.Instance.OnInvertedCameraYChanged -= ChangeInvertY;
             PrefsManager.Instance.OnCameraXSensitivityChanged -= SetCameraXSensitivity;
             PrefsManager.Instance.OnCameraYSensitivityChanged -= SetCameraYSensitivity;
+            PrefsManager.Instance.OnZoomSpeedChanged -= SetZoomSpeed;
+            PrefsManager.Instance.OnFieldOfViewChanged -= SetFieldOfView;
         }
     }
 
