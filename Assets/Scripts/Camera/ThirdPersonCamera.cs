@@ -23,7 +23,6 @@ public class ThirdPersonCamera : MonoBehaviour
     public float _maxPitch = 85;
     [Tooltip("How fast the camera moves to the new target by default")]
     public float _defaultTransitionTime = 1;
-    private bool _movingToTarget;
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
@@ -93,7 +92,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(_follow);
         if (GameManager.Instance.GamePaused) return;
 
         if (_lookAt == null) return;
@@ -200,9 +198,16 @@ public class ThirdPersonCamera : MonoBehaviour
         _lookAt = trans;
     }
 
-    public void Following(bool follow)
+    public void OnPlayerDeath()
     {
-        _follow = follow;
+        _follow = false;
+    }
+
+    public void OnPlayerRebirth()
+    {
+        _follow = true;
+        _pitch = 0.0f;
+        _yaw = 0.0f;
     }
 
     private void ChangeInvertX(bool b)
