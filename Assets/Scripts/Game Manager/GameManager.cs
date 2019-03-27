@@ -192,6 +192,7 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
+        PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
             Debug.LogWarning("No scene with ID: " + id);
@@ -200,6 +201,7 @@ public class GameManager : Singleton<GameManager>
         else
         {
             SceneManager.LoadScene(id);
+            if (GamePaused) UnPauseGame();
         }
     }
 
