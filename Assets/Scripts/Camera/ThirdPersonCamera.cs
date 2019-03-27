@@ -51,8 +51,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void OnEnable()
     {
-        LockCursor(!GameManager.Instance.GamePaused);
-        GameManager.Instance.OnGamePauseChanged += LockCursor;
+        UnLockCursor(GameManager.Instance.GamePaused);
+        GameManager.Instance.OnGamePauseChanged += UnLockCursor;
 
         PrefsManager.Instance.OnInvertedCameraXChanged += ChangeInvertX;
         PrefsManager.Instance.OnInvertedCameraYChanged += ChangeInvertY;
@@ -74,9 +74,9 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnGamePauseChanged -= LockCursor;
+            GameManager.Instance.OnGamePauseChanged -= UnLockCursor;
         }
-        LockCursor(false);
+        UnLockCursor(true);
 
         if (PrefsManager.Instance != null)
         {
@@ -214,17 +214,17 @@ public class ThirdPersonCamera : MonoBehaviour
         _verticalSensitivity = (float)sens * _verSensMulti;
     }
 
-    private void LockCursor(bool locked)
+    private void UnLockCursor(bool unlocked)
     {
-        if (locked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else
+        if (unlocked)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
