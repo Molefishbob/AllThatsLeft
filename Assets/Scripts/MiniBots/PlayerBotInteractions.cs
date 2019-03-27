@@ -259,7 +259,7 @@ public class PlayerBotInteractions : MonoBehaviour
 
     private void ActualRelease()
     {
-        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTime);
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTime, true);
         _ostDisable.StartTimer(_transitionTime);
     }
 

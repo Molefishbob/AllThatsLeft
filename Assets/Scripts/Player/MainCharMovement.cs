@@ -10,10 +10,11 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     protected float _deathTime = 5.0f;
     protected bool _dead = false;
     protected ScaledOneShotTimer _deathTimer;
+
     protected override void Awake()
     {
         base.Awake();
-        _deathTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _deathTimer = gameObject.AddComponent<ScaledOneShotTimer>();    
     }
 
     protected override void Start()
@@ -56,6 +57,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         ControlsDisabled = false;
         _animator?.SetBool(_animatorBoolDeath, false);
         SetControllerActive(true);
+        GameManager.Instance.Camera.OnPlayerRebirth();
     }
 
     protected override void OutOfBounds()
@@ -65,6 +67,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
             _dead = true;
             ControlsDisabled = true;
             _deathTimer.StartTimer(_deathTime);
+            GameManager.Instance.Camera.OnPlayerDeath();
         }
     }
 }

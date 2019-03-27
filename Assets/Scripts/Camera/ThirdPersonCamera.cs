@@ -23,30 +23,36 @@ public class ThirdPersonCamera : MonoBehaviour
     public float _maxPitch = 85;
     [Tooltip("How fast the camera moves to the new target by default")]
     public float _defaultTransitionTime = 1;
-    private bool _movingToTarget;
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
-    private Camera cam;
+    private Camera _cam;
     public int _fieldOfView = 60;
     private ScaledOneShotTimer _transitionTimer;
     public float _horSensMulti = 0.05f;
     public float _verSensMulti = 0.05f;
     public float _zoomMulti = 0.01f;
+    private bool _follow;
+    private float _botDistance;
+    private float _playerDistance;
+    private bool _canZoom;
+    private bool _followingPlayer;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
 
     private void Awake()
     {
-        cam = GetComponent<Camera>();
+        _cam = GetComponent<Camera>();
         _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _follow = true;
     }
 
     private void Start()
     {
-        cam.fieldOfView = _fieldOfView;
+        _botDistance = _minDistance;
+        _cam.fieldOfView = _fieldOfView;
     }
 
     private void OnEnable()
@@ -126,14 +132,25 @@ public class ThirdPersonCamera : MonoBehaviour
 
             Vector3 dir = new Vector3(0, 0, -_newDistance);
 
-            transform.position = _lookAt.position + rotation * dir;
+            if (_follow)
+            {
+                transform.position = _lookAt.position + rotation * dir;
+            }
             transform.LookAt(_lookAt.position);
         }
         else
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-            Vector3 dir = new Vector3(0, 0, -_newDistance);
-
+            if (_canZoom) {
+                if (_followingPlayer)
+                {
+                    _newDistance = Mathf.Lerp(_botDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
+                }else
+                {
+                    _newDistance = Mathf.Lerp(_playerDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
+                }
+            }
+            Vector3 dir = new Vector3(0, 0, -_newDistance); 
             transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
         }
     }
@@ -146,25 +163,40 @@ public class ThirdPersonCamera : MonoBehaviour
         if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
         {
             //Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
-
+            _canZoom = false;
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
         }
         else
         {
             tDistance = _distance;
+            _canZoom = true;
         }
 
         return tDistance;
     }
 
-    public void GetNewTarget(Transform trans)
+    public void GetNewTarget(Transform trans, bool willFollowPlayer)
     {
-        GetNewTarget(trans, _defaultTransitionTime);
+
+        GetNewTarget(trans, _defaultTransitionTime, willFollowPlayer);
     }
 
-    public void GetNewTarget(Transform trans, float time)
+    public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
     {
+        if (willFollowPlayer)
+        {
+            _followingPlayer = true;
+            _botDistance = _distance;
+            _distance = _playerDistance;
+        }
+        else
+        {
+            _followingPlayer = false;
+            _playerDistance = _distance;
+            _distance = _botDistance;
+        }
+
         Transform tf = trans.Find(_cameraTargetName);
         if (tf != null)
         {
@@ -192,6 +224,18 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         _lookAt = trans;
+    }
+
+    public void OnPlayerDeath()
+    {
+        _follow = false;
+    }
+
+    public void OnPlayerRebirth()
+    {
+        _follow = true;
+        _pitch = 0.0f;
+        _yaw = 0.0f;
     }
 
     private void ChangeInvertX(bool b)
