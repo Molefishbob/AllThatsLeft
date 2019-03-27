@@ -116,6 +116,11 @@ public class GameManager : Singleton<GameManager>
     public ThirdPersonCamera Camera;
 
     /// <summary>
+    /// Reference of the pause menu.
+    /// </summary>
+    public PauseMenu PauseMenu;
+
+    /// <summary>
     /// ID of the current level.
     /// </summary>
     public int CurrentLevel { get; private set; } = 1;
@@ -170,7 +175,6 @@ public class GameManager : Singleton<GameManager>
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);
-        Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     /// <summary>
@@ -188,6 +192,7 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
+        PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
             Debug.LogWarning("No scene with ID: " + id);
@@ -196,6 +201,7 @@ public class GameManager : Singleton<GameManager>
         else
         {
             SceneManager.LoadScene(id);
+            if (GamePaused) UnPauseGame();
         }
     }
 

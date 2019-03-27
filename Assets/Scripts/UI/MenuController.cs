@@ -29,7 +29,12 @@ public class MenuController : MonoBehaviour
         _eventSystem.SetSelectedGameObject(_newGame);
     }
 
-    public void StartGame() {
+    public void Continue()
+    {
+    }
+
+    public void StartGame()
+    {
         GameManager.Instance.StartNewGame();
     }
 
