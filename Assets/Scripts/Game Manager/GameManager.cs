@@ -170,7 +170,6 @@ public class GameManager : Singleton<GameManager>
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);
-        Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     /// <summary>
