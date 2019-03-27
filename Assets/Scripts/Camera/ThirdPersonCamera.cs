@@ -27,26 +27,28 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
-    private Camera cam;
+    private Camera _cam;
     public int _fieldOfView = 60;
     private ScaledOneShotTimer _transitionTimer;
     public float _horSensMulti = 0.05f;
     public float _verSensMulti = 0.05f;
     public float _zoomMulti = 0.01f;
+    private bool _follow;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
 
     private void Awake()
     {
-        cam = GetComponent<Camera>();
+        _cam = GetComponent<Camera>();
         _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _follow = true;
     }
 
     private void Start()
     {
-        cam.fieldOfView = _fieldOfView;
+        _cam.fieldOfView = _fieldOfView;
     }
 
     private void OnEnable()
@@ -90,6 +92,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(_follow);
         if (GameManager.Instance.GamePaused) return;
 
         if (_lookAt == null) return;
@@ -125,7 +128,10 @@ public class ThirdPersonCamera : MonoBehaviour
 
             Vector3 dir = new Vector3(0, 0, -_newDistance);
 
-            transform.position = _lookAt.position + rotation * dir;
+            if (_follow)
+            {
+                transform.position = _lookAt.position + rotation * dir;
+            }
             transform.LookAt(_lookAt.position);
         }
         else
@@ -191,6 +197,11 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         _lookAt = trans;
+    }
+
+    public void Following(bool follow)
+    {
+        _follow = follow;
     }
 
     private void ChangeInvertX(bool b)
