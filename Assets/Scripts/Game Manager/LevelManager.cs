@@ -130,9 +130,7 @@ public class LevelManager : MonoBehaviour
     {
         if (Input.GetButtonDown(_pauseMenuButton))
         {
-            bool currentState = GameManager.Instance.PauseMenu.gameObject.activeSelf;
-
-            switch (currentState)
+            switch (GameManager.Instance.GamePaused)
             {
                 case false:
                     GameManager.Instance.PauseMenu.gameObject.SetActive(true);
