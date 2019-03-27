@@ -33,6 +33,10 @@ public class ThirdPersonCamera : MonoBehaviour
     public float _verSensMulti = 0.05f;
     public float _zoomMulti = 0.01f;
     private bool _follow;
+    private float _botDistance;
+    private float _playerDistance;
+    private bool _canZoom;
+    private bool _followingPlayer;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -47,6 +51,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Start()
     {
+        _botDistance = _minDistance;
         _cam.fieldOfView = _fieldOfView;
     }
 
@@ -136,8 +141,16 @@ public class ThirdPersonCamera : MonoBehaviour
         else
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-            Vector3 dir = new Vector3(0, 0, -_newDistance);
-
+            if (_canZoom) {
+                if (_followingPlayer)
+                {
+                    _newDistance = Mathf.Lerp(_botDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
+                }else
+                {
+                    _newDistance = Mathf.Lerp(_playerDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
+                }
+            }
+            Vector3 dir = new Vector3(0, 0, -_newDistance); 
             transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
         }
     }
@@ -150,25 +163,40 @@ public class ThirdPersonCamera : MonoBehaviour
         if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
         {
             //Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
-
+            _canZoom = false;
             float newDistance = Vector3.Distance(hit.point, _lookAt.position);
             tDistance = newDistance;
         }
         else
         {
             tDistance = _distance;
+            _canZoom = true;
         }
 
         return tDistance;
     }
 
-    public void GetNewTarget(Transform trans)
+    public void GetNewTarget(Transform trans, bool willFollowPlayer)
     {
-        GetNewTarget(trans, _defaultTransitionTime);
+
+        GetNewTarget(trans, _defaultTransitionTime, willFollowPlayer);
     }
 
-    public void GetNewTarget(Transform trans, float time)
+    public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
     {
+        if (willFollowPlayer)
+        {
+            _followingPlayer = true;
+            _botDistance = _distance;
+            _distance = _playerDistance;
+        }
+        else
+        {
+            _followingPlayer = false;
+            _playerDistance = _distance;
+            _distance = _botDistance;
+        }
+
         Transform tf = trans.Find(_cameraTargetName);
         if (tf != null)
         {
