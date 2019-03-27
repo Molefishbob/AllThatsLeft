@@ -7,12 +7,7 @@ public class SingleUISound : VolumeControl
     [SerializeField]
     protected float _pitchVariance = 0.25f;
     protected float _basePitch;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        _basePitch = _audioSource.pitch;
-    }
+    protected bool _started = false;
 
     protected virtual void OnEnable()
     {
@@ -21,8 +16,20 @@ public class SingleUISound : VolumeControl
         PrefsManager.Instance.OnAudioMuteSFXChanged += MuteSelf;
         PrefsManager.Instance.OnAudioMuteMasterChanged += MuteMaster;
 
+        if (_started)
+        {
+            _audioSource.volume = PrefsManager.Instance.AudioVolumeSFX * PrefsManager.Instance.AudioVolumeMaster * _fullVolume;
+            _audioSource.mute = PrefsManager.Instance.AudioMuteSFX || PrefsManager.Instance.AudioMuteMaster;
+        }
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        _basePitch = _audioSource.pitch;
         _audioSource.volume = PrefsManager.Instance.AudioVolumeSFX * PrefsManager.Instance.AudioVolumeMaster * _fullVolume;
         _audioSource.mute = PrefsManager.Instance.AudioMuteSFX || PrefsManager.Instance.AudioMuteMaster;
+        _started = true;
     }
 
     protected virtual void OnDisable()
