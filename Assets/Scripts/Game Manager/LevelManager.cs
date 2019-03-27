@@ -21,9 +21,12 @@ public class LevelManager : MonoBehaviour
     /// The pool prefab
     /// </summary>
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
+    public PauseMenu _pauseMenu;
 
     public bool _levelNeedsFrogEnemies;
     public bool _levelNeedsPatrolEnemies;
+    [SerializeField]
+    private string _pauseMenuButton = "Pause Game";
 
     void Awake()
     {
@@ -90,6 +93,18 @@ public class LevelManager : MonoBehaviour
             DontDestroyOnLoad(camera);
             GameManager.Instance.Camera = camera;
         }
+
+        if (GameManager.Instance.PauseMenu == null)
+        {
+            PauseMenu pauseMenu = FindObjectOfType<PauseMenu>();
+            if (pauseMenu == null)
+            {
+                pauseMenu = Instantiate(_pauseMenu);
+            }
+            DontDestroyOnLoad(pauseMenu);
+            GameManager.Instance.PauseMenu = pauseMenu;
+            pauseMenu.gameObject.SetActive(false);
+        }
     }
 
     private void Start()
@@ -109,6 +124,27 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
 
         GameManager.Instance.ActivateGame(true);
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown(_pauseMenuButton))
+        {
+            bool currentState = _pauseMenu.gameObject.activeSelf;
+
+            switch (currentState)
+            {
+                case true:
+                    GameManager.Instance.PauseMenu.gameObject.SetActive(true);
+                    GameManager.Instance.PauseGame();
+                    break;
+                case false:
+                    GameManager.Instance.PauseMenu.gameObject.SetActive(false);
+                    GameManager.Instance.UnPauseGame();
+                    break;
+            }
+
+        }
     }
 
     private Vector3 GetSpawnPosition()

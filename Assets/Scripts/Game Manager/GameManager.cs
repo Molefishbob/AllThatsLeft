@@ -116,6 +116,11 @@ public class GameManager : Singleton<GameManager>
     public ThirdPersonCamera Camera;
 
     /// <summary>
+    /// Reference of the pause menu.
+    /// </summary>
+    public PauseMenu PauseMenu;
+
+    /// <summary>
     /// ID of the current level.
     /// </summary>
     public int CurrentLevel { get; private set; } = 1;
