@@ -5,12 +5,12 @@ using UnityEngine;
 public class MinibotAnimatorMiddlehand : MonoBehaviour
 {
     private PlayerBotInteractions _pbi = null;
-    [SerializeField]
-    private RandomSFXSound _jump = null;
+    //[SerializeField]
+    //private RandomSFXSound _jump = null;
     [SerializeField]
     private RandomSFXSound _walk = null;
-    [SerializeField]
-    private RandomSFXSound _land = null;
+    //[SerializeField]
+    //private RandomSFXSound _land = null;
     void Awake()
     {
         _pbi = transform.parent.gameObject.GetComponent<PlayerBotInteractions>();
