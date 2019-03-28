@@ -181,6 +181,7 @@ public class PrefsManager : Singleton<PrefsManager>
 
     public void DeleteSavedGame()
     {
+        PlayerPrefs.DeleteKey(keyBotsUnlocked);
         PlayerPrefs.DeleteKey(keyLevel);
         PlayerPrefs.DeleteKey(keyCheckPoint);
     }

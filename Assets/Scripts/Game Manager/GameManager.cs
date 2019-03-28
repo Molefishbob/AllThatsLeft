@@ -120,11 +120,6 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public PauseMenu PauseMenu;
 
-    /// <summary>
-    /// ID of the current level.
-    /// </summary>
-    public int CurrentLevel { get; private set; } = 1;
-
     private float _timeScaleBeforePause = 1.0f;
 
     /// <summary>
@@ -220,11 +215,10 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void NextLevel()
     {
-        CurrentLevel++;
-        PrefsManager.Instance.Level = CurrentLevel;
+        PrefsManager.Instance.Level++;
         PrefsManager.Instance.CheckPoint = 0;
         PrefsManager.Instance.Save();
-        ChangeScene(CurrentLevel);
+        ChangeScene(PrefsManager.Instance.Level);
     }
 
     /// <summary>
@@ -232,9 +226,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void StartNewGame()
     {
-        CurrentLevel = 1;
-        PrefsManager.Instance.BotsUnlocked = false;
-        ChangeScene(CurrentLevel);
+        PrefsManager.Instance.DeleteSavedGame();
+        ChangeScene(PrefsManager.Instance.Level);
     }
 
     /// <summary>
@@ -242,8 +235,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ContinueGame()
     {
-        CurrentLevel = PrefsManager.Instance.Level;
-        ChangeScene(CurrentLevel);
+        ChangeScene(PrefsManager.Instance.Level);
     }
 
     /// <summary>
