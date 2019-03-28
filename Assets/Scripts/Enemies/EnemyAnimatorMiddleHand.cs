@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyAnimatorMiddleHand : MonoBehaviour
 {
     [SerializeField]
-    private RandomSFXSound _hopsfx;
+    private RandomSFXSound _hopsfx = null;
 
     public void PlayHopSound()
     {
