@@ -24,6 +24,7 @@ public class BotMovement : PlayerMovement, IDamageReceiver
         {
             _pbi.ReleaseControls(true);
         }
+        _playerJump.ResetJump();
     }
 
     protected override void OutOfBounds()

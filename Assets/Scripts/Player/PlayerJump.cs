@@ -157,4 +157,13 @@ public class PlayerJump : MonoBehaviour
     {
         _canJump = false;
     }
+
+    public void ResetJump()
+    {
+        _jumping = false;
+        _forcedJumping = false;
+        _beforeTimer.StopTimer();
+        _holdTimer.StopTimer();
+        _afterTimer.StopTimer();
+    }
 }

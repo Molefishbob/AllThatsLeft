@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MainCharMovement : PlayerMovement, IDamageReceiver
 {
+    public event GenericEvent OnPlayerDeath;
+
     [SerializeField]
     protected string _animatorBoolDeath = "Dead";
     [SerializeField]
@@ -14,7 +16,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     protected override void Awake()
     {
         base.Awake();
-        _deathTimer = gameObject.AddComponent<ScaledOneShotTimer>();    
+        _deathTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     protected override void Start()
@@ -44,7 +46,9 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
             ControlsDisabled = true;
             _animator?.SetBool(_animatorBoolDeath, true);
             SetControllerActive(false);
+            _playerJump.ResetJump();
             _deathTimer.StartTimer(_deathTime);
+            if (OnPlayerDeath != null) OnPlayerDeath();
         }
     }
 
@@ -68,6 +72,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
             ControlsDisabled = true;
             _deathTimer.StartTimer(_deathTime);
             GameManager.Instance.Camera.OnPlayerDeath();
+            if (OnPlayerDeath != null) OnPlayerDeath();
         }
     }
 }

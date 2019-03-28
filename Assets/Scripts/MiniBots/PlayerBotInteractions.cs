@@ -39,6 +39,8 @@ public class PlayerBotInteractions : MonoBehaviour
     [SerializeField]
     private float _transitionTime = 1.0f;
     [SerializeField]
+    private float _transitionTimeOnPlayerDeath = 0.5f;
+    [SerializeField]
     private float _fLifeTime = 30.0f;
     private ScaledOneShotTimer _ostRelease;
     private ScaledOneShotTimer _ostDisable;
@@ -47,7 +49,7 @@ public class PlayerBotInteractions : MonoBehaviour
     private BotMovement _selfMover;
     private Projector _shadowProjector;
 
-    void OnEnable()
+    private void OnEnable()
     {
         if (!_bFirstEnable && _psExplosion != null)
         {
@@ -60,9 +62,11 @@ public class PlayerBotInteractions : MonoBehaviour
         {
             _bFirstEnable = false;
         }
+
+        if (GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath += ReleaseInstant;
     }
 
-    void Awake()
+    private void Awake()
     {
         _selfMover = GetComponent<BotMovement>();
         _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
@@ -78,7 +82,7 @@ public class PlayerBotInteractions : MonoBehaviour
         _ostLife.OnTimerCompleted += _selfMover.Die;
     }
 
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position, _fExplodeRadius);
     }
@@ -99,7 +103,7 @@ public class PlayerBotInteractions : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (GameManager.Instance.GamePaused) return;
         if (!_selfMover.IsGrounded || _selfMover.ControlsDisabled) return;
@@ -215,7 +219,7 @@ public class PlayerBotInteractions : MonoBehaviour
         }
         return null;
     }
-    public void OnDisable()
+    private void OnDisable()
     {
         _bHacking = false;
         _ostDisable.StopTimer();
@@ -224,6 +228,7 @@ public class PlayerBotInteractions : MonoBehaviour
         _selfMover._animator.SetBool("Explode", false);
         _shadowProjector.enabled = true;
         _selfMover.SetControllerActive(false);
+        if (GameManager.Instance != null && GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath -= ReleaseInstant;
     }
 
     // Release the controls back to the player
@@ -247,6 +252,22 @@ public class PlayerBotInteractions : MonoBehaviour
         {
             ActualRelease();
         }
+    }
+
+    public void ReleaseInstant()
+    {
+        _selfMover.ControlsDisabled = true;
+        GameObject[] hacks = CheckSurroundings(_lHackableLayer, false);
+        if (hacks != null && hacks.Length > 0)
+        {
+            foreach (GameObject item in hacks)
+            {
+                GenericHackable hack = item.GetComponent<GenericHackable>();
+                hack?.ShowPrompt(false);
+            }
+        }
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
+        _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
     }
 
     public void StopActing()
