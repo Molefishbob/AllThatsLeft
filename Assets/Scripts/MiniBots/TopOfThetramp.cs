@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class TopOfThetramp : MonoBehaviour
 {
-    public float MaxJumpHeight { private get; set; }
+    public float _fJumpHeight = 5;
     const int _iPlayerLayer = 10;
     private PlayerJump _PlayerMover;
     private PlayerMovement _Player;
-    public bool CanBounce { private get { return _bCanBounce; } set { _bCanBounce = value; } }
-    private bool _bCanBounce = false;
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == _iPlayerLayer && _bCanBounce)
+        if (other.gameObject.layer == _iPlayerLayer)
         {
             if (_PlayerMover == null)
             {
@@ -20,7 +18,7 @@ public class TopOfThetramp : MonoBehaviour
                 _Player = other.GetComponent<PlayerMovement>();
             }
             if (!_Player.IsGrounded)
-                _PlayerMover.ForceJump(MaxJumpHeight);
+                _PlayerMover.ForceJump(_fJumpHeight);
         }
     }
 }

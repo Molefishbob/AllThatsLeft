@@ -13,9 +13,11 @@ public class PlayerBotInteractions : MonoBehaviour
     [SerializeField]
     private string _sExplodeButton = "Bomb Action";
     [SerializeField]
-    private string _sStayButton = "Stay Action";
+    private string _sTrampolineButton = "Stay Action";
     [SerializeField]
     private GameObject _goParticlePrefab = null;
+    [SerializeField]
+    private GameObject _goTrampoline = null;
     private GameObject _goParticleHolder;
     private ParticleSystem[] _psExplosion = null;
     public bool _bActive
@@ -137,9 +139,10 @@ public class PlayerBotInteractions : MonoBehaviour
             ReleaseControls(true);
         }
 
-        // Just release
-        if (Input.GetButtonDown(_sStayButton))
+        // Trampoline
+        if (Input.GetButtonDown(_sTrampolineButton))
         {
+            _goTrampoline.SetActive(true);
             _ostRelease.StopTimer();
             _ostLife.StartTimer(_fLifeTime);
             ReleaseControls(false);
@@ -273,7 +276,7 @@ public class PlayerBotInteractions : MonoBehaviour
                 _goParticleHolder.transform.parent = transform;
                 _goParticleHolder.transform.localPosition = Vector3.zero;
             }
-
+            _goTrampoline.SetActive(false);
             gameObject.SetActive(false);
         }
     }
