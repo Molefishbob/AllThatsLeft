@@ -20,10 +20,6 @@ public class BotMovement : PlayerMovement, IDamageReceiver
     {
         // TODO animations
         _pbi.StopActing();
-        if (!ControlsDisabled)
-        {
-            _pbi.ReleaseControls(true);
-        }
     }
 
     protected override void OutOfBounds()
