@@ -84,7 +84,14 @@ public abstract class CharControlBase : MonoBehaviour
                 Quaternion inputRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
 
                 // rotate character towards input rotation
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, inputRotation, _turningSpeed * Time.deltaTime);
+                if (_turningSpeed > 0.0f)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, inputRotation, _turningSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    transform.rotation = inputRotation;
+                }
 
                 // save previous move's magnitude
                 float previousMoveMagnitude = _internalMove.magnitude;
