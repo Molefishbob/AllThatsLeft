@@ -163,7 +163,7 @@ public class PrefsManager : Singleton<PrefsManager>
         }
         set
         {
-            PlayerPrefs.SetInt(keyVolumeMaster, value);
+            PlayerPrefs.SetInt(keyLevel, value);
         }
     }
 
@@ -176,6 +176,20 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyCheckPoint, value);
+        }
+    }
+
+    public void DeleteSavedGame()
+    {
+        PlayerPrefs.DeleteKey(keyLevel);
+        PlayerPrefs.DeleteKey(keyCheckPoint);
+    }
+
+    public bool SavedGameExists
+    {
+        get
+        {
+            return PlayerPrefs.HasKey(keyLevel) && PlayerPrefs.HasKey(keyCheckPoint);
         }
     }
 
@@ -252,7 +266,7 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyFieldOfView, value);
-            if(OnFieldOfViewChanged != null)
+            if (OnFieldOfViewChanged != null)
             {
                 OnFieldOfViewChanged(value);
             }
