@@ -13,6 +13,11 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     protected bool _dead = false;
     protected ScaledOneShotTimer _deathTimer;
 
+    public bool Dead
+    {
+        get { return _dead; }
+    }
+
     protected override void Awake()
     {
         base.Awake();
