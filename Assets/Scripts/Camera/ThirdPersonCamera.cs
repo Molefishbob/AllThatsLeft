@@ -101,7 +101,24 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_lookAt == null) return;
 
-        if (!_transitionTimer.IsRunning)
+        if (_transitionTimer.IsRunning)
+        {
+            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+            if (_canZoom)
+            {
+                if (_followingPlayer)
+                {
+                    _newDistance = Mathf.Lerp(_botDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
+                }
+                else
+                {
+                    _newDistance = Mathf.Lerp(_playerDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
+                }
+            }
+            Vector3 dir = new Vector3(0, 0, -_newDistance);
+            transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
+        }
+        else if (!GameManager.Instance.Player.Dead)
         {
             _distance -= (Input.GetAxis("Scroll")) * _zoomSpeed;
 
@@ -140,18 +157,7 @@ public class ThirdPersonCamera : MonoBehaviour
         }
         else
         {
-            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-            if (_canZoom) {
-                if (_followingPlayer)
-                {
-                    _newDistance = Mathf.Lerp(_botDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
-                }else
-                {
-                    _newDistance = Mathf.Lerp(_playerDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
-                }
-            }
-            Vector3 dir = new Vector3(0, 0, -_newDistance); 
-            transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
+            transform.LookAt(_lookAt.position);
         }
     }
 
