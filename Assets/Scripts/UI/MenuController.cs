@@ -25,12 +25,13 @@ public class MenuController : MonoBehaviour
     private void Start() {
         // TODO: Check for save data and set continuebutton according to it
 
-        _continueButton.interactable = false;
+        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
         _eventSystem.SetSelectedGameObject(_newGame);
     }
 
     public void Continue()
     {
+        GameManager.Instance.ContinueGame();
     }
 
     public void StartGame()

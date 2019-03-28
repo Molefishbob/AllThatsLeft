@@ -196,6 +196,7 @@ public class GameManager : Singleton<GameManager>
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
             Debug.LogWarning("No scene with ID: " + id);
+            PrefsManager.Instance.DeleteSavedGame();
             ChangeToMainMenu();
         }
         else
@@ -220,6 +221,9 @@ public class GameManager : Singleton<GameManager>
     public void NextLevel()
     {
         CurrentLevel++;
+        PrefsManager.Instance.Level = CurrentLevel;
+        PrefsManager.Instance.CheckPoint = 0;
+        PrefsManager.Instance.Save();
         ChangeScene(CurrentLevel);
     }
 
@@ -240,8 +244,6 @@ public class GameManager : Singleton<GameManager>
     {
         CurrentLevel = PrefsManager.Instance.Level;
         ChangeScene(CurrentLevel);
-        LevelManager.SetCheckpointByID(PrefsManager.Instance.CheckPoint);
-        LevelManager.ResetLevel();
     }
 
     /// <summary>

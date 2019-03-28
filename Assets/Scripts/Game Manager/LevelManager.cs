@@ -30,9 +30,6 @@ public class LevelManager : MonoBehaviour
 
     void Awake()
     {
-        PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
-        PrefsManager.Instance.Save();
-
         GameManager.Instance.LevelManager = this;
 
         if (GameManager.Instance.BotPool == null)
@@ -111,7 +108,7 @@ public class LevelManager : MonoBehaviour
     {
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.ContainsKey(0))
         {
-            SetCheckpointByID(0);
+            SetCheckpointByID(PrefsManager.Instance.CheckPoint);
         }
         else
         {
