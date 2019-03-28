@@ -278,7 +278,7 @@ public class PlayerBotInteractions : MonoBehaviour
             _goTarget[0].GetComponent<GenericHackable>()?.TimeToLeave();
             _goTarget = null;
         }
-        gameObject.SetActive(false);
+        ReleaseControls(false);
     }
 
     private void ActualRelease()
