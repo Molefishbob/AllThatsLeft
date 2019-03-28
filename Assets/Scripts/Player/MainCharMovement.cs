@@ -44,6 +44,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
             ControlsDisabled = true;
             _animator?.SetBool(_animatorBoolDeath, true);
             SetControllerActive(false);
+            _playerJump.ResetJump();
             _deathTimer.StartTimer(_deathTime);
         }
     }

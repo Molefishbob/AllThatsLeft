@@ -72,7 +72,7 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// Reference of the player.
     /// </summary>
-    public PlayerMovement Player;
+    public MainCharMovement Player;
 
     private LevelManager _levelManager;
 
