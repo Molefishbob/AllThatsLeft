@@ -28,6 +28,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private string _pauseMenuButton = "Pause Game";
 
+    private bool _playerInScene;
+
     void Awake()
     {
         GameManager.Instance.LevelManager = this;
@@ -67,10 +69,12 @@ public class LevelManager : MonoBehaviour
             if (players == null || players.Length <= 0)
             {
                 GameManager.Instance.Player = Instantiate(_playerPrefab);
+                _playerInScene = false;
             }
             else
             {
                 GameManager.Instance.Player = players[0];
+                _playerInScene = true;
             }
             DontDestroyOnLoad(GameManager.Instance.Player);
         }
@@ -115,8 +119,11 @@ public class LevelManager : MonoBehaviour
             Debug.LogError("Spawn is missing.");
         }
 
-        GameManager.Instance.Player.transform.position = GetSpawnPosition();
-        GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
+        if (!_playerInScene)
+        {
+            GameManager.Instance.Player.transform.position = GetSpawnPosition();
+            GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
+        }
         GameManager.Instance.Player.SetControllerActive(true);
         GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
 
