@@ -112,7 +112,16 @@ public class LevelManager : MonoBehaviour
     {
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.ContainsKey(0))
         {
-            SetCheckpointByID(PrefsManager.Instance.CheckPoint);
+            int currentLevel = SceneManager.GetActiveScene().buildIndex;
+            if (PrefsManager.Instance.Level != currentLevel)
+            {
+                PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
+                SetCheckpointByID(0);
+            }
+            else
+            {
+                SetCheckpointByID(PrefsManager.Instance.CheckPoint);
+            }
         }
         else
         {
