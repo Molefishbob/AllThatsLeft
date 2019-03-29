@@ -69,6 +69,7 @@ public class LevelManager : MonoBehaviour
             if (players == null || players.Length <= 0)
             {
                 GameManager.Instance.Player = Instantiate(_playerPrefab);
+                DontDestroyOnLoad(GameManager.Instance.Player);
                 _playerInScene = false;
             }
             else
@@ -76,7 +77,6 @@ public class LevelManager : MonoBehaviour
                 GameManager.Instance.Player = players[0];
                 _playerInScene = true;
             }
-            DontDestroyOnLoad(GameManager.Instance.Player);
         }
         foreach (MainCharMovement p in players)
         {
