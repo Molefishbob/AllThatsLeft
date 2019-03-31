@@ -131,8 +131,8 @@ public abstract class CharControlBase : MonoBehaviour
                 // animation stuff
                 if (_animator != null)
                 {
-                    _animator.SetBool(_animatorBoolRunning, true);
-                    _animator.speed = _internalMove.magnitude / maxSpeed;
+                    _animator.SetBool(_animatorBoolRunning, false);
+                    _animator.speed = 1;
                 }
             }
             else
