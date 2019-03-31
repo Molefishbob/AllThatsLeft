@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,17 +20,6 @@ public class PlayerBotInteractions : MonoBehaviour
     private GameObject _goTrampoline = null;
     private GameObject _goParticleHolder;
     private ParticleSystem[] _psExplosion = null;
-    public bool _bActive
-    {
-        get { return _bactive; }
-        set
-        {
-            _bactive = value;
-            _selfMover.ControlsDisabled = !value;
-            _selfMover.SetControllerActive(true);
-        }
-    }
-    private bool _bactive = false;
     [SerializeField]
     private bool _bHacking = false;
     private bool _bFirstEnable = true;
@@ -48,6 +37,7 @@ public class PlayerBotInteractions : MonoBehaviour
     private GameObject[] _goTarget = null;
     private BotMovement _selfMover;
     private Projector _shadowProjector;
+    private bool _paused = true;
 
     private void OnEnable()
     {
@@ -105,7 +95,17 @@ public class PlayerBotInteractions : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GamePaused) return;
+        if (GameManager.Instance.GamePaused)
+        {
+            _paused = true;
+            return;
+        }
+        if (_paused)
+        {
+            _paused = false;
+            return;
+        }
+
         if (!_selfMover.IsGrounded || _selfMover.ControlsDisabled) return;
 
         // Hack

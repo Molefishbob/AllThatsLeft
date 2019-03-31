@@ -21,6 +21,7 @@ public class DeployControlledBots : MonoBehaviour
     private MainCharMovement _player;
     private BotMovement _activeBot;
     private ScaledOneShotTimer _timer;
+    private bool _paused = true;
 
     private void Awake()
     {
@@ -50,7 +51,16 @@ public class DeployControlledBots : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GamePaused) return;
+        if (GameManager.Instance.GamePaused)
+        {
+            _paused = true;
+            return;
+        }
+        if (_paused)
+        {
+            _paused = false;
+            return;
+        }
 
         if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
         {
