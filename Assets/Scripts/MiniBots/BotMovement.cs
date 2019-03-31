@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class BotMovement : PlayerMovement, IDamageReceiver
 {
+    [HideInInspector]
+    public bool Dead { get; private set; }
     private PlayerBotInteractions _pbi;
     protected override void Awake()
     {
         base.Awake();
         _pbi = GetComponent<PlayerBotInteractions>();
+    }
+
+    private void OnDisable()
+    {
+        Dead = false;
+        _playerJump.ResetJump();
+        SetControllerActive(false);
+        ControlsDisabled = true;
     }
 
     public void TakeDamage(int damage)
@@ -18,16 +28,19 @@ public class BotMovement : PlayerMovement, IDamageReceiver
 
     public void Die()
     {
+        if (Dead) return;
+
+        Dead = true;
+
         // TODO animations
         _pbi.StopActing();
-        _playerJump.ResetJump();
     }
 
     protected override void OutOfBounds()
     {
-        if (!ControlsDisabled)
-        {
-            _pbi.ReleaseControls(false);
-        }
+        if (Dead) return;
+
+        Dead = true;
+        _pbi.ReleaseControls(false);
     }
 }

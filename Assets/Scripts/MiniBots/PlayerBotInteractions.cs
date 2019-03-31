@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -229,7 +229,6 @@ public class PlayerBotInteractions : MonoBehaviour
         _ostLife.StopTimer();
         _selfMover._animator.SetBool("Explode", false);
         _shadowProjector.enabled = true;
-        _selfMover.SetControllerActive(false);
         if (GameManager.Instance != null && GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath -= ReleaseInstant;
     }
 
