@@ -8,6 +8,13 @@ public class TopOfThetramp : MonoBehaviour
     const int _iPlayerLayer = 10;
     private PlayerJump _PlayerMover;
     private PlayerMovement _Player;
+    private Animator _animator;
+
+    void Awake()
+    {
+        _animator = transform.parent.gameObject.GetComponentInChildren<Animator>();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == _iPlayerLayer)
@@ -18,7 +25,10 @@ public class TopOfThetramp : MonoBehaviour
                 _Player = other.GetComponent<PlayerMovement>();
             }
             if (!_Player.IsGrounded)
+            {
+                _animator.SetTrigger("TrampolineBounce");
                 _PlayerMover.ForceJump(_fJumpHeight);
+            }
         }
     }
 }
