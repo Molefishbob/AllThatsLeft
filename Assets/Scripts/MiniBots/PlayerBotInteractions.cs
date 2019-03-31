@@ -121,6 +121,7 @@ public class PlayerBotInteractions : MonoBehaviour
                     ghOther.TimeToStart();
                     ReleaseControls(true);
                 }
+                _selfMover._animator.SetBool("Hack", true);
             }
         }
 
@@ -149,7 +150,8 @@ public class PlayerBotInteractions : MonoBehaviour
             _goTrampoline.SetActive(true);
             _ostRelease.StopTimer();
             _ostLife.StartTimer(_fLifeTime);
-            ReleaseControls(false);
+            _selfMover._animator.SetTrigger("Trampoline");
+            ReleaseControls(true);
         }
     }
 
@@ -278,7 +280,10 @@ public class PlayerBotInteractions : MonoBehaviour
             _goTarget[0].GetComponent<GenericHackable>()?.TimeToLeave();
             _goTarget = null;
         }
-        ReleaseControls(false);
+        if (!_selfMover.ControlsDisabled)
+            ReleaseControls(false);
+        else
+            DisableSelf();
     }
 
     private void ActualRelease()
