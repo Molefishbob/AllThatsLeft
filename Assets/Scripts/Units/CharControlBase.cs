@@ -131,8 +131,8 @@ public abstract class CharControlBase : MonoBehaviour
                 // animation stuff
                 if (_animator != null)
                 {
-                    _animator.SetBool(_animatorBoolRunning, true);
-                    _animator.speed = _internalMove.magnitude / maxSpeed;
+                    _animator.SetBool(_animatorBoolRunning, false);
+                    _animator.speed = 1;
                 }
             }
             else
@@ -151,29 +151,7 @@ public abstract class CharControlBase : MonoBehaviour
             Vector3 gravityDelta = Physics.gravity * Time.deltaTime * Time.deltaTime;
 
             // check grounded
-            Vector3 upVector = -Physics.gravity.normalized;
-            RaycastHit hit;
-            if (Physics.SphereCast(
-                    transform.position + _controller.center,
-                    _controller.radius,
-                    Physics.gravity.normalized,
-                    out hit,
-                    (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
-                    _walkableTerrain))
-            {
-                float slopeAngle = Vector3.Angle(upVector, hit.normal);
-                _onSlope = slopeAngle > _controller.slopeLimit && slopeAngle < 90f;
-                if (_onSlope)
-                {
-                    _slopeDirection = Vector3.Cross(Vector3.Cross(upVector, hit.normal), hit.normal).normalized * slopeAngle / 90f;
-                }
-                IsGrounded = !_onSlope;
-            }
-            else
-            {
-                _onSlope = false;
-                IsGrounded = false;
-            }
+            CheckGrounded();
 
             // reset or apply gravity
             if ((_controller.isGrounded && !_onSlope) || _resetGravity)
@@ -238,6 +216,7 @@ public abstract class CharControlBase : MonoBehaviour
     public void ResetGravity()
     {
         _resetGravity = true;
+        _currentGravity = Vector3.zero;
     }
 
     /// <summary>
@@ -245,14 +224,42 @@ public abstract class CharControlBase : MonoBehaviour
     /// </summary>
     public void SetControllerActive(bool active)
     {
-        _controller.enabled = active;
-        _controllerEnabled = active;
-
-        if (active)
+        if (active && !_controllerEnabled)
         {
             _internalMove = Vector3.zero;
             _externalMove = Vector3.zero;
             ResetGravity();
+            CheckGrounded();
+        }
+
+        _controller.enabled = active;
+        _controllerEnabled = active;
+    }
+
+    private void CheckGrounded()
+    {
+        Vector3 upVector = -Physics.gravity.normalized;
+        RaycastHit hit;
+        if (Physics.SphereCast(
+                transform.position + _controller.center,
+                _controller.radius,
+                Physics.gravity.normalized,
+                out hit,
+                (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
+                _walkableTerrain))
+        {
+            float slopeAngle = Vector3.Angle(upVector, hit.normal);
+            _onSlope = slopeAngle > _controller.slopeLimit && slopeAngle < 90f;
+            if (_onSlope)
+            {
+                _slopeDirection = Vector3.Cross(Vector3.Cross(upVector, hit.normal), hit.normal).normalized * slopeAngle / 90f;
+            }
+            IsGrounded = !_onSlope;
+        }
+        else
+        {
+            _onSlope = false;
+            IsGrounded = false;
         }
     }
 

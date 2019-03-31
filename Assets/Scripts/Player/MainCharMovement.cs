@@ -10,13 +10,10 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     protected string _animatorBoolDeath = "Dead";
     [SerializeField]
     protected float _deathTime = 5.0f;
-    protected bool _dead = false;
     protected ScaledOneShotTimer _deathTimer;
 
-    public bool Dead
-    {
-        get { return _dead; }
-    }
+    [HideInInspector]
+    public bool Dead { get; protected set; }
 
     protected override void Awake()
     {
@@ -45,16 +42,15 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
 
     public virtual void Die()
     {
-        if (!_dead)
-        {
-            _dead = true;
-            ControlsDisabled = true;
-            _animator?.SetBool(_animatorBoolDeath, true);
-            SetControllerActive(false);
-            _playerJump.ResetJump();
-            _deathTimer.StartTimer(_deathTime);
-            if (OnPlayerDeath != null) OnPlayerDeath();
-        }
+        if (Dead) return;
+
+        Dead = true;
+        ControlsDisabled = true;
+        _animator?.SetBool(_animatorBoolDeath, true);
+        SetControllerActive(false);
+        _playerJump.ResetJump();
+        _deathTimer.StartTimer(_deathTime);
+        if (OnPlayerDeath != null) OnPlayerDeath();
     }
 
     private void Alive()
@@ -62,7 +58,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         SetControllerActive(false);
         GameManager.Instance.LevelManager.ResetLevel();
         //transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
-        _dead = false;
+        Dead = false;
         ControlsDisabled = false;
         _animator?.SetBool(_animatorBoolDeath, false);
         SetControllerActive(true);
@@ -71,13 +67,12 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
 
     protected override void OutOfBounds()
     {
-        if (!_dead)
-        {
-            _dead = true;
-            ControlsDisabled = true;
-            _deathTimer.StartTimer(_deathTime);
-            GameManager.Instance.Camera.OnPlayerDeath();
-            if (OnPlayerDeath != null) OnPlayerDeath();
-        }
+        if (Dead) return;
+
+        Dead = true;
+        ControlsDisabled = true;
+        _deathTimer.StartTimer(_deathTime);
+        GameManager.Instance.Camera.OnPlayerDeath();
+        if (OnPlayerDeath != null) OnPlayerDeath();
     }
 }
