@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 6066513225023212645}
   m_Layer: 11
   m_Name: FrogEnemy
-  m_TagString: Untagged
+  m_TagString: Frog
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -263,6 +263,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8538956537336883093}
     m_Modifications:
+    - target: {fileID: 3050510496603141345, guid: af492c8009af21e45932dc41558e4070,
+        type: 3}
+      propertyPath: m_Name
+      value: AttackTrigger
+      objectReference: {fileID: 0}
     - target: {fileID: 1000324180731870600, guid: af492c8009af21e45932dc41558e4070,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -318,11 +323,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3050510496603141345, guid: af492c8009af21e45932dc41558e4070,
-        type: 3}
-      propertyPath: m_Name
-      value: AttackTrigger
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af492c8009af21e45932dc41558e4070, type: 3}
 --- !u!4 &316650680436980434 stripped
@@ -343,6 +343,14 @@ PrefabInstance:
       value: frog
       objectReference: {fileID: 0}
     - target: {fileID: 100052, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100054, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
@@ -389,14 +397,6 @@ PrefabInstance:
     - target: {fileID: 400052, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 100054, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
-      propertyPath: m_Layer
-      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
       propertyPath: m_Controller
@@ -647,6 +647,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8609109678450264673}
     m_Modifications:
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Minibot Jump
+      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -701,16 +711,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Minibot Jump
-      objectReference: {fileID: 0}
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Name
-      value: Jump
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52d85fd4ab713f4408c47a467be28f9f, type: 3}

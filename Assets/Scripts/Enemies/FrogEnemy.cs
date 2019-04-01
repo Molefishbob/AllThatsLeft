@@ -23,6 +23,17 @@ public class FrogEnemy : CharControlBase
         _backToPrevious = false;
     }
 
+    public bool BackToPrevious
+    {
+        set {_backToPrevious = value;}
+        get { return _backToPrevious; }
+    }
+    public bool FollowPlayer
+    {
+        set { _followPlayer = value; }
+        get { return _followPlayer; }
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -41,7 +52,7 @@ public class FrogEnemy : CharControlBase
     private void Update()
     {
         if (GameManager.Instance.GamePaused) return;
-
+        Debug.Log(_goBackPosition);
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.up + transform.forward , 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
@@ -84,7 +95,6 @@ public class FrogEnemy : CharControlBase
         }
         else 
         {
-            
             x = 0;
             y = 0;
             z = 0;
@@ -145,7 +155,7 @@ public class FrogEnemy : CharControlBase
         _backToPrevious = true;
         //_canSpit = false;
     }
-
+    
     protected override void OutOfBounds()
     {
         gameObject.SetActive(false);
