@@ -22,11 +22,19 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     private GameObject _masterVolume = null;
 
-    private void Start() {
-        // TODO: Check for save data and set continuebutton according to it
-
-        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
-        _eventSystem.SetSelectedGameObject(_newGame);
+    private void Start() 
+    {
+        bool temp = PrefsManager.Instance.SavedGameExists;
+        
+        _continueButton.interactable = temp;
+        if (temp) 
+        {
+            _eventSystem.SetSelectedGameObject(_continueButton.gameObject);
+        } 
+        else 
+        {
+            _eventSystem.SetSelectedGameObject(_newGame);
+        }
     }
 
     public void Continue()
