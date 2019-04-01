@@ -8,13 +8,6 @@ public delegate void ValueChangedInt(int amount);
 public delegate void ValueChangedFloat(float amount);
 public delegate void ValueChangedBool(bool value);
 
-public enum MiniBotAbility
-{
-    Hack,
-    Bomb,
-    Tramp
-}
-
 public class GameManager : Singleton<GameManager>
 {
     // (Optional) Prevent non-singleton constructor use.
@@ -27,9 +20,6 @@ public class GameManager : Singleton<GameManager>
     /// Is the game currently paused?
     /// </summary>
     public bool GamePaused { get; private set; }
-
-    // TODO: make bot actions check this collection or remove ability system entirely
-    public HashSet<MiniBotAbility> UsableMiniBotAbilities;
 
     public int CurrentBotAmount
     {
@@ -114,6 +104,8 @@ public class GameManager : Singleton<GameManager>
     /// Reference of the camera.
     /// </summary>
     public ThirdPersonCamera Camera;
+
+    public ParticleSystem BeaconParticle;
 
     /// <summary>
     /// Reference of the pause menu.

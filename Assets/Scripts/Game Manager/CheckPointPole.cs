@@ -5,19 +5,24 @@ using UnityEngine;
 public class CheckPointPole : MonoBehaviour
 {
     public int id;
-    [HideInInspector]
-    public Transform SpawnPoint { get; private set; }
-    private Collider _collider;
-
-    void Awake()
-    {
-        SpawnPoint = transform.GetChild(0);
-        _collider = GetComponent<Collider>();
-    }
+    public Transform SpawnPoint;
+    public ParticleSystem _particlePrefab;
+    public Transform _particleSpawn;
 
     void OnTriggerEnter(Collider other)
     {
-        GameManager.Instance.LevelManager.SetCheckpoint(this);
-        _collider.enabled = false;
+        if (GameManager.Instance.LevelManager.SetCheckpoint(this))
+        {
+            if (GameManager.Instance.BeaconParticle == null)
+            {
+                GameManager.Instance.BeaconParticle = Instantiate(_particlePrefab, _particleSpawn.position, _particleSpawn.rotation);
+            }
+            else
+            {
+                GameManager.Instance.BeaconParticle.transform.position = _particleSpawn.position;
+                GameManager.Instance.BeaconParticle.transform.rotation = _particleSpawn.rotation;
+                GameManager.Instance.BeaconParticle.gameObject.SetActive(true);
+            }
+        }
     }
 }
