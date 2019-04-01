@@ -62,7 +62,6 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 
         CurrentMove = InternalMove() - transform.position;
         transform.position += CurrentMove;
-        Physics.SyncTransforms();
     }
 
     protected abstract Vector3 InternalMove();
