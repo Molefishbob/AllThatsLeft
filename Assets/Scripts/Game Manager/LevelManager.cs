@@ -175,12 +175,12 @@ public class LevelManager : MonoBehaviour
             return _currentCheckPoint.SpawnPoint.rotation;
     }
 
-    public void SetCheckpointByID(int id)
+    public bool SetCheckpointByID(int id)
     {
         if (!_allLevelCheckPoints.ContainsKey(id))
         {
             Debug.LogWarning("That checkpoint ID doesn't exist.");
-            return;
+            return false;
         }
 
         if (_currentCheckPoint == null || id > _currentCheckPoint.id)
@@ -188,15 +188,18 @@ public class LevelManager : MonoBehaviour
             _allLevelCheckPoints.TryGetValue(id, out _currentCheckPoint);
             PrefsManager.Instance.CheckPoint = _currentCheckPoint.id;
             PrefsManager.Instance.Save();
+            return true;
         }
+
+        return false;
     }
 
-    public void SetCheckpoint(CheckPointPole cp)
+    public bool SetCheckpoint(CheckPointPole cp)
     {
         if (!_allLevelCheckPoints.ContainsValue(cp))
         {
             Debug.LogError("That checkpoint is missing from collection of all checkpoints. This is very very bad.");
-            return;
+            return false;
         }
 
         if (_currentCheckPoint == null || cp.id > _currentCheckPoint.id)
@@ -204,7 +207,10 @@ public class LevelManager : MonoBehaviour
             _currentCheckPoint = cp;
             PrefsManager.Instance.CheckPoint = _currentCheckPoint.id;
             PrefsManager.Instance.Save();
+            return true;
         }
+
+        return false;
     }
 
     public void ResetLevel()

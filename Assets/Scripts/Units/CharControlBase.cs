@@ -15,7 +15,7 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField]
     private LayerMask _walkableTerrain = (1 << 12) + (1 << 13) + (1 << 14);
     [SerializeField]
-    private float _groundedDistanceBonus = 0.04f;
+    private float _groundedDistanceBonus = 0.22f;
     [SerializeField]
     private RandomSFXSound _landingSound = null;
     [SerializeField]
@@ -36,6 +36,7 @@ public abstract class CharControlBase : MonoBehaviour
     private Vector3 _slopeDirection = Vector3.down;
     private bool _onSlope = false;
     private bool _resetGravity = false;
+    private bool _noGravity = false;
     private bool _controllerEnabled = true;
     private bool _airBorne = false;
 
@@ -154,7 +155,11 @@ public abstract class CharControlBase : MonoBehaviour
             CheckGrounded();
 
             // reset or apply gravity
-            if ((_controller.isGrounded && !_onSlope) || _resetGravity)
+            if (_noGravity)
+            {
+                _noGravity = false;
+            }
+            else if ((_controller.isGrounded && !_onSlope) || _resetGravity)
             {
                 // character controller isn't grounded if it doesn't hit the ground every move method call
                 _currentGravity = gravityDelta;
@@ -172,17 +177,7 @@ public abstract class CharControlBase : MonoBehaviour
             _externalMove = Vector3.zero;
         }
 
-        FixedUpdateAdditions();
-
-        if (transform.position.y <= _minYPosition)
-        {
-            OutOfBounds();
-        }
-    }
-
-    protected virtual void FixedUpdateAdditions()
-    {
-        if (!_airBorne && !IsGrounded)
+        if (!IsGrounded)
         {
             _airBorne = true;
             _animator?.SetBool(_animatorBoolAirborne, true);
@@ -192,6 +187,11 @@ public abstract class CharControlBase : MonoBehaviour
             _airBorne = false;
             _animator?.SetBool(_animatorBoolAirborne, false);
             _landingSound?.PlaySound();
+        }
+
+        if (transform.position.y <= _minYPosition)
+        {
+            OutOfBounds();
         }
     }
 
@@ -219,6 +219,12 @@ public abstract class CharControlBase : MonoBehaviour
         _currentGravity = Vector3.zero;
     }
 
+    public void NoGravity()
+    {
+        _noGravity = true;
+        _currentGravity = Vector3.zero;
+    }
+
     /// <summary>
     /// Activates/deactivates character controller.
     /// </summary>
@@ -242,10 +248,10 @@ public abstract class CharControlBase : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(
                 transform.position + _controller.center,
-                _controller.radius,
+                _controller.radius + _controller.skinWidth,
                 Physics.gravity.normalized,
                 out hit,
-                (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
+                (_controller.height / 2.0f) - _controller.radius + _groundedDistanceBonus,
                 _walkableTerrain))
         {
             float slopeAngle = Vector3.Angle(upVector, hit.normal);

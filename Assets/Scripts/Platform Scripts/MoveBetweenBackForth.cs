@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class MoveBetweenBackForth : GenericMover
 {
-
-    [SerializeField,Tooltip("The amount of time the platform is still at the ends of the route")]
+    [SerializeField, Tooltip("The amount of time the platform is still at the ends of the route")]
     protected float _stopTime;
     private bool _backwards;
     private bool _stop;
     private float _stopCounter;
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
         _duration += _stopTime;
     }
 
-    // FixedUpdate is called once per physics update
-    void FixedUpdate()
+    protected override Vector3 InternalMove()
     {
-        if (GameManager.Instance.GamePaused) return;
-
         if (_activated)
         {
             if (_timer.TimeElapsed > _stopTime)
             {
+                Vector3 pos;
                 float currLength = (_timer.TimeElapsed - _stopTime) / (_timer.Duration - _stopTime) * _length;
 
                 if (!_backwards)
@@ -44,34 +42,26 @@ public class MoveBetweenBackForth : GenericMover
                     _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_currentObjectNum - 1].position).magnitude;
                 }
 
-
                 if (!_backwards)
                 {
-
-                    transform.position =
-                                        Vector3.Lerp(_transform[_currentObjectNum].position
-                                                    , _transform[_currentObjectNum + 1].position, _fracTime);
-
-
+                    pos = Vector3.Lerp(_transform[_currentObjectNum].position, _transform[_currentObjectNum + 1].position, _fracTime);
                 }
                 else
                 {
-
-                    transform.position =
-                                        Vector3.Lerp(_transform[_currentObjectNum].position
-                                                    , _transform[_currentObjectNum - 1].position, _fracTime);
-
-
+                    pos = Vector3.Lerp(_transform[_currentObjectNum].position, _transform[_currentObjectNum - 1].position, _fracTime);
                 }
 
                 if (_fracTime >= 1)
                 {
                     ChangeTarget();
                 }
+
+                return pos;
             }
         }
-    }
 
+        return transform.position;
+    }
 
     /// <summary>
     /// Changes the direction the object is travelling

@@ -5,59 +5,65 @@ using UnityEngine;
 public class CharControlPlatformMovement : MonoBehaviour
 {
     public LayerMask _platformLayerMask = 1 << 13;
-    public float _attachDistance = 0.2f;
     public float _disconnectDistance = 2.5f;
 
-    private Transform _platform;
-    private Vector3 _lastPlatformPos;
+    private GenericMover _platform;
     private CharControlBase _character;
-    private float _currentAttachDistance;
 
     private void Awake()
     {
         _character = GetComponent<CharControlBase>();
-        _currentAttachDistance = _attachDistance;
     }
 
     private void FixedUpdate()
     {
         if (GameManager.Instance.GamePaused) return;
 
-        RaycastHit hit;
-
+        RaycastHit hit2;
         if (Physics.SphereCast(
                 transform.position + _character._controller.center,
-                _character._controller.radius,
+                _character._controller.radius + _character._controller.skinWidth,
                 Physics.gravity.normalized,
-                out hit,
-                (_character._controller.height / 2.0f) + _character._controller.skinWidth + _currentAttachDistance,
+                out hit2,
+                (_character._controller.height / 2.0f) - _character._controller.radius - _character._controller.skinWidth,
                 _platformLayerMask))
         {
-            if (_platform == null)
+            if (_platform == null) _platform = hit2.transform.GetComponent<GenericMover>();
+            if (_platform.CurrentMove.y > 0.0f)
             {
-                _platform = hit.transform;
-                _currentAttachDistance = _disconnectDistance;
+                _character.NoGravity();
             }
-            else if (_platform != hit.transform)
+        }
+
+        if (_platform == null) return;
+
+        RaycastHit hit;
+        if (Physics.SphereCast(
+                transform.position + _character._controller.center,
+                _character._controller.radius + _character._controller.skinWidth,
+                Physics.gravity.normalized,
+                out hit,
+                (_character._controller.height / 2.0f) - _character._controller.radius + _disconnectDistance,
+                _platformLayerMask))
+        {
+            if (_platform != hit.transform.GetComponent<GenericMover>())
             {
                 _platform = null;
-                _currentAttachDistance = _attachDistance;
             }
             else
             {
-                Vector3 currentPlatformMove = _platform.position - _lastPlatformPos;
-                _character.AddDirectMovement(currentPlatformMove);
-            }
-
-            if (_platform != null)
-            {
-                _lastPlatformPos = _platform.position;
+                _character.AddDirectMovement(_platform.CurrentMove);
             }
         }
         else
         {
             _platform = null;
-            _currentAttachDistance = _attachDistance;
         }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        GenericMover gm = hit.gameObject.GetComponent<GenericMover>();
+        if (gm != null) _platform = gm;
     }
 }
