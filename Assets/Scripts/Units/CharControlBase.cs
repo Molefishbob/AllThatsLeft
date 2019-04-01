@@ -242,7 +242,7 @@ public abstract class CharControlBase : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(
                 transform.position + _controller.center,
-                _controller.radius,
+                _controller.radius + _controller.skinWidth,
                 Physics.gravity.normalized,
                 out hit,
                 (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
