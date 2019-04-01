@@ -52,7 +52,6 @@ public class FrogEnemy : CharControlBase
     private void Update()
     {
         if (GameManager.Instance.GamePaused) return;
-        Debug.Log(_goBackPosition);
         RaycastHit hit;
         if (!Physics.SphereCast(transform.position + transform.up + transform.forward , 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
         {
