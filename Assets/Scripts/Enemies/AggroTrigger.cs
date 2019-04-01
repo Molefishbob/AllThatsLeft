@@ -13,7 +13,7 @@ public class AggroTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 10)
+        if (other.gameObject.layer == 10 || other.gameObject.layer == 9)
         {
             _frog.AggroEnter();
         }
@@ -21,7 +21,7 @@ public class AggroTrigger : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.layer == 10)
+        if (other.gameObject.layer == 10 || other.gameObject.layer == 9)
         {
             _frog.AggroStay(other.transform);
         }
@@ -29,7 +29,7 @@ public class AggroTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == 10)
+        if (other.gameObject.layer == 10 || other.gameObject.layer == 9)
         {
             _frog.AggroExit();
         }
