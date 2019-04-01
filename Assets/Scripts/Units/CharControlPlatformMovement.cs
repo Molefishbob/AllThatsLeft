@@ -30,7 +30,7 @@ public class CharControlPlatformMovement : MonoBehaviour
                 _character._controller.radius + _character._controller.skinWidth,
                 Physics.gravity.normalized,
                 out hit,
-                (_character._controller.height / 2.0f) + _character._controller.skinWidth + _currentAttachDistance,
+                (_character._controller.height / 2.0f) - _character._controller.radius + _currentAttachDistance,
                 _platformLayerMask))
         {
             if (_platform == null)

@@ -245,7 +245,7 @@ public abstract class CharControlBase : MonoBehaviour
                 _controller.radius + _controller.skinWidth,
                 Physics.gravity.normalized,
                 out hit,
-                (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
+                (_controller.height / 2.0f) - _controller.radius + _groundedDistanceBonus,
                 _walkableTerrain))
         {
             float slopeAngle = Vector3.Angle(upVector, hit.normal);
