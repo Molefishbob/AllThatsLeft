@@ -4,17 +4,10 @@ using UnityEngine;
 
 public class MoveBetweenLoop : GenericMover
 {
-
-
-
-    // FixedUpdate is called once per physics update
-    void FixedUpdate()
+    protected override Vector3 InternalMove()
     {
-        if (GameManager.Instance.GamePaused) return;
-
         if (_activated)
         {
-
             float currLength = (_timer.TimeElapsed) / (_timer.Duration) * _length;
 
             for (int i = 0; i < _currentObjectNum; ++i)
@@ -24,15 +17,17 @@ public class MoveBetweenLoop : GenericMover
 
             _fracTime = currLength / (_transform[_currentObjectNum].position - _transform[_nextObjectNum].position).magnitude;
 
-            transform.position =
-                                Vector3.Lerp(_transform[_currentObjectNum].position
-                                            , _transform[_nextObjectNum].position, _fracTime);
+            Vector3 pos = Vector3.Lerp(_transform[_currentObjectNum].position, _transform[_nextObjectNum].position, _fracTime);
 
             if (_fracTime >= 1)
             {
                 ChangeTarget();
             }
+
+            return pos;
         }
+
+        return transform.position;
     }
 
     /// <summary>
@@ -50,7 +45,7 @@ public class MoveBetweenLoop : GenericMover
 
     /// <summary>
     /// Initializes the script.
-    /// 
+    ///
     /// Adds the distance between the last and the first object to the complete length.
     /// </summary>
     public override void Init()
@@ -61,7 +56,7 @@ public class MoveBetweenLoop : GenericMover
 
     /// <summary>
     /// Called when the timer is completed.
-    /// 
+    ///
     /// Defines what happens when the timer has completed.
     /// </summary>
     protected override void TimedAction()
