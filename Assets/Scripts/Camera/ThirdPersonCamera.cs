@@ -14,7 +14,8 @@ public class ThirdPersonCamera : MonoBehaviour
     public string _cameraXAxis = "Camera X";
     public string _cameraYAxis = "Camera Y";
     private float _yaw = 0.0f;
-    private float _pitch = 0.0f;
+    private float _pitch;
+    public float _startingPitch = 0.0f;
     public float _horizontalSensitivity = 1.0f;
     public float _verticalSensitivity = 1.0f;
     [Tooltip("How low the camera can go")]
@@ -45,12 +46,12 @@ public class ThirdPersonCamera : MonoBehaviour
         _cameras = GetComponentsInChildren<Camera>();
         _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
-        _follow = true;
     }
 
     private void Start()
     {
         _botDistance = _minDistance;
+        OnPlayerRebirth();
     }
 
     private void OnEnable()
@@ -246,8 +247,8 @@ public class ThirdPersonCamera : MonoBehaviour
     private void OnPlayerRebirth()
     {
         _follow = true;
-        _pitch = 0.0f;
-        _yaw = 0.0f;
+        _pitch = _startingPitch;
+        _yaw = GameManager.Instance.Player.transform.eulerAngles.y;
     }
 
     private void ChangeInvertX(bool b)
