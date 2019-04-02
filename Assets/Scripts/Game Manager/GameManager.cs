@@ -107,6 +107,10 @@ public class GameManager : Singleton<GameManager>
 
     public ParticleSystem BeaconParticle;
 
+    public LoadingScreen LoadingScreen;
+
+    private UnscaledOneShotTimer _loadingTimer;
+
     /// <summary>
     /// Reference of the pause menu.
     /// </summary>
@@ -157,7 +161,8 @@ public class GameManager : Singleton<GameManager>
 
     public void ActivateGame(bool active)
     {
-        Player?.gameObject.SetActive(active);
+        Player.gameObject.SetActive(active);
+        if (!LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = false;
         Camera?.gameObject.SetActive(active);
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
@@ -179,6 +184,7 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
+        LoadingScreen.gameObject.SetActive(true);
         PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
@@ -235,6 +241,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ReloadScene()
     {
+        LoadingScreen.gameObject.SetActive(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 

@@ -58,9 +58,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     {
         SetControllerActive(false);
         GameManager.Instance.LevelManager.ResetLevel();
-        //transform.position = GameManager.Instance.LevelManager.GetSpawnLocation();
         Dead = false;
-        ControlsDisabled = false;
         _animator?.SetBool(_animatorBoolDeath, false);
         SetControllerActive(true);
         if (OnPlayerAlive != null) OnPlayerAlive();

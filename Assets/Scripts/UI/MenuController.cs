@@ -21,6 +21,17 @@ public class MenuController : MonoBehaviour
     private GameObject _newGame = null;
     [SerializeField]
     private GameObject _masterVolume = null;
+    [SerializeField]
+    private LoadingScreen _loadingScreen = null;
+
+    private void Awake()
+    {
+        if (GameManager.Instance.LoadingScreen == null)
+        {
+            GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
+            DontDestroyOnLoad(GameManager.Instance.LoadingScreen);
+        }
+    }
 
     private void Start() 
     {
