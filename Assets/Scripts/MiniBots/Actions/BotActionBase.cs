@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class BotActionBase : MonoBehaviour
 {
-    protected PlayerBotInteractions _pbi;
     protected BotMovement _selfMover;
+    public bool _bCanAct = false;
+    protected bool _bPaused;
 
     protected virtual void Awake()
     {
-        _pbi = GetComponent<PlayerBotInteractions>();
         _selfMover = GetComponent<BotMovement>();
     }
 

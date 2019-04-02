@@ -12,9 +12,29 @@ public class HackAction : BotActionBase
     private GameObject[] _goHackTarget = null;
     public bool Hacking { get { return _bHacking; } }
     private bool _bHacking = false;
+    private BotReleaser _releaser = null;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _releaser = GetComponent<BotReleaser>();
+    }
 
     void Update()
     {
+        if (GameManager.Instance.GamePaused)
+        {
+            _bPaused = true;
+            return;
+        }
+        if (_bPaused)
+        {
+            _bPaused = false;
+            return;
+        }
+
+        if (!_selfMover.IsGrounded || !_bCanAct) return;
+
         if (Input.GetButtonDown(_sHackButton))
         {
             _goHackTarget = CheckSurroundings(_lHackLayer, _selfMover._controller.radius + _selfMover._controller.skinWidth);
@@ -25,7 +45,7 @@ public class HackAction : BotActionBase
                 {
                     _bHacking = true;
                     ghOther.TimeToStart();
-                    _pbi.ReleaseControls(true);
+                    _releaser.ReleaseControls(true);
                 }
                 _selfMover._animator.SetBool("Hack", true);
             }
@@ -34,6 +54,6 @@ public class HackAction : BotActionBase
 
     public override void DisableAction()
     {
-        
+        _bHacking = false;
     }
 }

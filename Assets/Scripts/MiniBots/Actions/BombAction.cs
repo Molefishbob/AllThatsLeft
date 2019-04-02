@@ -19,6 +19,12 @@ public class BombAction : BotActionBase
     private GameObject _goParticleHolder;
     private GameObject[] _goTarget;
     private Projector _shadowProjector = null;
+    private BotReleaser _releaser = null;
+
+    void OnDrawGizmosEnabled()
+    {
+        Gizmos.DrawWireSphere(transform.position, _fExplodeRadius);
+    }
 
     void OnEnable()
     {
@@ -38,11 +44,25 @@ public class BombAction : BotActionBase
     protected override void Awake()
     {
         base.Awake();
-        _shadowProjector.GetComponentInChildren<Projector>(true);
+        _shadowProjector = GetComponentInChildren<Projector>(true);
+        _releaser = GetComponent<BotReleaser>();
     }
 
     void Update()
     {
+        if (GameManager.Instance.GamePaused)
+        {
+            _bPaused = true;
+            return;
+        }
+        if (_bPaused)
+        {
+            _bPaused = false;
+            return;
+        }
+
+        if (!_selfMover.IsGrounded || !_bCanAct) return;
+
         if (Input.GetButtonDown(_sExplodeButton))
         {
             _selfMover._animator.SetBool("Explode", true);
@@ -58,7 +78,7 @@ public class BombAction : BotActionBase
                     o.gameObject.SetActive(true);
                 }
             }
-            _pbi.ReleaseControls(true);
+            _releaser.ReleaseControls(true);
         }
     }
 
@@ -69,6 +89,7 @@ public class BombAction : BotActionBase
             _goParticleHolder.transform.parent = transform;
             _goParticleHolder.transform.localPosition = Vector3.zero;
         }
+        _shadowProjector.enabled = true;
     }
 
     public void ExplodeBot()
