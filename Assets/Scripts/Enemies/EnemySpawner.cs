@@ -12,12 +12,29 @@ public class EnemySpawner : MonoBehaviour
     private int _spawnedCount = 0;
     private bool _hasSpawnedEnough;
     public SpawnedEnemy _spawnedEnemy;
+    private List<Transform> _patrolTargets = new List<Transform>();
 
     public enum SpawnedEnemy
     {
         Frog,
         Patrol
     };
+
+    public List<Transform> Targets
+    {
+        get { return _patrolTargets; }
+    }
+
+    private void Awake()
+    {
+        if (_spawnedEnemy == SpawnedEnemy.Patrol)
+        {
+            foreach (Transform child in transform)
+            {
+                _patrolTargets.Add(child);
+            }
+        }
+    }
 
     private void Start()
     {
@@ -37,15 +54,15 @@ public class EnemySpawner : MonoBehaviour
         {
             _patrolEnemy = _patrolPool.GetObject();
             _patrolEnemy.transform.position = transform.position;
-
+            _patrolEnemy.Targets = _patrolTargets;
             _spawnedCount++;
         }
-        
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == 10)
+        if (other.gameObject.layer == 10)
         {
             if (_spawnedCount < _maxSpawnAmount)
             {
