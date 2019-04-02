@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class CharControlPlatformMovement : MonoBehaviour
 {
-    public LayerMask _platformLayerMask = 1 << 13;
-    public float _disconnectDistance = 2.5f;
+    [SerializeField]
+    private LayerMask _platformLayerMask = 1 << 13;
+    [SerializeField]
+    private float _disconnectDistance = 2.5f;
 
     private GenericMover _platform;
     private CharControlBase _character;
@@ -19,45 +21,23 @@ public class CharControlPlatformMovement : MonoBehaviour
     {
         if (GameManager.Instance.GamePaused) return;
 
-        RaycastHit hit2;
-        if (Physics.SphereCast(
-                transform.position + _character._controller.center,
-                _character._controller.radius + _character._controller.skinWidth,
-                Physics.gravity.normalized,
-                out hit2,
-                (_character._controller.height / 2.0f) - _character._controller.radius - _character._controller.skinWidth,
-                _platformLayerMask))
+        if (_platform == null)
         {
-            if (_platform == null) _platform = hit2.transform.GetComponent<GenericMover>();
-            if (_platform.CurrentMove.y > 0.0f)
+            _platform = FindPlatform(0);
+            if (_platform != null)
             {
-                _character.NoGravity();
+                Vector3 pos = _character.transform.position + _platform.CurrentMove;
+                pos.y = _platform.transform.position.y;
+                _character.transform.position = pos;
             }
         }
-
-        if (_platform == null) return;
-
-        RaycastHit hit;
-        if (Physics.SphereCast(
-                transform.position + _character._controller.center,
-                _character._controller.radius + _character._controller.skinWidth,
-                Physics.gravity.normalized,
-                out hit,
-                (_character._controller.height / 2.0f) - _character._controller.radius + _disconnectDistance,
-                _platformLayerMask))
+        else if (FindPlatform(_disconnectDistance) != _platform)
         {
-            if (_platform != hit.transform.GetComponent<GenericMover>())
-            {
-                _platform = null;
-            }
-            else
-            {
-                _character.AddDirectMovement(_platform.CurrentMove);
-            }
+            _platform = null;
         }
         else
         {
-            _platform = null;
+            _character.transform.position += _platform.CurrentMove;
         }
     }
 
@@ -65,5 +45,21 @@ public class CharControlPlatformMovement : MonoBehaviour
     {
         GenericMover gm = hit.gameObject.GetComponent<GenericMover>();
         if (gm != null) _platform = gm;
+    }
+
+    private GenericMover FindPlatform(float distance)
+    {
+        RaycastHit hit;
+        if (Physics.SphereCast(
+                transform.position + _character._controller.center,
+                _character._controller.radius + _character._controller.skinWidth,
+                Physics.gravity.normalized,
+                out hit,
+                (_character._controller.height / 2.0f) - _character._controller.radius + distance,
+                _platformLayerMask))
+        {
+            return hit.transform.GetComponent<GenericMover>();
+        }
+        return null;
     }
 }

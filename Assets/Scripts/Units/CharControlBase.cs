@@ -36,7 +36,6 @@ public abstract class CharControlBase : MonoBehaviour
     private Vector3 _slopeDirection = Vector3.down;
     private bool _onSlope = false;
     private bool _resetGravity = false;
-    private bool _noGravity = false;
     private bool _controllerEnabled = true;
     private bool _airBorne = false;
 
@@ -155,11 +154,7 @@ public abstract class CharControlBase : MonoBehaviour
             CheckGrounded();
 
             // reset or apply gravity
-            if (_noGravity)
-            {
-                _noGravity = false;
-            }
-            else if ((_controller.isGrounded && !_onSlope) || _resetGravity)
+            if ((_controller.isGrounded && !_onSlope) || _resetGravity)
             {
                 // character controller isn't grounded if it doesn't hit the ground every move method call
                 _currentGravity = gravityDelta;
@@ -216,12 +211,6 @@ public abstract class CharControlBase : MonoBehaviour
     public void ResetGravity()
     {
         _resetGravity = true;
-        _currentGravity = Vector3.zero;
-    }
-
-    public void NoGravity()
-    {
-        _noGravity = true;
         _currentGravity = Vector3.zero;
     }
 
