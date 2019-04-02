@@ -6,13 +6,11 @@ public class EnemyAttack : MonoBehaviour
 {
     [SerializeField]
     private string attacktrigger = "Attack";
-    private CharControlBase charC;
     private FrogEnemy _frog;
     private PatrolEnemy _scorpion;
 
     private void Awake()
     {
-        charC = GetComponentInParent<CharControlBase>();
         if (transform.parent.tag == "Frog")
         {
             _frog = GetComponentInParent<FrogEnemy>();
@@ -26,15 +24,17 @@ public class EnemyAttack : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         other.GetComponent<IDamageReceiver>().Die();
-        charC._animator?.SetTrigger(attacktrigger);       
+              
         if(_frog != null)
         {
+            _frog._animator?.SetTrigger(attacktrigger);
             _frog.StopMoving();
             _frog.BackToPrevious = true;
             _frog.FollowPlayer = false;
         }
         if(_scorpion != null)
         {
+            _scorpion._animator?.SetTrigger(attacktrigger);
             _scorpion.StopMoving = true;
         }
     }

@@ -37,4 +37,12 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
             _scorpion.StopMoving = false;
         }
     }
+
+    public void DefendEnded()
+    {
+        if (_scorpion != null)
+        {
+            _scorpion.StopMoving = false;
+        }
+    }
 }
