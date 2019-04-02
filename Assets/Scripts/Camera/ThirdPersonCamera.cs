@@ -26,8 +26,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
-    private Camera _cam;
-    public int _fieldOfView = 60;
+    private Camera[] _cameras;
     private ScaledOneShotTimer _transitionTimer;
     public float _horSensMulti = 0.05f;
     public float _verSensMulti = 0.05f;
@@ -43,7 +42,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Awake()
     {
-        _cam = GetComponent<Camera>();
+        _cameras = GetComponentsInChildren<Camera>();
         _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
         _follow = true;
@@ -52,7 +51,6 @@ public class ThirdPersonCamera : MonoBehaviour
     private void Start()
     {
         _botDistance = _minDistance;
-        _cam.fieldOfView = _fieldOfView;
     }
 
     private void OnEnable()
@@ -74,6 +72,9 @@ public class ThirdPersonCamera : MonoBehaviour
         PrefsManager.Instance.OnFieldOfViewChanged += SetFieldOfView;
         SetZoomSpeed(PrefsManager.Instance.ZoomSpeed);
         SetFieldOfView(PrefsManager.Instance.FieldOfView);
+
+        GameManager.Instance.Player.OnPlayerDeath += OnPlayerDeath;
+        GameManager.Instance.Player.OnPlayerAlive += OnPlayerRebirth;
     }
 
     private void OnDisable()
@@ -81,6 +82,11 @@ public class ThirdPersonCamera : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnGamePauseChanged -= UnLockCursor;
+            if (GameManager.Instance.Player != null)
+            {
+                GameManager.Instance.Player.OnPlayerDeath -= OnPlayerDeath;
+                GameManager.Instance.Player.OnPlayerAlive -= OnPlayerRebirth;
+            }
         }
         UnLockCursor(true);
 
@@ -232,12 +238,12 @@ public class ThirdPersonCamera : MonoBehaviour
         _lookAt = trans;
     }
 
-    public void OnPlayerDeath()
+    private void OnPlayerDeath()
     {
         _follow = false;
     }
 
-    public void OnPlayerRebirth()
+    private void OnPlayerRebirth()
     {
         _follow = true;
         _pitch = 0.0f;
@@ -285,6 +291,9 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void SetFieldOfView(int fov)
     {
-        _fieldOfView = fov;
+        foreach (Camera cam in _cameras)
+        {
+            cam.fieldOfView = fov;
+        }
     }
 }

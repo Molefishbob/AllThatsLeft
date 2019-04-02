@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MainCharMovement : PlayerMovement, IDamageReceiver
 {
+    public event GenericEvent OnPlayerAlive;
     public event GenericEvent OnPlayerDeath;
 
     [SerializeField]
@@ -62,7 +63,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         ControlsDisabled = false;
         _animator?.SetBool(_animatorBoolDeath, false);
         SetControllerActive(true);
-        GameManager.Instance.Camera.OnPlayerRebirth();
+        if (OnPlayerAlive != null) OnPlayerAlive();
     }
 
     protected override void OutOfBounds()
@@ -72,7 +73,6 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         Dead = true;
         ControlsDisabled = true;
         _deathTimer.StartTimer(_deathTime);
-        GameManager.Instance.Camera.OnPlayerDeath();
         if (OnPlayerDeath != null) OnPlayerDeath();
     }
 }
