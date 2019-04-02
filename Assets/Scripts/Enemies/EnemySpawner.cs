@@ -48,6 +48,8 @@ public class EnemySpawner : MonoBehaviour
         {
             _frogEnemy = _frogPool.GetObject();
             _frogEnemy.transform.position = transform.position;
+            _frogEnemy.transform.rotation = transform.rotation;
+            _frogEnemy.SetSpawnerTransform(transform);
             _spawnedCount++;
         }
         else if (_spawnedEnemy == SpawnedEnemy.Patrol)

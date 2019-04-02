@@ -6,10 +6,11 @@ public class FrogEnemy : CharControlBase
 {
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
-    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow/* , _canSpit */;
+    private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow, _attackStop;
     private PhysicsOneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
     public LayerMask _groundLayer;
+    private Transform _spawnerTransform;
 
     protected override void Awake()
     {
@@ -21,6 +22,17 @@ public class FrogEnemy : CharControlBase
         _nextStopZ = false;
         _followPlayer = false;
         _backToPrevious = false;
+    }
+
+    private void OnDisable()
+    {
+        _stopMoving = false;
+        _nextStopX = true;
+        _nextStopZ = false;
+        _followPlayer = false;
+        _backToPrevious = false;
+        _canFollow = true;
+        _attackStop = false;
     }
 
     public bool BackToPrevious
@@ -66,6 +78,7 @@ public class FrogEnemy : CharControlBase
 
     protected override Vector3 InternalMovement()
     {
+        if (_attackStop) return Vector3.zero;
 
         float x, y, z;
 
@@ -119,6 +132,7 @@ public class FrogEnemy : CharControlBase
         }       
 
         Vector3 move = new Vector3(x,y,z);
+        move = _spawnerTransform.TransformDirection(move);
         return move;
     }
 
@@ -136,7 +150,6 @@ public class FrogEnemy : CharControlBase
             _goBackPosition = transform.position;
         }
         _backToPrevious = false;
-        //_canSpit = true;
     }
 
     public void AggroStay(Transform other)
@@ -152,12 +165,26 @@ public class FrogEnemy : CharControlBase
     {
         _followPlayer = false;
         _backToPrevious = true;
-        //_canSpit = false;
     }
     
     protected override void OutOfBounds()
     {
         gameObject.SetActive(false);
         transform.localPosition = Vector3.zero;
+    }
+
+    public void StartMoving()
+    {
+        _attackStop = false;
+    }
+
+    public void StopMoving()
+    {
+        _attackStop = true;
+    }
+
+    public void SetSpawnerTransform(Transform trans)
+    {
+        _spawnerTransform = trans;        
     }
 }
