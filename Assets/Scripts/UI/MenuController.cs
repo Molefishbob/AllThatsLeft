@@ -32,6 +32,18 @@ public class MenuController : MonoBehaviour
     }
     private Page _currentPage;
     
+    [SerializeField]
+    private LoadingScreen _loadingScreen = null;
+
+    private void Awake()
+    {
+        if (GameManager.Instance.LoadingScreen == null)
+        {
+            GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
+            DontDestroyOnLoad(GameManager.Instance.LoadingScreen);
+        }
+    }
+
     private void Start() 
     {
         bool temp = PrefsManager.Instance.SavedGameExists;
