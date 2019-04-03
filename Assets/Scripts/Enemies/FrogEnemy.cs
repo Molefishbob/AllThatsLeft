@@ -93,14 +93,14 @@ public class FrogEnemy : CharControlBase
         }
         else if (_followPlayer)
         {
-            Vector3 goToPlayer = _playerPosition - transform.position;
+            Vector3 goToPlayer = transform.position - _playerPosition;
             x = goToPlayer.x;
             y = 0;
             z = goToPlayer.z;
         }
         else if (_backToPrevious)
         {
-            Vector3 goBack = _goBackPosition - transform.position;
+            Vector3 goBack = transform.position - _goBackPosition;
             x = goBack.x;
             y = 0;
             z = goBack.z;
@@ -148,6 +148,7 @@ public class FrogEnemy : CharControlBase
         if (!_backToPrevious)
         {
             _goBackPosition = transform.position;
+            _animator?.SetBool("Jump", true);
         }
         _backToPrevious = false;
     }
@@ -165,6 +166,7 @@ public class FrogEnemy : CharControlBase
     {
         _followPlayer = false;
         _backToPrevious = true;
+        _animator?.SetBool("Jump", false);
     }
     
     protected override void OutOfBounds()
