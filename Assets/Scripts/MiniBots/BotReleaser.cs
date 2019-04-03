@@ -128,9 +128,14 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTime, true);
         if (_selfTrampoline._bActing || _selfHack.Hacking)
-            _ostDisable.StartTimer(_transitionTime);
-        else
+        {
             _ostDisable.StartTimer(_fLifeTime);
+            // Right now lets just give controls back instantly
+            // Will fix
+            GameManager.Instance.Player.ControlsDisabled = false;
+        } 
+        else
+            _ostDisable.StartTimer(_transitionTime);
     }
 
     public override void DisableAction()
@@ -141,15 +146,12 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfBomb.DisableAction();
         _selfTrampoline.DisableAction();
 
-        if (!_selfMover.ControlsDisabled)
-        {
-            GameManager.Instance.Player.ControlsDisabled = false;
-            _selfMover.ControlsDisabled = true;
-        }
-        if (!_ostLife.IsRunning)
-            gameObject.SetActive(false);
         // FIXME : THIS CAUSES A BUG WHEN TRAMPOLINE TIMER RUNS OUT AND CONTROLLING OTHER BOT
         GameManager.Instance.Player.ControlsDisabled = false;
+
+        _selfMover.ControlsDisabled = true;
+        if (!_ostLife.IsRunning)
+            gameObject.SetActive(false);
     }
 
     public void DisableActing()

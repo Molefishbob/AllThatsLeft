@@ -80,6 +80,7 @@ public class DeployControlledBots : MonoBehaviour
             else if (!_timer.IsRunning)
             {
                 _activeBot.ControlsDisabled = false;
+                _activeBot.Activate();
                 _activeBot = null;
             }
         }
