@@ -33,6 +33,7 @@ public class FrogEnemy : CharControlBase
         _backToPrevious = false;
         _canFollow = true;
         _attackStop = false;
+        _time = 0;
     }
 
     public bool BackToPrevious
