@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotReleaser : BotActionBase
+public class BotReleaser : BotActionBase, IDamageReceiver
 {
     [SerializeField]
     private float _fReleaseDelay = 2.0f;
@@ -13,12 +13,17 @@ public class BotReleaser : BotActionBase
     [SerializeField]
     private float _fLifeTime = 30;
 
+    [HideInInspector]
+    public bool Dead { get { return _dead; } set { _dead = value; } }
+    private bool _dead = false;
+
     private LayerMask _lHackableLayer = 1 << 18;
 
     private ScaledOneShotTimer _ostRelease;
     private ScaledOneShotTimer _ostDisable;
     private PhysicsOneShotTimer _ostLife;
 
+    // Could use a BotActionBase list/array for scaleability
     private BombAction _selfBomb;
     private HackAction _selfHack;
     private TrampolineAction _selfTrampoline;
@@ -45,7 +50,7 @@ public class BotReleaser : BotActionBase
     {
         _ostRelease.OnTimerCompleted += ActualRelease;
         _ostDisable.OnTimerCompleted += DisableAction;
-        _ostLife.OnTimerCompleted += _selfMover.Die;
+        _ostLife.OnTimerCompleted += Die;
 
         if (!_selfMover.ControlsDisabled)
             Activate();
@@ -57,12 +62,19 @@ public class BotReleaser : BotActionBase
         _ostRelease.StopTimer();
         _ostLife.StopTimer();
         _selfMover._animator.SetBool("Explode", false);
+        Dead = false;
+        _selfMover.Dead = false;
+        // TODO Add player jump reset to BotMovement
+        // Right now happens in movements OnDisable not a fan of that
+        //_selfMover._playerJump.ResetJump();
+        _selfMover.SetControllerActive(false);
+        _selfMover.ControlsDisabled = true;
+
         if (GameManager.Instance != null && GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath -= ReleaseInstant;
     }
 
     public void Activate()
     {
-        _selfMover.SetControllerActive(true);
         _selfBomb._bCanAct = true;
         _selfHack._bCanAct = true;
         _selfTrampoline._bCanAct = true;
@@ -72,6 +84,7 @@ public class BotReleaser : BotActionBase
     {
         _selfMover.ControlsDisabled = true;
         DisableActing();
+
         GameObject[] hacks = CheckSurroundings(_lHackableLayer, _selfMover._controller.radius + _selfMover._controller.skinWidth);
         if (hacks != null && hacks.Length > 0)
         {
@@ -81,6 +94,7 @@ public class BotReleaser : BotActionBase
                 hack?.ShowPrompt(false);
             }
         }
+
         if (withDelay)
         {
             _ostRelease.StartTimer(_fReleaseDelay);
@@ -95,6 +109,7 @@ public class BotReleaser : BotActionBase
     {
         _selfMover.ControlsDisabled = true;
         DisableActing();
+
         GameObject[] hacks = CheckSurroundings(_lHackableLayer, _selfMover._controller.radius + _selfMover._controller.skinWidth);
         if (hacks != null && hacks.Length > 0)
         {
@@ -104,6 +119,7 @@ public class BotReleaser : BotActionBase
                 hack?.ShowPrompt(false);
             }
         }
+
         GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
         _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
     }
@@ -111,7 +127,7 @@ public class BotReleaser : BotActionBase
     private void ActualRelease()
     {
         GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTime, true);
-        if (!_selfTrampoline._bActing)
+        if (_selfTrampoline._bActing || _selfHack.Hacking)
             _ostDisable.StartTimer(_transitionTime);
         else
             _ostDisable.StartTimer(_fLifeTime);
@@ -119,6 +135,8 @@ public class BotReleaser : BotActionBase
 
     public override void DisableAction()
     {
+        // Right now lets just do this the stupid way
+        // Need to do some stuff BEFORE the object is disabled
         _selfHack.DisableAction();
         _selfBomb.DisableAction();
         _selfTrampoline.DisableAction();
@@ -130,10 +148,14 @@ public class BotReleaser : BotActionBase
         }
         if (!_ostLife.IsRunning)
             gameObject.SetActive(false);
+        // FIXME : THIS CAUSES A BUG WHEN TRAMPOLINE TIMER RUNS OUT AND CONTROLLING OTHER BOT
+        GameManager.Instance.Player.ControlsDisabled = false;
     }
 
     public void DisableActing()
     {
+        // More stupid stuff here
+        // Is called from actions
         _bCanAct = false;
         _selfBomb._bCanAct = false;
         _selfHack._bCanAct = false;
@@ -152,7 +174,20 @@ public class BotReleaser : BotActionBase
         }
         if (_ostLife != null && _selfMover != null)
         {
-            _ostLife.OnTimerCompleted -= _selfMover.Die;
+            _ostLife.OnTimerCompleted -= Die;
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Die();
+    }
+
+    public void Die()
+    {
+        if (Dead) return;
+        Dead = true;
+        _selfMover.Dead = true;
+        ReleaseControls(false);
     }
 }
