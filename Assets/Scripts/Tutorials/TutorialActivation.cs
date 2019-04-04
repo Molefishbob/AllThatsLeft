@@ -10,6 +10,8 @@ public class TutorialActivation : MonoBehaviour
     [SerializeField, Tooltip("0 means never comes back")]
     private float _reshowTime = 0.0f;
     [SerializeField]
+    private bool _showWhileInArea = false;
+    [SerializeField]
     private bool _hideByCameraMove = false;
     [SerializeField]
     private bool _hideByCameraZoom = false;
@@ -72,19 +74,36 @@ public class TutorialActivation : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (_shown) return;
+
         foreach (TutorialActivation tut in _otherTutorials)
         {
             if (tut.IsShowing) return;
         }
 
-        _mover = other.GetComponent<PlayerMovement>();
-        if (_mover == null || _mover.ControlsDisabled) return;
+        if (_mover == null)
+        {
+            PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
+            if (foundMover != null && !foundMover.ControlsDisabled)
+            {
+                _mover = foundMover;
+            }
+            else
+            {
+                return;
+            }
+        }
 
-        _collider.enabled = false;
+        if (!_showWhileInArea)
+        {
+            _collider.enabled = false;
+        }
+
         if (_followPlayer)
         {
             _attachPoint = other.transform.Find(_attachPointName);
         }
+
         _prompt.gameObject.SetActive(true);
         _shown = true;
 
@@ -130,6 +149,17 @@ public class TutorialActivation : MonoBehaviour
         GameManager.Instance.Player.OnPlayerDeath += MyWorkHereIsDone;
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (!_showWhileInArea || _mover == null) return;
+
+        PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
+        if (foundMover == null || foundMover != _mover) return;
+
+        _mover = null;
+        ElvisHasLeftTheBuilding();
+    }
+
     private void MyWorkHereIsDone()
     {
         if (_hideByCameraMove && GameManager.Instance.Camera != null) GameManager.Instance.Camera.OnCameraMovedByPlayer -= MyWorkHereIsDone;
@@ -139,6 +169,8 @@ public class TutorialActivation : MonoBehaviour
         if (_hideByDeploy && _deploy != null) _deploy.OnDeployBot -= MyWorkHereIsDone;
         if (_bot != null) _bot.OnBotReleased -= MyWorkHereIsDone;
         if (GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath -= MyWorkHereIsDone;
+
+        _mover = null;
 
         _timer.StopTimer();
         if (_hideTime > 0.0f)
@@ -152,6 +184,10 @@ public class TutorialActivation : MonoBehaviour
             _timer.OnTimerCompleted += MoreWork;
             _timer.StartTimer(_reshowTime);
         }
+        else if (_showWhileInArea)
+        {
+            ElvisHasLeftTheBuilding();
+        }
         else
         {
             gameObject.SetActive(false);
@@ -163,5 +199,11 @@ public class TutorialActivation : MonoBehaviour
         _timer.OnTimerCompleted -= MoreWork;
         _shown = false;
         _collider.enabled = true;
+    }
+
+    private void ElvisHasLeftTheBuilding()
+    {
+        _shown = false;
+        _prompt.gameObject.SetActive(false);
     }
 }
