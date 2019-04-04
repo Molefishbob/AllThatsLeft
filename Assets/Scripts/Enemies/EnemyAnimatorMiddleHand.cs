@@ -41,7 +41,6 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
 
     public void DefendEnded()
     {
-        Debug.Log("ssa");
         if (_scorpion != null)
         {
             _scorpion.StopMoving = false;
