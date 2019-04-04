@@ -87,16 +87,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfMover.ControlsDisabled = true;
         DisableActing();
 
-        GameObject[] hacks = CheckSurroundings(_lHackableLayer, _selfMover._controller.radius + _selfMover._controller.skinWidth);
-        if (hacks != null && hacks.Length > 0)
-        {
-            foreach (GameObject item in hacks)
-            {
-                GenericHackable hack = item.GetComponent<GenericHackable>();
-                hack?.ShowPrompt(false);
-            }
-        }
-
         if (withDelay)
         {
             _ostRelease.StartTimer(_fReleaseDelay);
@@ -112,16 +102,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         _selfMover.ControlsDisabled = true;
         DisableActing();
-
-        GameObject[] hacks = CheckSurroundings(_lHackableLayer, _selfMover._controller.radius + _selfMover._controller.skinWidth);
-        if (hacks != null && hacks.Length > 0)
-        {
-            foreach (GameObject item in hacks)
-            {
-                GenericHackable hack = item.GetComponent<GenericHackable>();
-                hack?.ShowPrompt(false);
-            }
-        }
 
         GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
         _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);

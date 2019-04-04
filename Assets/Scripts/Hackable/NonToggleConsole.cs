@@ -11,7 +11,7 @@ public class NonToggleConsole : GenericHackable
     /// </summary>
     protected override void HackAction()
     {
-        switch (_currentStatus)
+        switch (CurrentStatus)
         {
             case Status.BeingHacked:
                 _hTarget.ButtonDown();
@@ -28,9 +28,9 @@ public class NonToggleConsole : GenericHackable
     /// </summary>
     protected override void StartHack()
     {
-        if (_currentStatus == Status.NotHacked)
+        if (CurrentStatus == Status.NotHacked)
         {
-            _currentStatus = Status.BeingHacked;
+            CurrentStatus = Status.BeingHacked;
             HackAction();
         }
     }
@@ -41,9 +41,9 @@ public class NonToggleConsole : GenericHackable
     /// </summary>
     protected override void StopHack()
     {
-        if (_currentStatus == Status.BeingHacked)
+        if (CurrentStatus == Status.BeingHacked)
         {
-            _currentStatus = Status.NotHacked;
+            CurrentStatus = Status.NotHacked;
             HackAction();
         }
     }

@@ -41,7 +41,7 @@ public class HackAction : BotActionBase
             if (_goHackTarget != null)
             {
                 GenericHackable ghOther = _goHackTarget[0].GetComponent<GenericHackable>();
-                if (ghOther._currentStatus == GenericHackable.Status.NotHacked)
+                if (ghOther.CurrentStatus == GenericHackable.Status.NotHacked)
                 {
                     _bHacking = true;
                     ghOther.TimeToStart();

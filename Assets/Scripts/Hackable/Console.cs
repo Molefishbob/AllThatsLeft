@@ -14,9 +14,8 @@ public class Console : GenericHackable
         base.Awake();
         _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsOneShotTimer>(gameObject);
     }
-    protected override void Start()
+    protected virtual void Start()
     {
-        base.Start();
         _timer.OnTimerCompleted += CompleteHack;
     }
 
@@ -34,10 +33,10 @@ public class Console : GenericHackable
     /// </summary>
     protected override void StartHack()
     {
-        if (_currentStatus == Status.NotHacked) 
+        if (CurrentStatus == Status.NotHacked) 
         {
             StartTimer(_duration);
-            _currentStatus = Status.BeingHacked;
+            CurrentStatus = Status.BeingHacked;
         }
     }
     
@@ -48,10 +47,10 @@ public class Console : GenericHackable
     protected override void StopHack()
     {
         _timer.StopTimer();
-        switch (_currentStatus)
+        switch (CurrentStatus)
         {
             case Status.BeingHacked:
-                _currentStatus = Status.NotHacked;
+                CurrentStatus = Status.NotHacked;
                 _timer.StopTimer();
                 break;
         }
@@ -92,14 +91,14 @@ public class Console : GenericHackable
     /// </summary>
     protected void CompleteHack()
     {
-        switch(_currentStatus)
+        switch(CurrentStatus)
         {
             case Status.BeingHacked:
-                _currentStatus = Status.Hacked;
+                CurrentStatus = Status.Hacked;
                 HackAction();
                 break;
             default:
-                Debug.LogError("Current Status:" + _currentStatus + " Timer completed even though it shouldn't! ree");
+                Debug.LogError("Current Status:" + CurrentStatus + " Timer completed even though it shouldn't! ree");
                 break;
         }
     }
