@@ -12,13 +12,8 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
 
     public void Die()
     {
-        if (transform.parent != null)
-        {
-            transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        
+        gameObject.SetActive(false);
+        
     }
 }

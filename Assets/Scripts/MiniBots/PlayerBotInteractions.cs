@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿/* using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Im gonna enjoy deleting this
 public class PlayerBotInteractions : MonoBehaviour
 {
     [SerializeField]
@@ -69,7 +70,7 @@ public class PlayerBotInteractions : MonoBehaviour
     {
         _ostRelease.OnTimerCompleted += ActualRelease;
         _ostDisable.OnTimerCompleted += DisableSelf;
-        _ostLife.OnTimerCompleted += _selfMover.Die;
+        //_ostLife.OnTimerCompleted += _selfMover.Die;
     }
 
     private void OnDrawGizmosSelected()
@@ -89,7 +90,7 @@ public class PlayerBotInteractions : MonoBehaviour
         }
         if (_ostLife != null && _selfMover != null)
         {
-            _ostLife.OnTimerCompleted -= _selfMover.Die;
+            //_ostLife.OnTimerCompleted -= _selfMover.Die;
         }
     }
 
@@ -306,3 +307,4 @@ public class PlayerBotInteractions : MonoBehaviour
         }
     }
 }
+ */

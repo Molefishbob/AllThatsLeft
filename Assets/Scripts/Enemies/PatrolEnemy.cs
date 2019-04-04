@@ -7,12 +7,25 @@ public class PatrolEnemy : CharControlBase
     private List<Transform> _targets = new List<Transform>();
     private int _targetCounter;
     private bool _goingForward;
+    private bool _stopMoving;
+
+    public bool StopMoving
+    {
+        set { _stopMoving = value; }
+    }
 
     protected override void Awake()
     {
         base.Awake();
         _targetCounter = 0;
         _goingForward = true;
+    }
+
+    private void OnDisable()
+    {
+        _targetCounter = 0;
+        _goingForward = true;
+        _stopMoving = false;
     }
 
     protected override void Start()
@@ -61,7 +74,7 @@ public class PatrolEnemy : CharControlBase
 
     protected override Vector3 InternalMovement()
     {
-        //Debug.Log(_targetCounter + " jeejee " + _transforms.Count);
+        if (_stopMoving) return Vector3.zero;
 
         Vector3 moveDirection = _targets[_targetCounter].position - transform.position;
 

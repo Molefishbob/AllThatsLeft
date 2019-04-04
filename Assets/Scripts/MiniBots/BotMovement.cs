@@ -2,38 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotMovement : PlayerMovement, IDamageReceiver
+public class BotMovement : PlayerMovement
 {
     [HideInInspector]
-    public bool Dead { get; private set; }
-    private PlayerBotInteractions _pbi;
+    public bool Dead { get { return _dead; } set { _dead = value; } }
+    private bool _dead = false;
+    private BotReleaser _selfReleaser;
     protected override void Awake()
     {
         base.Awake();
-        _pbi = GetComponent<PlayerBotInteractions>();
+        _selfReleaser = GetComponent<BotReleaser>();
     }
 
     private void OnDisable()
     {
-        Dead = false;
         _playerJump.ResetJump();
-        SetControllerActive(false);
-        ControlsDisabled = true;
     }
 
-    public void TakeDamage(int damage)
+    public void Activate()
     {
-        Die();
-    }
-
-    public void Die()
-    {
-        if (Dead) return;
-
-        Dead = true;
-
-        // TODO animations
-        _pbi.StopActing();
+        _selfReleaser.Activate();
     }
 
     protected override void OutOfBounds()
@@ -41,6 +29,8 @@ public class BotMovement : PlayerMovement, IDamageReceiver
         if (Dead) return;
 
         Dead = true;
-        _pbi.ReleaseControls(false);
+        _selfReleaser.Dead = true;
+
+        _selfReleaser.ReleaseControls(false);
     }
 }
