@@ -94,14 +94,14 @@ public class FrogEnemy : CharControlBase
         }
         else if (_followPlayer)
         {
-            Vector3 goToPlayer = transform.position - _playerPosition;
+            Vector3 goToPlayer = _playerPosition - transform.position;
             x = goToPlayer.x;
             y = 0;
             z = goToPlayer.z;
         }
         else if (_backToPrevious)
         {
-            Vector3 goBack = transform.position - _goBackPosition;
+            Vector3 goBack = _goBackPosition - transform.position;
             x = goBack.x;
             y = 0;
             z = goBack.z;
@@ -133,7 +133,10 @@ public class FrogEnemy : CharControlBase
         }       
 
         Vector3 move = new Vector3(x,y,z);
-        move = _spawnerTransform.TransformDirection(move);
+        if (!FollowPlayer && !_backToPrevious)
+        {
+            move = _spawnerTransform.TransformDirection(move);
+        }
         return move;
     }
 
