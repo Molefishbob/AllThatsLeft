@@ -9,7 +9,6 @@ public class FrogEnemy : CharControlBase
     private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow, _attackStop;
     private PhysicsOneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
-    public LayerMask _groundLayer;
     private Transform _spawnerTransform;
 
     protected override void Awake()
@@ -66,7 +65,7 @@ public class FrogEnemy : CharControlBase
     {
         if (GameManager.Instance.GamePaused) return;
         RaycastHit hit;
-        if (!Physics.SphereCast(transform.position + transform.up + transform.forward , 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _groundLayer))
+        if (!Physics.SphereCast(transform.position + transform.up + transform.forward , 0.5f, transform.TransformDirection(Vector3.down), out hit, 3, _walkableTerrain))
         {
             if (_time > 0.5f)
             {

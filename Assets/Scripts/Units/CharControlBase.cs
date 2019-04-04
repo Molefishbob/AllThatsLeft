@@ -13,7 +13,7 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
     [SerializeField]
-    private LayerMask _walkableTerrain = (1 << 12) + (1 << 13) + (1 << 14);
+    protected LayerMask _walkableTerrain = (1 << 12) + (1 << 13) + (1 << 14);
     [SerializeField]
     private float _groundedDistanceBonus = 0.22f;
     [SerializeField]
