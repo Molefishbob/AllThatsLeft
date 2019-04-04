@@ -83,17 +83,21 @@ public class TutorialActivation : MonoBehaviour
             if (tut.IsShowing) return;
         }
 
-        if (_mover == null)
+        PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
+
+        if (foundMover == null || foundMover.ControlsDisabled)
         {
-            PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
-            if (foundMover != null && !foundMover.ControlsDisabled)
+            return;
+        }
+        else if (_mover == null)
+        {
+            if (_hideByDeploy)
             {
-                _mover = foundMover;
+                _deploy = other.GetComponent<DeployControlledBots>();
+                if (_deploy != null && _deploy.enabled) _deploy.OnDeployBot += MyWorkHereIsDone;
+                else return;
             }
-            else
-            {
-                return;
-            }
+            _mover = foundMover;
         }
 
         if (!_showWhileInArea)
@@ -134,12 +138,6 @@ public class TutorialActivation : MonoBehaviour
         {
             _jump = other.GetComponent<PlayerJump>();
             if (_jump != null) _jump.OnPlayerJump += MyWorkHereIsDone;
-        }
-
-        if (_hideByDeploy)
-        {
-            _deploy = other.GetComponent<DeployControlledBots>();
-            if (_deploy != null) _deploy.OnDeployBot += MyWorkHereIsDone;
         }
 
         _bot = other.GetComponent<BotReleaser>();
