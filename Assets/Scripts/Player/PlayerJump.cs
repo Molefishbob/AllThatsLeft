@@ -49,6 +49,7 @@ public class PlayerJump : MonoBehaviour
     private ScaledOneShotTimer _holdTimer;
     private bool _canJump;
     private PlayerMovement _character;
+    private bool _paused = true;
 
     private void Awake()
     {
@@ -73,21 +74,29 @@ public class PlayerJump : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GamePaused) return;
-
-        if (!ControlsDisabled)
+        if (GameManager.Instance.GamePaused)
         {
-            if (_jumping)
+            _paused = true;
+            return;
+        }
+        if (_paused)
+        {
+            _paused = false;
+            return;
+        }
+
+        if (ControlsDisabled) return;
+
+        if (_jumping)
+        {
+            if (Input.GetButtonUp(_jumpButton) && _holdTimer.IsRunning)
             {
-                if (Input.GetButtonUp(_jumpButton) && _holdTimer.IsRunning)
-                {
-                    _currentJumpForce = GetJumpForce(_minHeight);
-                }
+                _currentJumpForce = GetJumpForce(_minHeight);
             }
-            else if (Input.GetButtonDown(_jumpButton))
-            {
-                _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround);
-            }
+        }
+        else if (Input.GetButtonDown(_jumpButton))
+        {
+            _beforeTimer.StartTimer(_leewayTimeBeforeHittingGround);
         }
     }
 
@@ -169,5 +178,6 @@ public class PlayerJump : MonoBehaviour
         _beforeTimer.StopTimer();
         _holdTimer.StopTimer();
         _afterTimer.StopTimer();
+        EndAfterLeeway();
     }
 }
