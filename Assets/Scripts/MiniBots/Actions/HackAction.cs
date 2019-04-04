@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class HackAction : BotActionBase
 {
-    public event GenericEvent OnHackUsed;
-
     [SerializeField]
     private string _sHackButton = "Hack Action";
     public LayerMask HackLayer { get { return _lHackLayer; } }
@@ -48,7 +46,6 @@ public class HackAction : BotActionBase
                     _bHacking = true;
                     ghOther.TimeToStart();
                     _releaser.ReleaseControls(true);
-                    if (OnHackUsed != null) OnHackUsed();
                 }
                 _selfMover._animator.SetBool("Hack", true);
             }
