@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
+    public event GenericEvent OnCameraZoomedByPlayer;
+    public event GenericEvent OnCameraMovedByPlayer;
+
     public LayerMask _groundLayer;
     private Transform _lookAt;
     private Vector3 _oldTarget;
@@ -127,7 +130,8 @@ public class ThirdPersonCamera : MonoBehaviour
         }
         else if (!GameManager.Instance.Player.Dead)
         {
-            _distance -= (Input.GetAxis("Scroll")) * _zoomSpeed;
+            float scroll = Input.GetAxis("Scroll");
+            _distance -= scroll * _zoomSpeed;
 
             if (_distance < _minDistance)
             {
@@ -138,8 +142,11 @@ public class ThirdPersonCamera : MonoBehaviour
                 _distance = _maxDistance;
             }
 
-            _yaw += _horizontalSensitivity * Input.GetAxis(_cameraXAxis) * _invertX;
-            _pitch += _verticalSensitivity * Input.GetAxis(_cameraYAxis) * _invertY;
+            float xInput = Input.GetAxis(_cameraXAxis);
+            float yInput = Input.GetAxis(_cameraYAxis);
+
+            _yaw += _horizontalSensitivity * xInput * _invertX;
+            _pitch += _verticalSensitivity * yInput * _invertY;
 
             if (_pitch > _maxPitch)
             {
@@ -161,6 +168,9 @@ public class ThirdPersonCamera : MonoBehaviour
                 transform.position = _lookAt.position + rotation * dir;
             }
             transform.LookAt(_lookAt.position);
+
+            if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
+            if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
         }
         else
         {

@@ -5,32 +5,26 @@ using UnityEngine;
 
 public class TutorialActivation : MonoBehaviour
 {
-    [SerializeField, Tooltip("0 means no timer")]
+    [SerializeField, Tooltip("0 means not hidden by time")]
     private float _hideTime = 0.0f;
-    [SerializeField, Tooltip("Put all button names that can hide prompt here")]
-    private string[] _hideButtons = new string[1];
-    [SerializeField, Tooltip("Put all axis names that can hide prompt here")]
-    private string[] _hideAxes = new string[1];
-    [SerializeField, Range(0.0f, 1.0f)]
-    private float _axisThreshold = 0.5f;
-    /* [SerializeField]
-    private bool _hideByMovement = false;
+    [SerializeField, Tooltip("0 means never comes back")]
+    private float _reshowTime = 0.0f;
     [SerializeField]
-    private bool _hideByCamera = false;
+    private bool _hideByCameraMove = false;
+    [SerializeField]
+    private bool _hideByCameraZoom = false;
+    [SerializeField]
+    private bool _hideByMovement = false;
     [SerializeField]
     private bool _hideByJump = false;
     [SerializeField]
-    private bool _hideByDeploy = false;
-    [SerializeField]
-    private bool _hideByHack = false;
-    [SerializeField]
-    private bool _hideByBomb = false;
-    [SerializeField]
-    private bool _hideByTramp = false; */
+    private bool _hideByDeploy = true;
     [SerializeField]
     private bool _followPlayer = true;
     [SerializeField]
     private string _attachPointName = "Tutorial Attach Point";
+
+    public bool IsShowing { get { return _prompt.gameObject.activeInHierarchy; } }
 
     private Collider _collider = null;
     private ScaledOneShotTimer _timer = null;
@@ -38,16 +32,20 @@ public class TutorialActivation : MonoBehaviour
     private Transform _attachPoint = null;
     private bool _shown = false;
 
+    private PlayerMovement _mover = null;
+    private PlayerJump _jump = null;
+    private DeployControlledBots _deploy = null;
+    private BotReleaser _bot = null;
+
+    private HashSet<TutorialActivation> _otherTutorials = null;
+
     private void Awake()
     {
         _collider = GetComponent<Collider>();
         _prompt = GetComponentInChildren<CanvasLookAtCamera>();
-
-        if (_hideTime > 0.0f)
-        {
-            _timer = gameObject.AddComponent<ScaledOneShotTimer>();
-            _timer.OnTimerCompleted += MyWorkHereIsDone;
-        }
+        _timer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _otherTutorials = new HashSet<TutorialActivation>(FindObjectsOfType<TutorialActivation>());
+        _otherTutorials.Remove(this);
     }
 
     private void Start()
@@ -57,7 +55,7 @@ public class TutorialActivation : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (_timer != null) _timer.OnTimerCompleted -= MyWorkHereIsDone;
+        if (GameManager.Instance != null) MyWorkHereIsDone();
     }
 
     private void Update()
@@ -65,31 +63,6 @@ public class TutorialActivation : MonoBehaviour
         if (GameManager.Instance.GamePaused) return;
 
         if (!_shown) return;
-
-        if (_hideButtons != null && _hideButtons.Length > 0)
-        {
-            foreach (string button in _hideButtons)
-            {
-                if (!button.Equals("") && Input.GetButtonDown(button))
-                {
-                    if (_timer != null) _timer.StopTimer();
-                    MyWorkHereIsDone();
-                    return;
-                }
-            }
-        }
-        else if (_hideAxes != null && _hideAxes.Length > 0)
-        {
-            foreach (string axis in _hideAxes)
-            {
-                if (!axis.Equals("") && Mathf.Abs(Input.GetAxis(axis)) >= _axisThreshold)
-                {
-                    if (_timer != null) _timer.StopTimer();
-                    MyWorkHereIsDone();
-                    return;
-                }
-            }
-        }
 
         if (_followPlayer)
         {
@@ -99,8 +72,13 @@ public class TutorialActivation : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        PlayerMovement mover = other.GetComponent<PlayerMovement>();
-        if (mover == null || mover.ControlsDisabled) return;
+        foreach (TutorialActivation tut in _otherTutorials)
+        {
+            if (tut.IsShowing) return;
+        }
+
+        _mover = other.GetComponent<PlayerMovement>();
+        if (_mover == null || _mover.ControlsDisabled) return;
 
         _collider.enabled = false;
         if (_followPlayer)
@@ -110,11 +88,80 @@ public class TutorialActivation : MonoBehaviour
         _prompt.gameObject.SetActive(true);
         _shown = true;
 
-        if (_hideTime > 0.0f) _timer.StartTimer(_hideTime);
+        if (_hideTime > 0.0f)
+        {
+            _timer.StartTimer(_hideTime);
+            _timer.OnTimerCompleted += MyWorkHereIsDone;
+        }
+
+        if (_hideByCameraMove)
+        {
+            GameManager.Instance.Camera.OnCameraMovedByPlayer += MyWorkHereIsDone;
+        }
+
+        if (_hideByCameraZoom)
+        {
+            GameManager.Instance.Camera.OnCameraZoomedByPlayer += MyWorkHereIsDone;
+        }
+
+        if (_hideByMovement)
+        {
+            _mover.OnPlayerMovement += MyWorkHereIsDone;
+        }
+
+        if (_hideByJump)
+        {
+            _jump = other.GetComponent<PlayerJump>();
+            if (_jump != null) _jump.OnPlayerJump += MyWorkHereIsDone;
+        }
+
+        if (_hideByDeploy)
+        {
+            _deploy = other.GetComponent<DeployControlledBots>();
+            if (_deploy != null) _deploy.OnDeployBot += MyWorkHereIsDone;
+        }
+
+        _bot = other.GetComponent<BotReleaser>();
+        if (_bot != null)
+        {
+            _bot.OnBotReleased += MyWorkHereIsDone;
+        }
+
+        GameManager.Instance.Player.OnPlayerDeath += MyWorkHereIsDone;
     }
 
     private void MyWorkHereIsDone()
     {
-        gameObject.SetActive(false);
+        if (_hideByCameraMove && GameManager.Instance.Camera != null) GameManager.Instance.Camera.OnCameraMovedByPlayer -= MyWorkHereIsDone;
+        if (_hideByCameraZoom && GameManager.Instance.Camera != null) GameManager.Instance.Camera.OnCameraZoomedByPlayer -= MyWorkHereIsDone;
+        if (_hideByMovement && _mover != null) _mover.OnPlayerMovement -= MyWorkHereIsDone;
+        if (_hideByJump && _jump != null) _jump.OnPlayerJump -= MyWorkHereIsDone;
+        if (_hideByDeploy && _deploy != null) _deploy.OnDeployBot -= MyWorkHereIsDone;
+        if (_bot != null) _bot.OnBotReleased -= MyWorkHereIsDone;
+        if (GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath -= MyWorkHereIsDone;
+
+        _timer.StopTimer();
+        if (_hideTime > 0.0f)
+        {
+            _timer.OnTimerCompleted -= MyWorkHereIsDone;
+        }
+
+        if (_reshowTime > 0.0f)
+        {
+            _prompt.gameObject.SetActive(false);
+            _timer.OnTimerCompleted += MoreWork;
+            _timer.StartTimer(_reshowTime);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void MoreWork()
+    {
+        _timer.OnTimerCompleted -= MoreWork;
+        _shown = false;
+        _collider.enabled = true;
     }
 }

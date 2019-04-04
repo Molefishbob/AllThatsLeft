@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BotReleaser : BotActionBase, IDamageReceiver
 {
+    public event GenericEvent OnBotReleased;
+
     [SerializeField]
     private float _fReleaseDelay = 2.0f;
     [SerializeField]
@@ -103,6 +105,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         {
             ActualRelease();
         }
+        if (OnBotReleased != null) OnBotReleased();
     }
 
     public void ReleaseInstant()

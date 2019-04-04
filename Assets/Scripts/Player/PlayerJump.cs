@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour
 {
+    public event GenericEvent OnPlayerJump;
+
     [SerializeField]
     private float _maxHeight = 2.5f;
     [SerializeField]
@@ -118,6 +120,8 @@ public class PlayerJump : MonoBehaviour
                 _holdTimer.StartTimer(_holdTimeForMaxHeight);
                 _sound?.PlaySound();
                 _character._animator?.SetTrigger(_animatorTriggerJump);
+
+                if (OnPlayerJump != null) OnPlayerJump();
             }
         }
 

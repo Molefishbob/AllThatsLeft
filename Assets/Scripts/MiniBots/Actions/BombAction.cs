@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BombAction : BotActionBase
 {
+    public event GenericEvent OnBombUsed;
+
     [SerializeField]
     private string _sExplodeButton = "Bomb Action";
     public LayerMask BombableLayer { get { return _lBombableLayer; } }
@@ -79,6 +81,7 @@ public class BombAction : BotActionBase
                 }
             }
             _releaser.ReleaseControls(true);
+            if (OnBombUsed != null) OnBombUsed();
         }
     }
 

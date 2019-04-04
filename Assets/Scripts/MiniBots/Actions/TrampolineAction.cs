@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TrampolineAction : BotActionBase
 {
+    public event GenericEvent OnTrampUsed;
+
     [SerializeField]
     private string _sTrampolineButton = "Stay Action";
     private GameObject _goTrampoline;
@@ -38,6 +40,7 @@ public class TrampolineAction : BotActionBase
             _bActing = true;
             _selfMover._animator.SetTrigger("Trampoline");
             _releaser.ReleaseControls(true);
+            if (OnTrampUsed != null) OnTrampUsed();
         }
     }
 
