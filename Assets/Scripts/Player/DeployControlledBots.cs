@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DeployControlledBots : MonoBehaviour
 {
+    public event GenericEvent OnDeployBot;
+
     [SerializeField]
     private string _deployBotButton = "Deploy Bot";
     [SerializeField]
@@ -59,6 +61,7 @@ public class DeployControlledBots : MonoBehaviour
         {
             _player.ControlsDisabled = true;
             _player._animator?.SetTrigger(_animatorTriggerDeploy);
+            if (OnDeployBot != null) OnDeployBot();
         }
     }
 

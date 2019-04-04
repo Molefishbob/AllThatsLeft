@@ -1,17 +1,12 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &78124647892253564
+--- !u!1001 &7538359258779502243
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 69024190282891473, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
-        type: 3}
-      propertyPath: m_Name
-      value: Deploy Button Prompter
-      objectReference: {fileID: 0}
     - target: {fileID: 1967550155410126471, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -117,10 +112,15 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 69024190282891473, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
+        type: 3}
+      propertyPath: m_Name
+      value: Trampoline Button Prompter
+      objectReference: {fileID: 0}
     - target: {fileID: 167770801069850406, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
       propertyPath: m_text
-      value: Deploy
+      value: Trampoline
       objectReference: {fileID: 0}
     - target: {fileID: 167770801069850406, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
@@ -135,20 +135,32 @@ PrefabInstance:
     - target: {fileID: 167770801069850406, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 167770801069850406, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
       propertyPath: m_textInfo.textComponent
       value: 
-      objectReference: {fileID: 234617448645690458}
+      objectReference: {fileID: 7694869909182298501}
+    - target: {fileID: 1219327493285150942, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e3d1e1abc34e05d44951bd8dd0270e77,
+        type: 3}
+    - target: {fileID: 1428225532734123238, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 526dd3c45ddb6554c8debbbac0348358,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05ba3b2ab1f7ba34ca64efc762750e00, type: 3}
---- !u!114 &234617448645690458 stripped
+--- !u!114 &7694869909182298501 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 167770801069850406, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
     type: 3}
-  m_PrefabInstance: {fileID: 78124647892253564}
+  m_PrefabInstance: {fileID: 7538359258779502243}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1

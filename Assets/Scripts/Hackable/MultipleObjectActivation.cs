@@ -46,7 +46,7 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
         bool hacked = true;
         foreach (MonoBehaviour console in _consoles)
         {
-            if (console.GetComponent<GenericHackable>()._currentStatus != GenericHackable.Status.Hacked)
+            if (console.GetComponent<GenericHackable>().CurrentStatus != GenericHackable.Status.Hacked)
             {
                 hacked = false;
                 break;

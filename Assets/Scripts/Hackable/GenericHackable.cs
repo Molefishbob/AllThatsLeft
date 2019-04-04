@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class GenericHackable : MonoBehaviour
 {
+    public event GenericEvent OnHackSuccess;
+
     public enum Status
     {
         NotHacked,
@@ -14,19 +16,26 @@ public abstract class GenericHackable : MonoBehaviour
     protected Status _startingStatus;
     [SerializeField, Tooltip("The target that will be called once hacked.\nTarget HAS TO IMPLEMENT IButtonInteraction!")]
     private MonoBehaviour _hackTarget = null;
-    [SerializeField]
-    protected GameObject _promptObject;
-    public Status _currentStatus
+
+    protected Status _currentStatus;
+    public Status CurrentStatus
     {
-        get;
-        protected set;
+        get
+        {
+            return _currentStatus;
+        }
+        protected set
+        {
+            _currentStatus = value;
+            if(_currentStatus==Status.Hacked && OnHackSuccess!=null)OnHackSuccess();
+        }
     }
 
     protected IButtonInteraction _hTarget;
 
     protected virtual void Awake()
     {
-        _currentStatus = _startingStatus;
+        CurrentStatus = _startingStatus;
         try
         {
             _hTarget = (IButtonInteraction)_hackTarget;
@@ -38,18 +47,12 @@ public abstract class GenericHackable : MonoBehaviour
 
     }
 
-    protected virtual void Start()
-    {
-        ShowPrompt(false);
-    }
-
     /// <summary>
     /// Called when a minibot enters the hacking radius of the console
     /// </summary>
     /// <param name="bot">The minibot that entered the radius</param>
     public virtual void TimeToStart()
     {
-        ShowPrompt(false);
         StartHack();
     }
 
@@ -59,7 +62,6 @@ public abstract class GenericHackable : MonoBehaviour
     /// <param name="bot">The minibot that entered the radius</param>
     public virtual void TimeToLeave()
     {
-        ShowPrompt(false);
         StopHack();
     }
     /// <summary>
@@ -77,22 +79,4 @@ public abstract class GenericHackable : MonoBehaviour
     /// For example you can call the targets methods here.
     /// </summary>
     protected abstract void HackAction();
-
-    public void ShowPrompt(bool show)
-    {
-        _promptObject.SetActive(show);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (_currentStatus == Status.NotHacked)
-        {
-            ShowPrompt(true);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        ShowPrompt(false);
-    }
 }

@@ -120,6 +120,7 @@ public class LevelManager : MonoBehaviour
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.ContainsKey(0))
         {
             int currentLevel = SceneManager.GetActiveScene().buildIndex;
+            if (currentLevel > 1) PrefsManager.Instance.BotsUnlocked = true; //TODO: remove this
             if (PrefsManager.Instance.Level != currentLevel)
             {
                 PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
