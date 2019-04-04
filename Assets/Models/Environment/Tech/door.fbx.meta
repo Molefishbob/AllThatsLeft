@@ -25,6 +25,8 @@ ModelImporter:
     400018: walkingRamp
     2100000: GeneralMetal
     2100002: No Name
+    2100004: glass
+    2100006: door
     2300000: DoorContainer
     2300002: doorLeft
     2300004: DoorLockInsideB
@@ -52,7 +54,12 @@ ModelImporter:
     4300012: doorLeft
     4300014: walkingRamp
     4300016: DoorContainer
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glass
+    second: {fileID: 2100000, guid: f32c99de4f3f6054da6a663ca8b5d2d3, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

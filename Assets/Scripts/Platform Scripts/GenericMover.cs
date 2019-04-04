@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInteraction
+public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 {
 
     [Tooltip("The amount of time it takes to go the whole length")]
@@ -16,27 +16,31 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     protected float _length;
     protected float _ogStartTime;
     protected int _trackRecord = 0;
-    protected RepeatingTimer _timer;
+    protected PhysicsRepeatingTimer _timer;
     [SerializeField]
     protected bool _activated = true;
+    [HideInInspector]
+    public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
     protected virtual void Awake()
     {
-        _timer = gameObject.AddComponent<RepeatingTimer>();
+        _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
         _transform = new List<Transform>(transform.parent.childCount);
 
-        foreach (Transform child in transform.parent) {
-            if (child != transform) {
+        foreach (Transform child in transform.parent)
+        {
+            if (child != transform)
+            {
                 _transform.Add(child);
             }
         }
-        
+
         _amountOfTransforms = _transform.Count - 1;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
+        _timer.OnTimerCompleted += TimedAction;
         transform.position = _transform[0].position;
         if (_activated)
         {
@@ -44,9 +48,27 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
         }
     }
 
+    private void OnDestroy()
+    {
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= TimedAction;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (GameManager.Instance.GamePaused) return;
+
+        CurrentMove = InternalMove() - transform.position;
+        transform.position += CurrentMove;
+    }
+
+    protected abstract Vector3 InternalMove();
+
     /// <summary>
     /// Initializes the script.
-    /// 
+    ///
     /// Gets all the checkpoints and counts the complete length of the trip.
     /// The length is later used to calculate the speed between objects.
     /// </summary>
@@ -54,26 +76,26 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     {
         _length = 0;
 
-        _timer.SetTimerTarget(this);
         _timer.StartTimer(_duration);
 
-        for (int a = 0; a < _transform.Count-1; a++)
+        for (int a = 0; a < _transform.Count - 1; a++)
         {
             _length += (_transform[a].position - _transform[a + 1].position).magnitude;
         }
     }
     /// <summary>
     /// Called when the timer is completed.
-    /// 
+    ///
     /// Defines what happens when the timer has completed.
     /// </summary>
-    public virtual void TimedAction() { }
+    protected virtual void TimedAction() { }
     /// <summary>
     /// Defines what happens when a connected console is hacked
     /// </summary>
     public virtual void ButtonDown()
     {
-        if (!_activated) {
+        if (!_activated)
+        {
             _activated = true;
             Init();
         }
@@ -87,25 +109,29 @@ public abstract class GenericMover : MonoBehaviour, ITimedAction, IButtonInterac
     /// <summary>
     /// Draws lines between the checkpoints that the platform moves through.
     /// </summary>
-    protected virtual void OnDrawGizmosSelected() {
+    protected virtual void OnDrawGizmosSelected()
+    {
         if (transform.parent == null) return;
-        
+
         _transform = new List<Transform>(transform.parent.childCount);
 
-        foreach (Transform child in transform.parent) {
-            if (child != transform) {
+        foreach (Transform child in transform.parent)
+        {
+            if (child != transform)
+            {
                 _transform.Add(child);
             }
         }
-        for (int a  = 0; a < _transform.Count;a++) 
+        for (int a = 0; a < _transform.Count; a++)
         {
-            if (a + 1 != _transform.Count) {
-                Gizmos.color = new Color(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f),1);
-                Gizmos.DrawLine(_transform[a].position,_transform[a+1].position);
-                }
+            if (a + 1 != _transform.Count)
+            {
+                Gizmos.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
+                Gizmos.DrawLine(_transform[a].position, _transform[a + 1].position);
+            }
         }
-        Gizmos.color = new Color(0,0,0,1);
-        Gizmos.DrawWireCube(_transform[0].position,new Vector3(3,0.5f,2));
-        Gizmos.DrawWireCube(_transform[_transform.Count -1].position,new Vector3(3,0.5f,2));;
+        Gizmos.color = new Color(0, 0, 0, 1);
+        Gizmos.DrawWireCube(_transform[0].position, new Vector3(3, 0.5f, 2));
+        Gizmos.DrawWireCube(_transform[_transform.Count - 1].position, new Vector3(3, 0.5f, 2)); ;
     }
 }

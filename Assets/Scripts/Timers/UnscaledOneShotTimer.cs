@@ -4,25 +4,16 @@ using UnityEngine;
 
 public class UnscaledOneShotTimer : Timer
 {
-    protected virtual void Update()
+    private void Update()
     {
-        if (IsRunning)
-        {
-            _timer += Time.unscaledDeltaTime;
-            if (_timer >= Duration)
-            {
-                _timer = Duration;
-                CompletedTimer();
-                if (IsTargeted)
-                {
-                    _timedObject.TimedAction();
-                }
-            }
-        }
-    }
+        if (!IsRunning) return;
 
-    protected override void CompletedTimer()
-    {
-        IsRunning = false;
+        _timer += Time.unscaledDeltaTime;
+        if (_timer >= Duration)
+        {
+            _timer = Duration;
+            IsRunning = false;
+            CompletedTimer();
+        }
     }
 }

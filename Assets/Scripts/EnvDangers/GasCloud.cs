@@ -2,34 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GasCloud : GenericEnvironmentDanger
+public class GasCloud : MonoBehaviour
 {
     [SerializeField, Tooltip("Time until the unit dies inside the area")]
     private float _timeUntilOof = 2;
-    private Collider _other;
-    public override void TimedAction()
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (_other != null)
-            DoDamage(_other);
-        _other = null;
-    }
-    
-    protected override void StopDamage()
-    {
-        _timer.StopTimer();
+        GassableUnit unit = other.GetComponent<GassableUnit>();
+        unit?.EnterGas(_timeUntilOof);
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-        if (!_timer.IsRunning) {
-            _timer.StartTimer(_timeUntilOof);
-            _other = other;
-        }
-    }
-
-    protected override void OnTriggerExit(Collider other)
-    {
-        StopDamage();
-        _other = null;
+        GassableUnit unit = other.GetComponent<GassableUnit>();
+        unit?.ExitGas();
     }
 }

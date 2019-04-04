@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnscaledRepeatingTimer : UnscaledOneShotTimer
+public class UnscaledRepeatingTimer : Timer
 {
     /// <summary>
     /// How many times the timer has completed.
@@ -14,9 +14,16 @@ public class UnscaledRepeatingTimer : UnscaledOneShotTimer
     /// </summary>
     public float TotalTimeElapsed { get { return TimesCompleted * Duration + TimeElapsed; } }
 
-    protected override void CompletedTimer()
+    private void Update()
     {
-        _timer -= Duration;
-        TimesCompleted++;
+        if (!IsRunning) return;
+
+        _timer += Time.unscaledDeltaTime;
+        if (_timer >= Duration)
+        {
+            _timer -= Duration;
+            TimesCompleted++;
+            CompletedTimer();
+        }
     }
 }

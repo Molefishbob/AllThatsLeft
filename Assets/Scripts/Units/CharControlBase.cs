@@ -13,11 +13,9 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
     [SerializeField]
-    private LayerMask _walkableTerrain = (1 << 12) + (1 << 13) + (1 << 14);
+    protected LayerMask _walkableTerrain = (1 << 12) + (1 << 13) + (1 << 14);
     [SerializeField]
-    private float _groundedDistanceBonus = 0.04f;
-    [SerializeField]
-    private RandomSFXSound _walkSound = null;
+    private float _groundedDistanceBonus = 0.22f;
     [SerializeField]
     private RandomSFXSound _landingSound = null;
     [SerializeField]
@@ -82,13 +80,18 @@ public abstract class CharControlBase : MonoBehaviour
 
             if (inputDirection.magnitude > 0.0f)
             {
-                _animator?.SetBool(_animatorBoolRunning, true);
-
                 // convert input direction to a rotation
                 Quaternion inputRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
 
                 // rotate character towards input rotation
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, inputRotation, _turningSpeed * Time.deltaTime);
+                if (_turningSpeed > 0.0f)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, inputRotation, _turningSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    transform.rotation = inputRotation;
+                }
 
                 // save previous move's magnitude
                 float previousMoveMagnitude = _internalMove.magnitude;
@@ -112,46 +115,43 @@ public abstract class CharControlBase : MonoBehaviour
                 {
                     _internalMove = _internalMove.normalized * maxSpeed;
                 }
+
+                // animation stuff
+                if (_animator != null)
+                {
+                    _animator.SetBool(_animatorBoolRunning, true);
+                    _animator.speed = _internalMove.magnitude / maxSpeed;
+                }
             }
             // no input deceleration
             else if (_internalMove.magnitude > decelerationMagnitude)
             {
                 _internalMove -= _internalMove.normalized * decelerationMagnitude;
-                _animator?.SetBool(_animatorBoolRunning, false);
+
+                // animation stuff
+                if (_animator != null)
+                {
+                    _animator.SetBool(_animatorBoolRunning, false);
+                    _animator.speed = 1;
+                }
             }
             else
             {
                 _internalMove = Vector3.zero;
-                _animator?.SetBool(_animatorBoolRunning, false);
+
+                // animation stuff
+                if (_animator != null)
+                {
+                    _animator.SetBool(_animatorBoolRunning, false);
+                    _animator.speed = 1;
+                }
             }
 
             // gravity is weird, have to multiply with deltatime twice
             Vector3 gravityDelta = Physics.gravity * Time.deltaTime * Time.deltaTime;
 
             // check grounded
-            Vector3 upVector = -Physics.gravity.normalized;
-            RaycastHit hit;
-            if (Physics.SphereCast(
-                    transform.position + _controller.center,
-                    _controller.radius,
-                    Physics.gravity.normalized,
-                    out hit,
-                    (_controller.height / 2.0f) + _controller.skinWidth + _groundedDistanceBonus,
-                    _walkableTerrain))
-            {
-                float slopeAngle = Vector3.Angle(upVector, hit.normal);
-                _onSlope = slopeAngle > _controller.slopeLimit && slopeAngle < 90f;
-                if (_onSlope)
-                {
-                    _slopeDirection = Vector3.Cross(Vector3.Cross(upVector, hit.normal), hit.normal).normalized * slopeAngle / 90f;
-                }
-                IsGrounded = !_onSlope;
-            }
-            else
-            {
-                _onSlope = false;
-                IsGrounded = false;
-            }
+            CheckGrounded();
 
             // reset or apply gravity
             if ((_controller.isGrounded && !_onSlope) || _resetGravity)
@@ -172,17 +172,7 @@ public abstract class CharControlBase : MonoBehaviour
             _externalMove = Vector3.zero;
         }
 
-        FixedUpdateAdditions();
-
-        if (transform.position.y <= _minYPosition)
-        {
-            OutOfBounds();
-        }
-    }
-
-    protected virtual void FixedUpdateAdditions()
-    {
-        if (!_airBorne && !IsGrounded)
+        if (!IsGrounded)
         {
             _airBorne = true;
             _animator?.SetBool(_animatorBoolAirborne, true);
@@ -192,6 +182,11 @@ public abstract class CharControlBase : MonoBehaviour
             _airBorne = false;
             _animator?.SetBool(_animatorBoolAirborne, false);
             _landingSound?.PlaySound();
+        }
+
+        if (transform.position.y <= _minYPosition)
+        {
+            OutOfBounds();
         }
     }
 
@@ -216,6 +211,7 @@ public abstract class CharControlBase : MonoBehaviour
     public void ResetGravity()
     {
         _resetGravity = true;
+        _currentGravity = Vector3.zero;
     }
 
     /// <summary>
@@ -223,14 +219,42 @@ public abstract class CharControlBase : MonoBehaviour
     /// </summary>
     public void SetControllerActive(bool active)
     {
-        _controller.enabled = active;
-        _controllerEnabled = active;
-
-        if (active)
+        if (active && !_controllerEnabled)
         {
             _internalMove = Vector3.zero;
             _externalMove = Vector3.zero;
             ResetGravity();
+            CheckGrounded();
+        }
+
+        _controller.enabled = active;
+        _controllerEnabled = active;
+    }
+
+    private void CheckGrounded()
+    {
+        Vector3 upVector = -Physics.gravity.normalized;
+        RaycastHit hit;
+        if (Physics.SphereCast(
+                transform.position + _controller.center,
+                _controller.radius + _controller.skinWidth,
+                Physics.gravity.normalized,
+                out hit,
+                (_controller.height / 2.0f) - _controller.radius + _groundedDistanceBonus,
+                _walkableTerrain))
+        {
+            float slopeAngle = Vector3.Angle(upVector, hit.normal);
+            _onSlope = slopeAngle > _controller.slopeLimit && slopeAngle < 90f;
+            if (_onSlope)
+            {
+                _slopeDirection = Vector3.Cross(Vector3.Cross(upVector, hit.normal), hit.normal).normalized * slopeAngle / 90f;
+            }
+            IsGrounded = !_onSlope;
+        }
+        else
+        {
+            _onSlope = false;
+            IsGrounded = false;
         }
     }
 

@@ -3,16 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public delegate void GenericEvent();
 public delegate void ValueChangedInt(int amount);
 public delegate void ValueChangedFloat(float amount);
 public delegate void ValueChangedBool(bool value);
-
-public enum MiniBotAbility
-{
-    Hack,
-    Bomb,
-    Tramp
-}
 
 public class GameManager : Singleton<GameManager>
 {
@@ -26,9 +20,6 @@ public class GameManager : Singleton<GameManager>
     /// Is the game currently paused?
     /// </summary>
     public bool GamePaused { get; private set; }
-
-    // TODO: make bot actions check this collection or remove ability system entirely
-    public HashSet<MiniBotAbility> UsableMiniBotAbilities;
 
     public int CurrentBotAmount
     {
@@ -71,7 +62,7 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// Reference of the player.
     /// </summary>
-    public PlayerMovement Player;
+    public MainCharMovement Player;
 
     private LevelManager _levelManager;
 
@@ -114,10 +105,16 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public ThirdPersonCamera Camera;
 
+    public ParticleSystem BeaconParticle;
+
+    public LoadingScreen LoadingScreen;
+
+    private UnscaledOneShotTimer _loadingTimer;
+
     /// <summary>
-    /// ID of the current level.
+    /// Reference of the pause menu.
     /// </summary>
-    public int CurrentLevel { get; private set; } = 1;
+    public PauseMenu PauseMenu;
 
     private float _timeScaleBeforePause = 1.0f;
 
@@ -164,12 +161,12 @@ public class GameManager : Singleton<GameManager>
 
     public void ActivateGame(bool active)
     {
-        Player?.gameObject.SetActive(active);
+        Player.gameObject.SetActive(active);
+        if (!LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = false;
         Camera?.gameObject.SetActive(active);
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);
-        Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     /// <summary>
@@ -187,14 +184,18 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
+        LoadingScreen.gameObject.SetActive(true);
+        PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
             Debug.LogWarning("No scene with ID: " + id);
+            PrefsManager.Instance.DeleteSavedGame();
             ChangeToMainMenu();
         }
         else
         {
             SceneManager.LoadScene(id);
+            if (GamePaused) UnPauseGame();
         }
     }
 
@@ -212,8 +213,10 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void NextLevel()
     {
-        CurrentLevel++;
-        ChangeScene(CurrentLevel);
+        PrefsManager.Instance.Level++;
+        PrefsManager.Instance.CheckPoint = 0;
+        PrefsManager.Instance.Save();
+        ChangeScene(PrefsManager.Instance.Level);
     }
 
     /// <summary>
@@ -221,9 +224,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void StartNewGame()
     {
-        CurrentLevel = 1;
-        PrefsManager.Instance.BotsUnlocked = false;
-        ChangeScene(CurrentLevel);
+        PrefsManager.Instance.DeleteSavedGame();
+        ChangeScene(PrefsManager.Instance.Level);
     }
 
     /// <summary>
@@ -231,10 +233,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ContinueGame()
     {
-        CurrentLevel = PrefsManager.Instance.Level;
-        ChangeScene(CurrentLevel);
-        LevelManager.SetCheckpoint(PrefsManager.Instance.CheckPoint);
-        LevelManager.ResetLevel();
+        ChangeScene(PrefsManager.Instance.Level);
     }
 
     /// <summary>
@@ -242,7 +241,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ReloadScene()
     {
-        ChangeScene(SceneManager.GetActiveScene().buildIndex);
+        LoadingScreen.gameObject.SetActive(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 
     /// <summary>

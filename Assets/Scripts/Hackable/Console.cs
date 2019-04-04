@@ -2,21 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Console : GenericHackable, ITimedAction
+public class Console : GenericHackable
 {
     [SerializeField, Tooltip("The amount of time needed to hack")]
     protected float _duration = 0.5f;
 
-    private OneShotTimer _timer;
+    private PhysicsOneShotTimer _timer;
 
     protected override void Awake()
     {
         base.Awake();
-        _timer = UnityEngineExtensions.GetOrAddComponent<OneShotTimer>(gameObject);
+        _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsOneShotTimer>(gameObject);
     }
-    private void Start()
+    protected virtual void Start()
     {
-        _timer.SetTimerTarget(this);
+        _timer.OnTimerCompleted += CompleteHack;
+    }
+
+    private void OnDestroy()
+    {
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= CompleteHack;
+        }
     }
     
     /// <summary>
@@ -25,10 +33,10 @@ public class Console : GenericHackable, ITimedAction
     /// </summary>
     protected override void StartHack()
     {
-        if (_currentStatus == Status.NotHacked) 
+        if (CurrentStatus == Status.NotHacked) 
         {
             StartTimer(_duration);
-            _currentStatus = Status.BeingHacked;
+            CurrentStatus = Status.BeingHacked;
         }
     }
     
@@ -39,10 +47,10 @@ public class Console : GenericHackable, ITimedAction
     protected override void StopHack()
     {
         _timer.StopTimer();
-        switch (_currentStatus)
+        switch (CurrentStatus)
         {
             case Status.BeingHacked:
-                _currentStatus = Status.NotHacked;
+                CurrentStatus = Status.NotHacked;
                 _timer.StopTimer();
                 break;
         }
@@ -81,16 +89,16 @@ public class Console : GenericHackable, ITimedAction
     /// Called by the timer once it has completed.
     /// Determines what happens when the timer has been completed.
     /// </summary>
-    public void TimedAction()
+    protected void CompleteHack()
     {
-        switch(_currentStatus)
+        switch(CurrentStatus)
         {
             case Status.BeingHacked:
-                _currentStatus = Status.Hacked;
+                CurrentStatus = Status.Hacked;
                 HackAction();
                 break;
             default:
-                Debug.LogError("Current Status:" + _currentStatus + " Timer completed even though it shouldn't! ree");
+                Debug.LogError("Current Status:" + CurrentStatus + " Timer completed even though it shouldn't! ree");
                 break;
         }
     }

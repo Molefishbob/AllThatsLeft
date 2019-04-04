@@ -4,27 +4,38 @@ using UnityEngine;
 
 public abstract class GenericHackable : MonoBehaviour
 {
+    public event GenericEvent OnHackSuccess;
+
     public enum Status
     {
         NotHacked,
         Hacked,
         BeingHacked
     }
-    [SerializeField,Tooltip("The starting status of the hackable object")]
+    [SerializeField, Tooltip("The starting status of the hackable object")]
     protected Status _startingStatus;
     [SerializeField, Tooltip("The target that will be called once hacked.\nTarget HAS TO IMPLEMENT IButtonInteraction!")]
     private MonoBehaviour _hackTarget = null;
-    public Status _currentStatus
+
+    protected Status _currentStatus;
+    public Status CurrentStatus
     {
-        get;
-        protected set;
+        get
+        {
+            return _currentStatus;
+        }
+        protected set
+        {
+            _currentStatus = value;
+            if(_currentStatus==Status.Hacked && OnHackSuccess!=null)OnHackSuccess();
+        }
     }
-    
+
     protected IButtonInteraction _hTarget;
-    
+
     protected virtual void Awake()
     {
-        _currentStatus = _startingStatus;
+        CurrentStatus = _startingStatus;
         try
         {
             _hTarget = (IButtonInteraction)_hackTarget;
@@ -33,7 +44,7 @@ public abstract class GenericHackable : MonoBehaviour
         {
             Debug.LogError("The Target of " + gameObject.name + " " + transform.position + " HAS TO IMPLEMENT IButtonInteraction");
         }
-        
+
     }
 
     /// <summary>

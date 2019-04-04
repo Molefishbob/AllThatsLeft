@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8180231741894675003}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: DockingPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 126
   m_IsActive: 1
 --- !u!4 &8180231741894675003
 Transform:
@@ -41,6 +41,14 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 08b31e4be61311a469e58f040fd78f20, type: 3}
       propertyPath: m_Name
       value: dockingPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 08b31e4be61311a469e58f040fd78f20, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 08b31e4be61311a469e58f040fd78f20, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 08b31e4be61311a469e58f040fd78f20, type: 3}
       propertyPath: m_LocalPosition.x
@@ -76,7 +84,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 08b31e4be61311a469e58f040fd78f20, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90.00001
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 08b31e4be61311a469e58f040fd78f20, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y

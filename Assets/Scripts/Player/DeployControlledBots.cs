@@ -4,74 +4,107 @@ using UnityEngine;
 
 public class DeployControlledBots : MonoBehaviour
 {
+    public event GenericEvent OnDeployBot;
+
     [SerializeField]
     private string _deployBotButton = "Deploy Bot";
     [SerializeField]
-    private Transform _deployTarget = null;
+    private Transform _characterHand = null;
     [SerializeField]
-    private LayerMask _deployableTerrain = (1 << 12) + (1 << 13);
+    private float _throwDistance = 2.0f;
     [SerializeField]
-    private float _deployHeightRange = 1.0f;
+    private float _throwHeight = 1.0f;
+    [SerializeField]
+    private float _throwTime = 2.0f;
     [SerializeField]
     private string _animatorTriggerDeploy = "Deploy";
 
-    private Vector3 _deployStartPosition;
     private MainCharMovement _player;
+    private BotMovement _activeBot;
+    private ScaledOneShotTimer _timer;
+    private bool _paused = true;
 
     private void Awake()
     {
         _player = GetComponent<MainCharMovement>();
+        _timer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
-        _deployStartPosition = _deployTarget.localPosition;
-        PrefsManager.Instance.OnBotsUnlockedChanged += Activate;
-        Activate(PrefsManager.Instance.BotsUnlocked);
+        PrefsManager.Instance.OnBotsUnlockedChanged += ActivateScript;
+        ActivateScript(PrefsManager.Instance.BotsUnlocked);
     }
 
     private void OnDestroy()
     {
         if (PrefsManager.Instance != null)
         {
-            PrefsManager.Instance.OnBotsUnlockedChanged -= Activate;
+            PrefsManager.Instance.OnBotsUnlockedChanged -= ActivateScript;
         }
     }
 
     private void Update()
     {
-        if (GameManager.Instance.GamePaused) return;
+        if (GameManager.Instance.GamePaused)
+        {
+            _paused = true;
+            return;
+        }
+        if (_paused)
+        {
+            _paused = false;
+            return;
+        }
 
         if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
         {
-            RaycastHit hit;
-            Vector3 upVector = -Physics.gravity.normalized;
-            if (Physics.Raycast(
-                    _deployTarget.parent.TransformPoint(_deployStartPosition) + upVector * _deployHeightRange,
-                    Physics.gravity,
-                    out hit,
-                    2 * _deployHeightRange,
-                    _deployableTerrain))
+            _player.ControlsDisabled = true;
+            _player._animator?.SetTrigger(_animatorTriggerDeploy);
+            if (OnDeployBot != null) OnDeployBot();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (GameManager.Instance.GamePaused) return;
+
+        if (_activeBot != null)
+        {
+            if (_activeBot.Dead)
             {
-                _deployTarget.position = hit.point;
-                DeployBot();
+                _timer.StopTimer();
+                _activeBot = null;
+            }
+            else if (!_activeBot.IsGrounded)
+            {
+                _activeBot.AddDirectMovement(_activeBot.transform.forward * _throwDistance * Time.deltaTime / _throwTime);
+            }
+            else if (!_timer.IsRunning)
+            {
+                _activeBot.ControlsDisabled = false;
+                _activeBot.Activate();
+                _activeBot = null;
             }
         }
     }
 
-    private void DeployBot()
+    public void DeployBot()
     {
-        _player.ControlsDisabled = true;
-        _player._animator?.SetTrigger(_animatorTriggerDeploy);
+        _activeBot = GameManager.Instance.BotPool.GetObject();
+        Vector3 pos = transform.InverseTransformPoint(_characterHand.position);
+        pos.x = 0.0f;
+        _activeBot.transform.position = transform.TransformPoint(pos);
+        _activeBot.transform.rotation = transform.rotation;
+        _activeBot.ControlsDisabled = true;
+        _activeBot.SetControllerActive(true);
+        _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight);
+        GameManager.Instance.Camera.GetNewTarget(_activeBot.transform, _throwTime, false);
 
-        PlayerBotInteractions bot = GameManager.Instance.BotPool.GetObject();
-        bot.transform.position = _deployTarget.position;
-        bot.transform.rotation = _deployTarget.rotation;
-        bot._bActive = true;
-        GameManager.Instance.Camera.GetNewTarget(bot.transform);
+        _timer.StartTimer(_throwTime);
     }
 
-    private void Activate(bool unlock)
+    private void ActivateScript(bool unlock)
     {
         enabled = unlock;
     }

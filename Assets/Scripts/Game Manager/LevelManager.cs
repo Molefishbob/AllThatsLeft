@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    private int _currentCheckPoint = 0;
-    private CheckPointPole[] _allLevelCheckPoints;
+    private CheckPointPole _currentCheckPoint;
+    private Dictionary<int, CheckPointPole> _allLevelCheckPoints;
     public MainCharMovement _playerPrefab;
     public ThirdPersonCamera _cameraPrefab;
     /// <summary>
@@ -21,15 +21,18 @@ public class LevelManager : MonoBehaviour
     /// The pool prefab
     /// </summary>
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
+    public PauseMenu _pauseMenu;
+    public LoadingScreen _loadingScreen;
 
     public bool _levelNeedsFrogEnemies;
     public bool _levelNeedsPatrolEnemies;
+    [SerializeField]
+    private string _pauseMenuButton = "Pause Game";
+
+    private bool _playerInScene;
 
     void Awake()
     {
-        PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
-        PrefsManager.Instance.Save();
-
         GameManager.Instance.LevelManager = this;
 
         if (GameManager.Instance.BotPool == null)
@@ -46,17 +49,40 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.PatrolEnemyPool = Instantiate(_patrolEnemyPoolPrefab);
         }
 
-        _allLevelCheckPoints = FindObjectsOfType<CheckPointPole>();
+        CheckPointPole[] foundPoints = FindObjectsOfType<CheckPointPole>();
+        if (foundPoints != null)
+        {
+            _allLevelCheckPoints = new Dictionary<int, CheckPointPole>(foundPoints.Length);
+            foreach (CheckPointPole cp in foundPoints)
+            {
+                if (_allLevelCheckPoints.ContainsKey(cp.id))
+                {
+                    Debug.LogError("THERE ARE 2 OR MORE CHECKPOINTS WITH ID " + cp.id + " !! FIX!!");
+                    continue;
+                }
+                _allLevelCheckPoints.Add(cp.id, cp);
+            }
+        }
 
+        MainCharMovement[] players = FindObjectsOfType<MainCharMovement>();
         if (GameManager.Instance.Player == null)
         {
-            PlayerMovement player = FindObjectOfType<PlayerMovement>();
-            if (player == null)
+            if (players == null || players.Length <= 0)
             {
-                player = Instantiate(_playerPrefab);
+                GameManager.Instance.Player = Instantiate(_playerPrefab);
+                DontDestroyOnLoad(GameManager.Instance.Player);
+                _playerInScene = false;
             }
-            DontDestroyOnLoad(player);
-            GameManager.Instance.Player = player;
+            else
+            {
+                GameManager.Instance.Player = players[0];
+                _playerInScene = true;
+            }
+        }
+        foreach (MainCharMovement p in players)
+        {
+            if (p == GameManager.Instance.Player) continue;
+            Destroy(p.gameObject);
         }
 
         if (GameManager.Instance.Camera == null)
@@ -69,83 +95,130 @@ public class LevelManager : MonoBehaviour
             DontDestroyOnLoad(camera);
             GameManager.Instance.Camera = camera;
         }
+
+        if (GameManager.Instance.PauseMenu == null)
+        {
+            PauseMenu pauseMenu = FindObjectOfType<PauseMenu>();
+            if (pauseMenu == null)
+            {
+                pauseMenu = Instantiate(_pauseMenu);
+            }
+            DontDestroyOnLoad(pauseMenu);
+            GameManager.Instance.PauseMenu = pauseMenu;
+            pauseMenu.gameObject.SetActive(false);
+        }
+
+        if (GameManager.Instance.LoadingScreen == null)
+        {
+            GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
+            DontDestroyOnLoad(GameManager.Instance.LoadingScreen);
+        }
     }
 
     private void Start()
     {
-        SortCheckpoints();
-
-        if (_allLevelCheckPoints != null && _allLevelCheckPoints.Length > 0)
+        if (_allLevelCheckPoints != null && _allLevelCheckPoints.ContainsKey(0))
         {
-            SetCheckpoint(0);
+            int currentLevel = SceneManager.GetActiveScene().buildIndex;
+            if (currentLevel > 1) PrefsManager.Instance.BotsUnlocked = true; //TODO: remove this
+            if (PrefsManager.Instance.Level != currentLevel)
+            {
+                PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
+                SetCheckpointByID(0);
+            }
+            else
+            {
+                SetCheckpointByID(PrefsManager.Instance.CheckPoint);
+            }
         }
         else
         {
-            Debug.LogError("There are no checkpoints in this level.");
+            Debug.LogError("Spawn is missing.");
         }
 
-        GameManager.Instance.Player.transform.position = GetSpawnLocation();
-        GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
+        if (!_playerInScene)
+        {
+            GameManager.Instance.Player.transform.position = GetSpawnPosition();
+            GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
+        }
         GameManager.Instance.Player.SetControllerActive(true);
         GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
 
         GameManager.Instance.ActivateGame(true);
     }
 
-    /// <summary>
-    /// Gives the spawn location from current checkpoint.
-    /// </summary>
-    /// <returns>Spawn location</returns>
-    private Vector3 GetSpawnLocation()
+    private void Update()
     {
-        if (_allLevelCheckPoints == null || _allLevelCheckPoints[_currentCheckPoint] == null)
+        if (Input.GetButtonDown(_pauseMenuButton))
+        {
+            switch (GameManager.Instance.GamePaused)
+            {
+                case false:
+                    GameManager.Instance.PauseMenu.gameObject.SetActive(true);
+                    GameManager.Instance.PauseMenu.ToPauseMenu();
+                    GameManager.Instance.PauseGame();
+                    break;
+                case true:
+                    GameManager.Instance.PauseMenu.gameObject.SetActive(false);
+                    GameManager.Instance.UnPauseGame();
+                    break;
+            }
+
+        }
+    }
+
+    private Vector3 GetSpawnPosition()
+    {
+        if (_currentCheckPoint == null)
             return Vector3.zero;
         else
-            return _allLevelCheckPoints[_currentCheckPoint].SpawnPoint.position;
+            return _currentCheckPoint.SpawnPoint.position;
     }
 
     private Quaternion GetSpawnRotation()
     {
-        if (_allLevelCheckPoints == null || _allLevelCheckPoints[_currentCheckPoint] == null)
+        if (_currentCheckPoint == null)
             return Quaternion.identity;
         else
-            return _allLevelCheckPoints[_currentCheckPoint].SpawnPoint.rotation;
+            return _currentCheckPoint.SpawnPoint.rotation;
     }
 
-    public void SetCheckpoint(int id)
+    public bool SetCheckpointByID(int id)
     {
-        if (id > _currentCheckPoint)
+        if (!_allLevelCheckPoints.ContainsKey(id))
         {
-            _currentCheckPoint = id;
-            PrefsManager.Instance.CheckPoint = _currentCheckPoint;
+            Debug.LogWarning("That checkpoint ID doesn't exist.");
+            return false;
+        }
+
+        if (_currentCheckPoint == null || id > _currentCheckPoint.id)
+        {
+            _allLevelCheckPoints.TryGetValue(id, out _currentCheckPoint);
+            PrefsManager.Instance.CheckPoint = _currentCheckPoint.id;
             PrefsManager.Instance.Save();
+            return true;
         }
+
+        return false;
     }
 
-    private void SortCheckpoints()
+    public bool SetCheckpoint(CheckPointPole cp)
     {
-        bool sorted = false;
-        while (!sorted)
+        if (!_allLevelCheckPoints.ContainsValue(cp))
         {
-            bool swapped = false;
-            for (int i = 0; i < _allLevelCheckPoints.Length - 1; i++)
-            {
-                if (_allLevelCheckPoints[i].id > _allLevelCheckPoints[i + 1].id)
-                {
-                    CheckPointPole tmp = _allLevelCheckPoints[i];
-                    _allLevelCheckPoints[i] = _allLevelCheckPoints[i + 1];
-                    _allLevelCheckPoints[i + 1] = tmp;
-                    swapped = true;
-                }
-                else if (_allLevelCheckPoints[i].id == _allLevelCheckPoints[i + 1].id)
-                {
-                    Debug.LogError("THERE ARE 2 OR MORE CHECKPOINTS WITH SAME ID!! FIX!!");
-                    swapped = false;
-                    break;
-                }
-            }
-            sorted = !swapped;
+            Debug.LogError("That checkpoint is missing from collection of all checkpoints. This is very very bad.");
+            return false;
         }
+
+        if (_currentCheckPoint == null || cp.id > _currentCheckPoint.id)
+        {
+            _currentCheckPoint = cp;
+            PrefsManager.Instance.CheckPoint = _currentCheckPoint.id;
+            PrefsManager.Instance.Save();
+            return true;
+        }
+
+        return false;
     }
 
     public void ResetLevel()

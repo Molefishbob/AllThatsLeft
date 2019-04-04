@@ -1,13 +1,12 @@
-﻿using System.Collections;
+﻿/* using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBotInteractions : MonoBehaviour, ITimedAction
+// Im gonna enjoy deleting this
+public class PlayerBotInteractions : MonoBehaviour
 {
     [SerializeField]
-    private float _fDetectRadius = 2;
-    [SerializeField]
-    private float _fExplodeRadius = 4;
+    private float _fExplodeRadius = 4.0f;
     public LayerMask _lHackableLayer = 1 << 18;
     public LayerMask _lBombableLayer = 1 << 11 | 1 << 10 | 1 << 9;
     [SerializeField]
@@ -15,42 +14,103 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
     [SerializeField]
     private string _sExplodeButton = "Bomb Action";
     [SerializeField]
-    private string _sStayButton = "Stay Action";
-    public bool _bActive
-    {
-        get { return _bactive; }
-        set
-        {
-            _bactive = value;
-            _selfMover.ControlsDisabled = !value;
-            _selfMover.SetControllerActive(true);
-        }
-    }
-    private bool _bactive = false;
+    private string _sTrampolineButton = "Stay Action";
+    [SerializeField]
+    private GameObject _goParticlePrefab = null;
+    [SerializeField]
+    private GameObject _goTrampoline = null;
+    private GameObject _goParticleHolder;
+    private ParticleSystem[] _psExplosion = null;
     [SerializeField]
     private bool _bHacking = false;
-    private bool _bReleasing = false;
+    private bool _bFirstEnable = true;
     [SerializeField]
-    private float _fReleaseDelay = 2;
-    private OneShotTimer _ostRelease;
-    private OneShotTimer _ostDisable;
+    private float _fReleaseDelay = 2.0f;
+    [SerializeField]
+    private float _transitionTime = 1.0f;
+    [SerializeField]
+    private float _transitionTimeOnPlayerDeath = 0.5f;
+    [SerializeField]
+    private float _fLifeTime = 30.0f;
+    private ScaledOneShotTimer _ostRelease;
+    private ScaledOneShotTimer _ostDisable;
+    private PhysicsOneShotTimer _ostLife;
     private GameObject[] _goTarget = null;
-    private PlayerMovement _selfMover;
+    private BotMovement _selfMover;
+    private Projector _shadowProjector;
+    private bool _paused = true;
 
-    void Awake()
+    private void OnEnable()
     {
-        _selfMover = GetComponent<PlayerMovement>();
-        _ostRelease = gameObject.AddComponent<OneShotTimer>();
-        _ostDisable = gameObject.AddComponent<OneShotTimer>();
+        if (!_bFirstEnable && _psExplosion != null)
+        {
+            foreach (ParticleSystem o in _psExplosion)
+            {
+                o.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            _bFirstEnable = false;
+        }
+
+        if (GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath += ReleaseInstant;
     }
 
-    void Update()
+    private void Awake()
     {
-        if (GameManager.Instance.GamePaused) return;
-        if (!_selfMover.IsGrounded) return;
+        _selfMover = GetComponent<BotMovement>();
+        _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
+        _ostDisable = gameObject.AddComponent<ScaledOneShotTimer>();
+        _ostLife = gameObject.AddComponent<PhysicsOneShotTimer>();
+        _shadowProjector = gameObject.GetComponentInChildren<Projector>();
+    }
+
+    private void Start()
+    {
+        _ostRelease.OnTimerCompleted += ActualRelease;
+        _ostDisable.OnTimerCompleted += DisableSelf;
+        //_ostLife.OnTimerCompleted += _selfMover.Die;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, _fExplodeRadius);
+    }
+
+    private void OnDestroy()
+    {
+        if (_ostRelease != null)
+        {
+            _ostRelease.OnTimerCompleted -= ActualRelease;
+        }
+        if (_ostDisable != null)
+        {
+            _ostDisable.OnTimerCompleted -= DisableSelf;
+        }
+        if (_ostLife != null && _selfMover != null)
+        {
+            //_ostLife.OnTimerCompleted -= _selfMover.Die;
+        }
+    }
+
+    private void Update()
+    {
+        if (GameManager.Instance.GamePaused)
+        {
+            _paused = true;
+            return;
+        }
+        if (_paused)
+        {
+            _paused = false;
+            return;
+        }
+
+        if (!_selfMover.IsGrounded || _selfMover.ControlsDisabled) return;
 
         // Hack
-        if (Input.GetButtonDown(_sHackButton) && _bActive && !_bHacking && !_bReleasing)
+        if (Input.GetButtonDown(_sHackButton))
         {
             _goTarget = CheckSurroundings(_lHackableLayer, false);
             if (_goTarget != null)
@@ -62,21 +122,37 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
                     ghOther.TimeToStart();
                     ReleaseControls(true);
                 }
+                _selfMover._animator.SetBool("Hack", true);
             }
         }
 
         // Explode
-        if (Input.GetButtonDown(_sExplodeButton) && _bActive && !_bReleasing)
+        if (Input.GetButtonDown(_sExplodeButton))
         {
             _selfMover._animator.SetBool("Explode", true);
+            if (_psExplosion == null)
+            {
+                _goParticleHolder = Instantiate(_goParticlePrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity, transform);
+                _psExplosion = _goParticleHolder.GetComponentsInChildren<ParticleSystem>(true);
+            }
+            else
+            {
+                foreach (ParticleSystem o in _psExplosion)
+                {
+                    o.gameObject.SetActive(true);
+                }
+            }
             ReleaseControls(true);
         }
 
-        // Just release
-        if (Input.GetButtonDown(_sStayButton) && _bActive)
+        // Trampoline
+        if (Input.GetButtonDown(_sTrampolineButton))
         {
+            _goTrampoline.SetActive(true);
             _ostRelease.StopTimer();
-            ReleaseControls(false);
+            _ostLife.StartTimer(_fLifeTime);
+            _selfMover._animator.SetTrigger("Trampoline");
+            ReleaseControls(true);
         }
     }
 
@@ -95,6 +171,8 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
                     o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
             }
         }
+        _goParticleHolder.transform.parent = null;
+        _shadowProjector.enabled = false;
     }
 
     private GameObject[] CheckSurroundings(LayerMask interLayer, bool isExplosion)
@@ -102,7 +180,9 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
         Collider[] hitColliders;
         if (!isExplosion)
         {
-            hitColliders = Physics.OverlapSphere(transform.position, _fDetectRadius, interLayer);
+            Vector3 capsuleCenter = transform.position + _selfMover._controller.center;
+            Vector3 halfHeight = Vector3.up * ((_selfMover._controller.height / 2.0f) - _selfMover._controller.radius);
+            hitColliders = Physics.OverlapCapsule(capsuleCenter - halfHeight, capsuleCenter + halfHeight, _selfMover._controller.radius, interLayer);
         }
         else
         {
@@ -142,31 +222,54 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
         }
         return null;
     }
-    public void OnDisable()
+    private void OnDisable()
     {
-        _bActive = false;
+        _bHacking = false;
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
+        _ostLife.StopTimer();
         _selfMover._animator.SetBool("Explode", false);
-        _selfMover.SetControllerActive(false);
+        _shadowProjector.enabled = true;
+        if (GameManager.Instance != null && GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath -= ReleaseInstant;
     }
 
     // Release the controls back to the player
     public void ReleaseControls(bool withDelay)
     {
+        _selfMover.ControlsDisabled = true;
+        GameObject[] hacks = CheckSurroundings(_lHackableLayer, false);
+        if (hacks != null && hacks.Length > 0)
+        {
+            foreach (GameObject item in hacks)
+            {
+                GenericHackable hack = item.GetComponent<GenericHackable>();
+                hack?.ShowPrompt(false);
+            }
+        }
         if (withDelay)
         {
-            _selfMover.ControlsDisabled = true;
-            _bReleasing = true;
-            _ostRelease.SetTimerTarget(this);
             _ostRelease.StartTimer(_fReleaseDelay);
         }
         else
         {
-            _selfMover.ControlsDisabled = true;
-            _bReleasing = true;
-            TimedAction();
+            ActualRelease();
         }
+    }
+
+    public void ReleaseInstant()
+    {
+        _selfMover.ControlsDisabled = true;
+        GameObject[] hacks = CheckSurroundings(_lHackableLayer, false);
+        if (hacks != null && hacks.Length > 0)
+        {
+            foreach (GameObject item in hacks)
+            {
+                GenericHackable hack = item.GetComponent<GenericHackable>();
+                hack?.ShowPrompt(false);
+            }
+        }
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
+        _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
     }
 
     public void StopActing()
@@ -176,25 +279,32 @@ public class PlayerBotInteractions : MonoBehaviour, ITimedAction
             _bHacking = false;
             _goTarget[0].GetComponent<GenericHackable>()?.TimeToLeave();
             _goTarget = null;
-            gameObject.SetActive(false);
-
         }
+        if (!_selfMover.ControlsDisabled)
+            ReleaseControls(false);
+        else
+            DisableSelf();
     }
 
-    public void TimedAction()
+    private void ActualRelease()
     {
-        if (!_ostRelease.IsRunning && _bActive)
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTime, true);
+        _ostDisable.StartTimer(_transitionTime);
+    }
+
+    private void DisableSelf()
+    {
+        GameManager.Instance.Player.ControlsDisabled = false;
+        if (!_bHacking && !_ostLife.IsRunning)
         {
-            GameManager.Instance.Player.ControlsDisabled = !_bReleasing;
-            _bActive = false;
-            _bReleasing = !_bReleasing;
-            GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform);
-            _ostDisable.SetTimerTarget(this);
-            _ostDisable.StartTimer(3f);
-        }
-        else if (!_ostDisable.IsRunning && !_bHacking)
-        {
+            if (_psExplosion != null)
+            {
+                _goParticleHolder.transform.parent = transform;
+                _goParticleHolder.transform.localPosition = Vector3.zero;
+            }
+            _goTrampoline.SetActive(false);
             gameObject.SetActive(false);
         }
     }
 }
+ */

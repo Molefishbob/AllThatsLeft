@@ -15,7 +15,9 @@ public class PrefsManager : Singleton<PrefsManager>
         keyInvertCameraY = "Invert Camera Y",
         keyInvertCameraX = "Invert Camera X",
         keyCameraXSensitivity = "Camera X Sensitivity",
-        keyCameraYSensitivity = "Camera Y Sensitivity";
+        keyCameraYSensitivity = "Camera Y Sensitivity",
+        keyFieldOfView = "Field Of View",
+        keyZoomSpeed = "Zoom Speed";
 
     public event ValueChangedInt OnAudioVolumeSFXChanged;
     public event ValueChangedInt OnAudioVolumeMusicChanged;
@@ -29,8 +31,12 @@ public class PrefsManager : Singleton<PrefsManager>
     public event ValueChangedBool OnInvertedCameraYChanged;
     public event ValueChangedBool OnInvertedCameraXChanged;
 
-    public event ValueChangedFloat OnCameraXSensitivityChanged;
-    public event ValueChangedFloat OnCameraYSensitivityChanged;
+    public event ValueChangedInt OnCameraXSensitivityChanged;
+    public event ValueChangedInt OnCameraYSensitivityChanged;
+
+    public event ValueChangedInt OnFieldOfViewChanged;
+
+    public event ValueChangedInt OnZoomSpeedChanged;
 
     public void Save()
     {
@@ -157,7 +163,7 @@ public class PrefsManager : Singleton<PrefsManager>
         }
         set
         {
-            PlayerPrefs.SetInt(keyVolumeMaster, value);
+            PlayerPrefs.SetInt(keyLevel, value);
         }
     }
 
@@ -170,6 +176,21 @@ public class PrefsManager : Singleton<PrefsManager>
         set
         {
             PlayerPrefs.SetInt(keyCheckPoint, value);
+        }
+    }
+
+    public void DeleteSavedGame()
+    {
+        PlayerPrefs.DeleteKey(keyBotsUnlocked);
+        PlayerPrefs.DeleteKey(keyLevel);
+        PlayerPrefs.DeleteKey(keyCheckPoint);
+    }
+
+    public bool SavedGameExists
+    {
+        get
+        {
+            return PlayerPrefs.HasKey(keyLevel) && PlayerPrefs.HasKey(keyCheckPoint);
         }
     }
 
@@ -205,15 +226,15 @@ public class PrefsManager : Singleton<PrefsManager>
         }
     }
 
-    public float CameraXSensitivity
+    public int CameraXSensitivity
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyCameraXSensitivity, 2.0f);
+            return PlayerPrefs.GetInt(keyCameraXSensitivity, 50);
         }
         set
         {
-            PlayerPrefs.SetFloat(keyCameraXSensitivity, value);
+            PlayerPrefs.SetInt(keyCameraXSensitivity, value);
             if (OnCameraXSensitivityChanged != null)
             {
                 OnCameraXSensitivityChanged(value);
@@ -221,18 +242,50 @@ public class PrefsManager : Singleton<PrefsManager>
         }
     }
 
-    public float CameraYSensitivity
+    public int CameraYSensitivity
     {
         get
         {
-            return PlayerPrefs.GetFloat(keyCameraYSensitivity, 2.0f);
+            return PlayerPrefs.GetInt(keyCameraYSensitivity, 50);
         }
         set
         {
-            PlayerPrefs.SetFloat(keyCameraYSensitivity, value);
+            PlayerPrefs.SetInt(keyCameraYSensitivity, value);
             if (OnCameraYSensitivityChanged != null)
             {
                 OnCameraYSensitivityChanged(value);
+            }
+        }
+    }
+
+    public int FieldOfView
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyFieldOfView, 60);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyFieldOfView, value);
+            if (OnFieldOfViewChanged != null)
+            {
+                OnFieldOfViewChanged(value);
+            }
+        }
+    }
+
+    public int ZoomSpeed
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(keyZoomSpeed, 50);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(keyZoomSpeed, value);
+            if (OnZoomSpeedChanged != null)
+            {
+                OnZoomSpeedChanged(value);
             }
         }
     }

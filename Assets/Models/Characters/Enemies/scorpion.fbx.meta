@@ -111,7 +111,7 @@ ModelImporter:
     100210: R_D6
     100212: R_D6_end
     100214: //RootNode
-    100216: scorpione
+    100216: scorpion
     100218: smallFrontLegIK_L
     100220: smallFrontLegIK_L_end
     100222: smallFrontLegIK_R
@@ -236,7 +236,7 @@ ModelImporter:
     400210: R_D6
     400212: R_D6_end
     400214: //RootNode
-    400216: scorpione
+    400216: scorpion
     400218: smallFrontLegIK_L
     400220: smallFrontLegIK_L_end
     400222: smallFrontLegIK_R
@@ -255,12 +255,13 @@ ModelImporter:
     400248: tailSeg5
     2100000: Material.001
     2100002: Material.003
-    4300000: scorpione
-    7400000: areaAttack
-    7400002: Armature|useless
-    7400004: walk
+    4300000: scorpion
+    7400000: scorpionAreaAttack
+    7400002: scorpionDefend
+    7400004: scorpionWalk
+    7400006: scorpionIdle
     9500000: //RootNode
-    13700000: scorpione
+    13700000: scorpion
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -290,10 +291,80 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: areaAttack
+      name: scorpionAreaAttack
       takeName: Armature|areaAttack
       firstFrame: 0
       lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.8333334
+        functionName: AttackEnded
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: scorpionDefend
+      takeName: Armature|Defend
+      firstFrame: 0
+      lastFrame: 26
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.89893615
+        functionName: DefendEnded
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: scorpionWalk
+      takeName: Armature|walk
+      firstFrame: 1
+      lastFrame: 18
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -318,10 +389,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: walk
-      takeName: Armature|walk
-      firstFrame: 1
-      lastFrame: 22
+      name: scorpionIdle
+      takeName: Armature|areaAttack
+      firstFrame: 0
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -369,7 +440,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
+    previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60

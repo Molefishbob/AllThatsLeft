@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class PlayerMovement : CharControlBase
 {
+    public event GenericEvent OnPlayerMovement;
+
     [SerializeField]
     protected string _horizontalAxis = "Horizontal";
     [SerializeField]
@@ -60,6 +62,8 @@ public abstract class PlayerMovement : CharControlBase
 
         // apply magnitude
         inputDirection = inputDirection.normalized * desiredSpeed;
+
+        if (OnPlayerMovement != null && (Mathf.Abs(horizontal) >= 0.5f || Mathf.Abs(vertical) >= 0.5f)) OnPlayerMovement();
 
         return inputDirection;
     }
