@@ -19,12 +19,18 @@ public class PauseMenu : MonoBehaviour
         _eventSystem.SetSelectedGameObject(_resumeButton);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void Resume()
     {
         GameManager.Instance.UnPauseGame();
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void ToMenu()
     {
         gameObject.SetActive(false);
@@ -32,6 +38,9 @@ public class PauseMenu : MonoBehaviour
         GameManager.Instance.ChangeToMainMenu();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void Settings()
     {
         _settings.SetActive(true);
@@ -40,6 +49,10 @@ public class PauseMenu : MonoBehaviour
 
         _eventSystem.SetSelectedGameObject(_masterVolumeSlider);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public void ToPauseMenu()
     {
         _pauseMenu.SetActive(true);
@@ -49,11 +62,17 @@ public class PauseMenu : MonoBehaviour
         _eventSystem.SetSelectedGameObject(_resumeButton);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void ToDesktop() {
         _confirmQuit.SetActive(true);
         _eventSystem.SetSelectedGameObject(_noButton);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void QuitGame()
     {
         GameManager.Instance.QuitGame();
