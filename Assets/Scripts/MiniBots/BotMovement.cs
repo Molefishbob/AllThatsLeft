@@ -16,7 +16,7 @@ public class BotMovement : PlayerMovement
 
     private void OnDisable()
     {
-        _playerJump.ResetJump();
+        Jump.ResetJump();
     }
 
     public void Activate()

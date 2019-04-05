@@ -17,6 +17,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 19
       objectReference: {fileID: 0}
+    - target: {fileID: 4637679189357502741, guid: 1d850aaaca698c2439b2f8805940ee32,
+        type: 3}
+      propertyPath: _showWhileInArea
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6477375710572859657, guid: 1d850aaaca698c2439b2f8805940ee32,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -72,11 +77,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4637679189357502741, guid: 1d850aaaca698c2439b2f8805940ee32,
-        type: 3}
-      propertyPath: _showWhileInArea
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d850aaaca698c2439b2f8805940ee32, type: 3}
 --- !u!4 &8138281941495567869 stripped
@@ -92,6 +92,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8138281941495567869}
     m_Modifications:
+    - target: {fileID: 69024190282891473, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
+        type: 3}
+      propertyPath: m_Name
+      value: Hack Button Prompter
+      objectReference: {fileID: 0}
     - target: {fileID: 1967550155410126471, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -155,7 +160,7 @@ PrefabInstance:
     - target: {fileID: 1967550155410126471, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1967550155410126471, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
@@ -197,11 +202,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 69024190282891473, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
-        type: 3}
-      propertyPath: m_Name
-      value: Hack Button Prompter
-      objectReference: {fileID: 0}
     - target: {fileID: 167770801069850406, guid: 05ba3b2ab1f7ba34ca64efc762750e00,
         type: 3}
       propertyPath: m_textInfo.textComponent
@@ -221,3 +221,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &6525730980109250516
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8138281941495567869}
+    m_Modifications:
+    - target: {fileID: 2185431624119628789, guid: c05ae50aaa5fe2846a5f92acf763856b,
+        type: 3}
+      propertyPath: m_Name
+      value: Tutorial Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751878118481539217, guid: c05ae50aaa5fe2846a5f92acf763856b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751878118481539217, guid: c05ae50aaa5fe2846a5f92acf763856b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751878118481539217, guid: c05ae50aaa5fe2846a5f92acf763856b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4751878118481539217, guid: c05ae50aaa5fe2846a5f92acf763856b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 790312765799551495, guid: c05ae50aaa5fe2846a5f92acf763856b,
+        type: 3}
+      propertyPath: _arrow
+      value: 
+      objectReference: {fileID: 3296730584212595272}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c05ae50aaa5fe2846a5f92acf763856b, type: 3}
+--- !u!1 &3296730584212595272 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8597472017090088348, guid: c05ae50aaa5fe2846a5f92acf763856b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6525730980109250516}
+  m_PrefabAsset: {fileID: 0}

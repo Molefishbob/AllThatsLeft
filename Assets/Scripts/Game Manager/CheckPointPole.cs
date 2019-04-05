@@ -16,6 +16,7 @@ public class CheckPointPole : MonoBehaviour
             if (GameManager.Instance.BeaconParticle == null)
             {
                 GameManager.Instance.BeaconParticle = Instantiate(_particlePrefab, _particleSpawn.position, _particleSpawn.rotation);
+                DontDestroyOnLoad(GameManager.Instance.BeaconParticle.gameObject);
             }
             else
             {
