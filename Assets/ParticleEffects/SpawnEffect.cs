@@ -26,7 +26,6 @@ public class SpawnEffect : MonoBehaviour {
         ps.Play();
 
     }
-	
 	void Update ()
     {
         if (timer < spawnEffectTime + pause)
