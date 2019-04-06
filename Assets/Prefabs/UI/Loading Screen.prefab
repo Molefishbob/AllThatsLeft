@@ -113,7 +113,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb49c145efbfbc74a98e30b481d5e19b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ball: {fileID: 5426273643004524907}
+  _scaledObject: {fileID: 4972565879040083169}
+  _startScale: 0
+  _endScale: 1
+  _timeBeforeTransition: 1
+  _transitionDuration: 2
 --- !u!1 &3809581064930746460
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 01712f91be5b7c747a75572791a98c36, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -199,7 +203,6 @@ GameObject:
   - component: {fileID: 4972565879040083169}
   - component: {fileID: 2196006692331809014}
   - component: {fileID: 8202223376017451747}
-  - component: {fileID: 3699462448678408390}
   m_Layer: 5
   m_Name: Ball
   m_TagString: Untagged
@@ -246,9 +249,9 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 254b15c4c8153794480d1dd9627a4246, type: 2}
+  m_Material: {fileID: 2100000, guid: 4af1ec83cce2fed4f9d4afc3b2a43bfe, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -263,19 +266,3 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &3699462448678408390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5426273643004524907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 629af00c881c919489f27ce6db74e785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _startScale: 0
-  _endScale: 1
-  _duration: 2
-  _disableObject: {fileID: 1864311786147015465}
