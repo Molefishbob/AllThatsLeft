@@ -14,6 +14,7 @@ public class DissolveEffect : MonoBehaviour {
 
     int shaderProperty;
     private bool canShow = false;
+    private bool hasplayedEffect = false;
 
     void Start() {
         shaderProperty = Shader.PropertyToID("_cutoff");
@@ -57,7 +58,11 @@ public class DissolveEffect : MonoBehaviour {
             else {
                 //timer = 0;
             }
-            ps_extraEffects.Play();
+            if (!hasplayedEffect) {
+                hasplayedEffect = true;
+                ps_extraEffects.Play();
+            }
+            
             _renderer.material.SetFloat(shaderProperty, fadeIn.Evaluate(Mathf.InverseLerp(0, spawnEffectTime, timer)));
         }
     }
