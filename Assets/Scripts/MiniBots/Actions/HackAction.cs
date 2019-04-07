@@ -43,11 +43,24 @@ public class HackAction : BotActionBase
                 GenericHackable ghOther = _goHackTarget[0].GetComponent<GenericHackable>();
                 if (ghOther.CurrentStatus == GenericHackable.Status.NotHacked)
                 {
+                    _selfMover._animator.SetBool("Hack", true);
                     _bHacking = true;
                     ghOther.TimeToStart();
                     _releaser.ReleaseControls(true);
                 }
-                _selfMover._animator.SetBool("Hack", true);
+            }
+        }
+    }
+
+    public void CheckHackDone()
+    {
+        GameObject[] _tmp = CheckSurroundings(_lHackLayer, _selfMover._controller.radius + _selfMover._controller.skinWidth);
+        if (_tmp != null)
+        {
+            GenericHackable ghOther = _goHackTarget[0].GetComponent<GenericHackable>();
+            if (ghOther.CurrentStatus == GenericHackable.Status.Hacked)
+            {
+                _selfMover._animator.SetBool("Hack", false);
             }
         }
     }

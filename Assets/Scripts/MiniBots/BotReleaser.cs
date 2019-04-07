@@ -23,6 +23,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     private ScaledOneShotTimer _ostRelease;
     private ScaledOneShotTimer _ostDisable;
+    private ScaledOneShotTimer _ostControlRelease;
     private PhysicsOneShotTimer _ostLife;
 
     // Could use a BotActionBase list/array for scaleability
@@ -36,6 +37,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
         _ostDisable = gameObject.AddComponent<ScaledOneShotTimer>();
+        _ostControlRelease = gameObject.AddComponent<ScaledOneShotTimer>();
         _ostLife = gameObject.AddComponent<PhysicsOneShotTimer>();
 
         _selfBomb = GetComponent<BombAction>();
@@ -52,7 +54,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         _ostRelease.OnTimerCompleted += ActualRelease;
         _ostDisable.OnTimerCompleted += DisableAction;
+        _ostControlRelease.OnTimerCompleted += EnablePlayerControls;
         _ostLife.OnTimerCompleted += Die;
+        _lHackableLayer = _selfHack.HackLayer;
 
         if (!_selfMover.ControlsDisabled)
             Activate();
@@ -85,17 +89,25 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     public void ReleaseControls(bool withDelay)
     {
         _selfMover.ControlsDisabled = true;
+        //_ostControlRelease.StartTimer(_transitionTime * 1.1f);
         DisableActing();
 
         if (withDelay)
         {
             _ostRelease.StartTimer(_fReleaseDelay);
+            _ostControlRelease.StartTimer(_fReleaseDelay + _transitionTime);
         }
         else
         {
+            _ostControlRelease.StartTimer(_transitionTime);
             ActualRelease();
         }
         if (OnBotReleased != null) OnBotReleased();
+    }
+
+    public void EnablePlayerControls()
+    {
+        GameManager.Instance.Player.ControlsDisabled = false;
     }
 
     public void ReleaseInstant()
@@ -113,9 +125,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         if (_selfTrampoline._bActing || _selfHack.Hacking)
         {
             _ostDisable.StartTimer(_fLifeTime);
-            // Right now lets just give controls back instantly
-            // Will fix
-            GameManager.Instance.Player.ControlsDisabled = false;
         } 
         else
             _ostDisable.StartTimer(_transitionTime);
@@ -128,9 +137,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfHack.DisableAction();
         _selfBomb.DisableAction();
         _selfTrampoline.DisableAction();
-
-        // FIXME : THIS CAUSES A BUG WHEN TRAMPOLINE TIMER RUNS OUT AND CONTROLLING OTHER BOT
-        GameManager.Instance.Player.ControlsDisabled = false;
 
         _selfMover.ControlsDisabled = true;
         if (!_ostLife.IsRunning)
@@ -157,6 +163,10 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         {
             _ostDisable.OnTimerCompleted -= DisableAction;
         }
+        if (_ostControlRelease != null)
+        {
+            _ostControlRelease.OnTimerCompleted -= EnablePlayerControls;
+        }
         if (_ostLife != null && _selfMover != null)
         {
             _ostLife.OnTimerCompleted -= Die;
@@ -173,6 +183,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         if (Dead) return;
         Dead = true;
         _selfMover.Dead = true;
-        ReleaseControls(false);
+        if (!_selfMover.ControlsDisabled)
+            ReleaseControls(false);
     }
 }
