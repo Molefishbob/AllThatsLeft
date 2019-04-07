@@ -19,6 +19,8 @@ public class DissolveEffect : MonoBehaviour {
         shaderProperty = Shader.PropertyToID("_cutoff");
         _renderer = GetComponent<Renderer>();
         ps_extraEffects = GetComponentInChildren<ParticleSystem>();
+        //gets right particle effects but doesnt play it in update
+        //Debug.Log(ps_extraEffects.name);
 
         var main = ps_extraEffects.main;
         main.duration = spawnEffectTime;
