@@ -99,7 +99,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         }
         else
         {
-            _ostControlRelease.StartTimer(_transitionTime);
+            _ostControlRelease.StartTimer(_transitionTime * 0.9f);
             ActualRelease();
         }
         if (OnBotReleased != null) OnBotReleased();
