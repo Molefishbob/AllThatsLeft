@@ -7,7 +7,7 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField, Tooltip("Meters per second")]
     private float _speed = 8;
     [SerializeField, Tooltip("Degrees per second")]
-    private float _turningSpeed = 540;
+    protected float _turningSpeed = 540;
     [SerializeField, Tooltip("NOT in seconds")]
     private float _accelerationTime = 5;
     [SerializeField, Tooltip("The y position on which the unit dies")]
