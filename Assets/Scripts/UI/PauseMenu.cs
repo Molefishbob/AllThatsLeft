@@ -20,7 +20,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Resumes the game
     /// </summary>
     public void Resume()
     {
@@ -29,7 +29,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Returns the game to mainmenu
     /// </summary>
     public void ToMenu()
     {
@@ -39,7 +39,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Opens the settings panel
     /// </summary>
     public void Settings()
     {
@@ -51,7 +51,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Opens the mainscreen of pausemenu
     /// </summary>
     public void ToPauseMenu()
     {
@@ -63,7 +63,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Opens confirmquit screen
     /// </summary>
     public void ToDesktop() {
         _confirmQuit.SetActive(true);
@@ -71,7 +71,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Tells the GameManager to quit the game
     /// </summary>
     public void QuitGame()
     {
