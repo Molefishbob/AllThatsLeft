@@ -68,10 +68,12 @@ public abstract class Timer : MonoBehaviour
     /// <summary>
     /// True when the timer is running.
     /// </summary>
-    public bool IsRunning { get; protected set; }
+    public bool IsRunning { get; protected set; } = false;
 
-    protected void CompletedTimer()
+    protected void CompletedTimer(bool stopRunning)
     {
+        IsRunning = !stopRunning;
+        enabled = !stopRunning;
         if (OnTimerCompleted != null)
         {
             OnTimerCompleted();
@@ -84,13 +86,14 @@ public abstract class Timer : MonoBehaviour
     /// <param name="duration">Timer duration in seconds.</param>
     public void StartTimer(float duration)
     {
+        IsRunning = true;
+        enabled = true;
         Duration = duration;
         if (Duration <= 0.0f)
         {
             Debug.LogWarning("Timer duration is " + Duration + ", are you sure this is what you wanted?");
         }
         _timer = 0.0f;
-        IsRunning = true;
     }
 
     /// <summary>
@@ -101,6 +104,7 @@ public abstract class Timer : MonoBehaviour
         if (_timer < Duration)
         {
             IsRunning = true;
+            enabled = true;
         }
         else
         {
@@ -114,5 +118,11 @@ public abstract class Timer : MonoBehaviour
     public void StopTimer()
     {
         IsRunning = false;
+        enabled = false;
+    }
+
+    protected virtual void Start()
+    {
+        enabled = IsRunning;
     }
 }

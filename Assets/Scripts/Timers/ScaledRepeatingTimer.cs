@@ -14,7 +14,7 @@ public class ScaledRepeatingTimer : Timer
     /// </summary>
     public float TotalTimeElapsed { get { return TimesCompleted * Duration + TimeElapsed; } }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (GameManager.Instance.GamePaused) return;
         if (!IsRunning) return;
@@ -24,7 +24,7 @@ public class ScaledRepeatingTimer : Timer
         {
             _timer -= Duration;
             TimesCompleted++;
-            CompletedTimer();
+            CompletedTimer(false);
         }
     }
 }

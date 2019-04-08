@@ -4,28 +4,14 @@ using UnityEngine;
 
 public class LoopingMusic : VolumeControl
 {
-    protected bool _started = false;
-
-    protected virtual void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         PrefsManager.Instance.OnAudioVolumeMusicChanged += SetVolumeSelf;
         PrefsManager.Instance.OnAudioVolumeMasterChanged += SetVolumeMaster;
         PrefsManager.Instance.OnAudioMuteMusicChanged += MuteSelf;
         PrefsManager.Instance.OnAudioMuteMasterChanged += MuteMaster;
-
-        if (_started)
-        {
-            _audioSource.volume = PrefsManager.Instance.AudioVolumeMusic * PrefsManager.Instance.AudioVolumeMaster * _fullVolume;
-            _audioSource.mute = PrefsManager.Instance.AudioMuteMusic || PrefsManager.Instance.AudioMuteMaster;
-        }
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-        _audioSource.volume = PrefsManager.Instance.AudioVolumeMusic * PrefsManager.Instance.AudioVolumeMaster * _fullVolume;
-        _audioSource.mute = PrefsManager.Instance.AudioMuteMusic || PrefsManager.Instance.AudioMuteMaster;
-        _started = true;
     }
 
     protected virtual void OnDisable()
