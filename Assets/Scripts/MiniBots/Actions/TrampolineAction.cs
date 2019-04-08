@@ -37,6 +37,7 @@ public class TrampolineAction : BotActionBase
             _goTrampoline.SetActive(true);
             _bActing = true;
             _selfMover._animator.SetTrigger("Trampoline");
+            _releaser.DisableActing();
             _releaser.ReleaseControls(true);
         }
     }
