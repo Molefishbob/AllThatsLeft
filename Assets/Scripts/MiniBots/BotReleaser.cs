@@ -81,6 +81,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     public void Activate()
     {
+        _bCanAct = true;
         _selfBomb._bCanAct = true;
         _selfHack._bCanAct = true;
         _selfTrampoline._bCanAct = true;
@@ -89,13 +90,19 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     public void ReleaseControls(bool withDelay)
     {
         _selfMover.ControlsDisabled = true;
-        //_ostControlRelease.StartTimer(_transitionTime * 1.1f);
+        
+        if (Dead && !_bCanAct)
+        {
+            DisableAction();
+            return;
+        }
+
         DisableActing();
 
         if (withDelay)
         {
             _ostRelease.StartTimer(_fReleaseDelay);
-            _ostControlRelease.StartTimer(_fReleaseDelay + _transitionTime);
+            _ostControlRelease.StartTimer(_fReleaseDelay + _transitionTime * 0.9f);
         }
         else
         {
@@ -180,10 +187,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     public void Die()
     {
-        if (Dead) return;
+        if (Dead || _selfBomb._bExploding) return;
         Dead = true;
         _selfMover.Dead = true;
-        if (!_selfMover.ControlsDisabled)
-            ReleaseControls(false);
+        ReleaseControls(false);
     }
 }

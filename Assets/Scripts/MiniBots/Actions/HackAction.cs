@@ -48,6 +48,7 @@ public class HackAction : BotActionBase
                     ghOther.TimeToStart();
                     _releaser.ReleaseControls(true);
                 }
+                _releaser.DisableActing();
             }
         }
     }

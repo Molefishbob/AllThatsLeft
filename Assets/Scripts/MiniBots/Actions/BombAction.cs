@@ -14,6 +14,7 @@ public class BombAction : BotActionBase
     public ParticleSystem[] ExplosionParticles { get { return _psExplosion; } }
     private ParticleSystem[] _psExplosion = null;
     private bool _bFirstEnable = true;
+    public bool _bExploding = false;
     [SerializeField]
     private GameObject _goParticlePrefab = null;
     private GameObject _goParticleHolder;
@@ -78,6 +79,8 @@ public class BombAction : BotActionBase
                     o.gameObject.SetActive(true);
                 }
             }
+            _releaser.DisableActing();
+            _bExploding = true;
             _releaser.ReleaseControls(true);
         }
     }
@@ -89,6 +92,7 @@ public class BombAction : BotActionBase
             _goParticleHolder.transform.parent = transform;
             _goParticleHolder.transform.localPosition = Vector3.zero;
         }
+        _bExploding = false;
         _shadowProjector.enabled = true;
     }
 
