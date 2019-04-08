@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    private FrogEnemyPool _frogPool;
-    private PatrolEnemyPool _patrolPool;
     private FrogEnemy _frogEnemy;
     private PatrolEnemy _patrolEnemy;
     public int _maxSpawnAmount;
@@ -18,7 +16,7 @@ public class EnemySpawner : MonoBehaviour
     {
         Frog,
         Patrol
-    };
+    }
 
     public List<Transform> Targets
     {
@@ -36,17 +34,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        _frogPool = FindObjectOfType<FrogEnemyPool>();
-        _patrolPool = FindObjectOfType<PatrolEnemyPool>();
-    }
-
     public void Spawn()
     {
         if (_spawnedEnemy == SpawnedEnemy.Frog)
         {
-            _frogEnemy = _frogPool.GetObject();
+            _frogEnemy = GameManager.Instance.FrogEnemyPool.GetObject();
             _frogEnemy.transform.position = transform.position;
             _frogEnemy.transform.rotation = transform.rotation;
             _frogEnemy.SetSpawnerTransform(transform);
@@ -54,7 +46,7 @@ public class EnemySpawner : MonoBehaviour
         }
         else if (_spawnedEnemy == SpawnedEnemy.Patrol)
         {
-            _patrolEnemy = _patrolPool.GetObject();
+            _patrolEnemy = GameManager.Instance.PatrolEnemyPool.GetObject();
             _patrolEnemy.transform.position = transform.position;
             _patrolEnemy.Targets = _patrolTargets;
             _spawnedCount++;
