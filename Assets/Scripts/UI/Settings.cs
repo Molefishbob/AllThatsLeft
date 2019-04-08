@@ -102,7 +102,7 @@ public class Settings : MonoBehaviour
     /// </summary>
     public void MuteMusic()
     {
-        PrefsManager.Instance.AudioMuteMusic = !PrefsManager.Instance.AudioMuteMusic;
+        PrefsManager.Instance.AudioMuteMusic = _musicMute.isOn;
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ public class Settings : MonoBehaviour
     /// </summary>
     public void MuteSound()
     {
-        PrefsManager.Instance.AudioMuteSFX = !PrefsManager.Instance.AudioMuteSFX;
+        PrefsManager.Instance.AudioMuteSFX = _sFXMute.isOn;
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public class Settings : MonoBehaviour
     /// </summary>
     public void MuteMaster()
     {
-        PrefsManager.Instance.AudioMuteMaster = !PrefsManager.Instance.AudioMuteMaster;
+        PrefsManager.Instance.AudioMuteMaster = _masterMute.isOn;
     }
 
     /// <summary>

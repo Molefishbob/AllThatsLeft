@@ -170,7 +170,6 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void Quit()
     {
-        print("Quitted");
         GameManager.Instance.QuitGame();
     }
 }
