@@ -109,6 +109,8 @@ public class GameManager : Singleton<GameManager>
 
     public LoadingScreen LoadingScreen;
 
+    public LoopingMusic LevelMusic;
+
     private UnscaledOneShotTimer _loadingTimer;
 
     /// <summary>
@@ -167,6 +169,8 @@ public class GameManager : Singleton<GameManager>
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);
+        if (active) LevelMusic?.PlayMusic();
+        else LevelMusic?.StopSound();
     }
 
     /// <summary>
