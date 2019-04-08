@@ -109,6 +109,9 @@ public class GameManager : Singleton<GameManager>
 
     public LoadingScreen LoadingScreen;
 
+    public LoopingMusic LevelMusic;
+    public LoopingMusic MenuMusic;
+
     private UnscaledOneShotTimer _loadingTimer;
 
     /// <summary>
@@ -167,6 +170,7 @@ public class GameManager : Singleton<GameManager>
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);
+        if (active) PlayLevelMusic();
     }
 
     /// <summary>
@@ -206,6 +210,7 @@ public class GameManager : Singleton<GameManager>
     {
         ActivateGame(false);
         ChangeScene(0);
+        PlayMenuMusic();
     }
 
     /// <summary>
@@ -252,5 +257,17 @@ public class GameManager : Singleton<GameManager>
     public void UndoDontDestroy(GameObject go)
     {
         SceneManager.MoveGameObjectToScene(go, SceneManager.GetActiveScene());
+    }
+
+    private void PlayLevelMusic()
+    {
+        MenuMusic?.StopSound();
+        LevelMusic?.PlayMusic();
+    }
+
+    private void PlayMenuMusic()
+    {
+        LevelMusic?.StopSound();
+        MenuMusic?.PlayMusic();
     }
 }

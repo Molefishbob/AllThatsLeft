@@ -23,6 +23,7 @@ public class LevelManager : MonoBehaviour
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
     public PauseMenu _pauseMenu;
     public LoadingScreen _loadingScreen;
+    public LoopingMusic _levelMusic;
 
     public bool _levelNeedsFrogEnemies;
     public bool _levelNeedsPatrolEnemies;
@@ -112,6 +113,12 @@ public class LevelManager : MonoBehaviour
         {
             GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
             DontDestroyOnLoad(GameManager.Instance.LoadingScreen);
+        }
+
+        if (GameManager.Instance.LevelMusic == null)
+        {
+            GameManager.Instance.LevelMusic = Instantiate(_levelMusic);
+            DontDestroyOnLoad(GameManager.Instance.LevelMusic);
         }
     }
 
