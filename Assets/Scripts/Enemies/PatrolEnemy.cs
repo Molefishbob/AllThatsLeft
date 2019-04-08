@@ -8,6 +8,7 @@ public class PatrolEnemy : CharControlBase
     private int _targetCounter;
     private bool _goingForward;
     private bool _stopMoving;
+    private Quaternion _lookAtThis;
 
     public bool StopMoving
     {
@@ -40,11 +41,26 @@ public class PatrolEnemy : CharControlBase
         get { return _targets; }
     }
 
+    private void Update()
+    {
+        Quaternion oldRotation = transform.rotation;
+        if (_stopMoving)
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, _lookAtThis, _turningSpeed * Time.deltaTime);
+        }
+        if(oldRotation == transform.rotation)
+        {
+            _stopMoving = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
 
         if (other.gameObject.layer == 23)
         {
+            _stopMoving = true;
+            
             if (_goingForward)
             {
                 _targetCounter++;
@@ -69,6 +85,8 @@ public class PatrolEnemy : CharControlBase
             {
                 _goingForward = true;
             }
+
+            _lookAtThis = Quaternion.LookRotation(_targets[_targetCounter].position - transform.position);
         }
     }
 
