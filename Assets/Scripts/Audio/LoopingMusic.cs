@@ -44,7 +44,10 @@ public class LoopingMusic : VolumeControl
     /// </summary>
     public virtual void PlayMusic()
     {
-        _audioSource.Play();
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.Play();
+        }
     }
 
     protected override void SetVolumeMaster(int volume)

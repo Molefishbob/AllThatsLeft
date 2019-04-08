@@ -24,6 +24,8 @@ public class MenuController : MonoBehaviour
     private GameObject _masterVolume = null;
     [SerializeField]
     private GameObject _CamxSlider = null;
+    [SerializeField]
+    private LoopingMusic _menuMusicPrefab = null;
     public enum Page 
     {
         MainMenu,
@@ -42,6 +44,13 @@ public class MenuController : MonoBehaviour
         {
             GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
             DontDestroyOnLoad(GameManager.Instance.LoadingScreen);
+        }
+
+        if (GameManager.Instance.MenuMusic == null)
+        {
+            GameManager.Instance.MenuMusic = Instantiate(_menuMusicPrefab);
+            DontDestroyOnLoad(GameManager.Instance.MenuMusic);
+            GameManager.Instance.MenuMusic.PlayMusic();
         }
     }
 
