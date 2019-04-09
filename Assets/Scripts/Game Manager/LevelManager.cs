@@ -234,7 +234,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.FrogEnemyPool?.ResetPool();
         GameManager.Instance.PatrolEnemyPool?.ResetPool();
         DontDestroyOnLoad(gameObject);
-        GameManager.Instance.ReloadScene();
+        GameManager.Instance.ReloadScene(true);
         GameManager.Instance.UndoDontDestroy(gameObject);
         Awake();
         Start();

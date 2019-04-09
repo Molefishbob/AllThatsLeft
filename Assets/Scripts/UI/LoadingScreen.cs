@@ -31,6 +31,9 @@ public class LoadingScreen : MonoBehaviour
         _mute = PrefsManager.Instance.AudioMuteSFX;
         PrefsManager.Instance.AudioMuteSFX = true;
 
+        if (GameManager.Instance.Camera != null)
+            GameManager.Instance.Camera.Frozen = true;
+
         if (GameManager.Instance.Player != null)
             GameManager.Instance.Player.ControlsDisabled = true;
 
@@ -56,6 +59,9 @@ public class LoadingScreen : MonoBehaviour
         _scaledObject.localScale = Vector3.one * _startScale;
 
         PrefsManager.Instance.AudioMuteSFX = _mute;
+
+        if (GameManager.Instance.Camera != null)
+            GameManager.Instance.Camera.Frozen = false;
 
         if (GameManager.Instance.Player != null)
             GameManager.Instance.Player.ControlsDisabled = false;

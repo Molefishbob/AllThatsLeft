@@ -28,7 +28,7 @@ public class TutorialActivation : MonoBehaviour
     [SerializeField]
     private string _attachPointName = "Tutorial Attach Point";
 
-    public bool IsShowing { get { return _prompt.gameObject.activeInHierarchy; } }
+    public bool IsFollowing { get { return _followPlayer && _prompt.gameObject.activeInHierarchy; } }
 
     private Collider _collider = null;
     private ScaledOneShotTimer _timer = null;
@@ -78,9 +78,12 @@ public class TutorialActivation : MonoBehaviour
     {
         if (_shown) return;
 
-        foreach (TutorialActivation tut in _otherTutorials)
+        if (_followPlayer)
         {
-            if (tut.IsShowing) return;
+            foreach (TutorialActivation tut in _otherTutorials)
+            {
+                if (tut.IsFollowing) return;
+            }
         }
 
         PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
