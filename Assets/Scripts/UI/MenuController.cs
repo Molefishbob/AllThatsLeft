@@ -26,6 +26,8 @@ public class MenuController : MonoBehaviour
     private GameObject _CamxSlider = null;
     [SerializeField]
     private LoopingMusic _menuMusicPrefab = null;
+    [SerializeField]
+    private Animator _titleAnim = null;
     public enum Page 
     {
         MainMenu,
@@ -37,6 +39,7 @@ public class MenuController : MonoBehaviour
     
     [SerializeField]
     private LoadingScreen _loadingScreen = null;
+    private Animator _anim;
 
     private void Awake()
     {
@@ -56,10 +59,15 @@ public class MenuController : MonoBehaviour
 
     private void Start() 
     {
+
+        _mainMenuPanel.SetActive(false);
+        _optionsPanel.SetActive(false);
+        _quitPanel.SetActive(false);
+
+        _titleAnim.SetTrigger("GameStart");
         bool temp = PrefsManager.Instance.SavedGameExists;
         
         _continueButton.interactable = temp;
-        EnableMainMenuPanel();
     }
 
     private void Update() 
