@@ -41,6 +41,8 @@ public class ThirdPersonCamera : MonoBehaviour
     private bool _canZoom;
     private bool _followingPlayer;
     private bool _lookAtHacked;
+    private Vector3 _previousPosition;
+    private Quaternion _previousRotation;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -112,7 +114,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_lookAt == null) return;
 
-        if (_transitionTimer.IsRunning || _lookAtHacked)
+        if (_transitionTimer.IsRunning && !_lookAtHacked)
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
             if (_canZoom)
@@ -173,6 +175,13 @@ public class ThirdPersonCamera : MonoBehaviour
             if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
             if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
         }
+        else if (_transitionTimer.IsRunning && _lookAtHacked)
+        {
+            Vector3 currentPosition = transform.position;
+            Quaternion currentRotation = transform.rotation;
+            transform.rotation = Quaternion.Lerp(currentRotation, _previousRotation, _transitionTimer.NormalizedTimeElapsed);
+            transform.position = (Vector3.Lerp(currentPosition, _previousPosition, _transitionTimer.NormalizedTimeElapsed));            
+        }
         else
         {
             transform.LookAt(_lookAt.position);
@@ -208,7 +217,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
     {
-        if (!trans.gameObject.layer == 13 || !trans.gameObject.layer == 14) _lookAtHacked = false;
+        
 
         if (willFollowPlayer)
         {
@@ -243,12 +252,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void GetInstantNewTarget(Transform trans)
     {
-        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14)
-        {
-            _distance = _maxDistance;
-            _canZoom = true;
-            _lookAtHacked = true;
-        }
         Transform tf = trans.Find(_cameraTargetName);
         if (tf != null)
         {
@@ -256,6 +259,16 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         _lookAt = trans;
+
+        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14)
+        {
+            _distance = 0;
+            _previousPosition = transform.position;
+            _previousRotation = transform.rotation;
+            transform.position = _lookAt.position;
+            transform.rotation = _lookAt.rotation;
+            _lookAtHacked = true;
+        }
     }
 
     private void OnPlayerDeath()
