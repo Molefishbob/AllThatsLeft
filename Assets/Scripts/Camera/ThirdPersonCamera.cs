@@ -40,6 +40,11 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _playerDistance;
     private bool _canZoom;
     private bool _followingPlayer;
+    private bool _lookAtHacked;
+    private Vector3 _returnPosition;
+    private Quaternion _returnRotation;
+    private Vector3 _currentPosition;
+    private Quaternion _currentRotation;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -55,6 +60,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         _botDistance = _minDistance;
         OnPlayerRebirth();
+        _transitionTimer.OnTimerCompleted += TimedAction;
     }
 
     private void OnEnable()
@@ -103,15 +109,20 @@ public class ThirdPersonCamera : MonoBehaviour
             PrefsManager.Instance.OnZoomSpeedChanged -= SetZoomSpeed;
             PrefsManager.Instance.OnFieldOfViewChanged -= SetFieldOfView;
         }
+        if (_transitionTimer != null)
+        {
+            _transitionTimer.OnTimerCompleted -= TimedAction;
+        }
     }
 
     private void Update()
     {
+        
         if (GameManager.Instance.GamePaused) return;
 
         if (_lookAt == null) return;
 
-        if (_transitionTimer.IsRunning)
+        if (_transitionTimer.IsRunning && !_lookAtHacked)
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
             if (_canZoom)
@@ -128,7 +139,7 @@ public class ThirdPersonCamera : MonoBehaviour
             Vector3 dir = new Vector3(0, 0, -_newDistance);
             transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
         }
-        else if (!GameManager.Instance.Player.Dead)
+        else if (!GameManager.Instance.Player.Dead && !_lookAtHacked)
         {
             float scroll = Input.GetAxis("Scroll");
             _distance -= scroll * _zoomSpeed;
@@ -171,6 +182,13 @@ public class ThirdPersonCamera : MonoBehaviour
 
             if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
             if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
+        }
+        else if (_transitionTimer.IsRunning && _lookAtHacked)
+        {
+            transform.rotation = Quaternion.Lerp(_currentRotation, _returnRotation, _transitionTimer.NormalizedTimeElapsed);
+            transform.position = Vector3.Lerp(_currentPosition, _returnPosition, _transitionTimer.NormalizedTimeElapsed);            
+        }else if(_lookAtHacked)
+        {
         }
         else
         {
@@ -247,6 +265,28 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         _lookAt = trans;
+
+        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14)
+        {
+            Vector3 dir;
+            if (_canZoom)
+            {
+                dir = new Vector3(0, 0, -_playerDistance);
+            }
+            else
+            {
+                dir = new Vector3(0, 0, -_distance);
+            }
+            _returnRotation = transform.rotation;
+            _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
+
+            transform.position = _lookAt.position;
+            transform.rotation = _lookAt.rotation;
+            
+            _currentPosition = transform.position;
+            _currentRotation = transform.rotation;
+            _lookAtHacked = true;
+        }
     }
 
     private void OnPlayerDeath()
@@ -306,5 +346,10 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             cam.fieldOfView = fov;
         }
+    }
+
+    private void TimedAction()
+    {
+        _lookAtHacked = false;
     }
 }
