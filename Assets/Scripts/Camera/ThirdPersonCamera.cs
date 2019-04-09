@@ -40,6 +40,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _playerDistance;
     private bool _canZoom;
     private bool _followingPlayer;
+    private bool _lookAtHacked;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -111,7 +112,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_lookAt == null) return;
 
-        if (_transitionTimer.IsRunning)
+        if (_transitionTimer.IsRunning || _lookAtHacked)
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
             if (_canZoom)
@@ -128,7 +129,7 @@ public class ThirdPersonCamera : MonoBehaviour
             Vector3 dir = new Vector3(0, 0, -_newDistance);
             transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
         }
-        else if (!GameManager.Instance.Player.Dead)
+        else if (!GameManager.Instance.Player.Dead && !_lookAtHacked)
         {
             float scroll = Input.GetAxis("Scroll");
             _distance -= scroll * _zoomSpeed;
@@ -207,6 +208,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
     {
+        if (!trans.gameObject.layer == 13 || !trans.gameObject.layer == 14) _lookAtHacked = false;
+
         if (willFollowPlayer)
         {
             _followingPlayer = true;
@@ -240,6 +243,12 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void GetInstantNewTarget(Transform trans)
     {
+        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14)
+        {
+            _distance = _maxDistance;
+            _canZoom = true;
+            _lookAtHacked = true;
+        }
         Transform tf = trans.Find(_cameraTargetName);
         if (tf != null)
         {

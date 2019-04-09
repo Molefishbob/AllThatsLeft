@@ -96,10 +96,17 @@ public class Console : GenericHackable
             case Status.BeingHacked:
                 CurrentStatus = Status.Hacked;
                 HackAction();
+                GameManager.Instance.Camera.GetInstantNewTarget(_hackTarget.transform);
+                Invoke("ZoomCameraBackToPlayer", 1);
                 break;
             default:
                 Debug.LogError("Current Status:" + CurrentStatus + " Timer completed even though it shouldn't! ree");
                 break;
         }
+    }
+
+    private void ZoomCameraBackToPlayer()
+    {
+        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _duration, true);
     }
 }
