@@ -41,8 +41,10 @@ public class ThirdPersonCamera : MonoBehaviour
     private bool _canZoom;
     private bool _followingPlayer;
     private bool _lookAtHacked;
-    private Vector3 _previousPosition;
-    private Quaternion _previousRotation;
+    private Vector3 _returnPosition;
+    private Quaternion _returnRotation;
+    private Vector3 _currentPosition;
+    private Quaternion _currentRotation;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
@@ -58,6 +60,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         _botDistance = _minDistance;
         OnPlayerRebirth();
+        _transitionTimer.OnTimerCompleted += TimedAction;
     }
 
     private void OnEnable()
@@ -106,10 +109,15 @@ public class ThirdPersonCamera : MonoBehaviour
             PrefsManager.Instance.OnZoomSpeedChanged -= SetZoomSpeed;
             PrefsManager.Instance.OnFieldOfViewChanged -= SetFieldOfView;
         }
+        if (_transitionTimer != null)
+        {
+            _transitionTimer.OnTimerCompleted -= TimedAction;
+        }
     }
 
     private void Update()
     {
+        
         if (GameManager.Instance.GamePaused) return;
 
         if (_lookAt == null) return;
@@ -177,10 +185,10 @@ public class ThirdPersonCamera : MonoBehaviour
         }
         else if (_transitionTimer.IsRunning && _lookAtHacked)
         {
-            Vector3 currentPosition = transform.position;
-            Quaternion currentRotation = transform.rotation;
-            transform.rotation = Quaternion.Lerp(currentRotation, _previousRotation, _transitionTimer.NormalizedTimeElapsed);
-            transform.position = (Vector3.Lerp(currentPosition, _previousPosition, _transitionTimer.NormalizedTimeElapsed));            
+            transform.rotation = Quaternion.Lerp(_currentRotation, _returnRotation, _transitionTimer.NormalizedTimeElapsed);
+            transform.position = Vector3.Lerp(_currentPosition, _returnPosition, _transitionTimer.NormalizedTimeElapsed);            
+        }else if(_lookAtHacked)
+        {
         }
         else
         {
@@ -217,8 +225,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
     {
-        
-
         if (willFollowPlayer)
         {
             _followingPlayer = true;
@@ -262,11 +268,23 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14)
         {
-            _distance = 0;
-            _previousPosition = transform.position;
-            _previousRotation = transform.rotation;
+            Vector3 dir;
+            if (_canZoom)
+            {
+                dir = new Vector3(0, 0, -_playerDistance);
+            }
+            else
+            {
+                dir = new Vector3(0, 0, -_distance);
+            }
+            _returnRotation = transform.rotation;
+            _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
+
             transform.position = _lookAt.position;
             transform.rotation = _lookAt.rotation;
+            
+            _currentPosition = transform.position;
+            _currentRotation = transform.rotation;
             _lookAtHacked = true;
         }
     }
@@ -328,5 +346,10 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             cam.fieldOfView = fov;
         }
+    }
+
+    private void TimedAction()
+    {
+        _lookAtHacked = false;
     }
 }
