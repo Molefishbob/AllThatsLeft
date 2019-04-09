@@ -18,6 +18,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     [HideInInspector]
     public bool Dead { get { return _dead; } set { _dead = value; } }
     private bool _dead = false;
+    private bool _bHasBeenActivated = false;
 
     private LayerMask _lHackableLayer = 1 << 18;
 
@@ -71,6 +72,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfMover._animator.SetBool("Explode", false);
         Dead = false;
         _selfMover.Dead = false;
+        _bHasBeenActivated = false;
         // TODO Add player jump reset to BotMovement
         // Right now happens in movements OnDisable not a fan of that
         //_selfMover._playerJump.ResetJump();
@@ -82,6 +84,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     public void Activate()
     {
+        _bHasBeenActivated = true;
         _bCanAct = true;
         _selfBomb._bCanAct = true;
         _selfHack._bCanAct = true;
@@ -92,7 +95,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         _selfMover.ControlsDisabled = true;
         
-        if (Dead && !_bCanAct)
+        if (Dead && !_bCanAct && _bHasBeenActivated)
         {
             DisableAction();
             return;
