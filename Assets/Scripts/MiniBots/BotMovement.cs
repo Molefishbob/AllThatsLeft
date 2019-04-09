@@ -28,9 +28,6 @@ public class BotMovement : PlayerMovement
     {
         if (Dead) return;
 
-        Dead = true;
-        _selfReleaser.Dead = true;
-
-        _selfReleaser.ReleaseControls(false);
+        _selfReleaser.Die();
     }
 }

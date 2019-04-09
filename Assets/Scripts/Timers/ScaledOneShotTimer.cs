@@ -14,7 +14,7 @@ public class ScaledOneShotTimer : Timer
         {
             _timer = Duration;
             IsRunning = false;
-            CompletedTimer();
+            CompletedTimer(true);
         }
     }
 }

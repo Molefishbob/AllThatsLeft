@@ -13,8 +13,7 @@ public class PhysicsOneShotTimer : Timer
         if (_timer >= Duration)
         {
             _timer = Duration;
-            IsRunning = false;
-            CompletedTimer();
+            CompletedTimer(true);
         }
     }
 }

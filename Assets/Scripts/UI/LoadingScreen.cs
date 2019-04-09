@@ -40,7 +40,7 @@ public class LoadingScreen : MonoBehaviour
         _timer.StartTimer(_timeBeforeTransition);
     }
 
-    void Update()
+    private void Update()
     {
         if (_inTransition)
         {
