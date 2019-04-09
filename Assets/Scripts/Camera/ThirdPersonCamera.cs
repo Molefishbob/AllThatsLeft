@@ -41,6 +41,8 @@ public class ThirdPersonCamera : MonoBehaviour
     private bool _canZoom;
     private bool _followingPlayer;
 
+    public bool Frozen;
+
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
 
@@ -79,6 +81,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         GameManager.Instance.Player.OnPlayerDeath += OnPlayerDeath;
         GameManager.Instance.Player.OnPlayerAlive += OnPlayerRebirth;
+        OnPlayerRebirth();
     }
 
     private void OnDisable()
@@ -110,6 +113,8 @@ public class ThirdPersonCamera : MonoBehaviour
         if (GameManager.Instance.GamePaused) return;
 
         if (_lookAt == null) return;
+
+        if (Frozen) return;
 
         if (_transitionTimer.IsRunning)
         {
