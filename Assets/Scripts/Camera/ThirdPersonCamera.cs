@@ -192,10 +192,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             transform.rotation = Quaternion.Lerp(_currentRotation, _returnRotation, _transitionTimer.NormalizedTimeElapsed);
             transform.position = Vector3.Lerp(_currentPosition, _returnPosition, _transitionTimer.NormalizedTimeElapsed);            
-        }else if(_lookAtHacked)
-        {
-        }
-        else
+        }else if(!_lookAtHacked)
         {
             transform.LookAt(_lookAt.position);
         }
