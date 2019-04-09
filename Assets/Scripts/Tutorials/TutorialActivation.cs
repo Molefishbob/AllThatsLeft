@@ -78,9 +78,12 @@ public class TutorialActivation : MonoBehaviour
     {
         if (_shown) return;
 
-        foreach (TutorialActivation tut in _otherTutorials)
+        if (_followPlayer)
         {
-            if (tut.IsShowing) return;
+            foreach (TutorialActivation tut in _otherTutorials)
+            {
+                if (tut.IsShowing) return;
+            }
         }
 
         PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
