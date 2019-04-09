@@ -188,7 +188,6 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
-        LoadingScreen.gameObject.SetActive(true);
         PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
@@ -198,6 +197,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
+            LoadingScreen.gameObject.SetActive(true);
             SceneManager.LoadScene(id);
             if (GamePaused) UnPauseGame();
         }
@@ -209,7 +209,7 @@ public class GameManager : Singleton<GameManager>
     public void ChangeToMainMenu()
     {
         ActivateGame(false);
-        ChangeScene(0);
+        SceneManager.LoadScene(0);
         PlayMenuMusic();
     }
 
@@ -244,10 +244,10 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// Reloads the active scene.
     /// </summary>
-    public void ReloadScene()
+    public void ReloadScene(bool useLoadingScreen)
     {
-        LoadingScreen.gameObject.SetActive(true);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+        if (useLoadingScreen) LoadingScreen.gameObject.SetActive(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     /// <summary>
