@@ -67,6 +67,9 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void ToDesktop() {
         _confirmQuit.SetActive(true);
+        _settings.SetActive(false);
+        _pauseMenu.SetActive(false);
+        
         _eventSystem.SetSelectedGameObject(_noButton);
     }
 
