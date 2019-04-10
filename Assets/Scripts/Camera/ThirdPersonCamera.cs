@@ -42,9 +42,9 @@ public class ThirdPersonCamera : MonoBehaviour
     private bool _followingPlayer;
     private bool _lookAtHacked;
     private Vector3 _returnPosition;
-    private Quaternion _returnRotation;
+    //private Quaternion _returnRotation;
     private Vector3 _currentPosition;
-    private Quaternion _currentRotation;
+    //private Quaternion _currentRotation;
 
     public bool Frozen;
 
@@ -190,7 +190,7 @@ public class ThirdPersonCamera : MonoBehaviour
         }
         else if (_transitionTimer.IsRunning && _lookAtHacked)
         {
-            transform.rotation = Quaternion.Lerp(_currentRotation, _returnRotation, _transitionTimer.NormalizedTimeElapsed);
+            //transform.rotation = Quaternion.Lerp(_currentRotation, _returnRotation, _transitionTimer.NormalizedTimeElapsed);
             transform.position = Vector3.Lerp(_currentPosition, _returnPosition, _transitionTimer.NormalizedTimeElapsed);            
         }else if(!_lookAtHacked)
         {
@@ -266,9 +266,9 @@ public class ThirdPersonCamera : MonoBehaviour
             tf = trans;
         }
 
-        _lookAt = trans;
+        _lookAt = tf;
 
-        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14 || trans.gameObject.layer == 21)
+        if (trans.GetComponent<IButtonInteraction>() != null)
         {
             Vector3 dir;
             if (_canZoom)
@@ -279,14 +279,17 @@ public class ThirdPersonCamera : MonoBehaviour
             {
                 dir = new Vector3(0, 0, -_distance);
             }
-            _returnRotation = transform.rotation;
-            _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
+            //_returnRotation = transform.rotation;
+            //_returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
 
             transform.position = tf.position;
             transform.LookAt(trans);
 
             _currentPosition = transform.position;
-            _currentRotation = transform.rotation;
+            //_currentRotation = transform.rotation;
+            _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + transform.rotation * dir;
+            _pitch = transform.eulerAngles.x;
+            _yaw = transform.eulerAngles.y;
             _lookAtHacked = true;
         }
     }
