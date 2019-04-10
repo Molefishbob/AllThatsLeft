@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
     public SpawnedEnemy _spawnedEnemy;
     private List<Transform> _patrolTargets = new List<Transform>();
     [SerializeField]
-    private float _speed;
+    private float _speed = 3;
 
     public enum SpawnedEnemy
     {
