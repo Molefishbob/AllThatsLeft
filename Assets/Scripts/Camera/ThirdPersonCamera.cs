@@ -261,9 +261,9 @@ public class ThirdPersonCamera : MonoBehaviour
     public void GetInstantNewTarget(Transform trans)
     {
         Transform tf = trans.Find(_cameraTargetName);
-        if (tf != null)
+        if (tf == null)
         {
-            trans = tf;
+            tf = trans;
         }
 
         _lookAt = trans;
@@ -282,9 +282,9 @@ public class ThirdPersonCamera : MonoBehaviour
             _returnRotation = transform.rotation;
             _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
 
-            transform.position = _lookAt.position;
-            transform.rotation = _lookAt.rotation;
-            
+            transform.position = tf.position;
+            transform.LookAt(trans);
+
             _currentPosition = transform.position;
             _currentRotation = transform.rotation;
             _lookAtHacked = true;
