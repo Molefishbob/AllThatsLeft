@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ecc79340d91734a9d750c0d979596a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: 3
   SpawnPoint: {fileID: 6929583724828996187}
   _particlePrefab: {fileID: 1050797310524270342, guid: 615ccde78d2994449bd3447a802e5212,
     type: 3}
@@ -140,7 +140,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 4, z: 5}
+  m_Size: {x: 6.5, y: 4, z: 6.45}
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &6929583724828996188
 GameObject:
@@ -165,13 +165,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6929583724828996188}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.35, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.9268675, z: -0, w: 0.37538883}
+  m_LocalPosition: {x: -3.0999978, y: 0, z: 1.2999983}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6929583723703662566}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -135.903, z: 0}
 --- !u!1001 &1521964901489373037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,6 +179,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7492455780060602048}
     m_Modifications:
+    - target: {fileID: 100004, guid: 3475dec24717ae14f9d2cbd9f5aa0948, type: 3}
+      propertyPath: m_Name
+      value: Dispenser
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 3475dec24717ae14f9d2cbd9f5aa0948, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 3475dec24717ae14f9d2cbd9f5aa0948, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -223,14 +231,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: 3475dec24717ae14f9d2cbd9f5aa0948, type: 3}
-      propertyPath: m_Name
-      value: Dispenser
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: 3475dec24717ae14f9d2cbd9f5aa0948, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 2300004, guid: 3475dec24717ae14f9d2cbd9f5aa0948, type: 3}
       propertyPath: m_Materials.Array.data[5]
       value: 
@@ -250,6 +250,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6929583723703662566}
     m_Modifications:
+    - target: {fileID: 867617959334655971, guid: 4cfd305b31b5ce44c95b230d009ca707,
+        type: 3}
+      propertyPath: m_Name
+      value: checkpointDisplay
+      objectReference: {fileID: 0}
     - target: {fileID: 7545519740890914372, guid: 4cfd305b31b5ce44c95b230d009ca707,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -304,11 +309,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 867617959334655971, guid: 4cfd305b31b5ce44c95b230d009ca707,
-        type: 3}
-      propertyPath: m_Name
-      value: checkpointDisplay
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cfd305b31b5ce44c95b230d009ca707, type: 3}
