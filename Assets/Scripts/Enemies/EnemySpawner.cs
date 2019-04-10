@@ -11,6 +11,8 @@ public class EnemySpawner : MonoBehaviour
     private bool _hasSpawnedEnough;
     public SpawnedEnemy _spawnedEnemy;
     private List<Transform> _patrolTargets = new List<Transform>();
+    [SerializeField]
+    private float _speed;
 
     public enum SpawnedEnemy
     {
@@ -25,6 +27,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
+
         if (_spawnedEnemy == SpawnedEnemy.Patrol)
         {
             foreach (Transform child in transform)
@@ -39,6 +42,7 @@ public class EnemySpawner : MonoBehaviour
         if (_spawnedEnemy == SpawnedEnemy.Frog)
         {
             _frogEnemy = GameManager.Instance.FrogEnemyPool.GetObject();
+            _frogEnemy.Speed = _speed;
             _frogEnemy.transform.position = transform.position;
             _frogEnemy.transform.rotation = transform.rotation;
             _frogEnemy.SetSpawnerTransform(transform);
@@ -47,6 +51,7 @@ public class EnemySpawner : MonoBehaviour
         else if (_spawnedEnemy == SpawnedEnemy.Patrol)
         {
             _patrolEnemy = GameManager.Instance.PatrolEnemyPool.GetObject();
+            _patrolEnemy.Speed = _speed;
             _patrolEnemy.transform.position = transform.position;
             _patrolEnemy.Targets = _patrolTargets;
             _spawnedCount++;

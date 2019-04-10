@@ -268,7 +268,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         _lookAt = trans;
 
-        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14)
+        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14 || trans.gameObject.layer == 21)
         {
             Vector3 dir;
             if (_canZoom)

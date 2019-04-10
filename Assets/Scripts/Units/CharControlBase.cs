@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class CharControlBase : MonoBehaviour
 {
     [SerializeField, Tooltip("Meters per second")]
-    private float _speed = 8;
+    protected float _speed = 8;
     [SerializeField, Tooltip("Degrees per second")]
     protected float _turningSpeed = 540;
     [SerializeField, Tooltip("NOT in seconds")]
