@@ -46,9 +46,9 @@ public class HackAction : BotActionBase
                     _selfMover._animator.SetBool("Hack", true);
                     _bHacking = true;
                     ghOther.TimeToStart();
+                    _releaser.DisableActing();
                     _releaser.ReleaseControls(true);
                 }
-                _releaser.DisableActing();
             }
         }
     }
