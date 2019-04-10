@@ -10,6 +10,11 @@ public class PatrolEnemy : CharControlBase
     private bool _stopMoving;
     private Quaternion _lookAtThis;
 
+    public float Speed
+    {
+        set { _speed = value; }
+    }
+
     public bool StopMoving
     {
         set { _stopMoving = value; }

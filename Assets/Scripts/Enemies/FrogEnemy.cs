@@ -11,6 +11,11 @@ public class FrogEnemy : CharControlBase
     private Vector3 _goBackPosition, _playerPosition;
     private Transform _spawnerTransform;
 
+    public float Speed
+    {
+        set { _speed = value; }
+    }
+
     protected override void Awake()
     {
         base.Awake();
