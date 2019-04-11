@@ -161,9 +161,24 @@ public class PlayerJump : MonoBehaviour
     /// <param name="height">height in meters</param>
     public void ForceJump(float height)
     {
+        ForceJump(height, true);
+    }
+
+    /// <summary>
+    /// Force the player to jump a certain height immediately.
+    /// </summary>
+    /// <param name="height">height in meters</param>
+    /// <param name="playAnimation">play jump animation</param>
+    public void ForceJump(float height, bool playAnimation)
+    {
         _character.ResetGravity();
         _currentJumpForce = GetJumpForce(height);
         _forcedJumping = true;
+        if (playAnimation)
+        {
+            _sound?.PlaySound();
+            _character._animator?.SetTrigger(_animatorTriggerJump);
+        }
     }
 
     private void EndAfterLeeway()
