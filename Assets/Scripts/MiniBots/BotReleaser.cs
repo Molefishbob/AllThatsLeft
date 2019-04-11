@@ -126,13 +126,13 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfMover.ControlsDisabled = true;
         DisableActing();
 
-        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
+        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
         _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
     }
 
     private void ActualRelease()
     {
-        GameManager.Instance.Camera.GetNewTarget(GameManager.Instance.Player.transform, _transitionTime, true);
+        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime, true);
         if (_selfTrampoline._bActing || _selfHack.Hacking)
         {
             _ostDisable.StartTimer(_fLifeTime);

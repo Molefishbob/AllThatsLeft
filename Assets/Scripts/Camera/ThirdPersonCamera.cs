@@ -207,13 +207,13 @@ public class ThirdPersonCamera : MonoBehaviour
         return distance;
     }
 
-    public void GetNewTarget(Transform trans, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans, bool willFollowPlayer)
     {
 
-        GetNewTarget(trans, _defaultTransitionTime, willFollowPlayer);
+        MoveToTarget(trans, _defaultTransitionTime, willFollowPlayer);
     }
 
-    public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans, float time, bool willFollowPlayer)
     {
         if (willFollowPlayer)
         {
@@ -251,7 +251,19 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
-    public void GetInstantNewTarget(Transform trans)
+    public void MoveToTargetInstant(Transform trans)
+    {
+        Transform tf = trans.Find(_cameraTargetName);
+        if (tf == null)
+        {
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+            tf = trans;
+        }
+
+        _lookAt = tf;
+    }
+
+    public void MoveToHackTargetInstant(Transform trans)
     {
         Transform tf = trans.Find(_cameraTargetName);
         if (tf == null)
@@ -262,31 +274,28 @@ public class ThirdPersonCamera : MonoBehaviour
 
         _lookAt = tf;
 
-        if (trans.GetComponent<IButtonInteraction>() != null)
-        {
-            // Vector3 dir;
-            // if (_canZoom)
-            // {
-            //     dir = new Vector3(0, 0, -_playerDistance);
-            // }
-            // else
-            // {
-            //     dir = new Vector3(0, 0, -_distance);
-            // }
-            //_returnRotation = transform.rotation;
-            //_returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
+        // Vector3 dir;
+        // if (_canZoom)
+        // {
+        //     dir = new Vector3(0, 0, -_playerDistance);
+        // }
+        // else
+        // {
+        //     dir = new Vector3(0, 0, -_distance);
+        // }
+        //_returnRotation = transform.rotation;
+        //_returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
 
-            transform.position = tf.position;
-            transform.LookAt(trans);
+        transform.position = tf.position;
+        transform.LookAt(trans);
 
-            _currentPosition = transform.position;
-            //_currentRotation = transform.rotation;
-            Vector3 dir = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _playerDistance);
-            _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + transform.rotation * dir;
-            _pitch = transform.eulerAngles.x;
-            _yaw = transform.eulerAngles.y;
-            _lookAtHacked = true;
-        }
+        _currentPosition = transform.position;
+        //_currentRotation = transform.rotation;
+        Vector3 dir = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _playerDistance);
+        _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + transform.rotation * dir;
+        _pitch = transform.eulerAngles.x;
+        _yaw = transform.eulerAngles.y;
+        _lookAtHacked = true;
     }
 
     private void OnPlayerDeath()
