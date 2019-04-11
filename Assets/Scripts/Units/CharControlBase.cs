@@ -229,6 +229,7 @@ public abstract class CharControlBase : MonoBehaviour
 
         _controller.enabled = active;
         _controllerEnabled = active;
+        if (_animator != null) _animator.speed = 1;
     }
 
     private void CheckGrounded()
