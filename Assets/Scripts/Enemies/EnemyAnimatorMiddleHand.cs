@@ -8,6 +8,8 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
     private RandomSFXSound _hopsfx = null;
     private FrogEnemy _frog;
     private PatrolEnemy _scorpion;
+    [SerializeField]
+    private string _deadBool = "Dead";
 
     private void Awake()
     {
@@ -33,7 +35,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
             _frog.StartMoving();
             _frog._animator?.SetBool("Jump", false);
         }
-        if(_scorpion != null)
+        if (_scorpion != null)
         {
             _scorpion.StopMoving = false;
         }
@@ -44,6 +46,15 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
         if (_scorpion != null)
         {
             _scorpion.StopMoving = false;
+        }
+    }
+
+    public void DeathComplete()
+    {
+        if (_frog != null)
+        {
+            _frog._animator.SetBool(_deadBool, false);
+            _frog.gameObject.SetActive(false);
         }
     }
 }

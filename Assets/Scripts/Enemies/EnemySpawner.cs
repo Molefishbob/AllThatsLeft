@@ -64,12 +64,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 10)
+        if (_spawnedCount < _maxSpawnAmount)
         {
-            if (_spawnedCount < _maxSpawnAmount)
-            {
-                Spawn();
-            }
+            Spawn();
         }
     }
 }
