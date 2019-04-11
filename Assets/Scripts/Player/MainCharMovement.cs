@@ -48,7 +48,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     public virtual void Die()
     {
         if (Dead) return;
-        GameManager.Instance.Camera.GetInstantNewTarget(transform);
+        GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
         ControlsDisabled = true;
         _animator?.SetBool(_animatorBoolDeath, true);

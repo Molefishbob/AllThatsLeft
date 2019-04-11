@@ -161,7 +161,7 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
         }
         GameManager.Instance.Player.SetControllerActive(true);
-        GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
+        GameManager.Instance.Camera.MoveToTargetInstant(GameManager.Instance.Player.transform);
 
         GameManager.Instance.ActivateGame(true);
     }

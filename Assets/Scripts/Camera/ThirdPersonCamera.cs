@@ -38,14 +38,13 @@ public class ThirdPersonCamera : MonoBehaviour
     private bool _follow;
     private float _botDistance;
     private float _playerDistance;
-    private bool _canZoom;
     private bool _followingPlayer;
     private bool _lookAtHacked;
     private Vector3 _returnPosition;
-    private Quaternion _returnRotation;
+    //private Quaternion _returnRotation;
     private Vector3 _currentPosition;
-    private Quaternion _currentRotation;
-
+    //private Quaternion _currentRotation;
+    public float _collisionRadius = 0.5f;
     public bool Frozen;
 
     [SerializeField]
@@ -120,7 +119,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Update()
     {
-        
         if (GameManager.Instance.GamePaused) return;
 
         if (_lookAt == null) return;
@@ -130,18 +128,18 @@ public class ThirdPersonCamera : MonoBehaviour
         if (_transitionTimer.IsRunning && !_lookAtHacked)
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-            if (_canZoom)
+
+            float lerpedDistance;
+            if (_followingPlayer)
             {
-                if (_followingPlayer)
-                {
-                    _newDistance = Mathf.Lerp(_botDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
-                }
-                else
-                {
-                    _newDistance = Mathf.Lerp(_playerDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
-                }
+                lerpedDistance = Mathf.Lerp(_botDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
             }
-            Vector3 dir = new Vector3(0, 0, -_newDistance);
+            else
+            {
+                lerpedDistance = Mathf.Lerp(_playerDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
+            }
+
+            Vector3 dir = Vector3.back * lerpedDistance;
             transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
         }
         else if (!GameManager.Instance.Player.Dead && !_lookAtHacked)
@@ -173,59 +171,49 @@ public class ThirdPersonCamera : MonoBehaviour
                 _pitch = _minPitch;
             }
 
-            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-
-            _newDistance = CheckCollision(_newDistance);
-
-            Vector3 dir = new Vector3(0, 0, -_newDistance);
-
             if (_follow)
             {
-                transform.position = _lookAt.position + rotation * dir;
+                Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+                transform.position = _lookAt.position + rotation * Vector3.back;
             }
             transform.LookAt(_lookAt.position);
+            Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+            transform.position = _lookAt.position + transform.rotation * dirr;
 
             if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
             if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
         }
         else if (_transitionTimer.IsRunning && _lookAtHacked)
         {
-            transform.rotation = Quaternion.Lerp(_currentRotation, _returnRotation, _transitionTimer.NormalizedTimeElapsed);
-            transform.position = Vector3.Lerp(_currentPosition, _returnPosition, _transitionTimer.NormalizedTimeElapsed);            
-        }else if(!_lookAtHacked)
+            //transform.rotation = Quaternion.Lerp(_currentRotation, _returnRotation, _transitionTimer.NormalizedTimeElapsed);
+            transform.position = Vector3.Lerp(_currentPosition, _returnPosition, _transitionTimer.NormalizedTimeElapsed);
+        }
+        else if (!_lookAtHacked)
         {
             transform.LookAt(_lookAt.position);
         }
     }
 
-    private float CheckCollision(float tDistance)
+    private float CheckCollision(Vector3 direction, float distance)
     {
-
         RaycastHit hit;
 
-        if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
+        if (Physics.SphereCast(_lookAt.position, _collisionRadius, direction, out hit, distance, _groundLayer))
         {
             //Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
-            _canZoom = false;
-            float newDistance = Vector3.Distance(hit.point, _lookAt.position);
-            tDistance = newDistance;
-        }
-        else
-        {
-            tDistance = _distance;
-            _canZoom = true;
+            return hit.distance;
         }
 
-        return tDistance;
+        return distance;
     }
 
-    public void GetNewTarget(Transform trans, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans, bool willFollowPlayer)
     {
 
-        GetNewTarget(trans, _defaultTransitionTime, willFollowPlayer);
+        MoveToTarget(trans, _defaultTransitionTime, willFollowPlayer);
     }
 
-    public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans, float time, bool willFollowPlayer)
     {
         if (willFollowPlayer)
         {
@@ -245,11 +233,16 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             trans = tf;
         }
+        else
+        {
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+        }
 
         if (trans != _lookAt)
         {
             _oldTarget = _lookAt.position;
             _lookAt = trans;
+            _newDistance = CheckCollision(transform.TransformDirection(Vector3.back), _distance);
             _transitionTimer.StartTimer(time);
         }
         if (_oldTarget == null)
@@ -258,37 +251,51 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
-    public void GetInstantNewTarget(Transform trans)
+    public void MoveToTargetInstant(Transform trans)
     {
         Transform tf = trans.Find(_cameraTargetName);
         if (tf == null)
         {
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
             tf = trans;
         }
 
-        _lookAt = trans;
+        _lookAt = tf;
+    }
 
-        if (trans.gameObject.layer == 13 || trans.gameObject.layer == 14 || trans.gameObject.layer == 21)
+    public void MoveToHackTargetInstant(Transform trans)
+    {
+        Transform tf = trans.Find(_cameraTargetName);
+        if (tf == null)
         {
-            Vector3 dir;
-            if (_canZoom)
-            {
-                dir = new Vector3(0, 0, -_playerDistance);
-            }
-            else
-            {
-                dir = new Vector3(0, 0, -_distance);
-            }
-            _returnRotation = transform.rotation;
-            _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
-
-            transform.position = tf.position;
-            transform.LookAt(trans);
-
-            _currentPosition = transform.position;
-            _currentRotation = transform.rotation;
-            _lookAtHacked = true;
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+            tf = trans;
         }
+
+        _lookAt = tf;
+
+        // Vector3 dir;
+        // if (_canZoom)
+        // {
+        //     dir = new Vector3(0, 0, -_playerDistance);
+        // }
+        // else
+        // {
+        //     dir = new Vector3(0, 0, -_distance);
+        // }
+        //_returnRotation = transform.rotation;
+        //_returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + _returnRotation * dir;
+
+        transform.position = tf.position;
+        transform.LookAt(trans);
+
+        _currentPosition = transform.position;
+        //_currentRotation = transform.rotation;
+        Vector3 dir = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _playerDistance);
+        _returnPosition = GameManager.Instance.Player.transform.Find(_cameraTargetName).position + transform.rotation * dir;
+        _pitch = transform.eulerAngles.x;
+        _yaw = transform.eulerAngles.y;
+        _lookAtHacked = true;
     }
 
     private void OnPlayerDeath()

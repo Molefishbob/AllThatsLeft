@@ -96,7 +96,7 @@ public class Console : GenericHackable
             case Status.BeingHacked:
                 CurrentStatus = Status.Hacked;
                 HackAction();
-                GameManager.Instance.Camera.GetInstantNewTarget(_hackTarget.transform);
+                GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform);
                 break;
             default:
                 Debug.LogError("Current Status:" + CurrentStatus + " Timer completed even though it shouldn't! ree");
