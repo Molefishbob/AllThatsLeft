@@ -97,6 +97,13 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         
         if (Dead && !_bCanAct && _bHasBeenActivated)
         {
+            if (_ostControlRelease.IsRunning || _ostDisable.IsRunning)
+            {
+                EnablePlayerControls();
+                ReleaseInstant();
+                _ostDisable.StartTimer(_transitionTimeOnPlayerDeath * 1.1f);
+                return;
+            }
             DisableAction();
             return;
         }
