@@ -44,7 +44,7 @@ public class PauseMenu : MonoBehaviour
     {
         _settings.SetActive(true);
         _pauseMenu.SetActive(false);
-        _confirmQuit.SetActive(false);
+        if (_confirmQuit != null) _confirmQuit.SetActive(false);
 
         _eventSystem.SetSelectedGameObject(_masterVolumeSlider);
     }
@@ -55,8 +55,8 @@ public class PauseMenu : MonoBehaviour
     public void ToPauseMenu()
     {
         _pauseMenu.SetActive(true);
-        _settings.SetActive(false);
-        _confirmQuit.SetActive(false);
+        if (_settings != null) _settings.SetActive(false);
+        if (_confirmQuit != null) _confirmQuit.SetActive(false);
 
         _eventSystem.SetSelectedGameObject(_resumeButton);
     }
@@ -64,11 +64,12 @@ public class PauseMenu : MonoBehaviour
     /// <summary>
     /// Opens confirmquit screen
     /// </summary>
-    public void ToDesktop() {
+    public void ToDesktop()
+    {
         _confirmQuit.SetActive(true);
-        _settings.SetActive(false);
+        if (_settings != null) _settings.SetActive(false);
         _pauseMenu.SetActive(false);
-        
+
         _eventSystem.SetSelectedGameObject(_noButton);
     }
 
