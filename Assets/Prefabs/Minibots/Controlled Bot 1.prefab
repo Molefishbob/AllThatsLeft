@@ -90,6 +90,7 @@ MonoBehaviour:
   _controller: {fileID: 0}
   _horizontalAxis: Horizontal
   _verticalAxis: Vertical
+  Jump: {fileID: 0}
 --- !u!114 &7545474917150780234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +106,6 @@ MonoBehaviour:
   _platformLayerMask:
     serializedVersion: 2
     m_Bits: 8192
-  _attachDistance: 0.15
   _disconnectDistance: 1.75
 --- !u!114 &2420816296300785827
 MonoBehaviour:
@@ -140,9 +140,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bCanAct: 0
-  _fReleaseDelay: 2
-  _transitionTime: 1
-  _transitionTimeOnPlayerDeath: 0.5
+  _fReleaseDelay: 1
+  _transitionTime: 0.5
+  _transitionTimeOnPlayerDeath: 0.25
   _fLifeTime: 30
 --- !u!114 &7729380837203966630
 MonoBehaviour:
@@ -162,6 +162,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16780800
   _fExplodeRadius: 4
+  _bExploding: 0
   _goParticlePrefab: {fileID: 8151892002794534510, guid: 1908cb25b596d994cb9bb28b0bb243cd,
     type: 3}
 --- !u!114 &3222409082277718256
@@ -382,10 +383,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8590310021024571873}
     m_Modifications:
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Name
-      value: BlobShadowProjector
-      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -430,6 +427,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Name
+      value: BlobShadowProjector
+      objectReference: {fileID: 0}
     - target: {fileID: 11900000, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_Orthographic
       value: 1
@@ -453,16 +454,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9171848565421935631}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Name
-      value: Walk
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Minibot Walk
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -517,6 +508,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Walk
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Minibot Walk
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52d85fd4ab713f4408c47a467be28f9f, type: 3}
@@ -545,16 +546,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9171848565421935631}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Name
-      value: Jump
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Minibot Jump
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -609,6 +600,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Minibot Jump
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52d85fd4ab713f4408c47a467be28f9f, type: 3}
@@ -625,10 +626,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8590310021024571873}
     m_Modifications:
-    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
-      propertyPath: m_Name
-      value: hackbot
-      objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -672,6 +669,10 @@ PrefabInstance:
     - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_Name
+      value: hackbot
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_Controller
@@ -698,16 +699,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9171848565421935631}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Name
-      value: Land
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Minibot Land
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -763,6 +754,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Land
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Minibot Land
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52d85fd4ab713f4408c47a467be28f9f, type: 3}
 --- !u!4 &4234812088241645940 stripped
@@ -790,11 +791,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8590310021024571873}
     m_Modifications:
-    - target: {fileID: 170874424196588824, guid: 77191fac458d0d547b19e59ab4f80572,
-        type: 3}
-      propertyPath: m_Name
-      value: Tutorial Attach Point
-      objectReference: {fileID: 0}
     - target: {fileID: 6477375710572859657, guid: 77191fac458d0d547b19e59ab4f80572,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -849,6 +845,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170874424196588824, guid: 77191fac458d0d547b19e59ab4f80572,
+        type: 3}
+      propertyPath: m_Name
+      value: Tutorial Attach Point
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77191fac458d0d547b19e59ab4f80572, type: 3}
