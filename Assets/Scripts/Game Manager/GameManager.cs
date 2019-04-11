@@ -165,13 +165,17 @@ public class GameManager : Singleton<GameManager>
 
     public void ActivateGame(bool active)
     {
-        Player.gameObject.SetActive(active);
-        if (!LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = false;
+        if (Player != null)
+        {
+            Player.gameObject.SetActive(active);
+            if (!LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = !active;
+        }
         Camera?.gameObject.SetActive(active);
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);
         if (active) PlayLevelMusic();
+        if (GamePaused) UnPauseGame();
     }
 
     /// <summary>
@@ -189,6 +193,7 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
+        ActivateGame(false);
         PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
@@ -247,6 +252,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ReloadScene(bool useLoadingScreen)
     {
+        ActivateGame(false);
         if (useLoadingScreen) LoadingScreen.gameObject.SetActive(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
