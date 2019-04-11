@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     private Dictionary<int, CheckPointPole> _allLevelCheckPoints;
     public MainCharMovement _playerPrefab;
     public ThirdPersonCamera _cameraPrefab;
+    public RotateSky _skyCameraPrefab;
     /// <summary>
     /// The pool prefab
     /// </summary>
@@ -95,6 +96,17 @@ public class LevelManager : MonoBehaviour
             }
             DontDestroyOnLoad(camera);
             GameManager.Instance.Camera = camera;
+        }
+
+        if (GameManager.Instance.SkyCamera == null)
+        {
+            RotateSky skycam = FindObjectOfType<RotateSky>();
+            if (skycam == null)
+            {
+                skycam = Instantiate(_skyCameraPrefab);
+            }
+            DontDestroyOnLoad(skycam);
+            GameManager.Instance.SkyCamera = skycam;
         }
 
         if (GameManager.Instance.PauseMenu == null)

@@ -104,6 +104,7 @@ public class GameManager : Singleton<GameManager>
     /// Reference of the camera.
     /// </summary>
     public ThirdPersonCamera Camera;
+    public RotateSky SkyCamera;
 
     public ParticleSystem BeaconParticle;
 
