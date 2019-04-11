@@ -39,7 +39,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private bool _follow;
     private float _botDistance;
     private float _playerDistance;
-    private bool _followingPlayer;
+    private float _oldDistance;
     public float _collisionRadius = 0.5f;
     public bool Frozen;
     private float _returnToPlayerTime;
@@ -50,6 +50,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private void Awake()
     {
         _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>());
+        _oldDistance = _distance;
         _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
         _freezeTimer = gameObject.AddComponent<ScaledOneShotTimer>();
@@ -113,9 +114,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (_freezeTimer!= null)
+        if (_freezeTimer != null)
         {
-            
             _freezeTimer.OnTimerCompleted -= UnFreeze;
         }
     }
@@ -132,15 +132,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
 
-            float lerpedDistance;
-            if (_followingPlayer)
-            {
-                lerpedDistance = Mathf.Lerp(_botDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
-            }
-            else
-            {
-                lerpedDistance = Mathf.Lerp(_playerDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
-            }
+            float lerpedDistance = Mathf.Lerp(_oldDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
 
             Vector3 dir = Vector3.back * lerpedDistance;
             transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
@@ -215,13 +207,11 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (willFollowPlayer)
         {
-            _followingPlayer = true;
             _botDistance = _distance;
             _distance = _playerDistance;
         }
         else
         {
-            _followingPlayer = false;
             _playerDistance = _distance;
             _distance = _botDistance;
         }
@@ -239,6 +229,7 @@ public class ThirdPersonCamera : MonoBehaviour
         if (trans != _lookAt)
         {
             _oldTarget = _lookAt.position;
+            _oldDistance = Vector3.Distance(transform.position, _oldTarget);
             _lookAt = trans;
             _newDistance = CheckCollision(transform.TransformDirection(Vector3.back), _distance);
             _transitionTimer.StartTimer(time);
