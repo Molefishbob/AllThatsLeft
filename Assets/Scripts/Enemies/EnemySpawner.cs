@@ -49,6 +49,7 @@ public class EnemySpawner : MonoBehaviour
             _frogEnemy.transform.position = transform.position;
             _frogEnemy.transform.rotation = transform.rotation;
             _frogEnemy.SetSpawnerTransform(transform);
+            _frogEnemy.SetControllerActive(true);
             _spawnedCount++;
         }
         else if (_spawnedEnemy == SpawnedEnemy.Patrol)
@@ -57,6 +58,7 @@ public class EnemySpawner : MonoBehaviour
             _patrolEnemy.Speed = _speed;
             _patrolEnemy.transform.position = transform.position;
             _patrolEnemy.Targets = _patrolTargets;
+            _patrolEnemy.SetControllerActive(true);
             _spawnedCount++;
         }
 
