@@ -98,7 +98,7 @@ public class DeployControlledBots : MonoBehaviour
         _activeBot.transform.rotation = transform.rotation;
         _activeBot.ControlsDisabled = true;
         _activeBot.SetControllerActive(true);
-        _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight);
+        _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight, false);
         GameManager.Instance.Camera.MoveToTarget(_activeBot.transform, _throwTime, false);
 
         _timer.StartTimer(_throwTime);

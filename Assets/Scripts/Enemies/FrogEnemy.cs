@@ -10,6 +10,8 @@ public class FrogEnemy : CharControlBase
     private PhysicsOneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
     private Transform _spawnerTransform;
+    [HideInInspector]
+    public EnemyAttack _attack;
 
     public float Speed
     {
@@ -26,6 +28,12 @@ public class FrogEnemy : CharControlBase
         _nextStopZ = false;
         _followPlayer = false;
         _backToPrevious = false;
+        _attack = GetComponentInChildren<EnemyAttack>();
+    }
+
+    private void OnEnable()
+    {
+        _attack.gameObject.SetActive(true);
     }
 
     private void OnDisable()
@@ -167,7 +175,7 @@ public class FrogEnemy : CharControlBase
     {
         if (_canFollow)
         {
-            _playerPosition = other.gameObject.transform.position;
+            _playerPosition = other.position;
         }
     }
 
