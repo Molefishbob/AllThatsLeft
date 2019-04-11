@@ -32,7 +32,6 @@ Transform:
   m_Children:
   - {fileID: 4490013515881265760}
   - {fileID: 7247742865095165772}
-  - {fileID: 8933095027717957130}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -163,46 +162,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3409515765494052495}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &3475817541697050569
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 5459540576229880259}
-    m_Modifications:
-    - target: {fileID: 5459540576229880263, guid: 866f8bceed4cff645a702641fd41a47d,
-        type: 3}
-      propertyPath: m_Name
-      value: Skybox Camera
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880259, guid: 866f8bceed4cff645a702641fd41a47d,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880259, guid: 866f8bceed4cff645a702641fd41a47d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880259, guid: 866f8bceed4cff645a702641fd41a47d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880259, guid: 866f8bceed4cff645a702641fd41a47d,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 866f8bceed4cff645a702641fd41a47d, type: 3}
---- !u!4 &8933095027717957130 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5459540576229880259, guid: 866f8bceed4cff645a702641fd41a47d,
-    type: 3}
-  m_PrefabInstance: {fileID: 3475817541697050569}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8470027052962892707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -210,11 +169,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5459540576229880259}
     m_Modifications:
-    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
-        type: 3}
-      propertyPath: m_Name
-      value: UI Camera
-      objectReference: {fileID: 0}
     - target: {fileID: 5459540576229880259, guid: 0f7c0ba7edc786d409962d40ba139490,
         type: 3}
       propertyPath: m_RootOrder
@@ -234,6 +188,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
+        type: 3}
+      propertyPath: m_Name
+      value: UI Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f7c0ba7edc786d409962d40ba139490, type: 3}
