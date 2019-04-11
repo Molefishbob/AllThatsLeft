@@ -97,7 +97,7 @@ public class TutorialActivation : MonoBehaviour
             if (_hideByDeploy)
             {
                 _deploy = other.GetComponent<DeployControlledBots>();
-                if (_deploy != null && _deploy.enabled) _deploy.OnDeployBot += MyWorkHereIsDone;
+                if (_deploy != null && PrefsManager.Instance.BotsUnlocked) _deploy.OnDeployBot += MyWorkHereIsDone;
                 else return;
             }
             _mover = foundMover;
