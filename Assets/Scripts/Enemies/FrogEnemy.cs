@@ -122,6 +122,7 @@ public class FrogEnemy : CharControlBase
             _nextStopX = false;
             _nextStopZ = true;
             _stopMoving = true;
+            _idleTime = Random.Range(1.0f, 3.0f);
             _timer.StartTimer(_idleTime);
  
         }else if (!_backToPrevious && !_followPlayer && _nextStopZ && (z > 0.999f || z < -0.999f))
@@ -129,6 +130,7 @@ public class FrogEnemy : CharControlBase
             _nextStopX = true;
             _nextStopZ = false;
             _stopMoving = true;
+            _idleTime = Random.Range(1.0f, 3.0f);
             _timer.StartTimer(_idleTime);   
         }else if(_backToPrevious && x < 0.1f && x > -0.1f && z < 0.1f && z > -0.1f)
         {
