@@ -132,7 +132,10 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     private void ActualRelease()
     {
-        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime, true);
+        if (!_selfHack.Hacking)
+        {
+            GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime, true);
+        }
         if (_selfTrampoline._bActing || _selfHack.Hacking)
         {
             _ostDisable.StartTimer(_fLifeTime);
