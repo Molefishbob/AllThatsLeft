@@ -42,6 +42,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _oldDistance;
     public float _collisionRadius = 0.5f;
     public bool Frozen;
+    public bool PlayerControlled;
     private float _returnToPlayerTime;
 
     [SerializeField]
@@ -61,13 +62,11 @@ public class ThirdPersonCamera : MonoBehaviour
         _botDistance = _minDistance;
         OnPlayerRebirth();
         _freezeTimer.OnTimerCompleted += UnFreeze;
+        PlayerControlled = true;
     }
 
     private void OnEnable()
     {
-        UnLockCursor(GameManager.Instance.GamePaused);
-        GameManager.Instance.OnGamePauseChanged += UnLockCursor;
-
         PrefsManager.Instance.OnInvertedCameraXChanged += ChangeInvertX;
         PrefsManager.Instance.OnInvertedCameraYChanged += ChangeInvertY;
         ChangeInvertX(PrefsManager.Instance.InvertedCameraX);
@@ -90,16 +89,11 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void OnDisable()
     {
-        if (GameManager.Instance != null)
+        if (GameManager.Instance != null && GameManager.Instance.Player != null)
         {
-            GameManager.Instance.OnGamePauseChanged -= UnLockCursor;
-            if (GameManager.Instance.Player != null)
-            {
-                GameManager.Instance.Player.OnPlayerDeath -= OnPlayerDeath;
-                GameManager.Instance.Player.OnPlayerAlive -= OnPlayerRebirth;
-            }
+            GameManager.Instance.Player.OnPlayerDeath -= OnPlayerDeath;
+            GameManager.Instance.Player.OnPlayerAlive -= OnPlayerRebirth;
         }
-        UnLockCursor(true);
 
         if (PrefsManager.Instance != null)
         {
@@ -140,30 +134,33 @@ public class ThirdPersonCamera : MonoBehaviour
         else if (!GameManager.Instance.Player.Dead)
         {
             float scroll = Input.GetAxis("Scroll");
-            _distance -= scroll * _zoomSpeed;
-
-            if (_distance < _minDistance)
-            {
-                _distance = _minDistance;
-            }
-            else if (_distance > _maxDistance)
-            {
-                _distance = _maxDistance;
-            }
-
             float xInput = Input.GetAxis(_cameraXAxis);
             float yInput = Input.GetAxis(_cameraYAxis);
 
-            _yaw += _horizontalSensitivity * xInput * _invertX;
-            _pitch += _verticalSensitivity * yInput * _invertY;
+            if (PlayerControlled)
+            {
+                _distance -= scroll * _zoomSpeed;
 
-            if (_pitch > _maxPitch)
-            {
-                _pitch = _maxPitch;
-            }
-            else if (_pitch < _minPitch)
-            {
-                _pitch = _minPitch;
+                if (_distance < _minDistance)
+                {
+                    _distance = _minDistance;
+                }
+                else if (_distance > _maxDistance)
+                {
+                    _distance = _maxDistance;
+                }
+
+                _yaw += _horizontalSensitivity * xInput * _invertX;
+                _pitch += _verticalSensitivity * yInput * _invertY;
+
+                if (_pitch > _maxPitch)
+                {
+                    _pitch = _maxPitch;
+                }
+                else if (_pitch < _minPitch)
+                {
+                    _pitch = _minPitch;
+                }
             }
 
             if (_follow)
@@ -175,8 +172,11 @@ public class ThirdPersonCamera : MonoBehaviour
             Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
             transform.position = _lookAt.position + transform.rotation * dirr;
 
-            if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
-            if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
+            if (PlayerControlled)
+            {
+                if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
+                if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
+            }
         }
         else
         {
@@ -250,6 +250,15 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         _lookAt = tf;
+
+        if (_follow)
+        {
+            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+            transform.position = _lookAt.position + rotation * Vector3.back;
+        }
+        transform.LookAt(_lookAt.position);
+        Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+        transform.position = _lookAt.position + transform.rotation * dirr;
     }
 
     public void MoveToHackTargetInstant(Transform trans, float lookatTime, float transitionTime)
@@ -305,20 +314,6 @@ public class ThirdPersonCamera : MonoBehaviour
     private void SetCameraYSensitivity(int sens)
     {
         _verticalSensitivity = (float)sens * _verSensMulti;
-    }
-
-    private void UnLockCursor(bool unlocked)
-    {
-        if (unlocked)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
     }
 
     private void SetZoomSpeed(int zSpeed)

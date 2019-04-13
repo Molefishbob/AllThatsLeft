@@ -113,7 +113,21 @@ public class GameManager : Singleton<GameManager>
     public LoopingMusic LevelMusic;
     public LoopingMusic MenuMusic;
 
-    private UnscaledOneShotTimer _loadingTimer;
+    private bool _showCursor;
+    public bool ShowCursor
+    {
+        get
+        {
+            return _showCursor;
+        }
+        set
+        {
+            _showCursor = value;
+
+            Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = value;
+        }
+    }
 
     /// <summary>
     /// Reference of the pause menu.
@@ -267,5 +281,10 @@ public class GameManager : Singleton<GameManager>
     {
         LevelMusic?.StopSound();
         MenuMusic?.PlayMusic();
+    }
+
+    private void Awake()
+    {
+        ShowCursor = false;
     }
 }
