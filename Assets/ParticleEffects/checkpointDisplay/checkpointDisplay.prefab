@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 3699359781569402129}
   - component: {fileID: 6074579795377248475}
   m_Layer: 0
-  m_Name: miniBotFace
+  m_Name: checkpointText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,14 +56,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2808620567143012757}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 2.043, z: -0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.97, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1791118836338480388}
   m_Father: {fileID: 7545519740890914372}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &3699359781569402129
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 0.54509807}
+      maxColor: {r: 0.08503916, g: 0.8584906, b: 0.11660859, a: 0.54509807}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -316,7 +316,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.8
+      scalar: 1.1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4686,8 +4686,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1976eeaaeb828994cacbd3f21ebea5de, type: 2}
-  - {fileID: 2100000, guid: 1976eeaaeb828994cacbd3f21ebea5de, type: 2}
+  - {fileID: 2100000, guid: 5d76c18ee62bd1048a6e20d8ad751019, type: 2}
+  - {fileID: 2100000, guid: 5d76c18ee62bd1048a6e20d8ad751019, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4710,16 +4710,16 @@ ParticleSystemRenderer:
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
-  m_MaxParticleSize: 0.5
+  m_MaxParticleSize: 2
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 0
+  m_RenderAlignment: 2
   m_Pivot: {x: 0, y: 0, z: 0}
-  m_Flip: {x: 0, y: 0, z: 0}
+  m_Flip: {x: 1, y: 0, z: 0}
   m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
@@ -4737,11 +4737,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4439608992374190866}
     m_Modifications:
-    - target: {fileID: 4158436857586167179, guid: 246654f7d58e28e4d921f89c5a1b8a83,
-        type: 3}
-      propertyPath: m_Name
-      value: techLight
-      objectReference: {fileID: 0}
     - target: {fileID: 4158436857586167188, guid: 246654f7d58e28e4d921f89c5a1b8a83,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4796,6 +4791,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158436857586167179, guid: 246654f7d58e28e4d921f89c5a1b8a83,
+        type: 3}
+      propertyPath: m_Name
+      value: techLight
       objectReference: {fileID: 0}
     - target: {fileID: 4158436857586167189, guid: 246654f7d58e28e4d921f89c5a1b8a83,
         type: 3}
