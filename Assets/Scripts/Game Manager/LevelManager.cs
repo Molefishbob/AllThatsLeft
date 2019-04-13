@@ -242,13 +242,6 @@ public class LevelManager : MonoBehaviour
 
     public void ResetLevel()
     {
-        GameManager.Instance.BotPool.ResetPool();
-        GameManager.Instance.FrogEnemyPool?.ResetPool();
-        GameManager.Instance.PatrolEnemyPool?.ResetPool();
-        DontDestroyOnLoad(gameObject);
         GameManager.Instance.ReloadScene(true);
-        GameManager.Instance.UndoDontDestroy(gameObject);
-        Awake();
-        Start();
     }
 }
