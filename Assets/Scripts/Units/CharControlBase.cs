@@ -120,7 +120,7 @@ public abstract class CharControlBase : MonoBehaviour
                 if (_animator != null)
                 {
                     _animator.SetBool(_animatorBoolRunning, true);
-                    _animator.speed = _internalMove.magnitude / maxSpeed;
+                    // _animator.speed = _internalMove.magnitude / maxSpeed;
                 }
             }
             // no input deceleration
@@ -132,7 +132,7 @@ public abstract class CharControlBase : MonoBehaviour
                 if (_animator != null)
                 {
                     _animator.SetBool(_animatorBoolRunning, false);
-                    _animator.speed = 1;
+                    // _animator.speed = 1;
                 }
             }
             else
@@ -143,7 +143,7 @@ public abstract class CharControlBase : MonoBehaviour
                 if (_animator != null)
                 {
                     _animator.SetBool(_animatorBoolRunning, false);
-                    _animator.speed = 1;
+                    // _animator.speed = 1;
                 }
             }
 
@@ -229,7 +229,7 @@ public abstract class CharControlBase : MonoBehaviour
 
         _controller.enabled = active;
         _controllerEnabled = active;
-        if (_animator != null) _animator.speed = 1;
+        // if (_animator != null) _animator.speed = 1;
     }
 
     private void CheckGrounded()
