@@ -21,23 +21,27 @@ public class CharControlPlatformMovement : MonoBehaviour
     {
         if (GameManager.Instance.GamePaused) return;
 
+        Vector3 pos = _character.transform.position;
+
         if (_platform == null)
         {
             _platform = FindPlatform(0);
-            if (_platform != null)
-            {
-                Vector3 pos = _character.transform.position + _platform.CurrentMove;
-                pos.y = _platform.transform.position.y;
-                _character.transform.position = pos;
-            }
-        }
-        else if (FindPlatform(_disconnectDistance) != _platform)
-        {
-            _platform = null;
+            if (_platform != null) pos.y = _platform.transform.position.y;
         }
         else
         {
-            _character.transform.position += _platform.CurrentMove;
+            GenericMover plat = FindPlatform(_disconnectDistance);
+            if (plat != _platform && plat != null) pos.y = _platform.transform.position.y;
+            _platform = plat;
+        }
+
+        if (_platform != null)
+        {
+            pos.y += _platform.CurrentMove.y;
+            _character.transform.position = pos;
+            Vector3 move = _platform.CurrentMove;
+            move.y = 0.0f;
+            _character.AddDirectMovement(move);
         }
     }
 
