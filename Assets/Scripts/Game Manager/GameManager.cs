@@ -257,15 +257,6 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    /// <summary>
-    /// Undoes DontDestroyOnLoad for the given GameObject.
-    /// </summary>
-    /// <param name="go">GameObject in the special DontDestroyOnLoad scene.</param>
-    public void UndoDontDestroy(GameObject go)
-    {
-        SceneManager.MoveGameObjectToScene(go, SceneManager.GetActiveScene());
-    }
-
     private void PlayLevelMusic()
     {
         MenuMusic?.StopSound();
