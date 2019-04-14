@@ -66,7 +66,6 @@ public class MenuController : MonoBehaviour
 
         _titleAnim.SetTrigger("GameStart");
         
-        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
     }
 
     private bool ButtonsUsed()
@@ -83,10 +82,9 @@ public class MenuController : MonoBehaviour
 
     private void Update() 
     {
-        if (_eventSystem.IsPointerOverGameObject() && _eventSystem.currentSelectedGameObject != null) 
-        {
+        if (_eventSystem.IsPointerOverGameObject() && GameManager.Instance.ShowCursor && _eventSystem.currentSelectedGameObject != null) 
             _eventSystem.SetSelectedGameObject(null);
-        }
+
         if (ButtonsUsed() && _eventSystem.currentSelectedGameObject == null) 
         {
             switch (_currentPage) {
@@ -137,6 +135,7 @@ public class MenuController : MonoBehaviour
         _mainMenuPanel.SetActive(true);
         _optionsPanel.SetActive(false);
         _quitPanel.SetActive(false);
+        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
         _currentPage = Page.MainMenu;
         _eventSystem.UpdateModules();
         if (_continueButton.interactable) 
