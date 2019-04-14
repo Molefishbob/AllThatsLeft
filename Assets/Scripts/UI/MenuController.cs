@@ -69,13 +69,25 @@ public class MenuController : MonoBehaviour
         _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
     }
 
+    private bool ButtonsUsed()
+    {
+        if (Input.GetAxis("Horizontal") > 0f)
+            return true;
+        if (Input.GetAxis("Vertical") > 0f)
+            return true;
+        if (Input.anyKeyDown)
+            return true;
+
+        return false;
+    }
+
     private void Update() 
     {
         if (_eventSystem.IsPointerOverGameObject() && _eventSystem.currentSelectedGameObject != null) 
         {
             _eventSystem.SetSelectedGameObject(null);
         }
-        if (Input.anyKeyDown && _eventSystem.currentSelectedGameObject == null) 
+        if (ButtonsUsed() && _eventSystem.currentSelectedGameObject == null) 
         {
             switch (_currentPage) {
                 case Page.MainMenu:
