@@ -190,7 +190,7 @@ public class PrefsManager : Singleton<PrefsManager>
     {
         get
         {
-            return PlayerPrefs.HasKey(keyLevel) && PlayerPrefs.HasKey(keyCheckPoint);
+            return PlayerPrefs.HasKey(keyCheckPoint);
         }
     }
 
