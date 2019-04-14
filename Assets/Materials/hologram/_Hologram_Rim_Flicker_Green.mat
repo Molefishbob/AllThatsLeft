@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: _Hologram_Rim_Flicker_Green
   m_Shader: {fileID: 4800000, guid: 29fed12d8547e354e90be987488147c1, type: 3}
-  m_ShaderKeywords: SCANLINES _GLOW_ON _SCAN_ON
+  m_ShaderKeywords: SCANLINES _GLITCH_ON _GLOW_ON _SCAN_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -91,7 +91,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _Flicker: 0
-    - _FlickerSpeed: 10
+    - _FlickerSpeed: 6
     - _Fold: 63
     - _Glitch: 1
     - _GlitchIntensity: 0.2
@@ -110,7 +110,7 @@ Material:
     - _RimPower: 3.23
     - _RimStrength: 2.5
     - _ScanSpeed: 0.81
-    - _ScanTiling: 10
+    - _ScanTiling: 96.1
     - _Scanline: 0
     - _ScanlineSize: 1
     - _ScanlineSpeed: 2
@@ -124,7 +124,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Direction: {r: 0, g: 1, b: 0, a: 0}
+    - _Direction: {r: 0, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MainColor: {r: 0, g: 0.684, b: 0.21700664, a: 1}
     - _RimColor: {r: 0, g: 0.6320754, b: 0.17695925, a: 1}
