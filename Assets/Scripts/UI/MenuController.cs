@@ -66,16 +66,26 @@ public class MenuController : MonoBehaviour
 
         _titleAnim.SetTrigger("GameStart");
         
-        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
+    }
+
+    private bool ButtonsUsed()
+    {
+        if (Input.GetAxis("Horizontal") > 0f)
+            return true;
+        if (Input.GetAxis("Vertical") > 0f)
+            return true;
+        if (Input.anyKeyDown)
+            return true;
+
+        return false;
     }
 
     private void Update() 
     {
-        if (_eventSystem.IsPointerOverGameObject() && _eventSystem.currentSelectedGameObject != null) 
-        {
+        if (_eventSystem.IsPointerOverGameObject() && GameManager.Instance.ShowCursor && _eventSystem.currentSelectedGameObject != null) 
             _eventSystem.SetSelectedGameObject(null);
-        }
-        if (Input.anyKeyDown && _eventSystem.currentSelectedGameObject == null) 
+
+        if (ButtonsUsed() && _eventSystem.currentSelectedGameObject == null) 
         {
             switch (_currentPage) {
                 case Page.MainMenu:
@@ -125,6 +135,7 @@ public class MenuController : MonoBehaviour
         _mainMenuPanel.SetActive(true);
         _optionsPanel.SetActive(false);
         _quitPanel.SetActive(false);
+        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
         _currentPage = Page.MainMenu;
         _eventSystem.UpdateModules();
         if (_continueButton.interactable) 
