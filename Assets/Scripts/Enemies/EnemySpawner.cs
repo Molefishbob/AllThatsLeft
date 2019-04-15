@@ -13,8 +13,6 @@ public class EnemySpawner : MonoBehaviour
     private List<Transform> _patrolTargets = new List<Transform>();
     [SerializeField]
     private float _speed = 3;
-    [SerializeField]
-    private float _frogPatrolRadius = 1;
 
     public enum SpawnedEnemy
     {
@@ -45,7 +43,6 @@ public class EnemySpawner : MonoBehaviour
         {
             _frogEnemy = GameManager.Instance.FrogEnemyPool.GetObject();
             _frogEnemy.Speed = _speed;
-            _frogEnemy._circleRadius = _frogPatrolRadius;
             _frogEnemy.transform.position = transform.position;
             _frogEnemy.transform.rotation = transform.rotation;
             _frogEnemy.SetSpawnerTransform(transform);
