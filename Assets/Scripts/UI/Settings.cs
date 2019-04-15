@@ -30,6 +30,8 @@ public class Settings : MonoBehaviour
     private TMP_Text _xSensText = null, _ySensText = null, _zoomSpeedText = null, _fovText = null;
     [SerializeField]
     private Slider _xSensSlider = null, _ySensSlider = null, _zoomSpeedSlider = null, _fovSlider = null;
+    [SerializeField]
+    private GameObject _masterButton = null, _xSensButton = null;
 
     private const bool True = true;
     private const bool False = false;
@@ -168,7 +170,7 @@ public class Settings : MonoBehaviour
         _volume.SetActive(!False);
         _controls.SetActive(!True);
 
-        _eventSystem.SetSelectedGameObject(_masterSlider.gameObject);
+        _eventSystem.SetSelectedGameObject(_masterButton.gameObject);
         Navigation nav = _backButton.navigation;
 
         nav.selectOnUp = _sFXMute.GetComponent<Selectable>();
@@ -195,7 +197,7 @@ public class Settings : MonoBehaviour
         _volume.SetActive(!True);
         _controls.SetActive(!False);
 
-        _eventSystem.SetSelectedGameObject(_xSensSlider.gameObject);
+        _eventSystem.SetSelectedGameObject(_xSensButton.gameObject);
 
         Navigation nav = _backButton.navigation;
 
