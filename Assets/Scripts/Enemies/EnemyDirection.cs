@@ -94,6 +94,9 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        _aggroArea = GetComponent<SphereCollider>();
+        _aggroRadius = _aggroArea.radius;
+        _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _patrolRadius);
     }
