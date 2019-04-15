@@ -96,56 +96,8 @@ public class HologramShaderGUI : ShaderGUI
         Undo.RecordObject(_material, "Material Edition");
     }
 
-    static Texture2D bannerTex = null;
-    static GUIStyle rateTxt = null;
-    static GUIStyle title = null;
-    static GUIStyle linkStyle = null;
-    static string twitterURL = "https://twitter.com/moj0111";
-
-    void DrawBanner()
-    {
-        if (bannerTex == null)
-            bannerTex = Resources.Load<Texture2D>("banner");
-
-        if (rateTxt == null)
-        {
-            rateTxt = new GUIStyle();
-            rateTxt.alignment = TextAnchor.LowerRight;
-            rateTxt.normal.textColor = new Color(0.9f, 0.9f, 0.9f);
-            rateTxt.fontSize = 9;
-            rateTxt.padding = new RectOffset(0, 1, 0, 1);
-        }
-
-        if (title == null)
-        {
-            title = new GUIStyle(rateTxt);
-            title.normal.textColor = new Color(1f, 1f, 1f);
-            title.alignment = TextAnchor.MiddleCenter;
-            title.fontSize = 19;
-        }
-
-        if (linkStyle == null) linkStyle = new GUIStyle();
-
-        if (bannerTex != null)
-        {
-            GUILayout.Space(3);
-            var rect = GUILayoutUtility.GetRect(0, int.MaxValue, 30, 30);
-            EditorGUI.DrawPreviewTexture(rect, bannerTex, null, ScaleMode.ScaleAndCrop);
-            rateTxt.alignment = TextAnchor.LowerRight;
-            EditorGUI.LabelField(rect, "Follow", rateTxt);
-            
-            EditorGUI.LabelField(rect, "Hologram Shader", title);
-
-            if (GUI.Button(rect, "", linkStyle)) {
-                Application.OpenURL(twitterURL);
-            }
-            GUILayout.Space(3);
-        }
-    }
-
     void DrawGUI()
     {
-        DrawBanner();
 
         if (Layout.BeginFold((int)Category.General, "- Surface -"))
             DrawGeneralSettings();
