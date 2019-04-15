@@ -168,7 +168,7 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown(_pauseMenuButton))
+        if (!GameManager.Instance.LoadingScreen.gameObject.activeSelf && Input.GetButtonDown(_pauseMenuButton))
         {
             switch (GameManager.Instance.GamePaused)
             {
