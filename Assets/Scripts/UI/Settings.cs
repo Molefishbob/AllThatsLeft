@@ -8,12 +8,14 @@ using UnityEngine.EventSystems;
 public class Settings : MonoBehaviour
 {
     private const string PercentageFormat = " %";
+    private const string Submit = "Submit";
+    private const string Cancel = "Cancel";
     [SerializeField]
-    private EventSystem  _eventSystem = null;
+    private EventSystem _eventSystem = null;
     [SerializeField]
     private Button _backButton = null;
     [SerializeField]
-    private TMP_Text  _musicText = null, _sFXText = null, _masterText = null;
+    private TMP_Text _musicText = null, _sFXText = null, _masterText = null;
     [SerializeField]
     private Slider _musicSlider = null, _sFXSlider = null, _masterSlider = null;
     [SerializeField]
@@ -28,11 +30,16 @@ public class Settings : MonoBehaviour
     private TMP_Text _xSensText = null, _ySensText = null, _zoomSpeedText = null, _fovText = null;
     [SerializeField]
     private Slider _xSensSlider = null, _ySensSlider = null, _zoomSpeedSlider = null, _fovSlider = null;
+    [SerializeField]
+    private GameObject _masterButton = null, _xSensButton = null;
 
     private const bool True = true;
     private const bool False = false;
+    private GameObject _lastButton = null;
+    private bool _stopIt = false;
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
 
         // Sets the volume settings page to be the default page
         VolumeSettings();
@@ -63,28 +70,53 @@ public class Settings : MonoBehaviour
         _masterText.SetText(_masterSlider.value + PercentageFormat);
 
     }
-    
+
+    private void Update()
+    {
+        if (_lastButton != null)
+        {
+            if (_stopIt) 
+            {
+                _stopIt = false;
+            }
+            else if (Input.GetButtonDown(Submit) || Input.GetButtonDown(Cancel))
+            {
+                _eventSystem.SetSelectedGameObject(_lastButton);
+                _lastButton = null;
+            }
+        }
+    }
+
     /// <summary>
     /// Formats the given float value to a single desimal string
     /// </summary>
     /// <param name="value">Given float to be changed to x.x format</param>
     /// <returns>The formatted value as a string</returns>
-    private string FormatToDecimalNumber(float value) {
+    private string FormatToDecimalNumber(float value)
+    {
         return (value / 10f).ToString("N1");
+    }
+
+    public void ToSlider(GameObject button)
+    {
+        _lastButton = button;
+        _stopIt = true;
     }
 
     /// <summary>
     /// Called by the music slider. Changes the text value and saves the music volume to PrefsManager
     /// </summary>
-    public void MusicPercentage() {
+    public void MusicPercentage()
+    {
         _musicText.SetText(_musicSlider.value + PercentageFormat);
-        PrefsManager.Instance.AudioVolumeMusic =  Mathf.RoundToInt(_musicSlider.value);
+        PrefsManager.Instance.AudioVolumeMusic = Mathf.RoundToInt(_musicSlider.value);
     }
 
     /// <summary>
     /// Called by the SFX slider. Changes the text value and saves the SFX volume to PrefsManager
     /// </summary>
-    public void UISoundPercentage() {
+    public void UISoundPercentage()
+    {
         _sFXText.SetText(_sFXSlider.value + PercentageFormat);
         PrefsManager.Instance.AudioVolumeSFX = Mathf.RoundToInt(_sFXSlider.value);
     }
@@ -92,7 +124,8 @@ public class Settings : MonoBehaviour
     /// <summary>
     /// Called by the master volume slider. Changes the text value and saves the master volume to PrefsManager
     /// </summary>
-    public void MasterSoundPercentage() {
+    public void MasterSoundPercentage()
+    {
         _masterText.SetText(_masterSlider.value + PercentageFormat);
         PrefsManager.Instance.AudioVolumeMaster = Mathf.RoundToInt(_masterSlider.value);
     }
@@ -129,14 +162,15 @@ public class Settings : MonoBehaviour
     /// Gives the back button new paths for controller movement
     /// Selects a slider for the console peasants
     /// </summary>
-    public void VolumeSettings() {
+    public void VolumeSettings()
+    {
         _volumeSettings.interactable = !True;
         _controlSettings.interactable = !False;
 
         _volume.SetActive(!False);
         _controls.SetActive(!True);
 
-        _eventSystem.SetSelectedGameObject(_masterSlider.gameObject);
+        _eventSystem.SetSelectedGameObject(_masterButton.gameObject);
         Navigation nav = _backButton.navigation;
 
         nav.selectOnUp = _sFXMute.GetComponent<Selectable>();
@@ -155,16 +189,17 @@ public class Settings : MonoBehaviour
     /// Gives the back button new paths for controller movement
     /// Selects a slider for the console peasants
     /// </summary>
-    public void ControlSettings() {
+    public void ControlSettings()
+    {
         _controlSettings.interactable = !True;
         _volumeSettings.interactable = !False;
 
         _volume.SetActive(!True);
         _controls.SetActive(!False);
 
-        _eventSystem.SetSelectedGameObject(_xSensSlider.gameObject);
+        _eventSystem.SetSelectedGameObject(_xSensButton.gameObject);
 
-         Navigation nav = _backButton.navigation;
+        Navigation nav = _backButton.navigation;
 
         nav.selectOnUp = _invertedXAxis.GetComponent<Selectable>();
         nav.selectOnLeft = _volumeSettings.GetComponent<Selectable>();
@@ -179,7 +214,7 @@ public class Settings : MonoBehaviour
     public void InvertedXAxis()
     {
         PrefsManager.Instance.InvertedCameraX = _invertedXAxis.isOn;
-        
+
     }
 
     /// <summary>
@@ -196,7 +231,7 @@ public class Settings : MonoBehaviour
     /// </summary>
     public void CameraXSensitivity()
     {
-        
+
         _xSensText.SetText(FormatToDecimalNumber(_xSensSlider.value));
         PrefsManager.Instance.CameraXSensitivity = Mathf.RoundToInt(_xSensSlider.value);
     }
