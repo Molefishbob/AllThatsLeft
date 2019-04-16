@@ -8,12 +8,9 @@ public class EnemyDirection : MonoBehaviour
     [Tooltip("How much smaller the patrolradius is compared to the aggroradius trigger")]
     public float _patrolRadiusDecrease;
     private float _patrolRadius;
-    private Quaternion _angle;
-    private float _distance;
     [SerializeField]
     private float _idleTime = 1;
-    [SerializeField]
-    private EnemyMover _prefab;
+    public EnemyMover _enemy;
     [HideInInspector]
     public List<Transform> _aggroTargets;
     private SphereCollider _aggroArea;
@@ -33,6 +30,10 @@ public class EnemyDirection : MonoBehaviour
     private void Start()
     {
         _timer.OnTimerCompleted += TimedAction;
+    }
+
+    private void OnEnable()
+    {
         SetRandomTarget();
     }
 
@@ -44,14 +45,16 @@ public class EnemyDirection : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        
         if (_aggroTargets == null || _aggroTargets.Count == 0)
         {
-            float dist = Mathf.Abs(Vector3.Distance(_moveTarget, _prefab.transform.position));
-
+            float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
+            
             if (dist < 1.0f)
             {
+                
                 _stopMoving = true;
                 _idleTime = Random.Range(1.0f, 3.0f);
                 _timer.StartTimer(_idleTime);
@@ -59,16 +62,24 @@ public class EnemyDirection : MonoBehaviour
         }
         else
         {
-            _moveTarget = _aggroTargets[0].position - _prefab.transform.position;
+            _moveTarget = _aggroTargets[0].position;
+           
+            _enemy.SetTarget(_moveTarget);
         }
     }
 
     private void SetRandomTarget()
     {
-        _angle = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
-        _distance = Random.Range(1.0f, _patrolRadius);
+        Quaternion angle = Quaternion.Euler(0, Random.Range(-180.0f, 180.0f), 0);
+        
+        float distance = Random.Range(0.0f, _patrolRadius);
 
-        _moveTarget = transform.TransformDirection(_angle * Vector3.forward * _distance);
+        _moveTarget = transform.TransformPoint(angle * Vector3.forward / 2  * distance);
+        
+        if (_enemy != null)
+        {
+            _enemy.SetTarget(_moveTarget);
+        }
     }    
 
     private void TimedAction()
