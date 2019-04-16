@@ -70,6 +70,7 @@ public class HackAction : BotActionBase
 
     private void OnTriggerExit(Collider other)
     {
+        if (_bHacking) return;
         GenericHackable ghOther = other.GetComponent<GenericHackable>();
         if (ghOther == null) return;
         _hackTargets.Remove(ghOther);
