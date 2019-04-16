@@ -31,7 +31,7 @@ public class Settings : MonoBehaviour
     [SerializeField]
     private Slider _xSensSlider = null, _ySensSlider = null, _zoomSpeedSlider = null, _fovSlider = null;
     [SerializeField]
-    private GameObject _masterButton = null, _xSensButton = null;
+    private GameObject _masterButton = null, _xSensButton = null, _fovButton = null;
 
     private const bool True = true;
     private const bool False = false;
@@ -97,6 +97,11 @@ public class Settings : MonoBehaviour
         return (value / 10f).ToString("N1");
     }
 
+    /// <summary>
+    /// Changes the control to the slider assigned to the button
+    /// Records the button that was used and starts to listen for inputs
+    /// </summary>
+    /// <param name="button">The button that was used</param>
     public void ToSlider(GameObject button)
     {
         _lastButton = button;
@@ -201,7 +206,7 @@ public class Settings : MonoBehaviour
 
         Navigation nav = _backButton.navigation;
 
-        nav.selectOnUp = _invertedXAxis.GetComponent<Selectable>();
+        nav.selectOnUp = _fovButton.GetComponent<Selectable>();
         nav.selectOnLeft = _volumeSettings.GetComponent<Selectable>();
         nav.selectOnRight = null;
 
