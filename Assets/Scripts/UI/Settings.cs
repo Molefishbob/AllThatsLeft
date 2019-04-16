@@ -60,7 +60,7 @@ public class Settings : MonoBehaviour
         _zoomSpeedSlider.value = PrefsManager.Instance.ZoomSpeed;
         _fovSlider.value = PrefsManager.Instance.FieldOfView;
 
-        // Sets the number indicators to show the correct number
+        // Sets the number indicators to show the correct numbers
         _xSensText.SetText(FormatToDecimalNumber(_xSensSlider.value));
         _ySensText.SetText(FormatToDecimalNumber(_ySensSlider.value));
         _zoomSpeedText.SetText(FormatToDecimalNumber(_zoomSpeedSlider.value));
