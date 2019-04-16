@@ -74,7 +74,7 @@ public class EnemyDirection : MonoBehaviour
         
         float distance = Random.Range(0.0f, _patrolRadius);
 
-        _moveTarget = transform.TransformPoint(angle * Vector3.forward / 2  * distance);
+        _moveTarget = transform.TransformPoint(angle * Vector3.forward  * distance);
         
         if (_enemy != null)
         {
