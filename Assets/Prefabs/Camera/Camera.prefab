@@ -65,7 +65,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 16776983
+    m_Bits: 33554197
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -107,7 +107,9 @@ MonoBehaviour:
   _horSensMulti: 0.05
   _verSensMulti: 0.05
   _zoomMulti: 0.01
+  _collisionRadius: 0.5
   Frozen: 0
+  PlayerControlled: 0
   _cameraTargetName: CameraTarget
 --- !u!81 &5459540576229880262
 AudioListener:
@@ -149,6 +151,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 813639282047785599, guid: 93cff93bfc0273b4d8bf217cc2f78ee9,
+        type: 3}
+      propertyPath: orthographic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9067919973260260930, guid: 93cff93bfc0273b4d8bf217cc2f78ee9,
         type: 3}
       propertyPath: m_IsActive
@@ -169,6 +176,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5459540576229880259}
     m_Modifications:
+    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
+        type: 3}
+      propertyPath: m_Name
+      value: UI Camera
+      objectReference: {fileID: 0}
     - target: {fileID: 5459540576229880259, guid: 0f7c0ba7edc786d409962d40ba139490,
         type: 3}
       propertyPath: m_RootOrder
@@ -188,11 +200,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
-        type: 3}
-      propertyPath: m_Name
-      value: UI Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f7c0ba7edc786d409962d40ba139490, type: 3}
