@@ -39,6 +39,8 @@ public class HackAction : BotActionBase
             if (_hackTargets[0].CurrentStatus == GenericHackable.Status.Hacked)
             {
                 _selfMover._animator.SetBool("Hack", false);
+                _hackTargets.Clear();
+                _bHacking = false;
             }
             return;
         }
