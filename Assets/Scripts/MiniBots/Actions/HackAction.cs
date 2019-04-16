@@ -80,6 +80,7 @@ public class HackAction : BotActionBase
 
     public override void DisableAction()
     {
+        _hackTargets.Clear();
         _bHacking = false;
     }
 }
