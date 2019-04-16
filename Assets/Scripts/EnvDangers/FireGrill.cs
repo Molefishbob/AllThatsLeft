@@ -18,18 +18,24 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     private GameObject _sparks = null;
     [SerializeField]
     private bool _activated = true;
+    [SerializeField, Tooltip("Time it waits before deactivating when hacked")]
+    private float _deactivationTime = 0.5f;
     private PhysicsRepeatingTimer _timer;
     private Collider _trigger;
     private bool _cycleStarted = false;
+    private ScaledOneShotTimer _deactivationTimer;
 
     private void Awake()
     {
         _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
         _trigger = GetComponent<Collider>();
+        _deactivationTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
+        _deactivationTimer.OnTimerCompleted += FlamesOff;
+
         if (_startDelay > 0)
         {
             _timer.OnTimerCompleted += DelayedStartCycle;
@@ -116,8 +122,8 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     public void ButtonDown()
     {
         _activated = false;
-        FlamesOff();
         _timer.StopTimer();
+        _deactivationTimer.StartTimer(_deactivationTime);
     }
 
     public void ButtonUp()
@@ -128,5 +134,11 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
             FlamesOn();
         }
         _timer.ResumeTimer();
+    }
+
+    private void OnDestroy()
+    {
+        if (_deactivationTimer != null)
+            _deactivationTimer.OnTimerCompleted -= FlamesOff;
     }
 }
