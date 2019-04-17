@@ -1406,6 +1406,7 @@ GameObject:
   - component: {fileID: 8154636201211610707}
   - component: {fileID: 1784121258796136012}
   - component: {fileID: 1688518780298491960}
+  - component: {fileID: 3252264352144973199}
   m_Layer: 5
   m_Name: EndScreen
   m_TagString: Untagged
@@ -1515,6 +1516,7 @@ MonoBehaviour:
   _masterVolumeSlider: {fileID: 0}
   _noButton: {fileID: 8249510099128090567}
   _resumeButton: {fileID: 0}
+  _camxSlider: {fileID: 0}
 --- !u!222 &1688518780298491960
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1523,6 +1525,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8154636201211610704}
   m_CullTransparentMesh: 0
+--- !u!114 &3252264352144973199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8154636201211610704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2110fbcccdd0464e9a7a5e3e0fea1ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8249510099128090567
 GameObject:
   m_ObjectHideFlags: 0
