@@ -6,11 +6,11 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
 {
     [SerializeField]
     private string _deadBool = "Dead";
-    private FrogEnemy _frog;
+    private EnemyMover _frog;
 
     private void Awake()
     {
-        _frog = GetComponent<FrogEnemy>();
+        _frog = GetComponent<EnemyMover>();
     }
 
     public void TakeDamage(int damage)

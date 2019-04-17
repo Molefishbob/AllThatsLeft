@@ -6,7 +6,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
 {
     [SerializeField]
     private RandomSFXSound _hopsfx = null;
-    private FrogEnemy _frog;
+    private EnemyMover _frog;
     private PatrolEnemy _scorpion;
     [SerializeField]
     private string _deadBool = "Dead";
@@ -15,7 +15,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
     {
         if (transform.parent.tag == "Frog")
         {
-            _frog = GetComponentInParent<FrogEnemy>();
+            _frog = GetComponentInParent<EnemyMover>();
         }
         else if (transform.parent.tag == "Scorpion")
         {
@@ -32,7 +32,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
     {
         if (_frog != null)
         {
-            _frog.StartMoving();
+
             _frog._animator?.SetBool("Jump", false);
         }
         if (_scorpion != null)

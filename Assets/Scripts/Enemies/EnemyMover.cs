@@ -6,6 +6,14 @@ public class EnemyMover : CharControlBase
 {
     public Vector3 _target;
     private bool _stopMoving = false;
+    [HideInInspector]
+    public EnemyAttack _attack;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _attack = GetComponentInChildren<EnemyAttack>();
+    }
 
     public bool StopMoving
     {
@@ -20,6 +28,11 @@ public class EnemyMover : CharControlBase
     public void SetTarget(Vector3 target)
     {
         _target = target;
+    }
+
+    private void OnEnable()
+    {
+        _attack.gameObject.SetActive(true);
     }
 
     protected override Vector3 InternalMovement()
