@@ -16,6 +16,7 @@ public class FrogSpawner : MonoBehaviour
     public void Spawn()
     {
         _eD._enemy = GameManager.Instance.FrogEnemyPool.GetObject();
+        _eD.SetRandomTarget();
         _eD._enemy.transform.position = transform.position;
         _eD._enemy.transform.rotation = transform.rotation;
         _eD._enemy.SetControllerActive(true);

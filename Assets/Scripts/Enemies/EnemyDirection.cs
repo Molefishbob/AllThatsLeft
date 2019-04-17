@@ -38,7 +38,13 @@ public class EnemyDirection : MonoBehaviour
     private void OnEnable()
     {
         _enemy.Speed = _speed;
-        SetRandomTarget();   
+    }
+
+    private void OnDisable()
+    {
+        _aggroTargets.Clear();
+        _timer.StopTimer();
+        _enemy.Speed = _speed;
     }
 
     private void OnDestroy()
@@ -51,11 +57,11 @@ public class EnemyDirection : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
         if (_aggroTargets == null || _aggroTargets.Count == 0)
         {
+            _enemy.Speed = _speed;
             float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
-            
+
             if (dist < 1.0f && !_timer.IsRunning)
             {
                 _enemy.StopMoving = true;
@@ -65,13 +71,14 @@ public class EnemyDirection : MonoBehaviour
         }
         else
         {
+            _enemy.Speed = _speed * 2;
             _moveTarget = _aggroTargets[0].position;
            
             _enemy.SetTarget(_moveTarget);
         }
     }
 
-    private void SetRandomTarget()
+    public void SetRandomTarget()
     {
         Quaternion angle = Quaternion.Euler(0, Random.Range(-180.0f, 180.0f), 0);
         
@@ -96,13 +103,12 @@ public class EnemyDirection : MonoBehaviour
         _enemy.StopMoving = false;
         _enemy._animator?.SetBool("Jump", true);
         _aggroTargets.Add(other.transform);
-        _enemy.Speed = _speed * 2;
     }
 
-    private void OnTriggerStay(Collider other)
+    /*private void OnTriggerStay(Collider other)
     {
         
-    }
+    }*/
 
     private void OnTriggerExit(Collider other)
     {

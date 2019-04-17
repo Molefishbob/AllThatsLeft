@@ -19,6 +19,8 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     [HideInInspector]
     public DeployControlledBots Deploy;
 
+    private EnemyDirection _eD;
+
     protected override void Awake()
     {
         base.Awake();
@@ -48,6 +50,15 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     public virtual void Die()
     {
         if (Dead) return;
+
+        if(_eD != null)
+        {
+            if (_eD._aggroTargets.Contains(transform))
+            {
+                _eD._aggroTargets.Remove(transform);
+            }
+        }
+
         GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
         ControlsDisabled = true;
@@ -76,5 +87,13 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         ControlsDisabled = true;
         _deathTimer.StartTimer(_deathTime);
         if (OnPlayerDeath != null) OnPlayerDeath();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.name == "EnemyDirection")
+        { 
+            _eD = other.gameObject.GetComponent<EnemyDirection>();
+        }   
     }
 }

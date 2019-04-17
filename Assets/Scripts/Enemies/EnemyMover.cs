@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyMover : CharControlBase
 {
     public Vector3 _target;
+    private Vector3 _empty;
     private bool _stopMoving = false;
     [HideInInspector]
     public EnemyAttack _attack;
@@ -32,12 +33,18 @@ public class EnemyMover : CharControlBase
 
     private void OnEnable()
     {
+        _stopMoving = false;
         _attack.gameObject.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        _stopMoving = false;
+        _attack.gameObject.SetActive(false);
     }
 
     protected override Vector3 InternalMovement()
     {
-
         if (_stopMoving) return Vector3.zero;
 
         Vector3 newDir = _target - transform.position;
