@@ -8,9 +8,16 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     private string _deadBool = "Dead";
     private EnemyMover _frog;
 
+    public bool Dead { get; protected set; }
+
     private void Awake()
     {
         _frog = GetComponent<EnemyMover>();
+    }
+
+    private void OnDisable()
+    {
+        Dead = false;
     }
 
     public void TakeDamage(int damage)
@@ -20,6 +27,8 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
 
     public void Die()
     {
+        if (Dead) return;
+        Dead = true;
         _frog.SetControllerActive(false);
         _frog._attack.gameObject.SetActive(false);
         _frog._animator.SetBool(_deadBool, true);

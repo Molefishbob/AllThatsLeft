@@ -16,8 +16,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     private float _fLifeTime = 30;
 
     [HideInInspector]
-    public bool Dead { get { return _dead; } set { _dead = value; } }
-    private bool _dead = false;
+    public bool Dead { get; protected set; }
     private bool _bHasBeenActivated = false;
 
     private LayerMask _lHackableLayer = 1 << 18;

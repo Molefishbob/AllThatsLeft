@@ -9,6 +9,8 @@ public class ScorpionTakeDamage : MonoBehaviour, IDamageReceiver
     private string _defendtrigger = "Defend";
     private PatrolEnemy _scorpion;
 
+    public bool Dead { get; protected set; }
+
     private void Awake()
     {
         _scorpion = GetComponentInParent<PatrolEnemy>();
