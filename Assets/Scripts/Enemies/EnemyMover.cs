@@ -5,6 +5,12 @@ using UnityEngine;
 public class EnemyMover : CharControlBase
 {
     public Vector3 _target;
+    private bool _stopMoving = false;
+
+    public bool StopMoving
+    {
+        set { _stopMoving = value; }
+    }
 
     public float Speed
     {
@@ -19,7 +25,7 @@ public class EnemyMover : CharControlBase
     protected override Vector3 InternalMovement()
     {
 
-        if (_target == Vector3.zero) return Vector3.zero;
+        if (_stopMoving) return Vector3.zero;
 
         Vector3 newDir = _target - transform.position;
         newDir.Normalize();

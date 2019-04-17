@@ -58,7 +58,7 @@ public class EnemyDirection : MonoBehaviour
             
             if (dist < 1.0f && !_timer.IsRunning)
             {
-                _enemy.SetTarget(Vector3.zero);
+                _enemy.StopMoving = true;
                 _idleTime = Random.Range(_minIdleTime, _maxIdleTime);
                 _timer.StartTimer(_idleTime);
             }
@@ -87,11 +87,14 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedAction()
     {
-        SetRandomTarget(); 
+        SetRandomTarget();
+        _enemy.StopMoving = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        _enemy.StopMoving = false;
+        _enemy._animator?.SetBool("Jump", true);
         _aggroTargets.Add(other.transform);
         _enemy.Speed = _speed * 2;
     }
@@ -104,6 +107,7 @@ public class EnemyDirection : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         _enemy.Speed = _speed;
+        _enemy._animator?.SetBool("Jump", false);
         _aggroTargets.Remove(other.transform);
     }
 
@@ -112,7 +116,7 @@ public class EnemyDirection : MonoBehaviour
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
         _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _patrolRadius);
     }
 }
