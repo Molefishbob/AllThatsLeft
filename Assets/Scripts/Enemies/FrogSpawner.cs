@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewEnemySpawner : MonoBehaviour
+public class FrogSpawner : MonoBehaviour
 {
     private EnemyDirection _eD;
+    private bool _hasSpawned = false;
 
     private void Awake()
     {
@@ -22,6 +23,10 @@ public class NewEnemySpawner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Spawn();
+        if (!_hasSpawned)
+        {
+            Spawn();
+            _hasSpawned = true;
+        }
     }
 }

@@ -7,16 +7,19 @@ public class EnemyDirection : MonoBehaviour
     private float _aggroRadius;
     [Tooltip("How much smaller the patrolradius is compared to the aggroradius trigger")]
     public float _patrolRadiusDecrease;
+    public float _speed = 4;
     private float _patrolRadius;
+    private float _idleTime;
     [SerializeField]
-    private float _idleTime = 1;
+    private float _minIdleTime = 1.0f;
+    [SerializeField]
+    private float _maxIdleTime = 3.0f;
     public EnemyMover _enemy;
     [HideInInspector]
     public List<Transform> _aggroTargets;
     private SphereCollider _aggroArea;
     private Vector3 _moveTarget;
     private PhysicsOneShotTimer _timer;
-    private bool _stopMoving;
 
     private void Awake()
     {
@@ -34,7 +37,8 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnEnable()
     {
-        SetRandomTarget();
+        _enemy.Speed = _speed;
+        SetRandomTarget();   
     }
 
     private void OnDestroy()
@@ -52,11 +56,10 @@ public class EnemyDirection : MonoBehaviour
         {
             float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
             
-            if (dist < 1.0f)
+            if (dist < 1.0f && !_timer.IsRunning)
             {
-                
-                _stopMoving = true;
-                _idleTime = Random.Range(1.0f, 3.0f);
+                _enemy.SetTarget(Vector3.zero);
+                _idleTime = Random.Range(_minIdleTime, _maxIdleTime);
                 _timer.StartTimer(_idleTime);
             }
         }
@@ -84,13 +87,13 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedAction()
     {
-        SetRandomTarget();
-        _stopMoving = false;  
+        SetRandomTarget(); 
     }
 
     private void OnTriggerEnter(Collider other)
     {
         _aggroTargets.Add(other.transform);
+        _enemy.Speed = _speed * 2;
     }
 
     private void OnTriggerStay(Collider other)
@@ -100,6 +103,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        _enemy.Speed = _speed;
         _aggroTargets.Remove(other.transform);
     }
 
