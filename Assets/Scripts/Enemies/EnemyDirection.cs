@@ -57,6 +57,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
         if (_aggroTargets == null || _aggroTargets.Count == 0)
         {
             _enemy.Speed = _speed;
@@ -67,13 +68,13 @@ public class EnemyDirection : MonoBehaviour
                 _enemy.StopMoving = true;
                 _idleTime = Random.Range(_minIdleTime, _maxIdleTime);
                 _timer.StartTimer(_idleTime);
+                _enemy.DirTimerRunning = true;
             }
         }
         else
-        {
+        {      
             _enemy.Speed = _speed * 2;
             _moveTarget = _aggroTargets[0].position;
-           
             _enemy.SetTarget(_moveTarget);
         }
     }
@@ -94,6 +95,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedAction()
     {
+        _enemy.DirTimerRunning = false;
         SetRandomTarget();
         _enemy.StopMoving = false;
     }
@@ -105,16 +107,29 @@ public class EnemyDirection : MonoBehaviour
         _aggroTargets.Add(other.transform);
     }
 
-    /*private void OnTriggerStay(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        
-    }*/
+        if (_aggroTargets.Contains(other.transform) && other.GetComponent<IDamageReceiver>().Dead)
+        { 
+            _aggroTargets.Remove(other.transform);
+            
+            if (_aggroTargets.Count == 0)
+            {
+                _enemy._animator?.SetBool("Jump", false);
+            }
+        }
+    }
 
     private void OnTriggerExit(Collider other)
     {
         _enemy.Speed = _speed;
-        _enemy._animator?.SetBool("Jump", false);
+ 
         _aggroTargets.Remove(other.transform);
+        
+        if (_aggroTargets.Count == 0)
+        {
+            _enemy._animator?.SetBool("Jump", false);
+        }
     }
 
     private void OnDrawGizmosSelected()

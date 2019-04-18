@@ -31,8 +31,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     private HackAction _selfHack;
     private TrampolineAction _selfTrampoline;
 
-    private EnemyDirection _eD;
-
     protected override void Awake()
     {
         base.Awake();
@@ -204,24 +202,8 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         if (Dead || _selfBomb._bExploding) return;
 
-        if (_eD != null)
-        {
-            if (_eD._aggroTargets.Contains(transform))
-            {
-                _eD._aggroTargets.Remove(transform);
-            }
-        }
-
         Dead = true;
         _selfMover.Dead = true;
         ReleaseControls(false);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.name == "EnemyDirection")
-        {
-            _eD = other.gameObject.GetComponent<EnemyDirection>();
-        }
     }
 }

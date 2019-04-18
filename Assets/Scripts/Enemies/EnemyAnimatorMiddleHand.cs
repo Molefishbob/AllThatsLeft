@@ -32,8 +32,10 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
     {
         if (_frog != null)
         {
-
-            _frog._animator?.SetBool("Jump", false);
+            if (_frog.DirTimerRunning == false)
+            {
+                _frog.StopMoving = false;
+            }
         }
         if (_scorpion != null)
         {

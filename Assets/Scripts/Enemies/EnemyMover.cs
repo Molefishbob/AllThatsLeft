@@ -9,6 +9,13 @@ public class EnemyMover : CharControlBase
     private bool _stopMoving = false;
     [HideInInspector]
     public EnemyAttack _attack;
+    private bool _dirTimerRunning;
+
+    public bool DirTimerRunning
+    {
+        set { _dirTimerRunning = value; }
+        get { return _dirTimerRunning; }
+    }
 
     protected override void Awake()
     {
@@ -19,6 +26,7 @@ public class EnemyMover : CharControlBase
     public bool StopMoving
     {
         set { _stopMoving = value; }
+        get { return _stopMoving; }
     }
 
     public float Speed
