@@ -8,6 +8,8 @@ public class CheckPointPole : MonoBehaviour
     public Transform SpawnPoint;
     public ParticleSystem _particlePrefab;
     public Transform _particleSpawn;
+    public Animator checkPoint;
+    public string triggerName = "getChecked";
 
     void OnTriggerEnter(Collider other)
     {
@@ -24,6 +26,7 @@ public class CheckPointPole : MonoBehaviour
                 GameManager.Instance.BeaconParticle.transform.rotation = _particleSpawn.rotation;
                 GameManager.Instance.BeaconParticle.gameObject.SetActive(true);
             }
+            checkPoint.SetTrigger(triggerName);
         }
     }
 }
