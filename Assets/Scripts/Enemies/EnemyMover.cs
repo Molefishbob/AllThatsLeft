@@ -10,6 +10,9 @@ public class EnemyMover : CharControlBase
     [HideInInspector]
     public EnemyAttack _attack;
     private bool _dirTimerRunning;
+    public SingleSFXSound _alertSound;
+    [HideInInspector]
+    public EnemyDirection _eDirect;
 
     public bool DirTimerRunning
     {

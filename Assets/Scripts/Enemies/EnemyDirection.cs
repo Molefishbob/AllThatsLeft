@@ -102,21 +102,37 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _enemy.StopMoving = false;
         _enemy._animator?.SetBool("Jump", true);
         _aggroTargets.Add(other.transform);
+        if (_aggroTargets.Count <= 1)
+        {
+            _enemy.StopMoving = true;
+            _enemy._animator?.SetTrigger("Alert");
+            if(_enemy._alertSound != null) _enemy._alertSound.PlaySound();
+        }
     }
 
-    private void OnTriggerStay(Collider other)
+    public void CheckTargets()
     {
-        if (_aggroTargets.Contains(other.transform) && other.GetComponent<IDamageReceiver>().Dead)
-        { 
-            _aggroTargets.Remove(other.transform);
-            
-            if (_aggroTargets.Count == 0)
+        for(int i = 0; i < _aggroTargets.Count; i++)
+        {
+            if (_aggroTargets[i].GetComponent<IDamageReceiver>().Dead || !_aggroTargets[i].gameObject.activeSelf)
             {
-                _enemy._animator?.SetBool("Jump", false);
+                _aggroTargets.Remove(_aggroTargets[i].transform);
             }
+        }
+
+        if (_aggroTargets.Count == 0)
+        {
+            _enemy._animator?.SetBool("Jump", false);
+            SetRandomTarget();
+            _enemy.StopMoving = false;
+        }
+        else
+        {
+            _enemy.StopMoving = true;
+            _enemy._animator?.SetTrigger("Alert");
+            if (_enemy._alertSound != null) _enemy._alertSound.PlaySound();
         }
     }
 
@@ -129,6 +145,13 @@ public class EnemyDirection : MonoBehaviour
         if (_aggroTargets.Count == 0)
         {
             _enemy._animator?.SetBool("Jump", false);
+            SetRandomTarget();
+        }
+        else
+        {
+            _enemy.StopMoving = true;
+            _enemy._animator?.SetTrigger("Alert");
+            if (_enemy._alertSound != null) _enemy._alertSound.PlaySound();
         }
     }
 

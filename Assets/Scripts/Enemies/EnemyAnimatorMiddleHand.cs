@@ -32,10 +32,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
     {
         if (_frog != null)
         {
-            if (_frog.DirTimerRunning == false)
-            {
-                _frog.StopMoving = false;
-            }
+            _frog._eDirect.CheckTargets();
         }
         if (_scorpion != null)
         {
@@ -58,5 +55,10 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
             _frog._animator.SetBool(_deadBool, false);
             _frog.gameObject.SetActive(false);
         }
+    }
+
+    public void AlertEnded()
+    {
+        _frog.StopMoving = false;
     }
 }
