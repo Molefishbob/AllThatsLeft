@@ -125,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   SpawnPoint: {fileID: 6929583724828996187}
-  _particlePrefab: {fileID: 1050797310524270342, guid: 615ccde78d2994449bd3447a802e5212,
+  _particlePrefab: {fileID: 937998923020728529, guid: b211573977fe854499e407c2d8340f5e,
     type: 3}
   _particleSpawn: {fileID: 6840788905676021060}
   checkPoint: {fileID: 1248169893434760565}
@@ -184,6 +184,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: checkpoint_flag_animated
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 15d1619ca7db26147b0139d94351e54a, type: 2}
     - target: {fileID: 400008, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -228,10 +232,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 15d1619ca7db26147b0139d94351e54a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
 --- !u!4 &1248169893427344029 stripped
