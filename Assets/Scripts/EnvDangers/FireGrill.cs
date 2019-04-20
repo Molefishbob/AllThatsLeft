@@ -24,17 +24,24 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     private Collider _trigger;
     private bool _cycleStarted = false;
     private ScaledOneShotTimer _deactivationTimer;
+    [Tooltip("The duration after which the symbol goes off")]
+    public float _delayDuration = 0.4f;
+    [SerializeField]
+    protected GameObject _symbol = null;
+    protected ScaledOneShotTimer _delayTimer;
 
     private void Awake()
     {
         _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
         _trigger = GetComponent<Collider>();
         _deactivationTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
         _deactivationTimer.OnTimerCompleted += FlamesOff;
+        _delayTimer.OnTimerCompleted += SymbolDown;
 
         if (_startDelay > 0)
         {
@@ -122,6 +129,7 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     public void ButtonDown()
     {
         _activated = false;
+        _delayTimer.StartTimer(_delayDuration);
         _timer.StopTimer();
         _deactivationTimer.StartTimer(_deactivationTime);
     }
@@ -133,7 +141,19 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
         {
             FlamesOn();
         }
+        _delayTimer.StartTimer(_delayDuration);
         _timer.ResumeTimer();
+    }
+    protected virtual void SymbolDown()
+    {
+        try
+        {
+            _symbol.SetActive(false);
+        }
+        catch
+        {
+            Debug.LogError(gameObject.name + " has to have a symbol!");
+        }
     }
 
     private void OnDestroy()
