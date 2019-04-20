@@ -141,6 +141,7 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
         {
             FlamesOn();
         }
+        _delayTimer.StartTimer(_delayDuration);
         _timer.ResumeTimer();
     }
     protected virtual void SymbolDown()
