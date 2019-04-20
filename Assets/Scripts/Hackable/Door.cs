@@ -17,6 +17,11 @@ public class Door : MonoBehaviour, IButtonInteraction
     void Awake()
     {
         _anim = GetComponent<Animator>();
+        _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+    }
+
+    private void Start()
+    {
         _delayTimer.OnTimerCompleted += SymbolDown;
     }
 
@@ -42,7 +47,7 @@ public class Door : MonoBehaviour, IButtonInteraction
             Debug.LogError(gameObject.name + " has to have a symbol!");
         }
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (_delayTimer != null)
             _delayTimer.OnTimerCompleted -= SymbolDown;

@@ -51,6 +51,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         transform.position = _transform[0].position;
         if (_activated)
         {
+            _symbol.SetActive(false);
             Init();
         }
     }
@@ -58,9 +59,9 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     private void OnDestroy()
     {
         if (_timer != null)
-        {
             _timer.OnTimerCompleted -= TimedAction;
-        }
+        if (_delayTimer != null)
+            _delayTimer.OnTimerCompleted -= SymbolDown;
     }
 
     private void FixedUpdate()
@@ -155,11 +156,5 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         Gizmos.color = new Color(0, 0, 0, 1);
         Gizmos.DrawWireCube(_transform[0].position, new Vector3(3, 0.5f, 2));
         Gizmos.DrawWireCube(_transform[_transform.Count - 1].position, new Vector3(3, 0.5f, 2)); ;
-    }
-
-    private void OnDisable()
-    {
-        if (_delayTimer != null)
-            _delayTimer.OnTimerCompleted -= SymbolDown;
     }
 }
