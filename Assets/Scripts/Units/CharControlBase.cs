@@ -76,7 +76,8 @@ public abstract class CharControlBase : MonoBehaviour
             }
 
             // get movement from child class
-            Vector3 inputDirection = InternalMovement();
+            Vector2 inputMove = InternalMovement();
+            Vector3 inputDirection = new Vector3(inputMove.x, 0.0f, inputMove.y);
 
             if (inputDirection.magnitude > 0.0f)
             {
@@ -191,10 +192,10 @@ public abstract class CharControlBase : MonoBehaviour
     }
 
     /// <summary>
-    /// Return a vector with a magnitude of [0,1]f to move.
+    /// Return a vector with a magnitude of [0,1]f to move in X and Z axes.
     /// </summary>
     /// <returns></returns>
-    protected abstract Vector3 InternalMovement();
+    protected abstract Vector2 InternalMovement();
 
     /// <summary>
     /// Add a movement vector for character controller's move in the next FixedUpdate.
@@ -260,4 +261,19 @@ public abstract class CharControlBase : MonoBehaviour
     }
 
     protected abstract void OutOfBounds();
+
+    /// <summary>
+    /// Rotates a Vector2 by an angle.
+    /// </summary>
+    /// <param name="v">Vector2 to rotate</param>
+    /// <param name="angle">angle in degrees</param>
+    /// <returns></returns>
+    public static Vector2 RotateInput(Vector2 v, float angle)
+    {
+        float radians = angle * Mathf.Deg2Rad;
+        float sin = Mathf.Sin(radians);
+        float cos = Mathf.Cos(radians);
+        Vector2 result = new Vector2(cos * v.x + sin * v.y, cos * v.y - sin * v.x);
+        return result;
+    }
 }

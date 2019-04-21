@@ -89,11 +89,11 @@ public class FrogEnemy : CharControlBase
         }
     }
 
-    protected override Vector3 InternalMovement()
+    protected override Vector2 InternalMovement()
     {
-        if (_attackStop) return Vector3.zero;
+        if (_attackStop) return Vector2.zero;
 
-        float x, y, z;
+        float x, z;
 
         if (!_stopMoving && !_followPlayer && !_backToPrevious)
         {
@@ -101,27 +101,23 @@ public class FrogEnemy : CharControlBase
             _time += Time.deltaTime / _circleRadius;
 
             x = Mathf.Sin(_time);
-            y = 0;
             z = Mathf.Cos(_time);
         }
         else if (_followPlayer)
         {
             Vector3 goToPlayer = _playerPosition - transform.position;
             x = goToPlayer.x;
-            y = 0;
             z = goToPlayer.z;
         }
         else if (_backToPrevious)
         {
             Vector3 goBack = _goBackPosition - transform.position;
             x = goBack.x;
-            y = 0;
             z = goBack.z;
         }
         else 
         {
             x = 0;
-            y = 0;
             z = 0;
         }
 
@@ -146,10 +142,10 @@ public class FrogEnemy : CharControlBase
             _backToPrevious = false;
         }       
 
-        Vector3 move = new Vector3(x,y,z);
+        Vector2 move = new Vector2(x, z);
         if (!FollowPlayer && !_backToPrevious)
         {
-            move = _spawnerTransform.TransformDirection(move);
+            move = RotateInput(move, _spawnerTransform.eulerAngles.y);
         }
         return move;
     }

@@ -39,11 +39,11 @@ public abstract class PlayerMovement : CharControlBase
         Jump = GetComponent<PlayerJump>();
     }
 
-    protected override Vector3 InternalMovement()
+    protected override Vector2 InternalMovement()
     {
         if (ControlsDisabled)
         {
-            return Vector3.zero;
+            return Vector2.zero;
         }
 
         // read input
@@ -51,19 +51,12 @@ public abstract class PlayerMovement : CharControlBase
         float vertical = Input.GetAxis(_verticalAxis);
 
         // create combined vector of input
-        Vector3 inputDirection = new Vector3(horizontal, 0, vertical);
+        Vector2 inputDirection = new Vector2(horizontal, vertical);
+
+        inputDirection = RotateInput(inputDirection, GameManager.Instance.Camera.transform.eulerAngles.y);
 
         // clamp magnitude
-        float desiredSpeed = Mathf.Clamp(inputDirection.magnitude, 0.0f, 1.0f);
-
-        // convert to world space relative to camera
-        inputDirection = GameManager.Instance.Camera.transform.TransformDirection(inputDirection);
-
-        // remove pitch
-        inputDirection.y = 0;
-
-        // apply magnitude
-        inputDirection = inputDirection.normalized * desiredSpeed;
+        inputDirection = Vector2.ClampMagnitude(inputDirection, 1.0f);
 
         if (OnPlayerMovement != null && (Mathf.Abs(horizontal) >= 0.5f || Mathf.Abs(vertical) >= 0.5f)) OnPlayerMovement();
 

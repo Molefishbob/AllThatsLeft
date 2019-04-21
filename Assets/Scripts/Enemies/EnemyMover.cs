@@ -54,13 +54,14 @@ public class EnemyMover : CharControlBase
         _attack.gameObject.SetActive(false);
     }
 
-    protected override Vector3 InternalMovement()
+    protected override Vector2 InternalMovement()
     {
-        if (_stopMoving) return Vector3.zero;
+        if (_stopMoving) return Vector2.zero;
 
         Vector3 newDir = _target - transform.position;
-        newDir.Normalize();
-        return newDir;
+        Vector2 move = new Vector2(newDir.x, newDir.z);
+        move.Normalize();
+        return move;
     }
 
     protected override void OutOfBounds()
