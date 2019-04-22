@@ -255,14 +255,21 @@ ModelImporter:
     400248: tailSeg5
     2100000: Material.001
     2100002: Material.003
+    2100004: scorpion
     4300000: scorpion
     7400000: scorpionAreaAttack
     7400002: scorpionDefend
     7400004: scorpionWalk
     7400006: scorpionIdle
+    7400008: scorpionDeath
     9500000: //RootNode
     13700000: scorpion
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: scorpion
+    second: {fileID: 2100000, guid: ac214dc6f8113d64682574c5561c8a8c, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -401,6 +408,34 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: scorpionDeath
+      takeName: Armature|death
+      firstFrame: 0
+      lastFrame: 21
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
