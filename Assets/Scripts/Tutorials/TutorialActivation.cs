@@ -9,6 +9,8 @@ public class TutorialActivation : MonoBehaviour
     private float _hideTime = 0.0f;
     [SerializeField, Tooltip("0 means never comes back")]
     private float _reshowTime = 0.0f;
+    [SerializeField, Tooltip("Time delay until camera or movement will hide tutorial")]
+    private float _delayTime = 2.0f;
     [SerializeField]
     private bool _showWhileInArea = false;
     [SerializeField]
@@ -28,10 +30,11 @@ public class TutorialActivation : MonoBehaviour
     [SerializeField]
     private string _attachPointName = "Tutorial Attach Point";
 
-    public bool IsShowing { get { return _prompt.gameObject.activeInHierarchy; } }
+    public bool IsFollowing { get { return _followPlayer && _prompt.gameObject.activeInHierarchy; } }
 
     private Collider _collider = null;
     private ScaledOneShotTimer _timer = null;
+    private ScaledOneShotTimer _delayTimer = null;
     private CanvasLookAtCamera _prompt = null;
     private Transform _attachPoint = null;
     private bool _shown = false;
@@ -48,6 +51,7 @@ public class TutorialActivation : MonoBehaviour
         _collider = GetComponent<Collider>();
         _prompt = GetComponentInChildren<CanvasLookAtCamera>();
         _timer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
         _otherTutorials = new HashSet<TutorialActivation>(FindObjectsOfType<TutorialActivation>());
         _otherTutorials.Remove(this);
     }
@@ -55,11 +59,13 @@ public class TutorialActivation : MonoBehaviour
     private void Start()
     {
         _prompt.gameObject.SetActive(false);
+        _delayTimer.OnTimerCompleted += DoneDelay;
     }
 
     private void OnDestroy()
     {
         if (GameManager.Instance != null) MyWorkHereIsDone();
+        if (_delayTimer != null) _delayTimer.OnTimerCompleted -= DoneDelay;
     }
 
     private void Update()
@@ -78,22 +84,29 @@ public class TutorialActivation : MonoBehaviour
     {
         if (_shown) return;
 
-        foreach (TutorialActivation tut in _otherTutorials)
+        if (_followPlayer)
         {
-            if (tut.IsShowing) return;
+            foreach (TutorialActivation tut in _otherTutorials)
+            {
+                if (tut.IsFollowing) return;
+            }
         }
 
-        if (_mover == null)
+        PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
+
+        if (foundMover == null || foundMover.ControlsDisabled)
         {
-            PlayerMovement foundMover = other.GetComponent<PlayerMovement>();
-            if (foundMover != null && !foundMover.ControlsDisabled)
+            return;
+        }
+        else if (_mover == null)
+        {
+            if (_hideByDeploy)
             {
-                _mover = foundMover;
+                _deploy = other.GetComponent<DeployControlledBots>();
+                if (_deploy != null && PrefsManager.Instance.BotsUnlocked) _deploy.OnDeployBot += MyWorkHereIsDone;
+                else return;
             }
-            else
-            {
-                return;
-            }
+            _mover = foundMover;
         }
 
         if (!_showWhileInArea)
@@ -115,31 +128,15 @@ public class TutorialActivation : MonoBehaviour
             _timer.OnTimerCompleted += MyWorkHereIsDone;
         }
 
-        if (_hideByCameraMove)
+        if (_hideByCameraMove || _hideByCameraZoom || _hideByMovement)
         {
-            GameManager.Instance.Camera.OnCameraMovedByPlayer += MyWorkHereIsDone;
-        }
-
-        if (_hideByCameraZoom)
-        {
-            GameManager.Instance.Camera.OnCameraZoomedByPlayer += MyWorkHereIsDone;
-        }
-
-        if (_hideByMovement)
-        {
-            _mover.OnPlayerMovement += MyWorkHereIsDone;
+            _delayTimer.StartTimer(_delayTime);
         }
 
         if (_hideByJump)
         {
             _jump = other.GetComponent<PlayerJump>();
             if (_jump != null) _jump.OnPlayerJump += MyWorkHereIsDone;
-        }
-
-        if (_hideByDeploy)
-        {
-            _deploy = other.GetComponent<DeployControlledBots>();
-            if (_deploy != null) _deploy.OnDeployBot += MyWorkHereIsDone;
         }
 
         _bot = other.GetComponent<BotReleaser>();
@@ -167,11 +164,37 @@ public class TutorialActivation : MonoBehaviour
         ElvisHasLeftTheBuilding();
     }
 
+    private void DoneDelay()
+    {
+        if (_hideByCameraMove)
+        {
+            GameManager.Instance.Camera.OnCameraMovedByPlayer += MyWorkHereIsDone;
+        }
+
+        if (_hideByCameraZoom)
+        {
+            GameManager.Instance.Camera.OnCameraZoomedByPlayer += MyWorkHereIsDone;
+        }
+
+        if (_hideByMovement)
+        {
+            _mover.OnPlayerMovement += MyWorkHereIsDone;
+        }
+    }
+
     private void MyWorkHereIsDone()
     {
-        if (_hideByCameraMove && GameManager.Instance.Camera != null) GameManager.Instance.Camera.OnCameraMovedByPlayer -= MyWorkHereIsDone;
-        if (_hideByCameraZoom && GameManager.Instance.Camera != null) GameManager.Instance.Camera.OnCameraZoomedByPlayer -= MyWorkHereIsDone;
-        if (_hideByMovement && _mover != null) _mover.OnPlayerMovement -= MyWorkHereIsDone;
+        if (!_delayTimer.IsRunning)
+        {
+            if (_hideByCameraMove && GameManager.Instance.Camera != null) GameManager.Instance.Camera.OnCameraMovedByPlayer -= MyWorkHereIsDone;
+            if (_hideByCameraZoom && GameManager.Instance.Camera != null) GameManager.Instance.Camera.OnCameraZoomedByPlayer -= MyWorkHereIsDone;
+            if (_hideByMovement && _mover != null) _mover.OnPlayerMovement -= MyWorkHereIsDone;
+        }
+        else
+        {
+            _delayTimer.StopTimer();
+        }
+
         if (_hideByJump && _jump != null) _jump.OnPlayerJump -= MyWorkHereIsDone;
         if (_hideByDeploy && _deploy != null) _deploy.OnDeployBot -= MyWorkHereIsDone;
         if (_bot != null) _bot.OnBotReleased -= MyWorkHereIsDone;
@@ -179,9 +202,9 @@ public class TutorialActivation : MonoBehaviour
 
         _mover = null;
 
-        _timer.StopTimer();
         if (_hideTime > 0.0f)
         {
+            _timer.StopTimer();
             _timer.OnTimerCompleted -= MyWorkHereIsDone;
         }
 

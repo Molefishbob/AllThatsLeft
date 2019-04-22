@@ -24,7 +24,7 @@ public class PhysicsRepeatingTimer : Timer
         {
             _timer -= Duration;
             TimesCompleted++;
-            CompletedTimer();
+            CompletedTimer(false);
         }
     }
 }

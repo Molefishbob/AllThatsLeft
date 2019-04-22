@@ -1,19 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &6292843646089350342
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6292843646710718779}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300004, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
 --- !u!1 &6292843646645894698
 GameObject:
   m_ObjectHideFlags: 0
@@ -23,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6292843646645894699}
-  m_Layer: 0
-  m_Name: GameObject 1
+  m_Layer: 14
+  m_Name: Rocky
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,6 +31,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &6292843646089350342
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6292843646710718779}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300004, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
 --- !u!64 &6292843647291344615
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -70,9 +70,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: RockyCool
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
+      propertyPath: m_Name
+      value: RockyLeg
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -117,14 +129,6 @@ PrefabInstance:
     - target: {fileID: 400002, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
-      propertyPath: m_Name
-      value: RockyLeg
-      objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}
-      propertyPath: m_Layer
-      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7ed7145495204ec5be5054b2f8067aa, type: 3}

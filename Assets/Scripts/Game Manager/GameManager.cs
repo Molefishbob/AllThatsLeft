@@ -104,12 +104,30 @@ public class GameManager : Singleton<GameManager>
     /// Reference of the camera.
     /// </summary>
     public ThirdPersonCamera Camera;
+    public RotateSky SkyCamera;
 
     public ParticleSystem BeaconParticle;
 
     public LoadingScreen LoadingScreen;
 
-    private UnscaledOneShotTimer _loadingTimer;
+    public LoopingMusic LevelMusic;
+    public LoopingMusic MenuMusic;
+
+    private bool _showCursor;
+    public bool ShowCursor
+    {
+        get
+        {
+            return _showCursor;
+        }
+        set
+        {
+            _showCursor = value;
+
+            Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = value;
+        }
+    }
 
     /// <summary>
     /// Reference of the pause menu.
@@ -161,12 +179,17 @@ public class GameManager : Singleton<GameManager>
 
     public void ActivateGame(bool active)
     {
-        Player.gameObject.SetActive(active);
-        if (!LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = false;
+        if (Player != null)
+        {
+            Player.gameObject.SetActive(active);
+            if (!LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = !active;
+        }
         Camera?.gameObject.SetActive(active);
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);
+        if (active) PlayLevelMusic();
+        if (GamePaused) UnPauseGame();
     }
 
     /// <summary>
@@ -184,7 +207,7 @@ public class GameManager : Singleton<GameManager>
     /// <param name="id">id of the scene in build settings</param>
     public void ChangeScene(int id)
     {
-        LoadingScreen.gameObject.SetActive(true);
+        ActivateGame(false);
         PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
@@ -194,6 +217,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
+            LoadingScreen.gameObject.SetActive(true);
             SceneManager.LoadScene(id);
             if (GamePaused) UnPauseGame();
         }
@@ -205,7 +229,8 @@ public class GameManager : Singleton<GameManager>
     public void ChangeToMainMenu()
     {
         ActivateGame(false);
-        ChangeScene(0);
+        SceneManager.LoadScene(0);
+        PlayMenuMusic();
     }
 
     /// <summary>
@@ -239,18 +264,27 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// Reloads the active scene.
     /// </summary>
-    public void ReloadScene()
+    public void ReloadScene(bool useLoadingScreen)
     {
-        LoadingScreen.gameObject.SetActive(true);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+        ActivateGame(false);
+        if (useLoadingScreen) LoadingScreen.gameObject.SetActive(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    /// <summary>
-    /// Undoes DontDestroyOnLoad for the given GameObject.
-    /// </summary>
-    /// <param name="go">GameObject in the special DontDestroyOnLoad scene.</param>
-    public void UndoDontDestroy(GameObject go)
+    private void PlayLevelMusic()
     {
-        SceneManager.MoveGameObjectToScene(go, SceneManager.GetActiveScene());
+        MenuMusic?.StopSound();
+        LevelMusic?.PlayMusic();
+    }
+
+    private void PlayMenuMusic()
+    {
+        LevelMusic?.StopSound();
+        MenuMusic?.PlayMusic();
+    }
+
+    private void Awake()
+    {
+        ShowCursor = false;
     }
 }

@@ -4,16 +4,28 @@ using UnityEngine;
 
 public class RotateSky : MonoBehaviour
 {
-    public Material _bgMat;
+    public const float FullCircle = 360.0f;
 
-    public float RotateSpeed = 1.2f;
-   private void Awake() {
-        RenderSettings.skybox = Instantiate(_bgMat);
-    }
-    void Update()
+    [SerializeField]
+    private float _rotateSpeed = 0.4f;
+
+    private float _currentRotation = 0.0f;
+
+    private void Start()
     {
+        Camera cam = GetComponent<Camera>();
+        cam.fieldOfView = PrefsManager.Instance.FieldOfView;
+        GameManager.Instance.Camera._cameras.Add(cam);
+    }
 
-        RenderSettings.skybox.SetFloat("_Rotation", Time.time * RotateSpeed);
+    private void LateUpdate()
+    {
+        if (GameManager.Instance.GamePaused) return;
 
+        Vector3 angles = GameManager.Instance.Camera.transform.eulerAngles;
+        _currentRotation += _rotateSpeed * Time.deltaTime;
+        if (_currentRotation >= FullCircle) _currentRotation -= FullCircle;
+        angles.y += _currentRotation;
+        transform.rotation = Quaternion.Euler(angles);
     }
 }

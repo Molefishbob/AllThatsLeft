@@ -7,6 +7,8 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
+    [Tooltip("The duration after which the symbol goes off")]
+    public float _delayDuration = 0.4f;
     protected float _eventTime;
     protected List<Transform> _transform;
     protected float _fracTime;
@@ -17,8 +19,11 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected float _ogStartTime;
     protected int _trackRecord = 0;
     protected PhysicsRepeatingTimer _timer;
+    protected ScaledOneShotTimer _delayTimer;
     [SerializeField]
     protected bool _activated = true;
+    [SerializeField]
+    protected GameObject _symbol = null;
     [HideInInspector]
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
@@ -26,6 +31,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     {
         _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
         _transform = new List<Transform>(transform.parent.childCount);
+        _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
 
         foreach (Transform child in transform.parent)
         {
@@ -41,9 +47,11 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     void Start()
     {
         _timer.OnTimerCompleted += TimedAction;
+        _delayTimer.OnTimerCompleted += SymbolDown;
         transform.position = _transform[0].position;
         if (_activated)
         {
+            _symbol.SetActive(false);
             Init();
         }
     }
@@ -51,9 +59,9 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     private void OnDestroy()
     {
         if (_timer != null)
-        {
             _timer.OnTimerCompleted -= TimedAction;
-        }
+        if (_delayTimer != null)
+            _delayTimer.OnTimerCompleted -= SymbolDown;
     }
 
     private void FixedUpdate()
@@ -89,6 +97,20 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// Defines what happens when the timer has completed.
     /// </summary>
     protected virtual void TimedAction() { }
+
+    /// <summary>
+    /// Turns off the symbol that indicates the console connection
+    /// </summary>
+    protected virtual void SymbolDown()
+    {
+        try
+        {
+            _symbol.SetActive(false);
+        } catch
+        {
+            Debug.LogError(gameObject.name + " has to have a symbol!");
+        }
+    }
     /// <summary>
     /// Defines what happens when a connected console is hacked
     /// </summary>
@@ -96,6 +118,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     {
         if (!_activated)
         {
+            _delayTimer.StartTimer(_delayDuration);
             _activated = true;
             Init();
         }

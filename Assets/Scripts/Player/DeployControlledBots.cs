@@ -30,22 +30,9 @@ public class DeployControlledBots : MonoBehaviour
         _timer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
-    private void Start()
-    {
-        PrefsManager.Instance.OnBotsUnlockedChanged += ActivateScript;
-        ActivateScript(PrefsManager.Instance.BotsUnlocked);
-    }
-
-    private void OnDestroy()
-    {
-        if (PrefsManager.Instance != null)
-        {
-            PrefsManager.Instance.OnBotsUnlockedChanged -= ActivateScript;
-        }
-    }
-
     private void Update()
     {
+        if (!PrefsManager.Instance.BotsUnlocked) return;
         if (GameManager.Instance.GamePaused)
         {
             _paused = true;
@@ -67,6 +54,7 @@ public class DeployControlledBots : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!PrefsManager.Instance.BotsUnlocked) return;
         if (GameManager.Instance.GamePaused) return;
 
         if (_activeBot != null)
@@ -91,6 +79,7 @@ public class DeployControlledBots : MonoBehaviour
 
     public void DeployBot()
     {
+        if (!PrefsManager.Instance.BotsUnlocked) return;
         _activeBot = GameManager.Instance.BotPool.GetObject();
         Vector3 pos = transform.InverseTransformPoint(_characterHand.position);
         pos.x = 0.0f;
@@ -98,14 +87,9 @@ public class DeployControlledBots : MonoBehaviour
         _activeBot.transform.rotation = transform.rotation;
         _activeBot.ControlsDisabled = true;
         _activeBot.SetControllerActive(true);
-        _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight);
-        GameManager.Instance.Camera.GetNewTarget(_activeBot.transform, _throwTime, false);
+        _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight, false);
+        GameManager.Instance.Camera.MoveToTarget(_activeBot.transform, _throwTime, false);
 
         _timer.StartTimer(_throwTime);
-    }
-
-    private void ActivateScript(bool unlock)
-    {
-        enabled = unlock;
     }
 }

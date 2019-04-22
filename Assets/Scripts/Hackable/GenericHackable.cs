@@ -15,7 +15,7 @@ public abstract class GenericHackable : MonoBehaviour
     [SerializeField, Tooltip("The starting status of the hackable object")]
     protected Status _startingStatus;
     [SerializeField, Tooltip("The target that will be called once hacked.\nTarget HAS TO IMPLEMENT IButtonInteraction!")]
-    private MonoBehaviour _hackTarget = null;
+    protected MonoBehaviour _hackTarget = null;
 
     protected Status _currentStatus;
     public Status CurrentStatus

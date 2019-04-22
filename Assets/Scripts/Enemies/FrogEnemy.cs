@@ -10,6 +10,13 @@ public class FrogEnemy : CharControlBase
     private PhysicsOneShotTimer _timer;
     private Vector3 _goBackPosition, _playerPosition;
     private Transform _spawnerTransform;
+    [HideInInspector]
+    public EnemyAttack _attack;
+
+    public float Speed
+    {
+        set { _speed = value; }
+    }
 
     protected override void Awake()
     {
@@ -21,6 +28,12 @@ public class FrogEnemy : CharControlBase
         _nextStopZ = false;
         _followPlayer = false;
         _backToPrevious = false;
+        _attack = GetComponentInChildren<EnemyAttack>();
+    }
+
+    private void OnEnable()
+    {
+        _attack.gameObject.SetActive(true);
     }
 
     private void OnDisable()
@@ -117,6 +130,7 @@ public class FrogEnemy : CharControlBase
             _nextStopX = false;
             _nextStopZ = true;
             _stopMoving = true;
+            _idleTime = Random.Range(1.0f, 3.0f);
             _timer.StartTimer(_idleTime);
  
         }else if (!_backToPrevious && !_followPlayer && _nextStopZ && (z > 0.999f || z < -0.999f))
@@ -124,6 +138,7 @@ public class FrogEnemy : CharControlBase
             _nextStopX = true;
             _nextStopZ = false;
             _stopMoving = true;
+            _idleTime = Random.Range(1.0f, 3.0f);
             _timer.StartTimer(_idleTime);   
         }else if(_backToPrevious && x < 0.1f && x > -0.1f && z < 0.1f && z > -0.1f)
         {
@@ -160,7 +175,7 @@ public class FrogEnemy : CharControlBase
     {
         if (_canFollow)
         {
-            _playerPosition = other.gameObject.transform.position;
+            _playerPosition = other.position;
         }
     }
 

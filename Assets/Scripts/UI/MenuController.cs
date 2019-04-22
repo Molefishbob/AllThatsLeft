@@ -24,6 +24,10 @@ public class MenuController : MonoBehaviour
     private GameObject _masterVolume = null;
     [SerializeField]
     private GameObject _CamxSlider = null;
+    [SerializeField]
+    private LoopingMusic _menuMusicPrefab = null;
+    [SerializeField]
+    private Animator _titleAnim = null;
     public enum Page 
     {
         MainMenu,
@@ -35,6 +39,7 @@ public class MenuController : MonoBehaviour
     
     [SerializeField]
     private LoadingScreen _loadingScreen = null;
+    private Animator _anim;
 
     private void Awake()
     {
@@ -43,27 +48,51 @@ public class MenuController : MonoBehaviour
             GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
             DontDestroyOnLoad(GameManager.Instance.LoadingScreen);
         }
+
+        if (GameManager.Instance.MenuMusic == null)
+        {
+            GameManager.Instance.MenuMusic = Instantiate(_menuMusicPrefab);
+            DontDestroyOnLoad(GameManager.Instance.MenuMusic);
+            GameManager.Instance.MenuMusic.PlayMusic();
+        }
     }
 
     private void Start() 
     {
-        bool temp = PrefsManager.Instance.SavedGameExists;
+
+        _mainMenuPanel.SetActive(false);
+        _optionsPanel.SetActive(false);
+        _quitPanel.SetActive(false);
+
+        _titleAnim.SetTrigger("GameStart");
         
-        _continueButton.interactable = temp;
-        EnableMainMenuPanel();
+    }
+
+    private bool ButtonsUsed()
+    {
+        if (Input.GetAxis("Horizontal") > 0f)
+            return true;
+        if (Input.GetAxis("Vertical") > 0f)
+            return true;
+        if (Input.anyKeyDown)
+            return true;
+
+        return false;
     }
 
     private void Update() 
     {
-        if (_eventSystem.IsPointerOverGameObject() && _eventSystem.currentSelectedGameObject != null) 
-        {
+        if (_eventSystem.IsPointerOverGameObject() && GameManager.Instance.ShowCursor && _eventSystem.currentSelectedGameObject != null) 
             _eventSystem.SetSelectedGameObject(null);
-        }
-        if (Input.anyKeyDown && _eventSystem.currentSelectedGameObject == null) 
+
+        if (ButtonsUsed() && _eventSystem.currentSelectedGameObject == null) 
         {
             switch (_currentPage) {
                 case Page.MainMenu:
-                    _eventSystem.SetSelectedGameObject(_newGame);
+                    if (!_continueButton.interactable)
+                        _eventSystem.SetSelectedGameObject(_newGame);
+                    else
+                        _eventSystem.SetSelectedGameObject(_continueButton.gameObject);
                     break;
                 case Page.VolumeSettings:
                     _eventSystem.SetSelectedGameObject(_masterVolume);
@@ -106,6 +135,7 @@ public class MenuController : MonoBehaviour
         _mainMenuPanel.SetActive(true);
         _optionsPanel.SetActive(false);
         _quitPanel.SetActive(false);
+        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
         _currentPage = Page.MainMenu;
         _eventSystem.UpdateModules();
         if (_continueButton.interactable) 
@@ -147,6 +177,7 @@ public class MenuController : MonoBehaviour
         _optionsPanel.SetActive(true);
         _currentPage = Page.VolumeSettings;
         _eventSystem.UpdateModules();
+        _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_masterVolume);
     }
 
@@ -170,7 +201,6 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void Quit()
     {
-        print("Quitted");
         GameManager.Instance.QuitGame();
     }
 }

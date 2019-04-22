@@ -5,11 +5,13 @@ using UnityEngine;
 public abstract class CharControlBase : MonoBehaviour
 {
     [SerializeField, Tooltip("Meters per second")]
-    private float _speed = 8;
+    protected float _speed = 8;
     [SerializeField, Tooltip("Degrees per second")]
-    private float _turningSpeed = 540;
+    protected float _turningSpeed = 540;
     [SerializeField, Tooltip("NOT in seconds")]
     private float _accelerationTime = 5;
+    [SerializeField, Tooltip("NOT in seconds")]
+    private float _decelerationTime = 5;
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
     [SerializeField]
@@ -67,7 +69,7 @@ public abstract class CharControlBase : MonoBehaviour
             if (_accelerationTime > 0)
             {
                 accelerationMagnitude = maxSpeed / _accelerationTime;
-                decelerationMagnitude = maxSpeed / (_accelerationTime * 2.0f);
+                decelerationMagnitude = maxSpeed / _decelerationTime;
             }
             else
             {
@@ -93,57 +95,37 @@ public abstract class CharControlBase : MonoBehaviour
                     transform.rotation = inputRotation;
                 }
 
-                // save previous move's magnitude
-                float previousMoveMagnitude = _internalMove.magnitude;
+                // turning angle
+                float turnAngle = Vector3.Angle(_internalMove, inputDirection);
+
+                // decelerate
+                Vector3 decelerationVector = inputDirection * maxSpeed - _internalMove;
+                decelerationVector = decelerationVector.normalized * Mathf.Min(decelerationVector.magnitude, decelerationMagnitude);
+                _internalMove += decelerationVector;
 
                 // add to current movement
-                _internalMove += inputDirection * inputDirection.magnitude * accelerationMagnitude;
-
-                // cap acceleration
-                if (_internalMove.magnitude - previousMoveMagnitude > accelerationMagnitude)
-                {
-                    _internalMove = _internalMove.normalized * (previousMoveMagnitude + accelerationMagnitude);
-                }
-                // cap deceleration
-                else if (previousMoveMagnitude - _internalMove.magnitude > decelerationMagnitude)
-                {
-                    _internalMove = _internalMove.normalized * (previousMoveMagnitude - decelerationMagnitude);
-                }
+                _internalMove += inputDirection * accelerationMagnitude;
 
                 // cap max speed
-                if (_internalMove.magnitude > maxSpeed)
-                {
-                    _internalMove = _internalMove.normalized * maxSpeed;
-                }
+                _internalMove = _internalMove.normalized * Mathf.Min(_internalMove.magnitude, maxSpeed);
 
                 // animation stuff
                 if (_animator != null)
                 {
                     _animator.SetBool(_animatorBoolRunning, true);
-                    _animator.speed = _internalMove.magnitude / maxSpeed;
+                    // _animator.speed = _internalMove.magnitude / maxSpeed;
                 }
             }
             // no input deceleration
-            else if (_internalMove.magnitude > decelerationMagnitude)
-            {
-                _internalMove -= _internalMove.normalized * decelerationMagnitude;
-
-                // animation stuff
-                if (_animator != null)
-                {
-                    _animator.SetBool(_animatorBoolRunning, false);
-                    _animator.speed = 1;
-                }
-            }
             else
             {
-                _internalMove = Vector3.zero;
+                _internalMove = _internalMove.normalized * Mathf.Max(_internalMove.magnitude - decelerationMagnitude, 0.0f);
 
                 // animation stuff
                 if (_animator != null)
                 {
                     _animator.SetBool(_animatorBoolRunning, false);
-                    _animator.speed = 1;
+                    // _animator.speed = 1;
                 }
             }
 
@@ -229,6 +211,7 @@ public abstract class CharControlBase : MonoBehaviour
 
         _controller.enabled = active;
         _controllerEnabled = active;
+        // if (_animator != null) _animator.speed = 1;
     }
 
     private void CheckGrounded()

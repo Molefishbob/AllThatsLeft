@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7181744646978947807}
   - component: {fileID: 1548654265513761093}
-  - component: {fileID: 4205431451771122724}
+  - component: {fileID: 666096737457396698}
   m_Layer: 17
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -46,8 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxSpawnAmount: 1
   _spawnedEnemy: 0
---- !u!136 &4205431451771122724
-CapsuleCollider:
+  _speed: 3
+  _frogPatrolRadius: 2
+--- !u!135 &666096737457396698
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -56,7 +58,6 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 25
-  m_Height: 1
-  m_Direction: 1
+  serializedVersion: 2
+  m_Radius: 200
   m_Center: {x: 0, y: 0, z: 0}

@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     private Dictionary<int, CheckPointPole> _allLevelCheckPoints;
     public MainCharMovement _playerPrefab;
     public ThirdPersonCamera _cameraPrefab;
+    public RotateSky _skyCameraPrefab;
     /// <summary>
     /// The pool prefab
     /// </summary>
@@ -23,13 +24,14 @@ public class LevelManager : MonoBehaviour
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
     public PauseMenu _pauseMenu;
     public LoadingScreen _loadingScreen;
+    public LoopingMusic _levelMusic;
 
     public bool _levelNeedsFrogEnemies;
     public bool _levelNeedsPatrolEnemies;
     [SerializeField]
     private string _pauseMenuButton = "Pause Game";
 
-    private bool _playerInScene;
+    private bool _playerInScene = false;
 
     void Awake()
     {
@@ -70,7 +72,6 @@ public class LevelManager : MonoBehaviour
             if (players == null || players.Length <= 0)
             {
                 GameManager.Instance.Player = Instantiate(_playerPrefab);
-                DontDestroyOnLoad(GameManager.Instance.Player);
                 _playerInScene = false;
             }
             else
@@ -78,10 +79,17 @@ public class LevelManager : MonoBehaviour
                 GameManager.Instance.Player = players[0];
                 _playerInScene = true;
             }
+            DontDestroyOnLoad(GameManager.Instance.Player);
         }
         foreach (MainCharMovement p in players)
         {
             if (p == GameManager.Instance.Player) continue;
+            if (!_playerInScene)
+            {
+                _playerInScene = true;
+                GameManager.Instance.Player.transform.position = p.transform.position;
+                GameManager.Instance.Player.transform.rotation = p.transform.rotation;
+            }
             Destroy(p.gameObject);
         }
 
@@ -94,6 +102,17 @@ public class LevelManager : MonoBehaviour
             }
             DontDestroyOnLoad(camera);
             GameManager.Instance.Camera = camera;
+        }
+
+        if (GameManager.Instance.SkyCamera == null)
+        {
+            RotateSky skycam = FindObjectOfType<RotateSky>();
+            if (skycam == null)
+            {
+                skycam = Instantiate(_skyCameraPrefab);
+            }
+            DontDestroyOnLoad(skycam);
+            GameManager.Instance.SkyCamera = skycam;
         }
 
         if (GameManager.Instance.PauseMenu == null)
@@ -112,6 +131,12 @@ public class LevelManager : MonoBehaviour
         {
             GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
             DontDestroyOnLoad(GameManager.Instance.LoadingScreen);
+        }
+
+        if (GameManager.Instance.LevelMusic == null)
+        {
+            GameManager.Instance.LevelMusic = Instantiate(_levelMusic);
+            DontDestroyOnLoad(GameManager.Instance.LevelMusic);
         }
     }
 
@@ -142,14 +167,14 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.Player.transform.rotation = GetSpawnRotation();
         }
         GameManager.Instance.Player.SetControllerActive(true);
-        GameManager.Instance.Camera.GetInstantNewTarget(GameManager.Instance.Player.transform);
+        GameManager.Instance.Camera.MoveToTargetInstant(GameManager.Instance.Player.transform);
 
         GameManager.Instance.ActivateGame(true);
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown(_pauseMenuButton))
+        if (!GameManager.Instance.LoadingScreen.gameObject.activeSelf && Input.GetButtonDown(_pauseMenuButton))
         {
             switch (GameManager.Instance.GamePaused)
             {
@@ -223,13 +248,6 @@ public class LevelManager : MonoBehaviour
 
     public void ResetLevel()
     {
-        GameManager.Instance.BotPool.ResetPool();
-        GameManager.Instance.FrogEnemyPool?.ResetPool();
-        GameManager.Instance.PatrolEnemyPool?.ResetPool();
-        DontDestroyOnLoad(gameObject);
-        GameManager.Instance.ReloadScene();
-        GameManager.Instance.UndoDontDestroy(gameObject);
-        Awake();
-        Start();
+        GameManager.Instance.ReloadScene(true);
     }
 }

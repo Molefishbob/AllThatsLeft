@@ -5,33 +5,93 @@ using UnityEngine;
 public class LoadingScreen : MonoBehaviour
 {
     [SerializeField]
-    private float _extraLoadingTime = 2.0f;
+    private Transform _scaledObject = null;
+    [SerializeField]
+    private float _startScale = 0.0f;
+    [SerializeField]
+    private float _endScale = 1.0f;
+    [SerializeField]
+    private float _timeBeforeTransition = 1.0f;
+    [SerializeField]
+    private float _transitionDuration = 1.0f;
+    [SerializeField]
+    private float _activateControlsAfter = 0.5f;
+
     private UnscaledOneShotTimer _timer;
     private bool _mute;
+    private bool _inTransition;
+    private bool _controlsGiven;
 
     private void Awake()
     {
         _timer = gameObject.AddComponent<UnscaledOneShotTimer>();
-        _timer.OnTimerCompleted += LoadingDone;
-    }
-
-    private void OnDestroy()
-    {
-        if (_timer != null) _timer.OnTimerCompleted -= LoadingDone;
     }
 
     private void OnEnable()
     {
-        GameManager.Instance.Player.ControlsDisabled = true;
+        _scaledObject.localScale = Vector3.zero;
+
         _mute = PrefsManager.Instance.AudioMuteSFX;
         PrefsManager.Instance.AudioMuteSFX = true;
-        _timer.StartTimer(_extraLoadingTime);
+
+        if (GameManager.Instance.Camera != null)
+        {
+            GameManager.Instance.Camera.PlayerControlled = false;
+        }
+
+        if (GameManager.Instance.Player != null)
+        {
+            GameManager.Instance.Player.ControlsDisabled = true;
+        }
+
+        _inTransition = false;
+        _controlsGiven = false;
+
+        _timer.OnTimerCompleted += GrowUp;
+        _timer.StartTimer(_timeBeforeTransition);
     }
 
-    private void LoadingDone()
+    private void Update()
     {
-        GameManager.Instance.Player.ControlsDisabled = false;
+        if (_inTransition)
+        {
+            float currentScale = _timer.NormalizedTimeElapsed * (_endScale - _startScale) + _startScale;
+            _scaledObject.localScale = Vector3.one * currentScale;
+
+            if (!_controlsGiven && _timer.TimeElapsed >= _activateControlsAfter)
+            {
+                if (GameManager.Instance.Camera != null)
+                {
+                    GameManager.Instance.Camera.PlayerControlled = true;
+                }
+
+                if (GameManager.Instance.Player != null)
+                {
+                    GameManager.Instance.Player.ControlsDisabled = false;
+                }
+
+                _controlsGiven = true;
+            }
+        }
+    }
+
+    private void GrowUp()
+    {
+        _timer.OnTimerCompleted -= GrowUp;
+
+        _scaledObject.localScale = Vector3.one * _startScale;
+
         PrefsManager.Instance.AudioMuteSFX = _mute;
+
+        _inTransition = true;
+
+        _timer.OnTimerCompleted += EndMe;
+        _timer.StartTimer(_transitionDuration);
+    }
+
+    private void EndMe()
+    {
+        _timer.OnTimerCompleted -= EndMe;
         gameObject.SetActive(false);
     }
 }

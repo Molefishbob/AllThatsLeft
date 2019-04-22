@@ -9,7 +9,7 @@ public class HackAction : BotActionBase
     public LayerMask HackLayer { get { return _lHackLayer; } }
     [SerializeField]
     private LayerMask _lHackLayer = 1 << 18;
-    private GameObject[] _goHackTarget = null;
+    private List<GenericHackable> _hackTargets = null;
     public bool Hacking { get { return _bHacking; } }
     private bool _bHacking = false;
     private BotReleaser _releaser = null;
@@ -18,9 +18,10 @@ public class HackAction : BotActionBase
     {
         base.Awake();
         _releaser = GetComponent<BotReleaser>();
+        _hackTargets = new List<GenericHackable>(4);
     }
 
-    void Update()
+    private void Update()
     {
         if (GameManager.Instance.GamePaused)
         {
@@ -33,27 +34,53 @@ public class HackAction : BotActionBase
             return;
         }
 
+        if (_bHacking)
+        {
+            if (_hackTargets[0].CurrentStatus == GenericHackable.Status.Hacked)
+            {
+                _selfMover._animator.SetBool("Hack", false);
+                _hackTargets.Clear();
+                _bHacking = false;
+            }
+            return;
+        }
+
         if (!_selfMover.IsGrounded || !_bCanAct) return;
 
         if (Input.GetButtonDown(_sHackButton))
         {
-            _goHackTarget = CheckSurroundings(_lHackLayer, _selfMover._controller.radius + _selfMover._controller.skinWidth);
-            if (_goHackTarget != null)
+            if (_hackTargets != null && _hackTargets.Count > 0)
             {
-                GenericHackable ghOther = _goHackTarget[0].GetComponent<GenericHackable>();
-                if (ghOther.CurrentStatus == GenericHackable.Status.NotHacked)
+                if (_hackTargets[0].CurrentStatus == GenericHackable.Status.NotHacked)
                 {
+                    _selfMover._animator.SetBool("Hack", true);
                     _bHacking = true;
-                    ghOther.TimeToStart();
+                    _hackTargets[0].TimeToStart();
+                    _releaser.DisableActing();
                     _releaser.ReleaseControls(true);
                 }
-                _selfMover._animator.SetBool("Hack", true);
             }
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        GenericHackable ghOther = other.GetComponent<GenericHackable>();
+        if (ghOther == null) return;
+        _hackTargets.Add(ghOther);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (_bHacking) return;
+        GenericHackable ghOther = other.GetComponent<GenericHackable>();
+        if (ghOther == null) return;
+        _hackTargets.Remove(ghOther);
+    }
+
     public override void DisableAction()
     {
+        _hackTargets.Clear();
         _bHacking = false;
     }
 }

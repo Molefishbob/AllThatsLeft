@@ -23,7 +23,7 @@ public class UnscaledRepeatingTimer : Timer
         {
             _timer -= Duration;
             TimesCompleted++;
-            CompletedTimer();
+            CompletedTimer(false);
         }
     }
 }

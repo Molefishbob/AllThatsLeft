@@ -16,10 +16,14 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     [HideInInspector]
     public bool Dead { get; protected set; }
 
+    [HideInInspector]
+    public DeployControlledBots Deploy;
+
     protected override void Awake()
     {
         base.Awake();
         _deathTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        Deploy = GetComponent<DeployControlledBots>();
     }
 
     protected override void Start()
@@ -44,12 +48,12 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     public virtual void Die()
     {
         if (Dead) return;
-
+        GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
         ControlsDisabled = true;
         _animator?.SetBool(_animatorBoolDeath, true);
         SetControllerActive(false);
-        _playerJump.ResetJump();
+        Jump.ResetJump();
         _deathTimer.StartTimer(_deathTime);
         if (OnPlayerDeath != null) OnPlayerDeath();
     }

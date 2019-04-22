@@ -6,6 +6,10 @@ public class Console : GenericHackable
 {
     [SerializeField, Tooltip("The amount of time needed to hack")]
     protected float _duration = 0.5f;
+    [SerializeField]
+    protected float _lookAtHackedTime = 1.0f;
+    [SerializeField]
+    protected float _transitionTime = 0.5f;
 
     private PhysicsOneShotTimer _timer;
 
@@ -96,10 +100,12 @@ public class Console : GenericHackable
             case Status.BeingHacked:
                 CurrentStatus = Status.Hacked;
                 HackAction();
+                GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
                 break;
             default:
                 Debug.LogError("Current Status:" + CurrentStatus + " Timer completed even though it shouldn't! ree");
                 break;
         }
     }
+
 }

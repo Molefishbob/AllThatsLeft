@@ -13,7 +13,7 @@ public class UnscaledOneShotTimer : Timer
         {
             _timer = Duration;
             IsRunning = false;
-            CompletedTimer();
+            CompletedTimer(true);
         }
     }
 }

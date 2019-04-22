@@ -16,7 +16,7 @@ public class BotMovement : PlayerMovement
 
     private void OnDisable()
     {
-        _playerJump.ResetJump();
+        Jump.ResetJump();
     }
 
     public void Activate()
@@ -28,9 +28,6 @@ public class BotMovement : PlayerMovement
     {
         if (Dead) return;
 
-        Dead = true;
-        _selfReleaser.Dead = true;
-
-        _selfReleaser.ReleaseControls(false);
+        _selfReleaser.Die();
     }
 }

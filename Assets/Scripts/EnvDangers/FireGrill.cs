@@ -10,22 +10,39 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     private float _fireDuration = 1;
     [SerializeField, Tooltip("The delay after activated until the fire cycle starts")]
     private float _startDelay = 0;
+    [SerializeField, Tooltip("How much time is left when sparks are activated")]
+    private float _sparkActivationtime = 0.2f;
     [SerializeField, Tooltip("The gameobject under which are all the flames")]
     private GameObject _flames = null;
+    [SerializeField, Tooltip("Warning of incoming fire")]
+    private GameObject _sparks = null;
     [SerializeField]
     private bool _activated = true;
+    [SerializeField, Tooltip("Time it waits before deactivating when hacked")]
+    private float _deactivationTime = 0.5f;
     private PhysicsRepeatingTimer _timer;
     private Collider _trigger;
     private bool _cycleStarted = false;
+    private ScaledOneShotTimer _deactivationTimer;
+    [Tooltip("The duration after which the symbol goes off")]
+    public float _delayDuration = 0.4f;
+    [SerializeField]
+    protected GameObject _symbol = null;
+    protected ScaledOneShotTimer _delayTimer;
 
     private void Awake()
     {
         _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
         _trigger = GetComponent<Collider>();
+        _deactivationTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
+        _deactivationTimer.OnTimerCompleted += FlamesOff;
+        _delayTimer.OnTimerCompleted += SymbolDown;
+
         if (_startDelay > 0)
         {
             _timer.OnTimerCompleted += DelayedStartCycle;
@@ -51,9 +68,13 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     {
         if (GameManager.Instance.GamePaused) return;
 
-        if (_cycleStarted && _trigger.enabled && _fireInterval > 0.0f && _timer.TimeElapsed > _fireDuration)
+        if (_cycleStarted && _trigger.enabled && _fireInterval > 0.0f && _timer.TimeElapsed > _fireDuration + _sparkActivationtime)
         {
             FlamesOff();
+        }
+        if (_cycleStarted && !_trigger.enabled && _fireInterval > 0.0f && _timer.TimeElapsed < _fireDuration + _sparkActivationtime && _timer.TimeElapsed > _sparkActivationtime)
+        {
+            FlamesOn();
         }
     }
 
@@ -64,6 +85,7 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
 
     private void FlamesOn()
     {
+        _sparks.SetActive(false);
         _trigger.enabled = true;
         _flames.SetActive(true);
     }
@@ -74,11 +96,26 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
         _flames.SetActive(false);
     }
 
+    private void SparksOn()
+    {
+        if (!_sparks.activeSelf && !_flames.activeSelf)
+            _sparks.SetActive(true);
+    }
+
     private void StartCycle()
     {
-        _timer.OnTimerCompleted += FlamesOn;
+        _timer.OnTimerCompleted += SparksOn;
         _timer.StartTimer(_fireDuration + _fireInterval);
-        FlamesOn();
+
+        if (_fireInterval > 0.0f)
+        {
+            SparksOn();
+        }
+        else
+        {
+            FlamesOn();
+        }
+
         _cycleStarted = true;
     }
 
@@ -92,8 +129,9 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     public void ButtonDown()
     {
         _activated = false;
-        FlamesOff();
+        _delayTimer.StartTimer(_delayDuration);
         _timer.StopTimer();
+        _deactivationTimer.StartTimer(_deactivationTime);
     }
 
     public void ButtonUp()
@@ -103,6 +141,24 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
         {
             FlamesOn();
         }
+        _delayTimer.StartTimer(_delayDuration);
         _timer.ResumeTimer();
+    }
+    protected virtual void SymbolDown()
+    {
+        try
+        {
+            _symbol.SetActive(false);
+        }
+        catch
+        {
+            Debug.LogError(gameObject.name + " has to have a symbol!");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_deactivationTimer != null)
+            _deactivationTimer.OnTimerCompleted -= FlamesOff;
     }
 }

@@ -23,6 +23,14 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void OnDisable()
+    {
+        foreach (T item in _pool)
+        {
+            item.gameObject.SetActive(false);
+        }
+    }
+
     /// <summary>
     /// Gets an object from the pool.
     /// </summary>
@@ -56,13 +64,5 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
         T obj = Instantiate(_prefab, transform.position, transform.rotation, transform);
         _pool.Add(obj);
         return obj;
-    }
-
-    public void ResetPool()
-    {
-        foreach (T item in _pool)
-        {
-            item.gameObject.SetActive(false);
-        }
     }
 }

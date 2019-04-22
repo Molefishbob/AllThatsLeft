@@ -30,38 +30,43 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
-    private Camera[] _cameras;
+    public HashSet<Camera> _cameras;
     private ScaledOneShotTimer _transitionTimer;
+    private ScaledOneShotTimer _freezeTimer;
     public float _horSensMulti = 0.05f;
     public float _verSensMulti = 0.05f;
     public float _zoomMulti = 0.01f;
     private bool _follow;
     private float _botDistance;
     private float _playerDistance;
-    private bool _canZoom;
-    private bool _followingPlayer;
+    private float _oldDistance;
+    public float _collisionRadius = 0.5f;
+    public bool Frozen;
+    public bool PlayerControlled;
+    private float _returnToPlayerTime;
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
 
     private void Awake()
     {
-        _cameras = GetComponentsInChildren<Camera>();
+        _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>());
+        _oldDistance = _distance;
         _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _freezeTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
         _botDistance = _minDistance;
         OnPlayerRebirth();
+        _freezeTimer.OnTimerCompleted += UnFreeze;
+        PlayerControlled = true;
     }
 
     private void OnEnable()
     {
-        UnLockCursor(GameManager.Instance.GamePaused);
-        GameManager.Instance.OnGamePauseChanged += UnLockCursor;
-
         PrefsManager.Instance.OnInvertedCameraXChanged += ChangeInvertX;
         PrefsManager.Instance.OnInvertedCameraYChanged += ChangeInvertY;
         ChangeInvertX(PrefsManager.Instance.InvertedCameraX);
@@ -79,20 +84,16 @@ public class ThirdPersonCamera : MonoBehaviour
 
         GameManager.Instance.Player.OnPlayerDeath += OnPlayerDeath;
         GameManager.Instance.Player.OnPlayerAlive += OnPlayerRebirth;
+        OnPlayerRebirth();
     }
 
     private void OnDisable()
     {
-        if (GameManager.Instance != null)
+        if (GameManager.Instance != null && GameManager.Instance.Player != null)
         {
-            GameManager.Instance.OnGamePauseChanged -= UnLockCursor;
-            if (GameManager.Instance.Player != null)
-            {
-                GameManager.Instance.Player.OnPlayerDeath -= OnPlayerDeath;
-                GameManager.Instance.Player.OnPlayerAlive -= OnPlayerRebirth;
-            }
+            GameManager.Instance.Player.OnPlayerDeath -= OnPlayerDeath;
+            GameManager.Instance.Player.OnPlayerAlive -= OnPlayerRebirth;
         }
-        UnLockCursor(true);
 
         if (PrefsManager.Instance != null)
         {
@@ -105,72 +106,77 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (_freezeTimer != null)
+        {
+            _freezeTimer.OnTimerCompleted -= UnFreeze;
+        }
+    }
+
     private void Update()
     {
         if (GameManager.Instance.GamePaused) return;
 
         if (_lookAt == null) return;
 
+        if (Frozen) return;
+
         if (_transitionTimer.IsRunning)
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-            if (_canZoom)
-            {
-                if (_followingPlayer)
-                {
-                    _newDistance = Mathf.Lerp(_botDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
-                }
-                else
-                {
-                    _newDistance = Mathf.Lerp(_playerDistance, _distance, _transitionTimer.NormalizedTimeElapsed);
-                }
-            }
-            Vector3 dir = new Vector3(0, 0, -_newDistance);
+
+            float lerpedDistance = Mathf.Lerp(_oldDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
+
+            Vector3 dir = Vector3.back * lerpedDistance;
             transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
         }
         else if (!GameManager.Instance.Player.Dead)
         {
             float scroll = Input.GetAxis("Scroll");
-            _distance -= scroll * _zoomSpeed;
-
-            if (_distance < _minDistance)
-            {
-                _distance = _minDistance;
-            }
-            else if (_distance > _maxDistance)
-            {
-                _distance = _maxDistance;
-            }
-
             float xInput = Input.GetAxis(_cameraXAxis);
             float yInput = Input.GetAxis(_cameraYAxis);
 
-            _yaw += _horizontalSensitivity * xInput * _invertX;
-            _pitch += _verticalSensitivity * yInput * _invertY;
-
-            if (_pitch > _maxPitch)
+            if (PlayerControlled)
             {
-                _pitch = _maxPitch;
+                _distance -= scroll * _zoomSpeed;
+
+                if (_distance < _minDistance)
+                {
+                    _distance = _minDistance;
+                }
+                else if (_distance > _maxDistance)
+                {
+                    _distance = _maxDistance;
+                }
+
+                _yaw += _horizontalSensitivity * xInput * _invertX;
+                _pitch += _verticalSensitivity * yInput * _invertY;
+
+                if (_pitch > _maxPitch)
+                {
+                    _pitch = _maxPitch;
+                }
+                else if (_pitch < _minPitch)
+                {
+                    _pitch = _minPitch;
+                }
             }
-            else if (_pitch < _minPitch)
-            {
-                _pitch = _minPitch;
-            }
-
-            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
-
-            _newDistance = CheckCollision(_newDistance);
-
-            Vector3 dir = new Vector3(0, 0, -_newDistance);
 
             if (_follow)
             {
-                transform.position = _lookAt.position + rotation * dir;
+                Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+                transform.position = _lookAt.position + rotation * Vector3.back;
             }
             transform.LookAt(_lookAt.position);
+            Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+            transform.position = _lookAt.position + transform.rotation * dirr;
 
-            if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
-            if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
+            if (PlayerControlled)
+            {
+                if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
+                if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
+            }
         }
         else
         {
@@ -178,44 +184,34 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
-    private float CheckCollision(float tDistance)
+    private float CheckCollision(Vector3 direction, float distance)
     {
-
         RaycastHit hit;
 
-        if (Physics.SphereCast(_lookAt.position, 1, transform.TransformDirection(Vector3.back), out hit, _distance, _groundLayer))
+        if (Physics.SphereCast(_lookAt.position, _collisionRadius, direction, out hit, distance, _groundLayer))
         {
             //Debug.DrawLine(_lookAt.position, hit.point, Color.red, 1.0f, false);
-            _canZoom = false;
-            float newDistance = Vector3.Distance(hit.point, _lookAt.position);
-            tDistance = newDistance;
-        }
-        else
-        {
-            tDistance = _distance;
-            _canZoom = true;
+            return hit.distance;
         }
 
-        return tDistance;
+        return distance;
     }
 
-    public void GetNewTarget(Transform trans, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans, bool willFollowPlayer)
     {
 
-        GetNewTarget(trans, _defaultTransitionTime, willFollowPlayer);
+        MoveToTarget(trans, _defaultTransitionTime, willFollowPlayer);
     }
 
-    public void GetNewTarget(Transform trans, float time, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans, float time, bool willFollowPlayer)
     {
         if (willFollowPlayer)
         {
-            _followingPlayer = true;
             _botDistance = _distance;
             _distance = _playerDistance;
         }
         else
         {
-            _followingPlayer = false;
             _playerDistance = _distance;
             _distance = _botDistance;
         }
@@ -225,11 +221,17 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             trans = tf;
         }
+        else
+        {
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+        }
 
         if (trans != _lookAt)
         {
             _oldTarget = _lookAt.position;
+            _oldDistance = Vector3.Distance(transform.position, _oldTarget);
             _lookAt = trans;
+            _newDistance = CheckCollision(transform.TransformDirection(Vector3.back), _distance);
             _transitionTimer.StartTimer(time);
         }
         if (_oldTarget == null)
@@ -238,15 +240,48 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
-    public void GetInstantNewTarget(Transform trans)
+    public void MoveToTargetInstant(Transform trans)
     {
         Transform tf = trans.Find(_cameraTargetName);
-        if (tf != null)
+        if (tf == null)
         {
-            trans = tf;
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+            tf = trans;
+        }
+
+        _lookAt = tf;
+
+        if (_follow)
+        {
+            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+            transform.position = _lookAt.position + rotation * Vector3.back;
+        }
+        transform.LookAt(_lookAt.position);
+        Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+        transform.position = _lookAt.position + transform.rotation * dirr;
+    }
+
+    public void MoveToHackTargetInstant(Transform trans, float lookatTime, float transitionTime)
+    {
+        _returnToPlayerTime = transitionTime;
+        Transform tf = trans.Find(_cameraTargetName);
+
+        if (tf == null)
+        {
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+            tf = trans;
         }
 
         _lookAt = trans;
+
+        transform.position = tf.position;
+        transform.LookAt(trans);
+
+        _pitch = transform.eulerAngles.x;
+        _yaw = transform.eulerAngles.y;
+
+        Frozen = true;
+        _freezeTimer.StartTimer(lookatTime);
     }
 
     private void OnPlayerDeath()
@@ -281,20 +316,6 @@ public class ThirdPersonCamera : MonoBehaviour
         _verticalSensitivity = (float)sens * _verSensMulti;
     }
 
-    private void UnLockCursor(bool unlocked)
-    {
-        if (unlocked)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
     private void SetZoomSpeed(int zSpeed)
     {
         _zoomSpeed = (float)zSpeed * _zoomMulti;
@@ -306,5 +327,11 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             cam.fieldOfView = fov;
         }
+    }
+
+    private void UnFreeze()
+    {
+        Frozen = false;
+        MoveToTarget(GameManager.Instance.Player.transform, _returnToPlayerTime, true);
     }
 }

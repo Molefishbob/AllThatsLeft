@@ -21,20 +21,22 @@ public abstract class PlayerMovement : CharControlBase
         set
         {
             _controlsDisabled = value;
-            if (_playerJump != null)
+            if (Jump != null)
             {
-                _playerJump.ControlsDisabled = value;
+                Jump.ControlsDisabled = value;
             }
         }
     }
 
+    [HideInInspector]
+    public PlayerJump Jump;
+
     protected bool _controlsDisabled;
-    protected PlayerJump _playerJump;
 
     protected override void Awake()
     {
         base.Awake();
-        _playerJump = GetComponent<PlayerJump>();
+        Jump = GetComponent<PlayerJump>();
     }
 
     protected override Vector3 InternalMovement()
