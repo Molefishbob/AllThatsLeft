@@ -31,8 +31,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &4138884452173141551
-MeshCollider:
+--- !u!65 &2572684532754676136
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -41,10 +41,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: 9daeca39ee611478980003ed93c12780, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 1.4, y: 0.45, z: 3.12}
+  m_Center: {x: -0.7, y: 0.135, z: 0.33}
 --- !u!1001 &5862062561582779217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 9daeca39ee611478980003ed93c12780, type: 3}
       propertyPath: m_Layer
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9daeca39ee611478980003ed93c12780, type: 3}
       propertyPath: m_LocalPosition.x
