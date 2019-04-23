@@ -177,6 +177,7 @@ public class MenuController : MonoBehaviour
         _optionsPanel.SetActive(true);
         _currentPage = Page.VolumeSettings;
         _eventSystem.UpdateModules();
+        _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_masterVolume);
     }
 

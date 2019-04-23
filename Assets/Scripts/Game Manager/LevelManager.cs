@@ -31,7 +31,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private string _pauseMenuButton = "Pause Game";
 
-    private bool _playerInScene;
+    private bool _playerInScene = false;
 
     void Awake()
     {
@@ -72,7 +72,6 @@ public class LevelManager : MonoBehaviour
             if (players == null || players.Length <= 0)
             {
                 GameManager.Instance.Player = Instantiate(_playerPrefab);
-                DontDestroyOnLoad(GameManager.Instance.Player);
                 _playerInScene = false;
             }
             else
@@ -80,10 +79,17 @@ public class LevelManager : MonoBehaviour
                 GameManager.Instance.Player = players[0];
                 _playerInScene = true;
             }
+            DontDestroyOnLoad(GameManager.Instance.Player);
         }
         foreach (MainCharMovement p in players)
         {
             if (p == GameManager.Instance.Player) continue;
+            if (!_playerInScene)
+            {
+                _playerInScene = true;
+                GameManager.Instance.Player.transform.position = p.transform.position;
+                GameManager.Instance.Player.transform.rotation = p.transform.rotation;
+            }
             Destroy(p.gameObject);
         }
 
@@ -168,7 +174,7 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown(_pauseMenuButton))
+        if (!GameManager.Instance.LoadingScreen.gameObject.activeSelf && Input.GetButtonDown(_pauseMenuButton))
         {
             switch (GameManager.Instance.GamePaused)
             {

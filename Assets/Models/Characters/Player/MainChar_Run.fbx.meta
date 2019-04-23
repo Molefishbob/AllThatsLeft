@@ -85,6 +85,8 @@ ModelImporter:
     100158: UpperLeg.R
     100160: Hand.R.001
     100162: Hand.R.001_end
+    100164: Hold_object
+    100166: Hold_object_end
     400000: Armature
     400002: Backpack
     400004: Backpack_end
@@ -167,6 +169,8 @@ ModelImporter:
     400158: UpperLeg.R
     400160: Hand.R.001
     400162: Hand.R.001_end
+    400164: Hold_object
+    400166: Hold_object_end
     2100000: Gloves
     2100002: Material
     2100004: Hair
@@ -175,6 +179,7 @@ ModelImporter:
     2100010: Goggles
     2100012: Material.001
     2100014: Suit
+    2100016: Textured
     4300000: Character
     7400000: MC_Dying
     7400002: MC_Jump_Hover
@@ -189,7 +194,12 @@ ModelImporter:
     9500000: //RootNode
     13700000: Character
     2186277476908879412: ImportLogs
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Textured
+    second: {fileID: 2100000, guid: 8f1c91219fb3fc9468171de24b704004, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -247,7 +257,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: MC_Jump_Hover
-      takeName: Armature|Jump_Hover
+      takeName: Armature|Jump_Hover3
       firstFrame: 0
       lastFrame: 6
       wrapMode: 0
@@ -479,7 +489,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
+    previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6929583723703662566}
   - component: {fileID: 7302906681709901595}
-  - component: {fileID: 6929583723703662565}
+  - component: {fileID: 1270491683640073344}
   m_Layer: 17
   m_Name: EndLevel
   m_TagString: Untagged
@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: affa296f5d17abd44a87af15851d51fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &6929583723703662565
-BoxCollider:
+--- !u!135 &1270491683640073344
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -55,5 +55,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10, y: 4, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

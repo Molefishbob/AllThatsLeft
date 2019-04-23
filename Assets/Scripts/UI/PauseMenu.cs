@@ -92,8 +92,10 @@ public class PauseMenu : MonoBehaviour
         _currentPage = Page.VolumeSettings;
         _settings.SetActive(true);
         _pauseMenu.SetActive(false);
-        if (_confirmQuit != null) _confirmQuit.SetActive(false);
+        if (_confirmQuit != null)
+            _confirmQuit.SetActive(false);
 
+        _eventSystem.SetSelectedGameObject(null);
         _eventSystem.SetSelectedGameObject(_masterVolumeSlider);
     }
     /// <summary>
