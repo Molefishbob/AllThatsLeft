@@ -115,6 +115,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _openBool: Open
+  _delayDuration: 0.4
+  _symbol: {fileID: 0}
 --- !u!65 &3370457406415433517
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -225,6 +227,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1637510364}
     m_Modifications:
+    - target: {fileID: 100000, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
+      propertyPath: m_Name
+      value: door
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -277,14 +287,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
-      propertyPath: m_Name
-      value: door
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
       propertyPath: m_Layer
       value: 14
@@ -313,14 +315,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: cafc7d7c2a50e4643b37814eb99c198a, type: 2}
-    - target: {fileID: 2300012, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100006, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
-    - target: {fileID: 2300002, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100006, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4318ec711cc58f4e84c9d31b4ac2aea, type: 3}
 --- !u!1 &566006806535396202 stripped
