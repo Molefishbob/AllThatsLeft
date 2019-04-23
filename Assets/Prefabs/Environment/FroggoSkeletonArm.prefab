@@ -1,7 +1,7 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &1135536196987600316
-MeshCollider:
+--- !u!65 &2384150951296234091
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10,10 +10,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.41, y: 0.18, z: 1.55}
+  m_Center: {x: 0.02, y: 0, z: -0.3}
 --- !u!1 &2889266517414874034
 GameObject:
   m_ObjectHideFlags: 0
@@ -52,17 +51,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 405151939239011783}
     m_Modifications:
-    - target: {fileID: 100000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
-      propertyPath: m_Name
-      value: FroggoSkeletonArm
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0020293742
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -70,7 +61,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0019689798
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
       propertyPath: m_LocalRotation.x
@@ -103,6 +94,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
+      propertyPath: m_Name
+      value: FroggoSkeletonArm
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbd6d3c07ccee424fb726b0e4d10084e, type: 3}
