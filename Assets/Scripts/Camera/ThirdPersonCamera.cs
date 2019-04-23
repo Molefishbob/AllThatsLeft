@@ -50,7 +50,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Awake()
     {
-        _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>());
+        _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>(true));
         _oldDistance = _distance;
         _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
