@@ -57,6 +57,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void FixedUpdate()
     {
+        RemoveDeadTargets();
         
         if (_aggroTargets == null || _aggroTargets.Count == 0)
         {
@@ -106,14 +107,14 @@ public class EnemyDirection : MonoBehaviour
         _aggroTargets.Add(other.transform);
         if (_aggroTargets.Count <= 1)
         {
-            _enemy.StopMoving = true;
-            _enemy._animator?.SetTrigger("Alert");
-            if(_enemy._alertSound != null) _enemy._alertSound.PlaySound();
+            Alert();
         }
     }
 
-    public void CheckTargets()
+    private void RemoveDeadTargets()
     {
+        int targetCount = _aggroTargets.Count;
+
         for(int i = 0; i < _aggroTargets.Count; i++)
         {
             if (_aggroTargets[i].GetComponent<IDamageReceiver>().Dead || !_aggroTargets[i].gameObject.activeSelf)
@@ -122,37 +123,52 @@ public class EnemyDirection : MonoBehaviour
             }
         }
 
+        if (_aggroTargets.Count == 0 && targetCount > 0)
+        {
+            _enemy._animator?.SetBool("Jump", false);
+            SetRandomTarget();
+        }
+    }
+
+    public void RemoveTarget(Transform other)
+    {
+        bool isSameTarget = _aggroTargets[0] == other;
+
+        _aggroTargets.Remove(other);
+
         if (_aggroTargets.Count == 0)
         {
             _enemy._animator?.SetBool("Jump", false);
             SetRandomTarget();
-            _enemy.StopMoving = false;
+        }
+        else if(isSameTarget)
+        {
+            Alert();
+        }
+    }
+
+    private void Alert()
+    {
+        _enemy.StopMoving = true;
+        _enemy._animator?.SetTrigger("Alert");
+        if (_enemy._alertSound != null) _enemy._alertSound.PlaySound();
+    }
+
+    public void CheckTargets()
+    {
+        if (_aggroTargets.Count <= 1)
+        {
+            Alert();
         }
         else
         {
-            _enemy.StopMoving = true;
-            _enemy._animator?.SetTrigger("Alert");
-            if (_enemy._alertSound != null) _enemy._alertSound.PlaySound();
+            _enemy.StopMoving = false;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _enemy.Speed = _speed;
- 
-        _aggroTargets.Remove(other.transform);
-        
-        if (_aggroTargets.Count == 0)
-        {
-            _enemy._animator?.SetBool("Jump", false);
-            SetRandomTarget();
-        }
-        else
-        {
-            _enemy.StopMoving = true;
-            _enemy._animator?.SetTrigger("Alert");
-            if (_enemy._alertSound != null) _enemy._alertSound.PlaySound();
-        }
+        RemoveTarget(other.transform);
     }
 
     private void OnDrawGizmosSelected()
