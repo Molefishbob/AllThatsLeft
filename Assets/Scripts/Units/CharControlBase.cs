@@ -214,6 +214,14 @@ public abstract class CharControlBase : MonoBehaviour
         // if (_animator != null) _animator.speed = 1;
     }
 
+    /// <summary>
+    /// Resets internal movement which stops character controller instantly on the next frame.
+    /// </summary>
+    public void ResetInternalMove()
+    {
+        _internalMove = Vector3.zero;
+    }
+
     private void CheckGrounded()
     {
         Vector3 upVector = -Physics.gravity.normalized;
