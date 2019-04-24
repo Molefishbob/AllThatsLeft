@@ -15,7 +15,7 @@ public class EnemyMover : CharControlBase
     public EnemyDirection _eDirect;
     public RandomSFXSound _burpSound = null;
     public RandomSFXSound _deathSound = null;
-
+    public SingleSFXSound _attackSound;
 
     public bool DirTimerRunning
     {
