@@ -203,7 +203,6 @@ public class GameManager : Singleton<GameManager>
 
     private void ChangeScene(int id)
     {
-        ActivateGame(false);
         PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
@@ -214,6 +213,7 @@ public class GameManager : Singleton<GameManager>
         else
         {
             LoadingScreen.gameObject.SetActive(true);
+            ActivateGame(false);
             SceneManager.LoadScene(id);
             if (GamePaused) UnPauseGame();
         }

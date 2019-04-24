@@ -34,16 +34,6 @@ public class LoadingScreen : MonoBehaviour
         _mute = PrefsManager.Instance.AudioMuteSFX;
         PrefsManager.Instance.AudioMuteSFX = true;
 
-        if (GameManager.Instance.Camera != null)
-        {
-            GameManager.Instance.Camera.PlayerControlled = false;
-        }
-
-        if (GameManager.Instance.Player != null)
-        {
-            GameManager.Instance.Player.ControlsDisabled = true;
-        }
-
         _inTransition = false;
         _controlsGiven = false;
 
@@ -60,16 +50,21 @@ public class LoadingScreen : MonoBehaviour
 
             if (!_controlsGiven && _timer.TimeElapsed >= _activateControlsAfter)
             {
-                if (GameManager.Instance.Camera != null)
-                {
-                    GameManager.Instance.Camera.PlayerControlled = true;
-                }
+                GameManager.Instance.Camera.PlayerControlled = true;
+                GameManager.Instance.Player.ControlsDisabled = false;
+                _controlsGiven = true;
+            }
+        }
+        else
+        {
+            if (GameManager.Instance.Camera != null)
+            {
+                GameManager.Instance.Camera.PlayerControlled = false;
+            }
 
-                if (GameManager.Instance.Player != null)
-                {
-                    GameManager.Instance.Player.ControlsDisabled = false;
-                    _controlsGiven = true;
-                }
+            if (GameManager.Instance.Player != null)
+            {
+                GameManager.Instance.Player.ControlsDisabled = true;
             }
         }
     }
@@ -91,6 +86,8 @@ public class LoadingScreen : MonoBehaviour
     private void EndMe()
     {
         _timer.OnTimerCompleted -= EndMe;
+        GameManager.Instance.Camera.PlayerControlled = true;
+        GameManager.Instance.Player.ControlsDisabled = false;
         gameObject.SetActive(false);
     }
 }
