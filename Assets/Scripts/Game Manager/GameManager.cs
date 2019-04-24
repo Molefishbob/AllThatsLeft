@@ -201,11 +201,7 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
-    /// <summary>
-    /// Change scene to given build id.
-    /// </summary>
-    /// <param name="id">id of the scene in build settings</param>
-    public void ChangeScene(int id)
+    private void ChangeScene(int id)
     {
         ActivateGame(false);
         PauseMenu?.gameObject.SetActive(false);
