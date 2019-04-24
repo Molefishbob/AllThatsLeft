@@ -9,8 +9,6 @@ public class DeployControlledBots : MonoBehaviour
     [SerializeField]
     private string _deployBotButton = "Deploy Bot";
     [SerializeField]
-    private Transform _characterHand = null;
-    [SerializeField]
     private float _throwDistance = 2.0f;
     [SerializeField]
     private float _throwHeight = 1.0f;
@@ -77,11 +75,11 @@ public class DeployControlledBots : MonoBehaviour
         }
     }
 
-    public void DeployBot()
+    public void DeployBot(Transform hand)
     {
         if (!PrefsManager.Instance.BotsUnlocked) return;
         _activeBot = GameManager.Instance.BotPool.GetObject();
-        Vector3 pos = transform.InverseTransformPoint(_characterHand.position);
+        Vector3 pos = transform.InverseTransformPoint(hand.position);
         pos.x = 0.0f;
         _activeBot.transform.position = transform.TransformPoint(pos);
         _activeBot.transform.rotation = transform.rotation;

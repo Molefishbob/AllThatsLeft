@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndLevel : MonoBehaviour
+public class EndLevel : Collectible
 {
-    private void OnTriggerEnter(Collider other)
+    protected override void CollectAction()
     {
         GameManager.Instance.NextLevel();
     }

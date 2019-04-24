@@ -8,7 +8,9 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     public event GenericEvent OnPlayerDeath;
 
     [SerializeField]
-    protected string _animatorBoolDeath = "Dead";
+    protected string _animatorTriggerDeath = "Die";
+    [SerializeField]
+    protected string _animatorTriggerAlive = "Default";
     [SerializeField]
     protected float _deathTime = 5.0f;
     protected ScaledOneShotTimer _deathTimer;
@@ -51,7 +53,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
         ControlsDisabled = true;
-        _animator?.SetBool(_animatorBoolDeath, true);
+        _animator?.SetTrigger(_animatorTriggerDeath);
         SetControllerActive(false);
         Jump.ResetJump();
         _deathTimer.StartTimer(_deathTime);
@@ -63,7 +65,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         SetControllerActive(false);
         GameManager.Instance.LevelManager.ResetLevel();
         Dead = false;
-        _animator?.SetBool(_animatorBoolDeath, false);
+        _animator?.SetTrigger(_animatorTriggerAlive);
         SetControllerActive(true);
         if (OnPlayerAlive != null) OnPlayerAlive();
     }
