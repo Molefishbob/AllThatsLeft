@@ -19,11 +19,17 @@ public class EnemyDirection : MonoBehaviour
     public List<Transform> _aggroTargets;
     private SphereCollider _aggroArea;
     private Vector3 _moveTarget;
-    private PhysicsOneShotTimer _timer;
+    private PhysicsOneShotTimer _targetTimer;
+    private PhysicsOneShotTimer _burpTimer;
+    [SerializeField]
+    private float _minBurpWait = 5.0f;
+    [SerializeField]
+    private float _maxBurpWait = 15.0f;
 
     private void Awake()
     {
-        _timer = GetComponent<PhysicsOneShotTimer>();
+        _targetTimer = GetComponent<PhysicsOneShotTimer>();
+        _burpTimer = GetComponent<PhysicsOneShotTimer>();
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
         _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
@@ -32,7 +38,8 @@ public class EnemyDirection : MonoBehaviour
 
     private void Start()
     {
-        _timer.OnTimerCompleted += TimedAction;
+        _targetTimer.OnTimerCompleted += TimedAction;
+        _burpTimer.OnTimerCompleted += TimedBurp;
     }
 
     private void OnEnable()
@@ -43,15 +50,21 @@ public class EnemyDirection : MonoBehaviour
     private void OnDisable()
     {
         _aggroTargets.Clear();
-        _timer.StopTimer();
+        _targetTimer.StopTimer();
+        _burpTimer.StopTimer();
         _enemy.Speed = _speed;
     }
 
     private void OnDestroy()
     {
-        if (_timer != null)
+        if (_targetTimer != null)
         {
-            _timer.OnTimerCompleted -= TimedAction;
+            _targetTimer.OnTimerCompleted -= TimedAction;
+        }
+
+        if (_burpTimer != null)
+        {
+            _burpTimer.OnTimerCompleted -= TimedBurp;
         }
     }
 
@@ -61,14 +74,18 @@ public class EnemyDirection : MonoBehaviour
         
         if (_aggroTargets == null || _aggroTargets.Count == 0)
         {
+            /*if (!_burpTimer.IsRunning)
+            {
+                _burpTimer.StartTimer(Random.Range(_minBurpWait, _maxBurpWait));
+            }*/
             _enemy.Speed = _speed;
             float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
 
-            if (dist < 1.0f && !_timer.IsRunning)
+            if (dist < 1.0f && !_targetTimer.IsRunning)
             {
                 _enemy.StopMoving = true;
                 _idleTime = Random.Range(_minIdleTime, _maxIdleTime);
-                _timer.StartTimer(_idleTime);
+                _targetTimer.StartTimer(_idleTime);
                 _enemy.DirTimerRunning = true;
             }
         }
@@ -178,5 +195,10 @@ public class EnemyDirection : MonoBehaviour
         _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _patrolRadius);
+    }
+
+    private void TimedBurp()
+    {
+        if (_enemy._burpsfx != null) _enemy._burpsfx.PlaySound(true, Random.Range(1, 5));
     }
 }
