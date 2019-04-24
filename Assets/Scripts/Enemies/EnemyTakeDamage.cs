@@ -30,6 +30,7 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         if (Dead) return;
         Dead = true;
         _frog.SetControllerActive(false);
+        if (_frog._deathSound != null) _frog._deathSound.PlaySound();
         _frog._attack.gameObject.SetActive(false);
         _frog._animator.SetBool(_deadBool, true);
     }

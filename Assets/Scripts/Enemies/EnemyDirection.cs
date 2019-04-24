@@ -28,8 +28,8 @@ public class EnemyDirection : MonoBehaviour
 
     private void Awake()
     {
-        _targetTimer = GetComponent<PhysicsOneShotTimer>();
-        _burpTimer = GetComponent<PhysicsOneShotTimer>();
+        _targetTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
+        _burpTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
         _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
@@ -45,6 +45,7 @@ public class EnemyDirection : MonoBehaviour
     private void OnEnable()
     {
         _enemy.Speed = _speed;
+        SetRandomTarget();
     }
 
     private void OnDisable()
@@ -71,16 +72,18 @@ public class EnemyDirection : MonoBehaviour
     private void FixedUpdate()
     {
         RemoveDeadTargets();
-        
+
         if (_aggroTargets == null || _aggroTargets.Count == 0)
         {
-            /*if (!_burpTimer.IsRunning)
+            Debug.Log(_enemy.gameObject.activeSelf);
+            if (_enemy.gameObject.activeSelf &&!_burpTimer.IsRunning)
             {
                 _burpTimer.StartTimer(Random.Range(_minBurpWait, _maxBurpWait));
-            }*/
+            }
+
             _enemy.Speed = _speed;
             float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
-
+            
             if (dist < 1.0f && !_targetTimer.IsRunning)
             {
                 _enemy.StopMoving = true;
@@ -199,6 +202,6 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedBurp()
     {
-        if (_enemy._burpsfx != null) _enemy._burpsfx.PlaySound(true, Random.Range(1, 5));
+        if (_enemy._burpSound != null) _enemy._burpSound.PlaySound();
     }
 }
