@@ -68,9 +68,8 @@ public class LoadingScreen : MonoBehaviour
                 if (GameManager.Instance.Player != null)
                 {
                     GameManager.Instance.Player.ControlsDisabled = false;
+                    _controlsGiven = true;
                 }
-
-                _controlsGiven = true;
             }
         }
     }

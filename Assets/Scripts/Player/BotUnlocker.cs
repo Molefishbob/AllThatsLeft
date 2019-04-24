@@ -2,19 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotUnlocker : MonoBehaviour
+public class BotUnlocker : Collectible
 {
-    private void OnEnable()
+    protected override void Start()
     {
+        base.Start();
+
         if (PrefsManager.Instance.BotsUnlocked)
         {
             gameObject.SetActive(false);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected override void CollectAction()
     {
         PrefsManager.Instance.BotsUnlocked = true;
-        gameObject.SetActive(false);
     }
 }

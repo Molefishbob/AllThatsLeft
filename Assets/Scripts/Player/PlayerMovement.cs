@@ -25,6 +25,10 @@ public abstract class PlayerMovement : CharControlBase
             {
                 Jump.ControlsDisabled = value;
             }
+            if (_controlsDisabled)
+            {
+                ResetInternalMove();
+            }
         }
     }
 
