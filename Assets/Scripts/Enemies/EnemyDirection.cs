@@ -75,8 +75,7 @@ public class EnemyDirection : MonoBehaviour
 
         if (_aggroTargets == null || _aggroTargets.Count == 0)
         {
-            Debug.Log(_enemy.gameObject.activeSelf);
-            if (_enemy.gameObject.activeSelf &&!_burpTimer.IsRunning)
+            if (_enemy.gameObject.activeInHierarchy && !_burpTimer.IsRunning)
             {
                 _burpTimer.StartTimer(Random.Range(_minBurpWait, _maxBurpWait));
             }
@@ -137,7 +136,7 @@ public class EnemyDirection : MonoBehaviour
 
         for(int i = 0; i < _aggroTargets.Count; i++)
         {
-            if (_aggroTargets[i].GetComponent<IDamageReceiver>().Dead || !_aggroTargets[i].gameObject.activeSelf)
+            if (_aggroTargets[i].GetComponent<IDamageReceiver>().Dead || !_aggroTargets[i].gameObject.activeInHierarchy)
             {
                 _aggroTargets.Remove(_aggroTargets[i].transform);
             }
@@ -171,7 +170,7 @@ public class EnemyDirection : MonoBehaviour
     {
         _enemy.StopMoving = true;
         _enemy._animator?.SetTrigger("Alert");
-        if (_enemy._alertSound != null) _enemy._alertSound.PlaySound();
+        if (_enemy._alertSound != null && _enemy.gameObject.activeInHierarchy) _enemy._alertSound.PlaySound();
     }
 
     public void CheckTargets()
@@ -202,6 +201,6 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedBurp()
     {
-        if (_enemy._burpSound != null) _enemy._burpSound.PlaySound();
+        if (_enemy._burpSound != null && _enemy.gameObject.activeInHierarchy) _enemy._burpSound.PlaySound();
     }
 }
