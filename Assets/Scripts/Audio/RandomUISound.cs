@@ -14,16 +14,29 @@ public class RandomUISound : SingleUISound
         _sounds = Resources.LoadAll<AudioClip>(_resourceFolder);
     }
 
+    /// <summary>
+    /// Plays random sound effect from the resource folder.
+    /// </summary>
+    /// <param name="usePitch">Randomize the pitch</param>
     public override void PlaySound(bool usePitch)
     {
         PlaySound(usePitch, Random.Range(0, _sounds.Length));
     }
 
+    /// <summary>
+    /// Plays a specific sound effect from the resource folder with randomized pitch.
+    /// </summary>
+    /// <param name="index">index of the sound effect</param>
     public virtual void PlaySound(int index)
     {
         PlaySound(true, index);
     }
 
+    /// <summary>
+    /// Plays a specific sound effect from the resource folder.
+    /// </summary>
+    /// <param name="usePitch">Randomize the pitch</param>
+    /// <param name="index">index of the sound effect</param>
     public virtual void PlaySound(bool usePitch, int index)
     {
         if (usePitch)

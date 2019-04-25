@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SingleUISound : VolumeControl
 {
-    [SerializeField]
+    [SerializeField, Range(0.0f, 1.0f)]
     protected float _pitchVariance = 0.25f;
     protected float _basePitch;
 
@@ -36,7 +36,7 @@ public class SingleUISound : VolumeControl
 
     protected void RandomizePitch()
     {
-        if (_pitchVariance != 0.0f)
+        if (_pitchVariance > 0.0f)
         {
             _audioSource.pitch = _basePitch * (1 + Random.Range(-_pitchVariance, _pitchVariance));
         }
@@ -47,7 +47,7 @@ public class SingleUISound : VolumeControl
     }
 
     /// <summary>
-    /// Plays the interface sound with randomized pitch.
+    /// Plays the sound with randomized pitch.
     /// </summary>
     public virtual void PlaySound()
     {
@@ -55,7 +55,7 @@ public class SingleUISound : VolumeControl
     }
 
     /// <summary>
-    /// Plays the interface sound.
+    /// Plays the sound.
     /// </summary>
     /// <param name="usePitch">Randomize the pitch</param>
     public virtual void PlaySound(bool usePitch)
