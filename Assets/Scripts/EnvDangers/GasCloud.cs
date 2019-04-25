@@ -6,16 +6,18 @@ public class GasCloud : MonoBehaviour
 {
     [SerializeField, Tooltip("Time until the unit dies inside the area")]
     private float _timeUntilOof = 2;
+    [SerializeField]
+    private Color _gassedUnitTint = Color.magenta;
 
     private void OnTriggerEnter(Collider other)
     {
         GassableUnit unit = other.GetComponent<GassableUnit>();
-        unit?.EnterGas(_timeUntilOof);
+        if (unit != null) unit.EnterGas(_timeUntilOof, _gassedUnitTint);
     }
 
     private void OnTriggerExit(Collider other)
     {
         GassableUnit unit = other.GetComponent<GassableUnit>();
-        unit?.ExitGas();
+        if (unit != null) unit.ExitGas();
     }
 }
