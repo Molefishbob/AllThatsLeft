@@ -8,6 +8,8 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
     private Transform _characterHand = null;
     [SerializeField]
     private SingleSFXSound _victorySound = null;
+    [SerializeField]
+    private RandomSFXSound _throwSound = null;
 
     private DeployControlledBots _deployScript = null;
 
@@ -22,6 +24,11 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
     public void ThrowBot()
     {
         _deployScript.DeployBot(_characterHand);
+    }
+
+    public void ThrowSound()
+    {
+        _throwSound.PlaySound();
     }
 
     public void VictorySound()
