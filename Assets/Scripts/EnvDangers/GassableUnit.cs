@@ -5,40 +5,43 @@ using UnityEngine;
 public class GassableUnit : MonoBehaviour
 {
     [SerializeField]
-    private Canvas _poisonScreen = null;
+    private RandomSFXSound _coughSound = null;
     [SerializeField]
     private float _blinkInterval = 0.25f;
-    [SerializeField]
-    private Color _gasTint = Color.magenta;
-    private Color[] _originalColors;
+    private Color _gasTint;
+    private Color[][] _originalColors;
     private bool _tintingBack = false;
     private PhysicsOneShotTimer _killTimer;
     private ScaledRepeatingTimer _blinkTimer;
     private IDamageReceiver _dmg;
-    private Renderer _renderer;
+    private SkinnedMeshRenderer[] _renderers;
 
     private void Awake()
     {
         _killTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
         _blinkTimer = gameObject.AddComponent<ScaledRepeatingTimer>();
         _dmg = GetComponent<IDamageReceiver>();
-        _renderer = GetComponentInChildren<Renderer>();
-        _originalColors = new Color[_renderer.materials.Length];
-        for (int i = 0; i < _originalColors.Length; i++)
+        _renderers = GetComponentsInChildren<SkinnedMeshRenderer>(true);
+        _originalColors = new Color[_renderers.Length][];
+        for (int i = 0; i < _renderers.Length; i++)
         {
-            _originalColors[i] = _renderer.materials[i].color;
+            _originalColors[i] = new Color[_renderers[i].materials.Length];
+            for (int j = 0; j < _renderers[i].materials.Length; j++)
+            {
+                _originalColors[i][j] = _renderers[i].materials[j].color;
+            }
         }
-    }
-
-    private void OnEnable()
-    {
-        ExitGas();
     }
 
     private void Start()
     {
         _killTimer.OnTimerCompleted += Death;
-        _blinkTimer.OnTimerCompleted += SwapColors;
+        _blinkTimer.OnTimerCompleted += SwitchDirection;
+    }
+
+    private void OnDisable()
+    {
+        ExitGas();
     }
 
     private void OnDestroy()
@@ -47,7 +50,7 @@ public class GassableUnit : MonoBehaviour
         {
             _killTimer.OnTimerCompleted -= Death;
         }
-        if (_blinkTimer != null) _blinkTimer.OnTimerCompleted -= SwapColors;
+        if (_blinkTimer != null) _blinkTimer.OnTimerCompleted -= SwitchDirection;
     }
 
     private void Update()
@@ -56,18 +59,25 @@ public class GassableUnit : MonoBehaviour
 
         if (_blinkTimer.IsRunning)
         {
+            if (!_coughSound.IsPlaying) _coughSound.PlaySound();
             if (_tintingBack)
             {
-                for (int i = 0; i < _renderer.materials.Length; i++)
+                for (int i = 0; i < _renderers.Length; i++)
                 {
-                    _renderer.materials[i].color = Color.Lerp(_gasTint, _originalColors[i], _blinkTimer.NormalizedTimeElapsed);
+                    for (int j = 0; j < _renderers[i].materials.Length; j++)
+                    {
+                        _renderers[i].materials[j].color = Color.Lerp(_gasTint, _originalColors[i][j], _blinkTimer.NormalizedTimeElapsed);
+                    }
                 }
             }
             else
             {
-                for (int i = 0; i < _renderer.materials.Length; i++)
+                for (int i = 0; i < _renderers.Length; i++)
                 {
-                    _renderer.materials[i].color = Color.Lerp(_originalColors[i], _gasTint, _blinkTimer.NormalizedTimeElapsed);
+                    for (int j = 0; j < _renderers[i].materials.Length; j++)
+                    {
+                        _renderers[i].materials[j].color = Color.Lerp(_originalColors[i][j], _gasTint, _blinkTimer.NormalizedTimeElapsed);
+                    }
                 }
             }
         }
@@ -77,13 +87,16 @@ public class GassableUnit : MonoBehaviour
     /// Start timer when entering gas.
     /// </summary>
     /// <param name="oofTime">Time until oof</param>
-    public void EnterGas(float oofTime)
+    public void EnterGas(float oofTime, Color tint)
     {
+        _gasTint = tint;
         _tintingBack = false;
-        if (_poisonScreen != null) _poisonScreen.gameObject.SetActive(true);
         _killTimer.StartTimer(oofTime);
         _blinkTimer.StartTimer(_blinkInterval);
+        EnterGasExtras();
     }
+
+    protected virtual void EnterGasExtras() { }
 
     /// <summary>
     /// Stop timer when leaving gas.
@@ -92,26 +105,34 @@ public class GassableUnit : MonoBehaviour
     {
         _killTimer.StopTimer();
         _blinkTimer.StopTimer();
-        for (int i = 0; i < _renderer.materials.Length; i++)
+        for (int i = 0; i < _renderers.Length; i++)
         {
-            _renderer.materials[i].color = _originalColors[i];
+            for (int j = 0; j < _renderers[i].materials.Length; j++)
+            {
+                _renderers[i].materials[j].color = _originalColors[i][j];
+            }
         }
-        if (_poisonScreen != null) _poisonScreen.gameObject.SetActive(false);
+        ExitGasExtras();
     }
+
+    protected virtual void ExitGasExtras() { }
 
     private void Death()
     {
         _killTimer.StopTimer();
         _blinkTimer.StopTimer();
-        for (int i = 0; i < _renderer.materials.Length; i++)
+        for (int i = 0; i < _renderers.Length; i++)
         {
-            _renderer.materials[i].color = Color.Lerp(_gasTint, _originalColors[i], 0.5f);
+            for (int j = 0; j < _renderers[i].materials.Length; j++)
+            {
+                _renderers[i].materials[j].color = Color.Lerp(_originalColors[i][j], _gasTint, 0.5f);
+            }
         }
-        if (_poisonScreen != null) _poisonScreen.gameObject.SetActive(false);
+        ExitGasExtras();
         _dmg.Die();
     }
 
-    private void SwapColors()
+    private void SwitchDirection()
     {
         _tintingBack = !_tintingBack;
     }

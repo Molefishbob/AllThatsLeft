@@ -124,9 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a31f144ad417464ca7debcfd9df8d47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _poisonScreen: {fileID: 0}
+  _coughSound: {fileID: 2479752693528661633}
   _blinkInterval: 0.25
-  _gasTint: {r: 1, g: 0, b: 1, a: 1}
 --- !u!114 &2894338818959886867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,9 +193,102 @@ Transform:
   - {fileID: 2538479299110744425}
   - {fileID: 2478848476300675021}
   - {fileID: 5105745073913169703}
+  - {fileID: 5453398225066511569}
   m_Father: {fileID: 8538956537336883093}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &367848488308048897
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8609109678450264673}
+    m_Modifications:
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Frog Hurt
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Poisoned
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 52d85fd4ab713f4408c47a467be28f9f, type: 3}
+--- !u!4 &5453398225066511569 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 367848488308048897}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2479752693528661633 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 367848488308048897}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c001463aab48745ae5d9b764e95538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &607916257397329911
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -748,6 +840,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: 7920768013923664c8f147fd39fbbfec, type: 2}
     - target: {fileID: 100054, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100118, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100120, guid: 50382e498d3b52849a023cbc33a652de, type: 3}
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
