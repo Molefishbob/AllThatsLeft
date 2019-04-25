@@ -50,6 +50,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     public virtual void Die()
     {
         if (Dead) return;
+
         GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
         ControlsDisabled = true;
@@ -79,4 +80,5 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         _deathTimer.StartTimer(_deathTime);
         if (OnPlayerDeath != null) OnPlayerDeath();
     }
+
 }

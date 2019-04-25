@@ -6,14 +6,14 @@ public class EnemyAttack : MonoBehaviour
 {
     [SerializeField]
     private string attacktrigger = "Attack";
-    private FrogEnemy _frog;
+    private EnemyMover _frog;
     private PatrolEnemy _scorpion;
 
     private void Awake()
     {
         if (transform.parent.tag == "Frog")
         {
-            _frog = GetComponentInParent<FrogEnemy>();
+            _frog = GetComponentInParent<EnemyMover>();
         }
         else if (transform.parent.tag == "Scorpion")
         {
@@ -28,9 +28,8 @@ public class EnemyAttack : MonoBehaviour
         if(_frog != null)
         {
             _frog._animator?.SetTrigger(attacktrigger);
-            _frog.StopMoving();
-            _frog.BackToPrevious = true;
-            _frog.FollowPlayer = false;
+            if (_frog._attackSound != null && _frog.gameObject.activeInHierarchy) _frog._attackSound.PlaySound();
+            _frog.StopMoving = true;
         }
         if(_scorpion != null)
         {

@@ -96,15 +96,14 @@ public class PatrolEnemy : CharControlBase
         }
     }
 
-    protected override Vector3 InternalMovement()
+    protected override Vector2 InternalMovement()
     {
-        if (_stopMoving || _turningStop) return Vector3.zero;
+        if (_stopMoving || _turningStop) return Vector2.zero;
 
         Vector3 moveDirection = _targets[_targetCounter].position - transform.position;
-
-        moveDirection.y = 0;
-
-        return moveDirection;
+        Vector2 move = new Vector2(moveDirection.x, moveDirection.z);
+        move.Normalize();
+        return move;
     }
 
     protected override void OutOfBounds()

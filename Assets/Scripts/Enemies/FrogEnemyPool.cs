@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogEnemyPool : ObjectPool<FrogEnemy>
+public class FrogEnemyPool : ObjectPool<EnemyMover>
 {
 
 }
