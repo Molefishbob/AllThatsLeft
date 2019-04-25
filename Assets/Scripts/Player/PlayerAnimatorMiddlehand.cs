@@ -26,7 +26,7 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
 
     public void VictorySound()
     {
-        _victorySound.PlaySound();
+        _victorySound.PlaySound(false);
     }
 
     public void PoseComplete()
