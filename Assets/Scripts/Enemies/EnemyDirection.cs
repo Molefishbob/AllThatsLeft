@@ -21,10 +21,8 @@ public class EnemyDirection : MonoBehaviour
     private Vector3 _moveTarget;
     private PhysicsOneShotTimer _targetTimer;
     private PhysicsOneShotTimer _burpTimer;
-    [SerializeField]
     private float _minBurpWait = 5.0f;
-    [SerializeField]
-    private float _maxBurpWait = 15.0f;
+    private float _maxBurpWait = 10.0f;
 
     private void Awake()
     {
