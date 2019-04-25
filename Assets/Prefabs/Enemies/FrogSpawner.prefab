@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7181744646978947807}
-  - component: {fileID: 1548654265513761093}
   - component: {fileID: 666096737457396698}
+  - component: {fileID: 7791268610396001084}
   m_Layer: 17
   m_Name: FrogSpawner
   m_TagString: Untagged
@@ -33,19 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1548654265513761093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 82288006638000068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3449561258a299c4989cdfd7c08be96d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 3
 --- !u!135 &666096737457396698
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -59,6 +46,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 200
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7791268610396001084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82288006638000068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c9be8c26b073b146a24dc8edf0e8faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4190881340755004987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66,11 +65,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7181744646978947807}
     m_Modifications:
-    - target: {fileID: 583770356982989689, guid: dd8b6b69767a4d94fb71e26475be9bb4,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyDirection
-      objectReference: {fileID: 0}
     - target: {fileID: 4583456212573917188, guid: dd8b6b69767a4d94fb71e26475be9bb4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -125,6 +119,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583770356982989689, guid: dd8b6b69767a4d94fb71e26475be9bb4,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyDirection
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd8b6b69767a4d94fb71e26475be9bb4, type: 3}

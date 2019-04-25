@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4583456212573917188}
   - component: {fileID: 2768034421615062568}
   - component: {fileID: 4922890177067603360}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: EnemyDirection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,10 +48,8 @@ MonoBehaviour:
   _speed: 4
   _minIdleTime: 1
   _maxIdleTime: 3
-  _enemy: {fileID: 0}
+  _enemy: {fileID: 2894338818959886867, guid: 82548c6bc47c1de419f8c5e2c5774016, type: 3}
   _aggroTargets: []
-  _minBurpWait: 5
-  _maxBurpWait: 10
 --- !u!135 &4922890177067603360
 SphereCollider:
   m_ObjectHideFlags: 0
