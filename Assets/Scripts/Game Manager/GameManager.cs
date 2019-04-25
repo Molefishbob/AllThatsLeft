@@ -182,9 +182,13 @@ public class GameManager : Singleton<GameManager>
         if (Player != null)
         {
             Player.gameObject.SetActive(active);
-            if (!LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = !active;
+            if (LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = true;
         }
-        Camera?.gameObject.SetActive(active);
+        if (Camera != null)
+        {
+            Camera.gameObject.SetActive(active);
+            if (LoadingScreen.gameObject.activeSelf) Camera.PlayerControlled = false;
+        }
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
         PatrolEnemyPool?.gameObject.SetActive(active);

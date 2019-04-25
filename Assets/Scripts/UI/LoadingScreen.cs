@@ -14,13 +14,10 @@ public class LoadingScreen : MonoBehaviour
     private float _timeBeforeTransition = 1.0f;
     [SerializeField]
     private float _transitionDuration = 1.0f;
-    [SerializeField]
-    private float _activateControlsAfter = 0.5f;
 
     private UnscaledOneShotTimer _timer;
     private bool _mute;
     private bool _inTransition;
-    private bool _controlsGiven;
 
     private void Awake()
     {
@@ -34,8 +31,17 @@ public class LoadingScreen : MonoBehaviour
         _mute = PrefsManager.Instance.AudioMuteSFX;
         PrefsManager.Instance.AudioMuteSFX = true;
 
+        if (GameManager.Instance.Camera != null)
+        {
+            GameManager.Instance.Camera.PlayerControlled = false;
+        }
+
+        if (GameManager.Instance.Player != null)
+        {
+            GameManager.Instance.Player.ControlsDisabled = true;
+        }
+
         _inTransition = false;
-        _controlsGiven = false;
 
         _timer.OnTimerCompleted += GrowUp;
         _timer.StartTimer(_timeBeforeTransition);
@@ -47,25 +53,6 @@ public class LoadingScreen : MonoBehaviour
         {
             float currentScale = _timer.NormalizedTimeElapsed * (_endScale - _startScale) + _startScale;
             _scaledObject.localScale = Vector3.one * currentScale;
-
-            if (!_controlsGiven && _timer.TimeElapsed >= _activateControlsAfter)
-            {
-                GameManager.Instance.Camera.PlayerControlled = true;
-                GameManager.Instance.Player.ControlsDisabled = false;
-                _controlsGiven = true;
-            }
-        }
-        else
-        {
-            if (GameManager.Instance.Camera != null)
-            {
-                GameManager.Instance.Camera.PlayerControlled = false;
-            }
-
-            if (GameManager.Instance.Player != null)
-            {
-                GameManager.Instance.Player.ControlsDisabled = true;
-            }
         }
     }
 
