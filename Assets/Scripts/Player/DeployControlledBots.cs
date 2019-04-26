@@ -21,6 +21,7 @@ public class DeployControlledBots : MonoBehaviour
     private BotMovement _activeBot;
     private ScaledOneShotTimer _timer;
     private bool _paused = true;
+    private bool _holding = false;
 
     private void Awake()
     {
@@ -42,11 +43,29 @@ public class DeployControlledBots : MonoBehaviour
             return;
         }
 
-        if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
+        if (_player.IsGrounded)
         {
-            _player.ControlsDisabled = true;
-            _player._animator?.SetTrigger(_animatorTriggerDeploy);
-            if (OnDeployBot != null) OnDeployBot();
+            if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton))
+            {
+                _player.HoldPosition = true;
+                _holding = true;
+            }
+
+            if (_holding)
+            {
+                if (Input.GetButtonUp(_deployBotButton))
+                {
+                    _holding = false;
+                    _player.ControlsDisabled = true;
+                    _player.HoldPosition = false;
+                    _player._animator?.SetTrigger(_animatorTriggerDeploy);
+                    if (OnDeployBot != null) OnDeployBot();
+                }
+            }
+        }
+        else
+        {
+            _holding = false;
         }
     }
 

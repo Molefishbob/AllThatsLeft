@@ -85,7 +85,7 @@ public class PlayerJump : MonoBehaviour
             return;
         }
 
-        if (ControlsDisabled) return;
+        if (ControlsDisabled || _character.HoldPosition) return;
 
         if (_jumping)
         {

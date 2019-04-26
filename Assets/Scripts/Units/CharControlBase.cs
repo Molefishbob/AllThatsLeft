@@ -40,6 +40,20 @@ public abstract class CharControlBase : MonoBehaviour
     private bool _resetGravity = false;
     private bool _controllerEnabled = true;
     private bool _airBorne = false;
+    private bool _holdPosition = false;
+
+    public bool HoldPosition
+    {
+        get
+        {
+            return _holdPosition;
+        }
+        set
+        {
+            _holdPosition = value;
+            ResetInternalMove();
+        }
+    }
 
     public bool IsGrounded { get; private set; }
     public float CurrentGravity { get { return _currentGravity.magnitude; } }
@@ -96,25 +110,33 @@ public abstract class CharControlBase : MonoBehaviour
                     transform.rotation = inputRotation;
                 }
 
-                // turning angle
-                float turnAngle = Vector3.Angle(_internalMove, inputDirection);
-
-                // decelerate
-                Vector3 decelerationVector = inputDirection * maxSpeed - _internalMove;
-                decelerationVector = decelerationVector.normalized * Mathf.Min(decelerationVector.magnitude, decelerationMagnitude);
-                _internalMove += decelerationVector;
-
-                // add to current movement
-                _internalMove += inputDirection * accelerationMagnitude;
-
-                // cap max speed
-                _internalMove = _internalMove.normalized * Mathf.Min(_internalMove.magnitude, maxSpeed);
-
-                // animation stuff
-                if (_animator != null)
+                if (HoldPosition)
                 {
-                    _animator.SetBool(_animatorBoolRunning, true);
-                    // _animator.speed = _internalMove.magnitude / maxSpeed;
+                    if (_animator != null)
+                    {
+                        _animator.SetBool(_animatorBoolRunning, false);
+                        // _animator.speed = 1;
+                    }
+                }
+                else
+                {
+                    // decelerate
+                    Vector3 decelerationVector = inputDirection * maxSpeed - _internalMove;
+                    decelerationVector = decelerationVector.normalized * Mathf.Min(decelerationVector.magnitude, decelerationMagnitude);
+                    _internalMove += decelerationVector;
+
+                    // add to current movement
+                    _internalMove += inputDirection * accelerationMagnitude;
+
+                    // cap max speed
+                    _internalMove = _internalMove.normalized * Mathf.Min(_internalMove.magnitude, maxSpeed);
+
+                    // animation stuff
+                    if (_animator != null)
+                    {
+                        _animator.SetBool(_animatorBoolRunning, true);
+                        // _animator.speed = _internalMove.magnitude / maxSpeed;
+                    }
                 }
             }
             // no input deceleration
