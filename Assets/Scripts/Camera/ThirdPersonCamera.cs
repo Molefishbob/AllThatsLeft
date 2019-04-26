@@ -45,6 +45,11 @@ public class ThirdPersonCamera : MonoBehaviour
     public bool PlayerControlled;
     private float _returnToPlayerTime;
 
+    public Transform LookingAt
+    {
+        get { return _lookAt; }
+    }
+
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
 

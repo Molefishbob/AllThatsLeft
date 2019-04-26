@@ -30,6 +30,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     private BombAction _selfBomb;
     private HackAction _selfHack;
     private TrampolineAction _selfTrampoline;
+    private Transform _thisCamTarget;
 
     protected override void Awake()
     {
@@ -43,6 +44,8 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfBomb = GetComponent<BombAction>();
         _selfHack = GetComponent<HackAction>();
         _selfTrampoline = GetComponent<TrampolineAction>();
+
+        _thisCamTarget = transform.Find("CameraTarget");
     }
 
     void OnEnable()
@@ -138,7 +141,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     private void ActualRelease()
     {
-        if (!_selfHack.Hacking)
+        if (GameManager.Instance.Camera.LookingAt.transform == _thisCamTarget)
         {
             GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime, true);
         }
