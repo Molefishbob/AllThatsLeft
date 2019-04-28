@@ -6,8 +6,8 @@ public class CheckPointPole : MonoBehaviour
 {
     public int id;
     public Transform SpawnPoint;
-    public ParticleSystem _particlePrefab;
-    public Transform _particleSpawn;
+    //public ParticleSystem _particlePrefab;
+    //public Transform _particleSpawn;
     public Animator checkPoint;
     public string triggerName = "getChecked";
 
@@ -15,7 +15,7 @@ public class CheckPointPole : MonoBehaviour
     {
         if (GameManager.Instance.LevelManager.SetCheckpoint(this))
         {
-            if (GameManager.Instance.BeaconParticle == null)
+            /*if (GameManager.Instance.BeaconParticle == null)
             {
                 GameManager.Instance.BeaconParticle = Instantiate(_particlePrefab, _particleSpawn.position, _particleSpawn.rotation);
                 DontDestroyOnLoad(GameManager.Instance.BeaconParticle.gameObject);
@@ -25,7 +25,7 @@ public class CheckPointPole : MonoBehaviour
                 GameManager.Instance.BeaconParticle.transform.position = _particleSpawn.position;
                 GameManager.Instance.BeaconParticle.transform.rotation = _particleSpawn.rotation;
                 GameManager.Instance.BeaconParticle.gameObject.SetActive(true);
-            }
+            }*/
             checkPoint.SetTrigger(triggerName);
         }
     }
