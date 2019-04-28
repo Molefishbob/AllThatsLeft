@@ -8,14 +8,13 @@ public class DeployControlledBots : MonoBehaviour
 
     [SerializeField]
     private string _deployBotButton = "Deploy Bot";
-    [SerializeField]
-    private float _throwDistance = 2.0f;
-    [SerializeField]
-    private float _throwHeight = 1.0f;
-    [SerializeField]
-    private float _throwTime = 2.0f;
+    public float _throwDistance = 2.0f;
+    public float _throwHeight = 1.0f;
+    public float _throwTime = 2.0f;
     [SerializeField]
     private string _animatorTriggerDeploy = "Deploy";
+    [SerializeField]
+    private GameObject _aimingLine = null;
 
     private MainCharMovement _player;
     private BotMovement _activeBot;
@@ -49,6 +48,7 @@ public class DeployControlledBots : MonoBehaviour
             {
                 _player.HoldPosition = true;
                 _holding = true;
+                _aimingLine.SetActive(true);
             }
 
             if (_holding)
@@ -56,6 +56,7 @@ public class DeployControlledBots : MonoBehaviour
                 if (Input.GetButtonUp(_deployBotButton))
                 {
                     _holding = false;
+                    _aimingLine.SetActive(false);
                     _player.ControlsDisabled = true;
                     _player.HoldPosition = false;
                     _player._animator?.SetTrigger(_animatorTriggerDeploy);
@@ -63,9 +64,10 @@ public class DeployControlledBots : MonoBehaviour
                 }
             }
         }
-        else
+        else if (_holding)
         {
             _holding = false;
+            _aimingLine.SetActive(false);
         }
     }
 
