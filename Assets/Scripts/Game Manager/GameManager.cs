@@ -106,8 +106,6 @@ public class GameManager : Singleton<GameManager>
     public ThirdPersonCamera Camera;
     public RotateSky SkyCamera;
 
-    public ParticleSystem BeaconParticle;
-
     public LoadingScreen LoadingScreen;
 
     public LoopingMusic LevelMusic;
