@@ -29,8 +29,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     // Could use a BotActionBase list/array for scaleability
     private BombAction _selfBomb;
     private HackAction _selfHack;
-    private TrampolineAction _selfTrampoline;
+    public TrampolineAction _selfTrampoline;
     private Transform _thisCamTarget;
+    public Transform ThisCameraTarget { get { return _thisCamTarget; } }
 
     protected override void Awake()
     {
