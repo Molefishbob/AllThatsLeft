@@ -13,6 +13,8 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
 
     private DeployControlledBots _deployScript = null;
 
+    public ParticleSystem landing = null;
+
     [HideInInspector]
     public Collectible _collectible = null;
 
@@ -40,5 +42,10 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
     {
         _collectible.HoldPose(_characterHand);
         _collectible = null;
+    }
+
+    public void PlayLanding()
+    {
+        Instantiate(landing, transform.position, transform.rotation);
     }
 }
