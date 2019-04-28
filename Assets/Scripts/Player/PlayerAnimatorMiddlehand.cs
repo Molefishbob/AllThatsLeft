@@ -44,7 +44,8 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
         _collectible = null;
     }
 
-    public void PlayLanding() {
-        landing.Play();
+    public void PlayLanding()
+    {
+        Instantiate(landing, transform.position, transform.rotation);
     }
 }
