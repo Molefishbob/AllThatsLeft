@@ -7,7 +7,10 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     [SerializeField]
     private string _deadBool = "Dead";
     private EnemyMover _frog;
-
+    //lisää partikkeliefekti viittaus ja timer jnejejne
+    //EndLevel skriptistä mallia
+    //play partikkeliefekti timerin jälkeen tapahtuvassa metodissa myös!! 3===D
+    
     public bool Dead { get; protected set; }
 
     private void Awake()

@@ -48,6 +48,8 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
         }
     }
 
+
+    //tämä pois. tilalle timerin pohjalta toimiva (EnemyTakeDamagessa)
     public void DeathComplete()
     {
         if (_frog != null)
