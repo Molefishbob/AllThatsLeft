@@ -27,7 +27,7 @@ public class ParabolicLine : MonoBehaviour
 
         for (int i = 0; i < _totalPoints; i++)
         {
-            positions[i].z = i * _maxDistance / _totalPoints;
+            positions[i].z = i * _maxDistance / (_totalPoints - 1);
             float t = positions[i].z / v;
             positions[i].y = f * t - g * t * t / 2.0f;
             positions[i].x = 0.0f;
