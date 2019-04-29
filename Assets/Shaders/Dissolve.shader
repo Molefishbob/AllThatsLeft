@@ -97,7 +97,7 @@ Shader "Custom/Dissolve" {
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
 			fixed3 EmissiveCol = c.a * _Emission;
 
-			o.Albedo = _Color;
+			o.Albedo = c;
 			o.Occlusion = tex2D (_AO, IN.uv_MainTex);
 			o.Emission = EmissiveCol + _EdgeColor1 * Edge;
 			o.Normal = UnpackNormal (tex2D (_Normal, IN.uv_MainTex));
