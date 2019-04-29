@@ -18,6 +18,9 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     [SerializeField]
     protected SingleSFXSound _fallDeathSound = null;
 
+    public ParticleSystem _teleportEffectSlow;
+    public ParticleSystem _teleportEffectFast;
+
     protected ScaledOneShotTimer _deathTimer;
 
     public bool Dead { get; protected set; }

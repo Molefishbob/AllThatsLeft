@@ -30,6 +30,8 @@ public abstract class CharControlBase : MonoBehaviour
     [HideInInspector]
     public Animator _animator;
     [HideInInspector]
+    public SkinnedMeshRenderer _renderer;
+    [HideInInspector]
     public CharacterController _controller;
 
     private Vector3 _externalMove = Vector3.zero;
@@ -47,7 +49,8 @@ public abstract class CharControlBase : MonoBehaviour
     protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponentInChildren<Animator>(true);
+        _renderer = GetComponentInChildren<SkinnedMeshRenderer>(true);
         SetControllerActive(_startsActive);
     }
 
