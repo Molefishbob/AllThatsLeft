@@ -55,6 +55,11 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
             _frog._animator.SetBool(_deadBool, false);
             _frog.gameObject.SetActive(false);
         }
+        if (_scorpion != null)
+        {
+            _scorpion._animator.SetBool(_deadBool, false);
+            _scorpion.gameObject.SetActive(false);
+        }
     }
 
     public void AlertEnded()

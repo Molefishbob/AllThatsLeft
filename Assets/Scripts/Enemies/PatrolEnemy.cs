@@ -10,6 +10,8 @@ public class PatrolEnemy : CharControlBase
     private bool _stopMoving;
     private bool _turningStop;
     private Quaternion _lookAtThis;
+    public EnemyAttack _attack;
+    private string _defaultAnimState = "Default";
 
     public float Speed
     {
@@ -26,6 +28,13 @@ public class PatrolEnemy : CharControlBase
         base.Awake();
         _targetCounter = 0;
         _goingForward = true;
+        _attack = GetComponentInChildren<EnemyAttack>();
+    }
+
+    private void OnEnable()
+    {
+        _stopMoving = false;
+        _attack.gameObject.SetActive(true);
     }
 
     private void OnDisable()
@@ -33,6 +42,8 @@ public class PatrolEnemy : CharControlBase
         _targetCounter = 0;
         _goingForward = true;
         _stopMoving = false;
+        _animator.SetTrigger(_defaultAnimState);
+        _attack.gameObject.SetActive(false);
     }
 
     protected override void Start()
