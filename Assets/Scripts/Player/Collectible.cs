@@ -75,7 +75,10 @@ public abstract class Collectible : MonoBehaviour
         _model.transform.rotation = GameManager.Instance.Player.transform.rotation;
         if (_modelAnimator != null) _modelAnimator.SetTrigger(_modelAnimatorTrigger);
         _timer.StartTimer(_holdPoseTime);
+        HoldAction();
     }
+
+    protected virtual void HoldAction() { }
 
     private void DoneHolding()
     {
