@@ -13,11 +13,13 @@ public class HackAction : BotActionBase
     public bool Hacking { get { return _bHacking; } }
     private bool _bHacking = false;
     private BotReleaser _releaser = null;
+    private NewMinibotAnimatorMiddlehand _animMiddlehand;
 
     protected override void Awake()
     {
         base.Awake();
         _releaser = GetComponent<BotReleaser>();
+        _animMiddlehand = GetComponentInChildren<NewMinibotAnimatorMiddlehand>(true);
         _hackTargets = new List<GenericHackable>(4);
     }
 
@@ -41,6 +43,7 @@ public class HackAction : BotActionBase
                 _selfMover._animator.SetBool("Hack", false);
                 _hackTargets.Clear();
                 _bHacking = false;
+                _animMiddlehand.ToggleParticleEffectsOff();
             }
             return;
         }
@@ -82,5 +85,6 @@ public class HackAction : BotActionBase
     {
         _hackTargets.Clear();
         _bHacking = false;
+        _animMiddlehand.ToggleParticleEffectsOff();
     }
 }
