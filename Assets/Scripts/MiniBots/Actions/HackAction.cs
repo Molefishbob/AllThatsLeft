@@ -41,6 +41,7 @@ public class HackAction : BotActionBase
                 _selfMover._animator.SetBool("Hack", false);
                 _hackTargets.Clear();
                 _bHacking = false;
+                GetComponentInChildren<NewMinibotAnimatorMiddlehand>().ToggleParticleEffectsOff();
             }
             return;
         }
