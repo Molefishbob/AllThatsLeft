@@ -85,5 +85,6 @@ public class HackAction : BotActionBase
     {
         _hackTargets.Clear();
         _bHacking = false;
+        _animMiddlehand.ToggleParticleEffectsOff();
     }
 }
