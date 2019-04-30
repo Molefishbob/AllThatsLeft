@@ -45,13 +45,13 @@ public class NewMinibotAnimatorMiddlehand : MonoBehaviour
     public void ToggleParticleEffectsOn() {
         
         foreach (GameObject effect in particleEffects) {
-            effect.active = true;
+            effect.SetActive(true);
         }
     }
     public void ToggleParticleEffectsOff() {
 
         foreach (GameObject effect in particleEffects) {
-            effect.active = false;
+            effect.SetActive(false);
         }
     }
 }
