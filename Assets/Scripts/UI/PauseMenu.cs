@@ -13,6 +13,9 @@ public class PauseMenu : MonoBehaviour
     private GameObject _settings = null, _pauseMenu = null, _confirmQuit = null;
     [SerializeField]
     private GameObject _masterVolumeSlider = null, _noButton = null, _resumeButton = null, _camxSlider = null;
+    [SerializeField]
+    private SingleUISound _buttonClickSound = null;
+    private UnscaledOneShotTimer _timer;
     public enum Page
     {
         MainMenu,
@@ -24,6 +27,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
+        _timer = gameObject.AddComponent<UnscaledOneShotTimer>();
         _currentPage = Page.MainMenu;
         _eventSystem.SetSelectedGameObject(_resumeButton);
     }
@@ -34,10 +38,15 @@ public class PauseMenu : MonoBehaviour
             return true;
         if (Input.GetAxis("Vertical") > 0f)
             return true;
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown && !Input.GetMouseButtonDown(0))
             return true;
 
         return false;
+    }
+
+    public void ButtonClickSound()
+    {
+        _buttonClickSound.PlaySound();
     }
 
     private void Update()
@@ -51,7 +60,7 @@ public class PauseMenu : MonoBehaviour
             switch (_currentPage)
             {
                 case Page.MainMenu:
-                        _eventSystem.SetSelectedGameObject(_resumeButton);
+                    _eventSystem.SetSelectedGameObject(_resumeButton);
                     break;
                 case Page.VolumeSettings:
                     _eventSystem.SetSelectedGameObject(_masterVolumeSlider);
@@ -66,13 +75,38 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= ResumeGame;
+            _timer.OnTimerCompleted -= Menu;
+            _timer.OnTimerCompleted -= Quit;
+            _timer.OnTimerCompleted -= Desktop;
+        }
+    }
+
+    private void ResumeGame()
+    {
+        GameManager.Instance.UnPauseGame();
+        gameObject.SetActive(false);
+        _timer.OnTimerCompleted -= ResumeGame;
+    }
+
     /// <summary>
     /// Resumes the game
     /// </summary>
     public void Resume()
     {
-        GameManager.Instance.UnPauseGame();
+        _timer.StartTimer(_buttonClickSound.Duration);
+        _timer.OnTimerCompleted += ResumeGame;
+    }
+
+    private void Menu()
+    {
         gameObject.SetActive(false);
+        GameManager.Instance.ChangeToMainMenu();
+        _timer.OnTimerCompleted -= Menu;
     }
 
     /// <summary>
@@ -80,8 +114,8 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void ToMenu()
     {
-        gameObject.SetActive(false);
-        GameManager.Instance.ChangeToMainMenu();
+        _timer.StartTimer(_buttonClickSound.Duration);
+        _timer.OnTimerCompleted += Menu;
     }
 
     /// <summary>
@@ -103,6 +137,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PageToVolumeSettings()
     {
+        ButtonClickSound();
         _currentPage = Page.VolumeSettings;
     }
     /// <summary>
@@ -110,6 +145,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void PageToControlSettings()
     {
+        ButtonClickSound();
         _currentPage = Page.ControlSettings;
     }
 
@@ -126,10 +162,7 @@ public class PauseMenu : MonoBehaviour
         _eventSystem.SetSelectedGameObject(_resumeButton);
     }
 
-    /// <summary>
-    /// Opens confirmquit screen
-    /// </summary>
-    public void ToDesktop()
+    private void Desktop()
     {
         _currentPage = Page.ConfirmationQuit;
         _confirmQuit.SetActive(true);
@@ -137,6 +170,22 @@ public class PauseMenu : MonoBehaviour
         _pauseMenu.SetActive(false);
 
         _eventSystem.SetSelectedGameObject(_noButton);
+        _timer.OnTimerCompleted -= Desktop;
+    }
+
+    /// <summary>
+    /// Opens confirmquit screen
+    /// </summary>
+    public void ToDesktop()
+    {
+        _timer.StartTimer(_buttonClickSound.Duration);
+        _timer.OnTimerCompleted += Desktop;
+    }
+
+    private void Quit()
+    {
+        GameManager.Instance.QuitGame();
+        _timer.OnTimerCompleted -= Quit;
     }
 
     /// <summary>
@@ -144,6 +193,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void QuitGame()
     {
-        GameManager.Instance.QuitGame();
+        _timer.StartTimer(_buttonClickSound.Duration);
+        _timer.OnTimerCompleted += Quit;
     }
 }

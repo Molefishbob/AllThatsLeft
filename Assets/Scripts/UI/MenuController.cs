@@ -28,7 +28,9 @@ public class MenuController : MonoBehaviour
     private LoopingMusic _menuMusicPrefab = null;
     [SerializeField]
     private Animator _titleAnim = null;
-    public enum Page 
+    [SerializeField]
+    private SingleUISound _buttonSound = null;
+    public enum Page
     {
         MainMenu,
         VolumeSettings,
@@ -36,13 +38,15 @@ public class MenuController : MonoBehaviour
         ConfirmationQuit
     }
     private Page _currentPage;
-    
+
     [SerializeField]
     private LoadingScreen _loadingScreen = null;
     private Animator _anim;
+    private UnscaledOneShotTimer _timer;
 
     private void Awake()
     {
+        _timer = gameObject.AddComponent<UnscaledOneShotTimer>();
         if (GameManager.Instance.LoadingScreen == null)
         {
             GameManager.Instance.LoadingScreen = Instantiate(_loadingScreen);
@@ -57,7 +61,7 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    private void Start() 
+    private void Start()
     {
 
         _mainMenuPanel.SetActive(false);
@@ -65,7 +69,7 @@ public class MenuController : MonoBehaviour
         _quitPanel.SetActive(false);
 
         _titleAnim.SetTrigger("GameStart");
-        
+
     }
 
     private bool ButtonsUsed()
@@ -74,20 +78,26 @@ public class MenuController : MonoBehaviour
             return true;
         if (Input.GetAxis("Vertical") > 0f)
             return true;
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown && !Input.GetMouseButtonDown(0))
             return true;
 
         return false;
     }
 
-    private void Update() 
+    private void PlayButtonClick()
     {
-        if (_eventSystem.IsPointerOverGameObject() && GameManager.Instance.ShowCursor && _eventSystem.currentSelectedGameObject != null) 
+        _buttonSound.PlaySound();
+    }
+
+    private void Update()
+    {
+        if (_eventSystem.IsPointerOverGameObject() && GameManager.Instance.ShowCursor && _eventSystem.currentSelectedGameObject != null)
             _eventSystem.SetSelectedGameObject(null);
 
-        if (ButtonsUsed() && _eventSystem.currentSelectedGameObject == null) 
+        if (ButtonsUsed() && _eventSystem.currentSelectedGameObject == null)
         {
-            switch (_currentPage) {
+            switch (_currentPage)
+            {
                 case Page.MainMenu:
                     if (!_continueButton.interactable)
                         _eventSystem.SetSelectedGameObject(_newGame);
@@ -107,12 +117,36 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (_timer != null)
+        {
+            _timer.OnTimerCompleted -= ContinueAction;
+            _timer.OnTimerCompleted -= StartGameAction;
+            _timer.OnTimerCompleted -= QuitAction;
+        }
+    }
+
+    private void ContinueAction()
+    {
+        GameManager.Instance.ContinueGame();
+        _timer.OnTimerCompleted -= ContinueAction;
+    }
+
     /// <summary>
     /// Called by the continue button to continue a previously saved game
     /// </summary>
     public void Continue()
     {
-        GameManager.Instance.ContinueGame();
+        PlayButtonClick();
+        _timer.StartTimer(_buttonSound.Duration);
+        _timer.OnTimerCompleted += ContinueAction;
+    }
+
+    private void StartGameAction()
+    {
+        GameManager.Instance.StartNewGame();
+        _timer.OnTimerCompleted -= StartGameAction;
     }
 
     /// <summary>
@@ -120,7 +154,9 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        GameManager.Instance.StartNewGame();
+        PlayButtonClick();
+        _timer.StartTimer(_buttonSound.Duration);
+        _timer.OnTimerCompleted += StartGameAction;
     }
 
     /// <summary>
@@ -138,11 +174,40 @@ public class MenuController : MonoBehaviour
         _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
         _currentPage = Page.MainMenu;
         _eventSystem.UpdateModules();
-        if (_continueButton.interactable) 
+        if (_continueButton.interactable)
         {
             _eventSystem.SetSelectedGameObject(_continueButton.gameObject);
-        } 
-        else 
+        }
+        else
+        {
+            _eventSystem.SetSelectedGameObject(_newGame);
+        }
+    }
+
+    /// <summary>
+    /// Switches the current panel to mainmenu panel
+    /// 
+    /// Enables the mainmenu panel and disables the other panels
+    /// Sets the currentpage to be mainmenu
+    /// Selects a button for the console peasants
+    /// </summary>
+    /// <param name="playSound">Plays a button click sound if true</param>
+    public void EnableMainMenuPanel(bool playSound)
+    {
+        if (playSound)
+            _buttonSound.PlaySound();
+
+        _mainMenuPanel.SetActive(true);
+        _optionsPanel.SetActive(false);
+        _quitPanel.SetActive(false);
+        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
+        _currentPage = Page.MainMenu;
+        _eventSystem.UpdateModules();
+        if (_continueButton.interactable)
+        {
+            _eventSystem.SetSelectedGameObject(_continueButton.gameObject);
+        }
+        else
         {
             _eventSystem.SetSelectedGameObject(_newGame);
         }
@@ -151,16 +216,18 @@ public class MenuController : MonoBehaviour
     /// <summary>
     /// Changes the currentPage to VolumeSettings
     /// </summary>
-    public void VolumeSettings() 
+    public void VolumeSettings()
     {
+        PlayButtonClick();
         _currentPage = Page.VolumeSettings;
     }
 
     /// <summary>
     /// Changes the currentPage to ControlSettings
     /// </summary>
-    public void ControlSettings() 
+    public void ControlSettings()
     {
+        PlayButtonClick();
         _currentPage = Page.ControlSettings;
     }
 
@@ -173,6 +240,7 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void EnableOptionsPanel()
     {
+        PlayButtonClick();
         _mainMenuPanel.SetActive(false);
         _optionsPanel.SetActive(true);
         _currentPage = Page.VolumeSettings;
@@ -188,12 +256,19 @@ public class MenuController : MonoBehaviour
     /// Changes the currentPage to ConfirmQuit
     /// Selects a button for the console peasants
     /// </summary>
-    public void EnableConfirmQuit(){
+    public void EnableConfirmQuit()
+    {
+        PlayButtonClick();
         _mainMenuPanel.SetActive(false);
         _quitPanel.SetActive(true);
         _currentPage = Page.ConfirmationQuit;
         _eventSystem.UpdateModules();
-       _eventSystem.SetSelectedGameObject(_quitPanel.GetComponentInChildren<Button>().gameObject);
+        _eventSystem.SetSelectedGameObject(_quitPanel.GetComponentInChildren<Button>().gameObject);
+    }
+    private void QuitAction()
+    {
+        GameManager.Instance.QuitGame();
+        _timer.OnTimerCompleted -= QuitAction;
     }
 
     /// <summary>
@@ -201,6 +276,8 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void Quit()
     {
-        GameManager.Instance.QuitGame();
+        PlayButtonClick();
+        _timer.StartTimer(_buttonSound.Duration);
+        _timer.OnTimerCompleted += QuitAction;
     }
 }

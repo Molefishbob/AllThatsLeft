@@ -7,6 +7,11 @@ public class SingleUISound : VolumeControl
     [SerializeField, Range(0.0f, 1.0f)]
     protected float _pitchVariance = 0.25f;
     protected float _basePitch;
+    public float Duration
+    {
+        get;
+        protected set;
+    }
 
     protected override void OnEnable()
     {
@@ -21,6 +26,8 @@ public class SingleUISound : VolumeControl
     protected virtual void Start()
     {
         _basePitch = _audioSource.pitch;
+        if (_audioSource.clip != null)
+            Duration =  _audioSource.clip.length;
     }
 
     protected virtual void OnDisable()
