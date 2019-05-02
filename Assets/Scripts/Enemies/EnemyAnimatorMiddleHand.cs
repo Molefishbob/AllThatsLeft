@@ -50,7 +50,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
 
 
     //tämä pois. tilalle timerin pohjalta toimiva (EnemyTakeDamagessa)
-    public void DeathComplete()
+    /*public void DeathComplete()
     {
         if (_frog != null)
         {
@@ -62,7 +62,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
             _scorpion._animator.SetBool(_deadBool, false);
             _scorpion.gameObject.SetActive(false);
         }
-    }
+    }*/
 
     public void AlertEnded()
     {

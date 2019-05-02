@@ -7,20 +7,40 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     [SerializeField]
     private string _deadBool = "Dead";
     private EnemyMover _frog;
+    public ParticleSystem _dissolveFlakes;
+    private int _shaderProperty;
+    protected ScaledOneShotTimer _timer;
+    [SerializeField]
+    private float _dissolveTime = 4.0f;
     //lisää partikkeliefekti viittaus ja timer jnejejne
     //EndLevel skriptistä mallia
     //play partikkeliefekti timerin jälkeen tapahtuvassa metodissa myös!! 3===D
-    
+
     public bool Dead { get; protected set; }
 
     private void Awake()
     {
         _frog = GetComponent<EnemyMover>();
+        _shaderProperty = Shader.PropertyToID("_cutoff");
+        _timer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _timer.OnTimerCompleted += DeathComplete;
     }
 
     private void OnDisable()
     {
         Dead = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (_timer != null) _timer.OnTimerCompleted -= DeathComplete;
+    }
+    private void Update()
+    {
+        if (_timer.IsRunning)
+        {
+            _frog._renderer.material.SetFloat(_shaderProperty, _timer.NormalizedTimeElapsed);
+        }
     }
 
     public void TakeDamage(int damage)
@@ -36,5 +56,16 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         if (_frog._deathSound != null) _frog._deathSound.PlaySound();
         _frog._attack.gameObject.SetActive(false);
         _frog._animator.SetBool(_deadBool, true);
+        _timer.StartTimer(_dissolveTime);
+    }
+
+    private void DeathComplete()
+    {
+        if (_frog != null)
+        {
+            _frog._animator.SetBool(_deadBool, false);
+            _frog.gameObject.SetActive(false);
+            _frog._renderer.material.SetFloat(_shaderProperty, 0.0f);
+        }
     }
 }
