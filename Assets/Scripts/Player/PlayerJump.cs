@@ -127,8 +127,9 @@ public class PlayerJump : MonoBehaviour
                 _character.ResetGravity();
                 _currentJumpForce = GetJumpForce(_maxHeight);
                 _holdTimer.StartTimer(_holdTimeForMaxHeight);
-                _sound?.PlaySound();
-                _character._animator?.SetTrigger(_animatorTriggerJump);
+                if (_sound != null) _sound.PlaySound();
+                _character._animator.SetTrigger(_animatorTriggerJump);
+                _character._animator.SetBool(_character._animatorBoolAirborne, true);
 
                 if (OnPlayerJump != null) OnPlayerJump();
             }
@@ -176,9 +177,10 @@ public class PlayerJump : MonoBehaviour
         _forcedJumping = true;
         if (playAnimation)
         {
-            _sound?.PlaySound();
-            _character._animator?.SetTrigger(_animatorTriggerJump);
+            if (_sound != null) _sound.PlaySound();
+            _character._animator.SetTrigger(_animatorTriggerJump);
         }
+        _character._animator.SetBool(_character._animatorBoolAirborne, true);
     }
 
     private void EndAfterLeeway()

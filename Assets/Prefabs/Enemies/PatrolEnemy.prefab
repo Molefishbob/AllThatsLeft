@@ -51,11 +51,12 @@ MonoBehaviour:
   _speed: 8
   _turningSpeed: 200
   _accelerationTime: 5
-  _minYPosition: -10
+  _decelerationTime: 5
+  _minYPosition: -5
+  _minAirborneTime: 0.2
   _walkableTerrain:
     serializedVersion: 2
     m_Bits: 28672
-  _groundedDistanceBonus: 0.22
   _landingSound: {fileID: 0}
   _animatorBoolRunning: Run
   _animatorBoolAirborne: Airborne
@@ -75,7 +76,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2
   m_Radius: 1
-  m_SlopeLimit: 45
+  m_SlopeLimit: 30
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001

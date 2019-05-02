@@ -21,6 +21,7 @@ public class DeployControlledBots : MonoBehaviour
     private ScaledOneShotTimer _timer;
     private bool _paused = true;
     private bool _holding = false;
+    private bool _hit = false;
 
     private void Awake()
     {
@@ -59,7 +60,7 @@ public class DeployControlledBots : MonoBehaviour
                     _aimingLine.SetActive(false);
                     _player.ControlsDisabled = true;
                     _player.HoldPosition = false;
-                    _player._animator?.SetTrigger(_animatorTriggerDeploy);
+                    _player._animator.SetTrigger(_animatorTriggerDeploy);
                     if (OnDeployBot != null) OnDeployBot();
                 }
             }
@@ -85,7 +86,14 @@ public class DeployControlledBots : MonoBehaviour
             }
             else if (!_activeBot.IsGrounded)
             {
-                _activeBot.AddDirectMovement(_activeBot.transform.forward * _throwDistance * Time.deltaTime / _throwTime);
+                if ((_activeBot._controller.collisionFlags & CollisionFlags.Sides) == CollisionFlags.Sides)
+                {
+                    _hit = true;
+                }
+                if (!_hit)
+                {
+                    _activeBot.AddDirectMovement(_activeBot.transform.forward * _throwDistance * Time.deltaTime / _throwTime);
+                }
             }
             else if (!_timer.IsRunning)
             {
@@ -107,6 +115,7 @@ public class DeployControlledBots : MonoBehaviour
         _activeBot.ControlsDisabled = true;
         _activeBot.SetControllerActive(true);
         _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight, false);
+        _hit = false;
         GameManager.Instance.Camera.MoveToTarget(_activeBot.transform, _throwTime, false);
 
         _timer.StartTimer(_throwTime);

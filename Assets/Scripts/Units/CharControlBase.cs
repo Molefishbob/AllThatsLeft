@@ -15,15 +15,14 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField, Tooltip("The y position on which the unit dies")]
     private float _minYPosition = -10;
     [SerializeField]
-    protected LayerMask _walkableTerrain = (1 << 12) + (1 << 13) + (1 << 14);
+    private float _minAirborneTime = 0.2f;
     [SerializeField]
-    private float _groundedDistanceBonus = 0.22f;
+    protected LayerMask _walkableTerrain = 1 << 12 | 1 << 13 | 1 << 14;
     [SerializeField]
     private RandomSFXSound _landingSound = null;
     [SerializeField]
     private string _animatorBoolRunning = "Run";
-    [SerializeField]
-    private string _animatorBoolAirborne = "Airborne";
+    public string _animatorBoolAirborne = "Airborne";
     [SerializeField]
     private bool _startsActive = false;
 
@@ -41,6 +40,7 @@ public abstract class CharControlBase : MonoBehaviour
     private bool _controllerEnabled = true;
     private bool _airBorne = false;
     private bool _holdPosition = false;
+    private PhysicsOneShotTimer _airTimer;
 
     public bool HoldPosition
     {
@@ -61,13 +61,19 @@ public abstract class CharControlBase : MonoBehaviour
     protected virtual void Awake()
     {
         _controller = GetComponent<CharacterController>();
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponentInChildren<Animator>(true);
+        _airTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
         SetControllerActive(_startsActive);
     }
 
     protected virtual void Start()
     {
-        _airBorne = !IsGrounded;
+        _airTimer.OnTimerCompleted += Aired;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        _airTimer.OnTimerCompleted -= Aired;
     }
 
     private void FixedUpdate()
@@ -112,11 +118,7 @@ public abstract class CharControlBase : MonoBehaviour
 
                 if (HoldPosition)
                 {
-                    if (_animator != null)
-                    {
-                        _animator.SetBool(_animatorBoolRunning, false);
-                        // _animator.speed = 1;
-                    }
+                    _animator.SetBool(_animatorBoolRunning, false);
                 }
                 else
                 {
@@ -131,12 +133,7 @@ public abstract class CharControlBase : MonoBehaviour
                     // cap max speed
                     _internalMove = _internalMove.normalized * Mathf.Min(_internalMove.magnitude, maxSpeed);
 
-                    // animation stuff
-                    if (_animator != null)
-                    {
-                        _animator.SetBool(_animatorBoolRunning, true);
-                        // _animator.speed = _internalMove.magnitude / maxSpeed;
-                    }
+                    _animator.SetBool(_animatorBoolRunning, true);
                 }
             }
             // no input deceleration
@@ -144,22 +141,14 @@ public abstract class CharControlBase : MonoBehaviour
             {
                 _internalMove = _internalMove.normalized * Mathf.Max(_internalMove.magnitude - decelerationMagnitude, 0.0f);
 
-                // animation stuff
-                if (_animator != null)
-                {
-                    _animator.SetBool(_animatorBoolRunning, false);
-                    // _animator.speed = 1;
-                }
+                _animator.SetBool(_animatorBoolRunning, false);
             }
 
             // gravity is weird, have to multiply with deltatime twice
             Vector3 gravityDelta = Physics.gravity * Time.deltaTime * Time.deltaTime;
 
-            // check grounded
-            CheckGrounded();
-
             // reset or apply gravity
-            if ((_controller.isGrounded && !_onSlope) || _resetGravity)
+            if (IsGrounded || _resetGravity)
             {
                 // character controller isn't grounded if it doesn't hit the ground every move method call
                 _currentGravity = gravityDelta;
@@ -173,26 +162,57 @@ public abstract class CharControlBase : MonoBehaviour
             // make character controller move with all combined moves
             _controller.Move(_externalMove + _internalMove + (_onSlope ? _slopeDirection * _currentGravity.magnitude : _currentGravity));
 
+            // check grounded
+            IsGrounded = _controller.isGrounded && !_onSlope;
+
             // reset external movement
             _externalMove = Vector3.zero;
+
+            if (_controller.collisionFlags == CollisionFlags.None)
+            {
+                _onSlope = false;
+            }
         }
 
-        if (!IsGrounded)
+        if (!IsGrounded && !_airBorne && !_airTimer.IsRunning)
         {
-            _airBorne = true;
-            _animator?.SetBool(_animatorBoolAirborne, true);
+            _airTimer.StartTimer(_minAirborneTime);
         }
-        else if (_airBorne && IsGrounded)
+        else if (IsGrounded)
         {
-            _airBorne = false;
-            _animator?.SetBool(_animatorBoolAirborne, false);
-            _landingSound?.PlaySound();
+            _airTimer.StopTimer();
+            _animator.SetBool(_animatorBoolAirborne, false);
+            if (_airBorne)
+            {
+                _airBorne = false;
+                if (_landingSound != null) _landingSound.PlaySound();
+            }
         }
 
         if (transform.position.y <= _minYPosition)
         {
             OutOfBounds();
         }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        float slopeAngle = Vector3.Angle(Vector3.up, hit.normal);
+        if (slopeAngle <= _controller.slopeLimit)
+        {
+            _onSlope = false;
+            return;
+        }
+        if (slopeAngle > 90.0f) return;
+
+        _onSlope = true;
+        _slopeDirection = Vector3.Cross(Vector3.Cross(Vector3.up, hit.normal), hit.normal).normalized * slopeAngle / 90f;
+    }
+
+    private void Aired()
+    {
+        _airBorne = true;
+        _animator.SetBool(_animatorBoolAirborne, true);
     }
 
     /// <summary>
@@ -229,7 +249,6 @@ public abstract class CharControlBase : MonoBehaviour
             _internalMove = Vector3.zero;
             _externalMove = Vector3.zero;
             ResetGravity();
-            CheckGrounded();
         }
 
         _controller.enabled = active;
@@ -243,33 +262,6 @@ public abstract class CharControlBase : MonoBehaviour
     public void ResetInternalMove()
     {
         _internalMove = Vector3.zero;
-    }
-
-    private void CheckGrounded()
-    {
-        Vector3 upVector = -Physics.gravity.normalized;
-        RaycastHit hit;
-        if (Physics.SphereCast(
-                transform.position + _controller.center,
-                _controller.radius + _controller.skinWidth,
-                Physics.gravity.normalized,
-                out hit,
-                (_controller.height / 2.0f) - _controller.radius + _groundedDistanceBonus,
-                _walkableTerrain))
-        {
-            float slopeAngle = Vector3.Angle(upVector, hit.normal);
-            _onSlope = slopeAngle > _controller.slopeLimit && slopeAngle < 90f;
-            if (_onSlope)
-            {
-                _slopeDirection = Vector3.Cross(Vector3.Cross(upVector, hit.normal), hit.normal).normalized * slopeAngle / 90f;
-            }
-            IsGrounded = !_onSlope;
-        }
-        else
-        {
-            _onSlope = false;
-            IsGrounded = false;
-        }
     }
 
     protected abstract void OutOfBounds();

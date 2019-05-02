@@ -23,7 +23,7 @@ public class ScorpionTakeDamage : MonoBehaviour, IDamageReceiver
 
     public void Die()
     {
-        _scorpion._animator?.SetTrigger(_defendtrigger);
+        _scorpion._animator.SetTrigger(_defendtrigger);
         _scorpion.StopMoving = true;
     }
 }

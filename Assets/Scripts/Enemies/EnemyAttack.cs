@@ -27,13 +27,13 @@ public class EnemyAttack : MonoBehaviour
               
         if(_frog != null)
         {
-            _frog._animator?.SetTrigger(attacktrigger);
+            _frog._animator.SetTrigger(attacktrigger);
             if (_frog._attackSound != null && _frog.gameObject.activeInHierarchy) _frog._attackSound.PlaySound();
             _frog.StopMoving = true;
         }
         if(_scorpion != null)
         {
-            _scorpion._animator?.SetTrigger(attacktrigger);
+            _scorpion._animator.SetTrigger(attacktrigger);
             _scorpion.StopMoving = true;
         }
     }
