@@ -130,6 +130,7 @@ ModelImporter:
     2100004: FrogEyes
     2100006: eyes
     2100008: frogSkin
+    2100010: frogMat
     4300000: Froggo
     4300002: eyes
     4300004: frogSpiked
@@ -138,6 +139,7 @@ ModelImporter:
     7400004: frogAttack
     7400006: frogDying
     7400008: frogWalk
+    7400010: frogAlerted
     9500000: //RootNode
     13700000: Froggo
     13700002: eyes
@@ -148,6 +150,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: eyes
     second: {fileID: 2100000, guid: cf6a2d5467d651f48811f6c4f8e47197, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: frogMat
+    second: {fileID: 2100000, guid: 0b85893b6bd34f34b818dd22ce43eac7, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -238,9 +245,9 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: frogAttack
-      takeName: Armature|Alerted
+      takeName: Armature|Attack
       firstFrame: 0
-      lastFrame: 22
+      lastFrame: 23
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -294,14 +301,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 1
-        functionName: DeathComplete
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -319,6 +319,34 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: frogAlerted
+      takeName: Armature|Alerted
+      firstFrame: 0
+      lastFrame: 22
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
