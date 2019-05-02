@@ -8,19 +8,20 @@ public class DeployControlledBots : MonoBehaviour
 
     [SerializeField]
     private string _deployBotButton = "Deploy Bot";
-    [SerializeField]
-    private float _throwDistance = 2.0f;
-    [SerializeField]
-    private float _throwHeight = 1.0f;
-    [SerializeField]
-    private float _throwTime = 2.0f;
+    public float _throwDistance = 2.0f;
+    public float _throwHeight = 1.0f;
+    public float _throwTime = 2.0f;
     [SerializeField]
     private string _animatorTriggerDeploy = "Deploy";
+    [SerializeField]
+    private GameObject _aimingLine = null;
 
     private MainCharMovement _player;
     private BotMovement _activeBot;
     private ScaledOneShotTimer _timer;
     private bool _paused = true;
+    private bool _holding = false;
+    private bool _hit = false;
 
     private void Awake()
     {
@@ -42,11 +43,32 @@ public class DeployControlledBots : MonoBehaviour
             return;
         }
 
-        if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton) && _player.IsGrounded)
+        if (_player.IsGrounded)
         {
-            _player.ControlsDisabled = true;
-            _player._animator?.SetTrigger(_animatorTriggerDeploy);
-            if (OnDeployBot != null) OnDeployBot();
+            if (!_player.ControlsDisabled && Input.GetButtonDown(_deployBotButton))
+            {
+                _player.HoldPosition = true;
+                _holding = true;
+                _aimingLine.SetActive(true);
+            }
+
+            if (_holding)
+            {
+                if (Input.GetButtonUp(_deployBotButton))
+                {
+                    _holding = false;
+                    _aimingLine.SetActive(false);
+                    _player.ControlsDisabled = true;
+                    _player.HoldPosition = false;
+                    _player._animator.SetTrigger(_animatorTriggerDeploy);
+                    if (OnDeployBot != null) OnDeployBot();
+                }
+            }
+        }
+        else if (_holding)
+        {
+            _holding = false;
+            _aimingLine.SetActive(false);
         }
     }
 
@@ -64,7 +86,14 @@ public class DeployControlledBots : MonoBehaviour
             }
             else if (!_activeBot.IsGrounded)
             {
-                _activeBot.AddDirectMovement(_activeBot.transform.forward * _throwDistance * Time.deltaTime / _throwTime);
+                if ((_activeBot._controller.collisionFlags & CollisionFlags.Sides) == CollisionFlags.Sides)
+                {
+                    _hit = true;
+                }
+                if (!_hit)
+                {
+                    _activeBot.AddDirectMovement(_activeBot.transform.forward * _throwDistance * Time.deltaTime / _throwTime);
+                }
             }
             else if (!_timer.IsRunning)
             {
@@ -86,6 +115,7 @@ public class DeployControlledBots : MonoBehaviour
         _activeBot.ControlsDisabled = true;
         _activeBot.SetControllerActive(true);
         _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight, false);
+        _hit = false;
         GameManager.Instance.Camera.MoveToTarget(_activeBot.transform, _throwTime, false);
 
         _timer.StartTimer(_throwTime);

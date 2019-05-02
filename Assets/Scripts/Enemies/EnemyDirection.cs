@@ -120,7 +120,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _enemy._animator?.SetBool("Jump", true);
+        _enemy._animator.SetBool("Jump", true);
         _aggroTargets.Add(other.transform);
         if (_aggroTargets.Count <= 1)
         {
@@ -142,7 +142,7 @@ public class EnemyDirection : MonoBehaviour
 
         if (_aggroTargets.Count == 0 && targetCount > 0)
         {
-            _enemy._animator?.SetBool("Jump", false);
+            _enemy._animator.SetBool("Jump", false);
             SetRandomTarget();
         }
     }
@@ -155,7 +155,7 @@ public class EnemyDirection : MonoBehaviour
 
         if (_aggroTargets.Count == 0)
         {
-            _enemy._animator?.SetBool("Jump", false);
+            _enemy._animator.SetBool("Jump", false);
             SetRandomTarget();
         }
         else if(isSameTarget)
@@ -167,7 +167,7 @@ public class EnemyDirection : MonoBehaviour
     private void Alert()
     {
         _enemy.StopMoving = true;
-        _enemy._animator?.SetTrigger("Alert");
+        _enemy._animator.SetTrigger("Alert");
         if (_enemy._alertSound != null && _enemy.gameObject.activeInHierarchy) _enemy._alertSound.PlaySound();
     }
 

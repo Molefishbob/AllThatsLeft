@@ -11,7 +11,6 @@ public abstract class PlayerMovement : CharControlBase
     [SerializeField]
     protected string _verticalAxis = "Vertical";
 
-    [HideInInspector]
     public bool ControlsDisabled
     {
         get

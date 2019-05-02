@@ -66,8 +66,9 @@ public class FrogEnemy : CharControlBase
         _timer.OnTimerCompleted += TimedAction;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (_timer != null)
         {
             _timer.OnTimerCompleted -= TimedAction;
@@ -162,7 +163,7 @@ public class FrogEnemy : CharControlBase
         if (!_backToPrevious)
         {
             _goBackPosition = transform.position;
-            _animator?.SetBool("Jump", true);
+            _animator.SetBool("Jump", true);
         }
         _backToPrevious = false;
     }
@@ -180,7 +181,7 @@ public class FrogEnemy : CharControlBase
     {
         _followPlayer = false;
         _backToPrevious = true;
-        _animator?.SetBool("Jump", false);
+        _animator.SetBool("Jump", false);
     }
     
     protected override void OutOfBounds()

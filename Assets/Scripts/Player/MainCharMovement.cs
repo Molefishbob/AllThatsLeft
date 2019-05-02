@@ -37,8 +37,9 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         _deathTimer.OnTimerCompleted += Alive;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (_deathTimer != null)
         {
             _deathTimer.OnTimerCompleted -= Alive;
@@ -58,7 +59,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         Dead = true;
         ControlsDisabled = true;
         _damageDeathSound.PlaySound();
-        _animator?.SetTrigger(_animatorTriggerDeath);
+        _animator.SetTrigger(_animatorTriggerDeath);
         SetControllerActive(false);
         Jump.ResetJump();
         _deathTimer.StartTimer(_deathTime);
@@ -70,7 +71,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         SetControllerActive(false);
         GameManager.Instance.LevelManager.ResetLevel();
         Dead = false;
-        _animator?.SetTrigger(_animatorTriggerAlive);
+        _animator.SetTrigger(_animatorTriggerAlive);
         SetControllerActive(true);
         if (OnPlayerAlive != null) OnPlayerAlive();
     }
