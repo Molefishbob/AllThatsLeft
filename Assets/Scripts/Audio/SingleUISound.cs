@@ -7,6 +7,10 @@ public class SingleUISound : VolumeControl
     [SerializeField, Range(0.0f, 1.0f)]
     protected float _pitchVariance = 0.25f;
     protected float _basePitch;
+    public float Duration
+    {
+        get { return _audioSource.clip.length; }
+    }
 
     protected override void OnEnable()
     {

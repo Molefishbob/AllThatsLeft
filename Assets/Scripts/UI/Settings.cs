@@ -32,7 +32,8 @@ public class Settings : MonoBehaviour
     private Slider _xSensSlider = null, _ySensSlider = null, _zoomSpeedSlider = null, _fovSlider = null;
     [SerializeField]
     private GameObject _masterButton = null, _xSensButton = null, _fovButton = null;
-
+    [SerializeField]
+    private SingleUISound _sliderButtonSound = null;
     private const bool True = true;
     private const bool False = false;
     private GameObject _lastButton = null;
@@ -75,16 +76,25 @@ public class Settings : MonoBehaviour
     {
         if (_lastButton != null)
         {
-            if (_stopIt) 
+            if (_stopIt)
             {
                 _stopIt = false;
             }
             else if (Input.GetButtonDown(Submit) || Input.GetButtonDown(Cancel))
             {
+                PlaySliderButtonSound();
                 _eventSystem.SetSelectedGameObject(_lastButton);
                 _lastButton = null;
             }
         }
+    }
+
+    /// <summary>
+    /// Plays the designated slider button sound
+    /// </summary>
+    public void PlaySliderButtonSound()
+    {
+        _sliderButtonSound.PlaySound();
     }
 
     /// <summary>
