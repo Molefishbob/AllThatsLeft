@@ -78,7 +78,7 @@ public class MenuController : MonoBehaviour
             return true;
         if (Input.GetAxis("Vertical") > 0f)
             return true;
-        if (Input.anyKeyDown && !Input.GetMouseButtonDown(0))
+        if (Input.anyKeyDown)
             return true;
 
         return false;
@@ -91,10 +91,11 @@ public class MenuController : MonoBehaviour
 
     private void Update()
     {
-        if (_eventSystem.IsPointerOverGameObject() && GameManager.Instance.ShowCursor && _eventSystem.currentSelectedGameObject != null)
+        if (GameManager.Instance.ShowCursor && _eventSystem.IsPointerOverGameObject() && _eventSystem.currentSelectedGameObject != null)
+        {
             _eventSystem.SetSelectedGameObject(null);
-
-        if (ButtonsUsed() && _eventSystem.currentSelectedGameObject == null)
+        }
+        if (!GameManager.Instance.ShowCursor && ButtonsUsed() && _eventSystem.currentSelectedGameObject == null)
         {
             switch (_currentPage)
             {
