@@ -9,8 +9,7 @@ public class SingleUISound : VolumeControl
     protected float _basePitch;
     public float Duration
     {
-        get;
-        protected set;
+        get { return _audioSource.clip.length; }
     }
 
     protected override void OnEnable()
@@ -26,8 +25,6 @@ public class SingleUISound : VolumeControl
     protected virtual void Start()
     {
         _basePitch = _audioSource.pitch;
-        if (_audioSource.clip != null)
-            Duration =  _audioSource.clip.length;
     }
 
     protected virtual void OnDisable()
