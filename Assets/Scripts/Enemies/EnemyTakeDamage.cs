@@ -12,9 +12,6 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     protected ScaledOneShotTimer _timer;
     [SerializeField]
     private float _dissolveTime = 4.0f;
-    //lisää partikkeliefekti viittaus ja timer jnejejne
-    //EndLevel skriptistä mallia
-    //play partikkeliefekti timerin jälkeen tapahtuvassa metodissa myös!! 3===D
 
     public bool Dead { get; protected set; }
 
@@ -24,6 +21,11 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         _shaderProperty = Shader.PropertyToID("_cutoff");
         _timer = gameObject.AddComponent<ScaledOneShotTimer>();
         _timer.OnTimerCompleted += DeathComplete;
+    }
+    private void Start()
+    {
+        var main = _dissolveFlakes.main;
+        main.duration = _dissolveTime;
     }
 
     private void OnDisable()
@@ -35,6 +37,7 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     {
         if (_timer != null) _timer.OnTimerCompleted -= DeathComplete;
     }
+
     private void Update()
     {
         if (_timer.IsRunning)
@@ -57,6 +60,7 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         _frog._attack.gameObject.SetActive(false);
         _frog._animator.SetBool(_deadBool, true);
         _timer.StartTimer(_dissolveTime);
+        _dissolveFlakes.Play();
     }
 
     private void DeathComplete()

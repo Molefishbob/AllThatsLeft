@@ -8,8 +8,8 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
     private RandomSFXSound _hopsfx = null;
     private EnemyMover _frog;
     private PatrolEnemy _scorpion;
-    [SerializeField]
-    private string _deadBool = "Dead";
+    //[SerializeField]
+    //private string _deadBool = "Dead";
 
     private void Awake()
     {
@@ -48,8 +48,6 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
         }
     }
 
-
-    //tämä pois. tilalle timerin pohjalta toimiva (EnemyTakeDamagessa)
     /*public void DeathComplete()
     {
         if (_frog != null)
