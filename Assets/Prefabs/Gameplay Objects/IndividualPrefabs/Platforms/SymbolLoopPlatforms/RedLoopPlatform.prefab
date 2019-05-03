@@ -67,30 +67,58 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3480851416634716295, guid: 993f231d5af7a70408a72ddbd29d3c1b,
+    - target: {fileID: 1440444307073561152, guid: 993f231d5af7a70408a72ddbd29d3c1b,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: _symbol
       value: 
-      objectReference: {fileID: 2100000, guid: 21f11a5ba58207149b40663d4c3cd3c9, type: 2}
+      objectReference: {fileID: 1976191024732952404}
+    - target: {fileID: 1440444307073561152, guid: 993f231d5af7a70408a72ddbd29d3c1b,
+        type: 3}
+      propertyPath: _moveSound
+      value: 
+      objectReference: {fileID: 396054835976437544}
     - target: {fileID: 6124906346209135611, guid: 993f231d5af7a70408a72ddbd29d3c1b,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3480851416634716295, guid: 993f231d5af7a70408a72ddbd29d3c1b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 21f11a5ba58207149b40663d4c3cd3c9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 993f231d5af7a70408a72ddbd29d3c1b, type: 3}
---- !u!224 &1453840109198375984 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1023164308587230426, guid: 993f231d5af7a70408a72ddbd29d3c1b,
+--- !u!114 &396054835976437544 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2261089186070902722, guid: 993f231d5af7a70408a72ddbd29d3c1b,
     type: 3}
   m_PrefabInstance: {fileID: 1881960819454429418}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &8541155474500606398
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c846738e3c06e84894575f97b798184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1976191024732952404 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 104363584964599742, guid: 993f231d5af7a70408a72ddbd29d3c1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1881960819454429418}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6768080139141352967 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5184518811657520877, guid: 993f231d5af7a70408a72ddbd29d3c1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1881960819454429418}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5428206742496381780
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1453840109198375984}
+    m_TransformParent: {fileID: 6768080139141352967}
     m_Modifications:
     - target: {fileID: 489230063978052584, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
         type: 3}
@@ -135,7 +163,7 @@ PrefabInstance:
     - target: {fileID: 7398605055529505527, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7398605055529505527, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
         type: 3}
@@ -204,3 +232,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2acbbdcbb82c3f04e923d87a57b89b0e, type: 3}
+--- !u!41386430 &2186277476908879412
+AssetImporterLog:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Import Logs
+  m_Logs:
+  - error: Some Prefab instances could not be merged.
+    mode: 132
+    line: 475
+    file: C:\buildslave\unity\build\Editor/Src/AssetPipeline/PrefabImporter.cpp
+    object: {fileID: 0}
