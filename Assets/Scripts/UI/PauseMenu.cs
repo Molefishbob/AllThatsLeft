@@ -82,7 +82,6 @@ public class PauseMenu : MonoBehaviour
             _timer.OnTimerCompleted -= ResumeGame;
             _timer.OnTimerCompleted -= Menu;
             _timer.OnTimerCompleted -= Quit;
-            _timer.OnTimerCompleted -= Desktop;
         }
     }
 
@@ -123,6 +122,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void Settings()
     {
+        _timer.StopTimer();
         _currentPage = Page.VolumeSettings;
         _settings.SetActive(true);
         _pauseMenu.SetActive(false);
@@ -154,6 +154,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void ToPauseMenu()
     {
+        _timer.StopTimer();
         _currentPage = Page.MainMenu;
         _pauseMenu.SetActive(true);
         if (_settings != null) _settings.SetActive(false);
@@ -162,30 +163,24 @@ public class PauseMenu : MonoBehaviour
         _eventSystem.SetSelectedGameObject(_resumeButton);
     }
 
-    private void Desktop()
+    /// <summary>
+    /// Opens confirmquit screen
+    /// </summary>
+    public void ToDesktop()
     {
+        _timer.StopTimer();
         _currentPage = Page.ConfirmationQuit;
         _confirmQuit.SetActive(true);
         if (_settings != null) _settings.SetActive(false);
         _pauseMenu.SetActive(false);
 
         _eventSystem.SetSelectedGameObject(_noButton);
-        _timer.OnTimerCompleted -= Desktop;
-    }
-
-    /// <summary>
-    /// Opens confirmquit screen
-    /// </summary>
-    public void ToDesktop()
-    {
-        _timer.StartTimer(_buttonClickSound.Duration);
-        _timer.OnTimerCompleted += Desktop;
     }
 
     private void Quit()
     {
-        GameManager.Instance.QuitGame();
         _timer.OnTimerCompleted -= Quit;
+        GameManager.Instance.QuitGame();
     }
 
     /// <summary>
