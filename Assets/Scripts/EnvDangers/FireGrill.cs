@@ -28,6 +28,10 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     public float _delayDuration = 0.4f;
     [SerializeField]
     protected GameObject _symbol = null;
+    [SerializeField]
+    protected SingleSFXSound _sparkSound = null,
+                             _flameBurstSound = null,
+                             _FlameLoopSound = null;
     protected ScaledOneShotTimer _delayTimer;
 
     private void Awake()
@@ -85,6 +89,9 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
 
     private void FlamesOn()
     {
+        _sparkSound.StopSound();
+        _flameBurstSound.PlaySound();
+        _FlameLoopSound.PlaySound();
         _sparks.SetActive(false);
         _trigger.enabled = true;
         _flames.SetActive(true);
@@ -93,13 +100,17 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     private void FlamesOff()
     {
         _trigger.enabled = false;
+        _FlameLoopSound.StopSound();
         _flames.SetActive(false);
     }
 
     private void SparksOn()
     {
         if (!_sparks.activeSelf && !_flames.activeSelf)
+        {
             _sparks.SetActive(true);
+            _sparkSound.PlaySound();
+        }
     }
 
     private void StartCycle()
