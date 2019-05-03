@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6125272038393687126}
   - component: {fileID: 4995818587591935888}
+  - component: {fileID: 9066716120516011839}
+  - component: {fileID: 889052282980377084}
   m_Layer: 14
   m_Name: Palm Plant
   m_TagString: Untagged
@@ -64,6 +66,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &9066716120516011839
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7324801912220156027}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.25, y: 0.25, z: 0.25}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &889052282980377084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7324801912220156027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc02d22b1f9b8124fa448e48360e5666, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &780158003174192565
 PrefabInstance:
   m_ObjectHideFlags: 0
