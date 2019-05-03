@@ -8,6 +8,13 @@ public class GasCloud : MonoBehaviour
     private float _timeUntilOof = 2;
     [SerializeField]
     private Color _gassedUnitTint = Color.magenta;
+    [SerializeField]
+    private SingleSFXSound _gasSound = null;
+
+    private void Start()
+    {
+        _gasSound.PlaySound();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
