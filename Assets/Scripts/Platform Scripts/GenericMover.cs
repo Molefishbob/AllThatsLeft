@@ -24,6 +24,8 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected bool _activated = true;
     [SerializeField]
     protected GameObject _symbol = null;
+    [SerializeField]
+    protected SingleSFXSound _moveSound = null;
     [HideInInspector]
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
@@ -82,6 +84,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// </summary>
     public virtual void Init()
     {
+        _moveSound.PlaySound();
         _length = 0;
 
         _timer.StartTimer(_duration);

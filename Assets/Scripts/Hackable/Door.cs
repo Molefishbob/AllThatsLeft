@@ -11,6 +11,8 @@ public class Door : MonoBehaviour, IButtonInteraction
     public float _delayDuration = 0.4f;
     [SerializeField]
     protected GameObject _symbol = null;
+    [SerializeField]
+    protected SingleSFXSound _openSound = null;
     protected ScaledOneShotTimer _delayTimer;
 
     // Awake is called before the first frame update
@@ -29,11 +31,13 @@ public class Door : MonoBehaviour, IButtonInteraction
     {
         _delayTimer.StartTimer(_delayDuration);
         _anim.SetBool(_openBool,true);
+        _openSound.PlaySound();
     }
 
     public void ButtonUp()
     {
         _anim.SetBool(_openBool,false);
+        _openSound.PlaySound();
     }
     
     protected virtual void SymbolDown()
