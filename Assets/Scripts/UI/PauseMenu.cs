@@ -25,9 +25,13 @@ public class PauseMenu : MonoBehaviour
     }
     private Page _currentPage;
 
-    private void Start()
+    private void Awake()
     {
         _timer = gameObject.AddComponent<UnscaledOneShotTimer>();
+    }
+
+    private void Start()
+    {
         _currentPage = Page.MainMenu;
         _eventSystem.SetSelectedGameObject(_resumeButton);
     }

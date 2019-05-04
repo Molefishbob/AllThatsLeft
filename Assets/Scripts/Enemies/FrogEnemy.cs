@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FrogEnemy : CharControlBase
 {
+    [SerializeField]
+    private LayerMask _walkableTerrain = 1 << 12 | 1 << 13 | 1 << 14;
     private float _time = 0;
     public float _circleRadius = 1, _idleTime = 2;
     private bool _stopMoving, _nextStopX, _nextStopZ, _followPlayer, _backToPrevious, _canFollow, _attackStop;
