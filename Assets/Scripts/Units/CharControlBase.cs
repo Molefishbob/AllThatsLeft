@@ -17,8 +17,6 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField]
     private float _minAirborneTime = 0.2f;
     [SerializeField]
-    protected LayerMask _walkableTerrain = 1 << 12 | 1 << 13 | 1 << 14;
-    [SerializeField]
     private RandomSFXSound _landingSound = null;
     [SerializeField]
     private string _animatorBoolRunning = "Run";
