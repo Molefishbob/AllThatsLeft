@@ -158,7 +158,8 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void ToPauseMenu()
     {
-        _timer.StopTimer();
+        if (_timer != null)
+            _timer.StopTimer();
         _currentPage = Page.MainMenu;
         _pauseMenu.SetActive(true);
         if (_settings != null) _settings.SetActive(false);

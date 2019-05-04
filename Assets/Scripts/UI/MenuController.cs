@@ -169,7 +169,8 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void EnableMainMenuPanel()
     {
-        _timer.StopTimer();
+        if (_timer != null)
+            _timer.StopTimer();
         _mainMenuPanel.SetActive(true);
         _optionsPanel.SetActive(false);
         _quitPanel.SetActive(false);

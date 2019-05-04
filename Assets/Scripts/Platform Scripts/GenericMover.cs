@@ -10,7 +10,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     [Tooltip("The duration after which the symbol goes off")]
     public float _delayDuration = 0.4f;
     protected float _eventTime;
-    protected List<Transform> _transform;
+    public List<Transform> _transform;
     protected float _fracTime;
     protected int _amountOfTransforms;
     protected int _currentObjectNum = 0;
