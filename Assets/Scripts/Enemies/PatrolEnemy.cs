@@ -12,6 +12,8 @@ public class PatrolEnemy : CharControlBase
     private Quaternion _lookAtThis;
     public EnemyAttack _attack;
     private string _defaultAnimState = "Default";
+    public ScorpionSpawner _spawner;
+    public bool _dead;
 
     public float Speed
     {
@@ -33,6 +35,7 @@ public class PatrolEnemy : CharControlBase
 
     private void OnEnable()
     {
+        _dead = false;
         _stopMoving = false;
         _attack.gameObject.SetActive(true);
     }
@@ -68,6 +71,10 @@ public class PatrolEnemy : CharControlBase
         if(oldRotation == transform.rotation)
         {
             _turningStop = false;
+        }
+        if(_spawner != null && _dead)
+        {
+            _spawner.GetComponent<ScaledOneShotTimer>().StartTimer(_spawner._respawnTime);
         }
     }
 
