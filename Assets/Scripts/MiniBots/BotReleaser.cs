@@ -102,8 +102,11 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         {
             if (_ostControlRelease.IsRunning || _ostDisable.IsRunning)
             {
-                EnablePlayerControls();
-                ReleaseInstant();
+                if (!_selfTrampoline._bActing)
+                {
+                    EnablePlayerControls();
+                    ReleaseInstant();
+                }
                 _ostDisable.StartTimer(_transitionTimeOnPlayerDeath * 1.1f);
                 return;
             }
