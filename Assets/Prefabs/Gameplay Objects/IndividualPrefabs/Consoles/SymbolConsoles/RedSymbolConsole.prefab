@@ -1,11 +1,11 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5682963090739049104
+--- !u!1001 &4788734970605297515
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 195123117571784636}
+    m_TransformParent: {fileID: 5437297851259112843}
     m_Modifications:
     - target: {fileID: 489230063978052584, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
         type: 3}
@@ -50,7 +50,7 @@ PrefabInstance:
     - target: {fileID: 7398605055529505527, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7398605055529505527, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
         type: 3}
@@ -117,8 +117,44 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1671352401179110325, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671352401179110325, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671352401179110325, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671352401179110325, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671352401179110325, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2841408448354869529, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
+        type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[0].emitter
+      value: 
+      objectReference: {fileID: 3398643362651676686}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2acbbdcbb82c3f04e923d87a57b89b0e, type: 3}
+--- !u!198 &3398643362651676686 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7881133548529057637, guid: 2acbbdcbb82c3f04e923d87a57b89b0e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4788734970605297515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8073066155015223404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126,11 +162,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1912868006643720609, guid: 7d81a4965e8124c45976c7eb22fb57c6,
-        type: 3}
-      propertyPath: m_Name
-      value: RedSymbolConsole
-      objectReference: {fileID: 0}
     - target: {fileID: 1912868006643720608, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -186,16 +217,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3190710134144974537, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+    - target: {fileID: 1912868006643720609, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
-      propertyPath: _hidePermanentlyWhenHacked
-      value: 
-      objectReference: {fileID: 7674861315719715275}
-    - target: {fileID: 4716429009035384091, guid: 7d81a4965e8124c45976c7eb22fb57c6,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 21f11a5ba58207149b40663d4c3cd3c9, type: 2}
+      propertyPath: m_Name
+      value: RedSymbolConsole
+      objectReference: {fileID: 0}
     - target: {fileID: 8669053176278256573, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -211,11 +237,21 @@ PrefabInstance:
       propertyPath: m_textInfo.textComponent
       value: 
       objectReference: {fileID: 596695115370640337}
+    - target: {fileID: 3190710134144974537, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: _hidePermanentlyWhenHacked
+      value: 
+      objectReference: {fileID: 7674861315719715275}
     - target: {fileID: 1587326275469916466, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4716429009035384091, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 21f11a5ba58207149b40663d4c3cd3c9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d81a4965e8124c45976c7eb22fb57c6, type: 3}
 --- !u!114 &7674861315719715275 stripped
@@ -242,9 +278,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &195123117571784636 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8267621091354871760, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+--- !u!4 &5437297851259112843 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4286410292325414375, guid: 7d81a4965e8124c45976c7eb22fb57c6,
     type: 3}
   m_PrefabInstance: {fileID: 8073066155015223404}
   m_PrefabAsset: {fileID: 0}
+--- !u!41386430 &2186277476908879412
+AssetImporterLog:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Import Logs
+  m_Logs:
+  - error: Some Prefab instances could not be merged.
+    mode: 132
+    line: 475
+    file: C:\buildslave\unity\build\Editor/Src/AssetPipeline/PrefabImporter.cpp
+    object: {fileID: 0}
