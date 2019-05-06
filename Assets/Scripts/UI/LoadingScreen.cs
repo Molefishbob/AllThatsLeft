@@ -34,8 +34,6 @@ public class LoadingScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        _scaledObject.localScale = Vector3.zero;
-
         _mute = PrefsManager.Instance.AudioMuteSFX;
         PrefsManager.Instance.AudioMuteSFX = true;
 
@@ -58,7 +56,13 @@ public class LoadingScreen : MonoBehaviour
 
     private void Start()
     {
+        _scaledObject.localScale = Vector3.one * _startScale;
         _teleportTimer.OnTimerCompleted += TeleportDone;
+    }
+
+    private void OnDisable()
+    {
+        _scaledObject.localScale = Vector3.one * _startScale;
     }
 
     private void OnDestroy()
