@@ -15,6 +15,8 @@ public class Door : MonoBehaviour, IButtonInteraction
     protected SingleSFXSound _openSound = null;
     protected ScaledOneShotTimer _delayTimer;
 
+    private bool _opened = false;
+
     // Awake is called before the first frame update
     void Awake()
     {
@@ -27,19 +29,31 @@ public class Door : MonoBehaviour, IButtonInteraction
         _delayTimer.OnTimerCompleted += SymbolDown;
     }
 
-    public void ButtonDown()
+    public bool ButtonDown()
     {
-        _delayTimer.StartTimer(_delayDuration);
-        _anim.SetBool(_openBool,true);
-        _openSound.PlaySound();
+        if (!_opened)
+        {
+            _delayTimer.StartTimer(_delayDuration);
+            _anim.SetBool(_openBool, true);
+            _openSound.PlaySound();
+            _opened = true;
+            return true;
+        }
+        return false;
     }
 
-    public void ButtonUp()
+    public bool ButtonUp()
     {
-        _anim.SetBool(_openBool,false);
-        _openSound.PlaySound();
+        if (_opened)
+        {
+            _anim.SetBool(_openBool, false);
+            _openSound.PlaySound();
+            _opened = false;
+            return true;
+        }
+        return false;
     }
-    
+
     protected virtual void SymbolDown()
     {
         try
@@ -51,6 +65,7 @@ public class Door : MonoBehaviour, IButtonInteraction
             Debug.LogError(gameObject.name + " has to have a symbol!");
         }
     }
+
     private void OnDestroy()
     {
         if (_delayTimer != null)

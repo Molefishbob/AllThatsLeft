@@ -17,15 +17,18 @@ public class DeployControlledBots : MonoBehaviour
     private GameObject _aimingLine = null;
 
     private MainCharMovement _player;
+    private CharControlPlatformMovement _ccpm;
     private BotMovement _activeBot;
     private ScaledOneShotTimer _timer;
     private bool _paused = true;
     private bool _holding = false;
     private bool _hit = false;
+    private Vector3 _platformAdd = Vector3.zero;
 
     private void Awake()
     {
         _player = GetComponent<MainCharMovement>();
+        _ccpm = GetComponent<CharControlPlatformMovement>();
         _timer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
@@ -92,7 +95,7 @@ public class DeployControlledBots : MonoBehaviour
                 }
                 if (!_hit)
                 {
-                    _activeBot.AddDirectMovement(_activeBot.transform.forward * _throwDistance * Time.deltaTime / _throwTime);
+                    _activeBot.AddDirectMovement(_activeBot.transform.forward * _throwDistance * Time.deltaTime / _throwTime + _platformAdd);
                 }
             }
             else if (!_timer.IsRunning)
@@ -117,7 +120,7 @@ public class DeployControlledBots : MonoBehaviour
         _activeBot.GetComponent<PlayerJump>().ForceJump(_throwHeight, false);
         _hit = false;
         GameManager.Instance.Camera.MoveToTarget(_activeBot.transform, _throwTime, false);
-
+        _platformAdd = _ccpm.CurrentMove;
         _timer.StartTimer(_throwTime);
     }
 }

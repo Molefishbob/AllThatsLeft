@@ -9,17 +9,18 @@ public class NonToggleConsole : GenericHackable
     /// Determines what the console does when it is being hacked or has been hacked.
     /// For example you can call the targets methods here.
     /// </summary>
-    protected override void HackAction()
+    protected override bool HackAction()
     {
         switch (CurrentStatus)
         {
             case Status.BeingHacked:
                 _hTarget.ButtonDown();
-                break;
+                return true;
             case Status.NotHacked:
                 _hTarget.ButtonUp();
-                break;
+                return false;
         }
+        return false;
     }
 
     /// <summary>

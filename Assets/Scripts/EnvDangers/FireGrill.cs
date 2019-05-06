@@ -137,24 +137,35 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
         StartCycle();
     }
 
-    public void ButtonDown()
+    public bool ButtonDown()
     {
-        _activated = false;
-        _delayTimer.StartTimer(_delayDuration);
-        _timer.StopTimer();
-        _deactivationTimer.StartTimer(_deactivationTime);
+        if (_activated)
+        {
+            _activated = false;
+            _delayTimer.StartTimer(_delayDuration);
+            _timer.StopTimer();
+            _deactivationTimer.StartTimer(_deactivationTime);
+            return true;
+        }
+        return false;
     }
 
-    public void ButtonUp()
+    public bool ButtonUp()
     {
-        _activated = true;
-        if (!_cycleStarted || _timer.TimeElapsed <= _fireDuration)
+        if (!_activated)
         {
-            FlamesOn();
+            _activated = true;
+            if (!_cycleStarted || _timer.TimeElapsed <= _fireDuration)
+            {
+                FlamesOn();
+            }
+            _delayTimer.StartTimer(_delayDuration);
+            _timer.ResumeTimer();
+            return true;
         }
-        _delayTimer.StartTimer(_delayDuration);
-        _timer.ResumeTimer();
+        return false;
     }
+
     protected virtual void SymbolDown()
     {
         try
