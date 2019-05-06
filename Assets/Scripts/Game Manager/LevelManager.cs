@@ -33,7 +33,7 @@ public class LevelManager : MonoBehaviour
 
     private bool _playerInScene = false;
 
-    void Awake()
+    private void Awake()
     {
         GameManager.Instance.LevelManager = this;
 
@@ -189,7 +189,37 @@ public class LevelManager : MonoBehaviour
                     GameManager.Instance.UnPauseGame();
                     break;
             }
+        }
+        else if (!GameManager.Instance.GamePaused)
+        {
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                int[] keys = new int[_allLevelCheckPoints.Keys.Count];
+                _allLevelCheckPoints.Keys.CopyTo(keys, 0);
+                int nextKey = 0;
+                foreach (int key in keys)
+                {
+                    if (key > nextKey) nextKey = key;
+                }
+                foreach (int key in keys)
+                {
+                    if (key <= _currentCheckPoint.id) continue;
+                    if (key < nextKey) nextKey = key;
+                }
 
+                CheckPointPole cp;
+                _allLevelCheckPoints.TryGetValue(nextKey, out cp);
+
+                GameManager.Instance.Player.transform.position = cp.SpawnPoint.position;
+                GameManager.Instance.Player.transform.rotation = cp.SpawnPoint.rotation;
+                Physics.SyncTransforms();
+                GameManager.Instance.Camera.OnPlayerRebirth();
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                GameManager.Instance.NextLevel();
+            }
         }
     }
 
