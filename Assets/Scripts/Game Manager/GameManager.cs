@@ -184,7 +184,6 @@ public class GameManager : Singleton<GameManager>
         }
         if (Camera != null)
         {
-            Camera.gameObject.SetActive(active);
             if (LoadingScreen.gameObject.activeSelf) Camera.PlayerControlled = false;
         }
         BotPool?.gameObject.SetActive(active);

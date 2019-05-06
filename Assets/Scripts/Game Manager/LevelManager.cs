@@ -168,6 +168,7 @@ public class LevelManager : MonoBehaviour
         }
         GameManager.Instance.Player.SetControllerActive(true);
         GameManager.Instance.Camera.MoveToTargetInstant(GameManager.Instance.Player.transform);
+        GameManager.Instance.Camera.OnPlayerRebirth();
 
         GameManager.Instance.ActivateGame(true);
     }
