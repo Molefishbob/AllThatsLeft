@@ -37,6 +37,9 @@ public class ScorpionTakeDamage : MonoBehaviour, IDamageReceiver
     private void OnDisable()
     {
         Dead = false;
+        _timer.StopTimer();
+        _scorpion._renderer.material.SetFloat(_shaderProperty, 0.0f);
+
     }
 
     private void OnDestroy()
@@ -63,6 +66,7 @@ public class ScorpionTakeDamage : MonoBehaviour, IDamageReceiver
         _scorpion._attack.gameObject.SetActive(false);
         _timer.StartTimer(_dissolveTime);
         _dissolveFlakes.Play();
+        _scorpion._dead = true;
     }
 
     private void DeathComplete()
@@ -70,7 +74,6 @@ public class ScorpionTakeDamage : MonoBehaviour, IDamageReceiver
         if (_scorpion != null)
         {
             _scorpion.gameObject.SetActive(false);
-            _scorpion._renderer.material.SetFloat(_shaderProperty, 0.0f);
         }
     }
 }

@@ -7,11 +7,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1912868006643720609, guid: 7d81a4965e8124c45976c7eb22fb57c6,
-        type: 3}
-      propertyPath: m_Name
-      value: OrangeSymbolConsole
-      objectReference: {fileID: 0}
     - target: {fileID: 1912868006643720608, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67,16 +62,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3190710134144974537, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+    - target: {fileID: 1912868006643720609, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
-      propertyPath: _hidePermanentlyWhenHacked
-      value: 
-      objectReference: {fileID: 858068032278258268}
-    - target: {fileID: 4716429009035384091, guid: 7d81a4965e8124c45976c7eb22fb57c6,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: f7b1b73cf95ed894fa8f291d46dbb794, type: 2}
+      propertyPath: m_Name
+      value: OrangeSymbolConsole
+      objectReference: {fileID: 0}
     - target: {fileID: 8669053176278256573, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -92,10 +82,35 @@ PrefabInstance:
       propertyPath: m_textInfo.textComponent
       value: 
       objectReference: {fileID: 7578730152833353798}
+    - target: {fileID: 3190710134144974537, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: _hidePermanentlyWhenHacked
+      value: 
+      objectReference: {fileID: 858068032278258268}
     - target: {fileID: 1587326275469916466, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4716429009035384091, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f7b1b73cf95ed894fa8f291d46dbb794, type: 2}
+    - target: {fileID: 136869454602154950, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1346691449732530227, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8841017327072869695, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[0].emitter
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d81a4965e8124c45976c7eb22fb57c6, type: 3}
@@ -123,18 +138,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &7196711047352878123 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8267621091354871760, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+--- !u!4 &3035360685569046044 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4286410292325414375, guid: 7d81a4965e8124c45976c7eb22fb57c6,
     type: 3}
   m_PrefabInstance: {fileID: 1253028763254719483}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &6577351077299215463
+--- !u!1001 &6160368278125716998
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7196711047352878123}
+    m_TransformParent: {fileID: 3035360685569046044}
     m_Modifications:
     - target: {fileID: 489230063978052584, guid: 43acf2a424ad93949aa12c5d63a9324d,
         type: 3}
@@ -179,7 +194,7 @@ PrefabInstance:
     - target: {fileID: 7398605055529505527, guid: 43acf2a424ad93949aa12c5d63a9324d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7398605055529505527, guid: 43acf2a424ad93949aa12c5d63a9324d,
         type: 3}
@@ -246,5 +261,59 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5888128791996932479, guid: 43acf2a424ad93949aa12c5d63a9324d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888128791996932479, guid: 43acf2a424ad93949aa12c5d63a9324d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888128791996932479, guid: 43acf2a424ad93949aa12c5d63a9324d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888128791996932479, guid: 43acf2a424ad93949aa12c5d63a9324d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 5888128791996932479, guid: 43acf2a424ad93949aa12c5d63a9324d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2801960857225630731, guid: 43acf2a424ad93949aa12c5d63a9324d,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2801960857225630731, guid: 43acf2a424ad93949aa12c5d63a9324d,
+        type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[0].emitter
+      value: 
+      objectReference: {fileID: 96457679942855369}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43acf2a424ad93949aa12c5d63a9324d, type: 3}
+--- !u!198 &96457679942855369 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6064283750330436815, guid: 43acf2a424ad93949aa12c5d63a9324d,
+    type: 3}
+  m_PrefabInstance: {fileID: 6160368278125716998}
+  m_PrefabAsset: {fileID: 0}
+--- !u!41386430 &2186277476908879412
+AssetImporterLog:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Import Logs
+  m_Logs:
+  - error: Some Prefab instances could not be merged.
+    mode: 132
+    line: 475
+    file: C:\buildslave\unity\build\Editor/Src/AssetPipeline/PrefabImporter.cpp
+    object: {fileID: 0}

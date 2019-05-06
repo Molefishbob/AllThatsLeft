@@ -169,6 +169,8 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void EnableMainMenuPanel()
     {
+        if (_timer != null)
+            _timer.StopTimer();
         _mainMenuPanel.SetActive(true);
         _optionsPanel.SetActive(false);
         _quitPanel.SetActive(false);
@@ -195,6 +197,7 @@ public class MenuController : MonoBehaviour
     /// <param name="playSound">Plays a button click sound if true</param>
     public void EnableMainMenuPanel(bool playSound)
     {
+        _timer.StopTimer();
         if (playSound)
             _buttonSound.PlaySound();
 
@@ -241,6 +244,7 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void EnableOptionsPanel()
     {
+        _timer.StopTimer();
         PlayButtonClick();
         _mainMenuPanel.SetActive(false);
         _optionsPanel.SetActive(true);
@@ -259,6 +263,7 @@ public class MenuController : MonoBehaviour
     /// </summary>
     public void EnableConfirmQuit()
     {
+        _timer.StopTimer();
         PlayButtonClick();
         _mainMenuPanel.SetActive(false);
         _quitPanel.SetActive(true);
@@ -268,8 +273,8 @@ public class MenuController : MonoBehaviour
     }
     private void QuitAction()
     {
-        GameManager.Instance.QuitGame();
         _timer.OnTimerCompleted -= QuitAction;
+        GameManager.Instance.QuitGame();
     }
 
     /// <summary>

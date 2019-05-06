@@ -31,6 +31,8 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     private void OnDisable()
     {
         Dead = false;
+        _timer.StopTimer();
+        _frog._renderer.material.SetFloat(_shaderProperty, 0.0f);
     }
 
     private void OnDestroy()
@@ -69,7 +71,6 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         {
             _frog._animator.SetBool(_deadBool, false);
             _frog.gameObject.SetActive(false);
-            _frog._renderer.material.SetFloat(_shaderProperty, 0.0f);
         }
     }
 }
