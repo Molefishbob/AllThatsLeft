@@ -7,10 +7,12 @@ ModelImporter:
     100002: Console
     100004: Console.001
     100006: Electricitydoor
+    100008: Console.002
     400000: //RootNode
     400002: Console
     400004: Console.001
     400006: Electricitydoor
+    400008: Console.002
     2100000: Button
     2100002: No Name
     2100004: Metal
@@ -19,20 +21,52 @@ ModelImporter:
     2100010: Glass screen
     2100012: Radiotransmitter
     2100014: Stone
+    2100016: Material.002
+    2100018: Console
+    2100020: Glass
     2300000: Console
     2300002: Console.001
     2300004: Electricitydoor
+    2300006: Console.002
     3300000: Console
     3300002: Console.001
     3300004: Electricitydoor
+    3300006: Console.002
     4300000: Console.001
     4300002: Electricitydoor
     4300004: Console
+    4300006: Console.002
     7400000: Console.001|Cylinder.003Action
     7400002: Electricitydoor|Cylinder.003Action
     7400004: Console|Cylinder.003Action
+    7400006: Console.002|Cylinder.003Action
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Button
+    second: {fileID: 2100000, guid: b18748e2ce2ed4a1db449964ceefbbce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Console
+    second: {fileID: 2100000, guid: d28f27b98f6e148de91dee8a2fd5233d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: 95df7f72db00f4f608e6dcc3d4f38cea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: d68bee4196bd54f688a3dab83e143a0c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stone
+    second: {fileID: 2100000, guid: 178e6bc015a32cc4d91e0a7f96479866, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -84,7 +118,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
+    previousCalculatedGlobalScale: 1
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
