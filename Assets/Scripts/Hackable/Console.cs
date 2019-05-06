@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class Console : GenericHackable
 {
+    private const string Hacking = "hacking";
     [SerializeField, Tooltip("The amount of time needed to hack")]
     protected float _duration = 0.5f;
     [SerializeField]
     protected float _lookAtHackedTime = 1.0f;
     [SerializeField]
     protected float _transitionTime = 0.5f;
+    [SerializeField]
+    protected Animator _anim = null;
 
     private PhysicsOneShotTimer _timer;
 
     protected override void Awake()
     {
         base.Awake();
+        _anim = GetComponent<Animator>();
         _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsOneShotTimer>(gameObject);
     }
     protected virtual void Start()
@@ -98,7 +102,7 @@ public class Console : GenericHackable
         switch(CurrentStatus)
         {
             case Status.BeingHacked:
-                // TODO: ANIMATION HERE
+                _anim.SetTrigger(Hacking);
                 CurrentStatus = Status.Hacked;
                 HackAction();
                 GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
