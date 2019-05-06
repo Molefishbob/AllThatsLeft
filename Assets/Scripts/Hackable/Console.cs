@@ -98,6 +98,7 @@ public class Console : GenericHackable
         switch(CurrentStatus)
         {
             case Status.BeingHacked:
+                // TODO: ANIMATION HERE
                 CurrentStatus = Status.Hacked;
                 HackAction();
                 GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
