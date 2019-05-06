@@ -49,25 +49,27 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction
     /// <summary>
     /// What happens when the button is pressed down
     /// </summary>
-    public void ButtonDown()
+    public bool ButtonDown()
     {
         /// TODO: ADD ANIMATION
         /// TODO: ADD SOUNDS HERE
         _tInt.ButtonDown();
         _timer.StartTimer(_cooldownDuration);
         _cooldownDone = false;
+        return true;
     }
 
     /// <summary>
     /// What happens when the button is no longer pressed down
     /// </summary>
-    public void ButtonUp()
+    public bool ButtonUp()
     {
         /// TODO: ADD ANIMATION
         /// TODO: ADD SOUNDS HERE
         _tInt.ButtonUp();
         _timer.StartTimer(_cooldownDuration);
         _cooldownDone = false;
+        return true;
     }
 
     private void OnTriggerStay(Collider other)

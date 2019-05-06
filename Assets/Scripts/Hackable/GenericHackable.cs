@@ -78,5 +78,5 @@ public abstract class GenericHackable : MonoBehaviour
     /// Determines what the console does when it is being hacked or has been hacked.
     /// For example you can call the targets methods here.
     /// </summary>
-    protected abstract void HackAction();
+    protected abstract bool HackAction();
 }
