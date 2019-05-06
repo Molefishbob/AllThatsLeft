@@ -13,8 +13,11 @@ public class PathLine : MonoBehaviour
     private void Start()
     {
         _platform = GetComponent<GenericMover>();
+
+        Transform[] temp = new Transform[_platform._transform.Count];
+        _platform._transform.CopyTo(temp);
         
-        List<Transform> pointList = _platform._transform;
+        List<Transform> pointList = new List<Transform>(temp);
 
         int totalPoints;
 
