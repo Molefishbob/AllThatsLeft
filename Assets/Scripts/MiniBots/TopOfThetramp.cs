@@ -21,7 +21,7 @@ public class TopOfThetramp : MonoBehaviour
             _PlayerMover = other.GetComponent<PlayerJump>();
             _Player = other.GetComponent<MainCharMovement>();
         }
-        if (!_Player.IsGrounded)
+        if (!_Player.IsGrounded && !_Player.ControlsDisabled)
         {
             _animator.SetTrigger("TrampolineBounce");
             _PlayerMover.ForceJump(_fJumpHeight);
