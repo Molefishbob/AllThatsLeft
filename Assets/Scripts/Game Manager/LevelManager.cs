@@ -171,6 +171,8 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.Camera.OnPlayerRebirth();
 
         GameManager.Instance.ActivateGame(true);
+
+        if (GameManager.Instance.LoadingScreen.gameObject.activeSelf) GameManager.Instance.LoadingScreen.Begin();
     }
 
     private void Update()
