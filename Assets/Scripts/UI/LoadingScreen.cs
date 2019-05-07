@@ -34,35 +34,13 @@ public class LoadingScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        _mute = PrefsManager.Instance.AudioMuteSFX;
-        PrefsManager.Instance.AudioMuteSFX = true;
-
-        if (GameManager.Instance.Camera != null)
-        {
-            GameManager.Instance.Camera.PlayerControlled = false;
-        }
-
-        if (GameManager.Instance.Player != null)
-        {
-            GameManager.Instance.Player.ControlsDisabled = true;
-            GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
-        }
-
+        _scaledObject.localScale = Vector3.zero;
         _inTransition = false;
-
-        _timer.OnTimerCompleted += GrowUp;
-        _timer.StartTimer(_timeBeforeTransition);
     }
 
     private void Start()
     {
-        _scaledObject.localScale = Vector3.one * _startScale;
         _teleportTimer.OnTimerCompleted += TeleportDone;
-    }
-
-    private void OnDisable()
-    {
-        _scaledObject.localScale = Vector3.one * _startScale;
     }
 
     private void OnDestroy()
@@ -88,6 +66,19 @@ public class LoadingScreen : MonoBehaviour
         {
             GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, _teleportTimer.NormalizedTimeElapsed);
         }
+    }
+
+    public void Begin()
+    {
+        _mute = PrefsManager.Instance.AudioMuteSFX;
+        PrefsManager.Instance.AudioMuteSFX = true;
+
+        GameManager.Instance.Camera.PlayerControlled = false;
+        GameManager.Instance.Player.ControlsDisabled = true;
+        GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
+
+        _timer.OnTimerCompleted += GrowUp;
+        _timer.StartTimer(_timeBeforeTransition);
     }
 
     private void GrowUp()
