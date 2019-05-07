@@ -54,6 +54,11 @@ public class CharControlPlatformMovement : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if ((hit.controller.collisionFlags & CollisionFlags.Below) != 0)
+        {
+            _platform = null;
+        }
+
         GenericMover gm = hit.gameObject.GetComponent<GenericMover>();
         if (gm != null) _platform = gm;
     }
