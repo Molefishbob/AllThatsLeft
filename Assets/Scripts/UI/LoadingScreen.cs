@@ -25,6 +25,7 @@ public class LoadingScreen : MonoBehaviour
     private bool _mute;
     private bool _inTransition;
     private int _shaderProperty;
+    private int _loadState = -1;
 
     private void Awake()
     {
@@ -37,6 +38,7 @@ public class LoadingScreen : MonoBehaviour
     {
         _scaledObject.localScale = Vector3.zero;
         _inTransition = false;
+        _loadState = -1;
         _mute = PrefsManager.Instance.AudioMuteSFX;
         PrefsManager.Instance.AudioMuteSFX = true;
         SceneManager.sceneLoaded += Begin;
@@ -59,6 +61,22 @@ public class LoadingScreen : MonoBehaviour
 
     private void Update()
     {
+        if (_loadState < 0) return;
+
+        if (_loadState < 1)
+        {
+            _loadState++;
+            return;
+        }
+
+        if (_loadState == 1)
+        {
+            _timer.OnTimerCompleted += GrowUp;
+            _timer.StartTimer(_timeBeforeTransition);
+            _loadState++;
+            return;
+        }
+
         if (_inTransition)
         {
             float currentScale = _timer.NormalizedTimeElapsed * (_endScale - _startScale) + _startScale;
@@ -84,8 +102,7 @@ public class LoadingScreen : MonoBehaviour
         GameManager.Instance.Player.ControlsDisabled = true;
         GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
 
-        _timer.OnTimerCompleted += GrowUp;
-        _timer.StartTimer(_timeBeforeTransition);
+        _loadState = 0;
     }
 
     private void GrowUp()
