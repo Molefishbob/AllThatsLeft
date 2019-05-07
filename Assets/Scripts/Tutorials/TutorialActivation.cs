@@ -14,8 +14,6 @@ public class TutorialActivation : MonoBehaviour
     [SerializeField]
     private bool _showWhileInArea = false;
     [SerializeField]
-    private GenericHackable _hidePermanentlyWhenHacked = null;
-    [SerializeField]
     private bool _hideByCameraMove = false;
     [SerializeField]
     private bool _hideByCameraZoom = false;
@@ -146,11 +144,6 @@ public class TutorialActivation : MonoBehaviour
         }
 
         GameManager.Instance.Player.OnPlayerDeath += MyWorkHereIsDone;
-
-        if (_hidePermanentlyWhenHacked != null)
-        {
-            _hidePermanentlyWhenHacked.OnHackSuccess += GetOutOfMyLife;
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -222,12 +215,6 @@ public class TutorialActivation : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-    }
-
-    private void GetOutOfMyLife()
-    {
-        _hidePermanentlyWhenHacked.OnHackSuccess -= GetOutOfMyLife;
-        gameObject.SetActive(false);
     }
 
     private void MoreWork()
