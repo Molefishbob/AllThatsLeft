@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2901923119199534566}
   - component: {fileID: 2901923119199534564}
   - component: {fileID: 7569724380776543899}
+  - component: {fileID: 50147335503632977}
   m_Layer: 22
   m_Name: GasTrap
   m_TagString: Untagged
@@ -63,6 +64,22 @@ MonoBehaviour:
   _gassedUnitTint: {r: 1, g: 0, b: 1, a: 1}
   _deathTintStrength: 0.75
   _gasSound: {fileID: 3267944155504581033}
+--- !u!114 &50147335503632977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2901923119199534567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d733c58acbf5e314896b6fbe80a72caf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _effectOverflowAmount: 1
+  _particleDensities:
+  - 2
+  - 0.1
 --- !u!1001 &3510649900226655304
 PrefabInstance:
   m_ObjectHideFlags: 0
