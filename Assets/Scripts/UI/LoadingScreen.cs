@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
@@ -36,11 +37,19 @@ public class LoadingScreen : MonoBehaviour
     {
         _scaledObject.localScale = Vector3.zero;
         _inTransition = false;
+        _mute = PrefsManager.Instance.AudioMuteSFX;
+        PrefsManager.Instance.AudioMuteSFX = true;
+        SceneManager.sceneLoaded += Begin;
     }
 
     private void Start()
     {
         _teleportTimer.OnTimerCompleted += TeleportDone;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= Begin;
     }
 
     private void OnDestroy()
@@ -59,6 +68,7 @@ public class LoadingScreen : MonoBehaviour
             {
                 _teleportTimer.StartTimer(_teleportEffectTime);
                 GameManager.Instance.Player._teleportEffectFast.Play();
+                PrefsManager.Instance.AudioMuteSFX = _mute;
             }
         }
 
@@ -68,11 +78,8 @@ public class LoadingScreen : MonoBehaviour
         }
     }
 
-    public void Begin()
+    private void Begin(Scene scene, LoadSceneMode mode)
     {
-        _mute = PrefsManager.Instance.AudioMuteSFX;
-        PrefsManager.Instance.AudioMuteSFX = true;
-
         GameManager.Instance.Camera.PlayerControlled = false;
         GameManager.Instance.Player.ControlsDisabled = true;
         GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
@@ -86,8 +93,6 @@ public class LoadingScreen : MonoBehaviour
         _timer.OnTimerCompleted -= GrowUp;
 
         _scaledObject.localScale = Vector3.one * _startScale;
-
-        PrefsManager.Instance.AudioMuteSFX = _mute;
 
         _inTransition = true;
 
@@ -108,5 +113,4 @@ public class LoadingScreen : MonoBehaviour
         GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 1.0f);
         gameObject.SetActive(false);
     }
-
 }
