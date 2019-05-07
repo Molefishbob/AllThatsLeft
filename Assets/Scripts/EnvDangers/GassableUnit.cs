@@ -11,6 +11,7 @@ public class GassableUnit : MonoBehaviour
     private Color _gasTint;
     private Color[][] _originalColors;
     private bool _tintingBack = false;
+    private float _deathTintStrength;
     private PhysicsOneShotTimer _killTimer;
     private ScaledRepeatingTimer _blinkTimer;
     private IDamageReceiver _dmg;
@@ -87,9 +88,10 @@ public class GassableUnit : MonoBehaviour
     /// Start timer when entering gas.
     /// </summary>
     /// <param name="oofTime">Time until oof</param>
-    public void EnterGas(float oofTime, Color tint)
+    public void EnterGas(float oofTime, Color tint, float deathTintStrength)
     {
         _gasTint = tint;
+        _deathTintStrength = deathTintStrength;
         _tintingBack = false;
         _killTimer.StartTimer(oofTime);
         _blinkTimer.StartTimer(_blinkInterval);
@@ -125,7 +127,7 @@ public class GassableUnit : MonoBehaviour
         {
             for (int j = 0; j < _renderers[i].materials.Length; j++)
             {
-                _renderers[i].materials[j].color = Color.Lerp(_originalColors[i][j], _gasTint, 0.5f);
+                _renderers[i].materials[j].color = Color.Lerp(_originalColors[i][j], _gasTint, _deathTintStrength);
             }
         }
         ExitGasExtras();
