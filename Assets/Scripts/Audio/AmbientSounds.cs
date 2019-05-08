@@ -25,8 +25,8 @@ public class AmbientSounds : MonoBehaviour
 
     private void PlaySound()
     {
-        //_sounds.PlaySound();
-        //_timer.StartTimer((int)Random.Range(_minTimeInterval, _maxTimeInterval));
+        _sounds.PlaySound();
+        _timer.StartTimer((int)Random.Range(_minTimeInterval, _maxTimeInterval));
     }
 
     private void OnDisable()
