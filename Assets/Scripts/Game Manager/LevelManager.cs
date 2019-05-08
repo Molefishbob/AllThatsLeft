@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -191,7 +191,7 @@ public class LevelManager : MonoBehaviour
                     break;
             }
         }
-        else if (!GameManager.Instance.GamePaused)
+        /* else if (!GameManager.Instance.GamePaused)
         {
             if (Input.GetKeyDown(KeyCode.K))
             {
@@ -221,7 +221,7 @@ public class LevelManager : MonoBehaviour
             {
                 GameManager.Instance.NextLevel();
             }
-        }
+        } */
     }
 
     private Vector3 GetSpawnPosition()
