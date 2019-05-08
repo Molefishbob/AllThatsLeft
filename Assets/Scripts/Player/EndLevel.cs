@@ -12,6 +12,11 @@ public class EndLevel : Collectible
         _shaderProperty = Shader.PropertyToID("_cutoff");
     }
 
+    private void OnDisable()
+    {
+        if (GameManager.Instance != null) StopEffects();
+    }
+
     private void Update()
     {
         if (_timer.IsRunning)
@@ -27,9 +32,13 @@ public class EndLevel : Collectible
 
     protected override void CollectAction()
     {
-        GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
-
-        GameManager.Instance.Player._teleportEffectSlow.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        StopEffects();
         GameManager.Instance.NextLevel();
+    }
+
+    private void StopEffects()
+    {
+        GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
+        GameManager.Instance.Player._teleportEffectSlow.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 }

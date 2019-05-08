@@ -9,9 +9,11 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
     [SerializeField]
     private List<MonoBehaviour> _targets = null;
 
+    private bool _hacked = false;
+
     private void Start()
     {
-        foreach(MonoBehaviour console in _consoles)
+        foreach (MonoBehaviour console in _consoles)
         {
             try
             {
@@ -41,27 +43,33 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
     /// Checks if every console in the list of consoles have been hacked.
     /// If they are hacked the method calls every single targets ButtonDown method.
     /// </summary>
-    public void ButtonDown()
+    public bool ButtonDown()
     {
-        bool hacked = true;
-        foreach (MonoBehaviour console in _consoles)
+        if (!_hacked)
         {
-            if (console.GetComponent<GenericHackable>().CurrentStatus != GenericHackable.Status.Hacked)
+            bool hacked = true;
+            foreach (MonoBehaviour console in _consoles)
             {
-                hacked = false;
-                break;
+                if (console.GetComponent<GenericHackable>().CurrentStatus != GenericHackable.Status.Hacked)
+                {
+                    hacked = false;
+                    break;
+                }
+            }
+            if (hacked)
+            {
+                foreach (MonoBehaviour target in _targets)
+                {
+                    target.GetComponent<IButtonInteraction>().ButtonDown();
+                }
+                _hacked = true;
+                return true;
             }
         }
-        if (hacked)
-        {
-            foreach(MonoBehaviour target in _targets)
-            {
-                target.GetComponent<IButtonInteraction>().ButtonDown();
-            }
-        }
+        return false;
     }
 
-    public void ButtonUp()
+    public bool ButtonUp()
     {
         throw new System.NotImplementedException();
     }

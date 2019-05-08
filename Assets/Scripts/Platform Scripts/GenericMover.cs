@@ -117,19 +117,21 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// <summary>
     /// Defines what happens when a connected console is hacked
     /// </summary>
-    public virtual void ButtonDown()
+    public virtual bool ButtonDown()
     {
         if (!_activated)
         {
             _delayTimer.StartTimer(_delayDuration);
             _activated = true;
             Init();
+            return true;
         }
+        return false;
     }
 
-    public void ButtonUp()
+    public bool ButtonUp()
     {
-
+        return false;
     }
 
     /// <summary>

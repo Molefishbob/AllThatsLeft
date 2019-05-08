@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class LoadingScreen : MonoBehaviour
     private bool _mute;
     private bool _inTransition;
     private int _shaderProperty;
+    private int _loadState = -1;
 
     private void Awake()
     {
@@ -35,30 +37,21 @@ public class LoadingScreen : MonoBehaviour
     private void OnEnable()
     {
         _scaledObject.localScale = Vector3.zero;
-
+        _inTransition = false;
+        _loadState = -1;
         _mute = PrefsManager.Instance.AudioMuteSFX;
         PrefsManager.Instance.AudioMuteSFX = true;
-
-        if (GameManager.Instance.Camera != null)
-        {
-            GameManager.Instance.Camera.PlayerControlled = false;
-        }
-
-        if (GameManager.Instance.Player != null)
-        {
-            GameManager.Instance.Player.ControlsDisabled = true;
-            GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
-        }
-
-        _inTransition = false;
-
-        _timer.OnTimerCompleted += GrowUp;
-        _timer.StartTimer(_timeBeforeTransition);
+        SceneManager.sceneLoaded += Begin;
     }
 
     private void Start()
     {
         _teleportTimer.OnTimerCompleted += TeleportDone;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= Begin;
     }
 
     private void OnDestroy()
@@ -68,6 +61,22 @@ public class LoadingScreen : MonoBehaviour
 
     private void Update()
     {
+        if (_loadState < 0) return;
+
+        if (_loadState < 1)
+        {
+            _loadState++;
+            return;
+        }
+
+        if (_loadState == 1)
+        {
+            _timer.OnTimerCompleted += GrowUp;
+            _timer.StartTimer(_timeBeforeTransition);
+            _loadState++;
+            return;
+        }
+
         if (_inTransition)
         {
             float currentScale = _timer.NormalizedTimeElapsed * (_endScale - _startScale) + _startScale;
@@ -77,6 +86,7 @@ public class LoadingScreen : MonoBehaviour
             {
                 _teleportTimer.StartTimer(_teleportEffectTime);
                 GameManager.Instance.Player._teleportEffectFast.Play();
+                PrefsManager.Instance.AudioMuteSFX = _mute;
             }
         }
 
@@ -86,13 +96,20 @@ public class LoadingScreen : MonoBehaviour
         }
     }
 
+    private void Begin(Scene scene, LoadSceneMode mode)
+    {
+        GameManager.Instance.Camera.PlayerControlled = false;
+        GameManager.Instance.Player.ControlsDisabled = true;
+        GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 0.0f);
+
+        _loadState = 0;
+    }
+
     private void GrowUp()
     {
         _timer.OnTimerCompleted -= GrowUp;
 
         _scaledObject.localScale = Vector3.one * _startScale;
-
-        PrefsManager.Instance.AudioMuteSFX = _mute;
 
         _inTransition = true;
 
@@ -113,5 +130,4 @@ public class LoadingScreen : MonoBehaviour
         GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, 1.0f);
         gameObject.SetActive(false);
     }
-
 }

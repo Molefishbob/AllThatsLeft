@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1438648819910294246
+--- !u!1 &3119780472202093036
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,128 +8,129 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7438008253336766193}
-  - component: {fileID: 794926366156922972}
-  - component: {fileID: 439229645941950719}
-  m_Layer: 22
-  m_Name: ElectricFieldTrap_box
+  - component: {fileID: 8138281941495567869}
+  - component: {fileID: 7132352199788450092}
+  - component: {fileID: 4852621411433496182}
+  m_Layer: 19
+  m_Name: Hackable Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7438008253336766193
+--- !u!4 &8138281941495567869
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1438648819910294246}
+  m_GameObject: {fileID: 3119780472202093036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6227851373065157350}
+  - {fileID: 8112065576889107879}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &794926366156922972
+--- !u!65 &7132352199788450092
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1438648819910294246}
+  m_GameObject: {fileID: 3119780472202093036}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 4, z: 4}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &439229645941950719
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &4852621411433496182
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1438648819910294246}
+  m_GameObject: {fileID: 3119780472202093036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fc3f97c2044bbc47bb2e43cfe2f51ca, type: 3}
+  m_Script: {fileID: 11500000, guid: a919cff227e658a4ab8a10ffa1e775c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &2218106973218434601
+  _hidePermanentlyWhenHacked: {fileID: 0}
+--- !u!1001 &7285039433406505541
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7438008253336766193}
+    m_TransformParent: {fileID: 8138281941495567869}
     m_Modifications:
-    - target: {fileID: 7895522549204345044, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677501, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_Name
-      value: ElectricField
+      value: canHackGlow
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.24
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.126
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.032
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+    - target: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4faf96c485755b4459484644a076dd54, type: 3}
---- !u!4 &6227851373065157350 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: db632ee335ff1b14c97673b21d289d35, type: 3}
+--- !u!4 &8112065576889107879 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5234741159413830863, guid: 4faf96c485755b4459484644a076dd54,
+  m_CorrespondingSourceObject: {fileID: 1552176639126677474, guid: db632ee335ff1b14c97673b21d289d35,
     type: 3}
-  m_PrefabInstance: {fileID: 2218106973218434601}
+  m_PrefabInstance: {fileID: 7285039433406505541}
   m_PrefabAsset: {fileID: 0}

@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class Console : GenericHackable
 {
+    private const string Hacking = "hacking";
     [SerializeField, Tooltip("The amount of time needed to hack")]
     protected float _duration = 0.5f;
     [SerializeField]
     protected float _lookAtHackedTime = 1.0f;
     [SerializeField]
     protected float _transitionTime = 0.5f;
+    [SerializeField]
+    protected Animator _anim = null;
 
     private PhysicsOneShotTimer _timer;
 
     protected override void Awake()
     {
         base.Awake();
+        _anim = GetComponent<Animator>();
         _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsOneShotTimer>(gameObject);
     }
     protected virtual void Start()
@@ -30,20 +34,20 @@ public class Console : GenericHackable
             _timer.OnTimerCompleted -= CompleteHack;
         }
     }
-    
+
     /// <summary>
     /// Determines the actions when something starts to hack the object.
     /// By default this is called when something enters the trigger.
     /// </summary>
     protected override void StartHack()
     {
-        if (CurrentStatus == Status.NotHacked) 
+        if (CurrentStatus == Status.NotHacked)
         {
             StartTimer(_duration);
             CurrentStatus = Status.BeingHacked;
         }
     }
-    
+
     /// <summary>
     /// Determines the actions when something stops to hack the object.
     /// By default this is called when something leaves the trigger and there is nothing else hacking the console.
@@ -64,9 +68,9 @@ public class Console : GenericHackable
     /// Determines what the console does when it is being hacked or has been hacked.
     /// For example you can call the targets methods here.
     /// </summary>
-    protected override void HackAction()
+    protected override bool HackAction()
     {
-        _hTarget.ButtonDown();
+        return _hTarget.ButtonDown();
     }
 
     /// <summary>
@@ -95,17 +99,23 @@ public class Console : GenericHackable
     /// </summary>
     protected void CompleteHack()
     {
-        switch(CurrentStatus)
+        switch (CurrentStatus)
         {
             case Status.BeingHacked:
+                _anim.SetTrigger(Hacking);
                 CurrentStatus = Status.Hacked;
-                HackAction();
-                GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
+                if (HackAction())
+                {
+                    GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
+                }
+                else
+                {
+                    GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime, true);
+                }
                 break;
             default:
                 Debug.LogError("Current Status:" + CurrentStatus + " Timer completed even though it shouldn't! ree");
                 break;
         }
     }
-
 }

@@ -149,7 +149,7 @@ public class EnemyDirection : MonoBehaviour
 
     public void RemoveTarget(Transform other)
     {
-        bool isSameTarget = _aggroTargets[0] == other;
+        bool isSameTarget = _aggroTargets.Count > 0 && _aggroTargets[0] == other;
 
         _aggroTargets.Remove(other);
 

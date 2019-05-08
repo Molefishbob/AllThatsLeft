@@ -294,7 +294,7 @@ public class ThirdPersonCamera : MonoBehaviour
         _follow = false;
     }
 
-    private void OnPlayerRebirth()
+    public void OnPlayerRebirth()
     {
         _follow = true;
         _pitch = _startingPitch;

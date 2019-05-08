@@ -141,6 +141,8 @@ public class MenuController : MonoBehaviour
     {
         PlayButtonClick();
         _timer.StartTimer(_buttonSound.Duration);
+        _timer.OnTimerCompleted -= StartGameAction;
+        _timer.OnTimerCompleted -= QuitAction;
         _timer.OnTimerCompleted += ContinueAction;
     }
 
@@ -157,6 +159,8 @@ public class MenuController : MonoBehaviour
     {
         PlayButtonClick();
         _timer.StartTimer(_buttonSound.Duration);
+        _timer.OnTimerCompleted -= ContinueAction;
+        _timer.OnTimerCompleted -= QuitAction;
         _timer.OnTimerCompleted += StartGameAction;
     }
 
@@ -284,6 +288,8 @@ public class MenuController : MonoBehaviour
     {
         PlayButtonClick();
         _timer.StartTimer(_buttonSound.Duration);
+        _timer.OnTimerCompleted -= StartGameAction;
+        _timer.OnTimerCompleted -= ContinueAction;
         _timer.OnTimerCompleted += QuitAction;
     }
 }

@@ -12,6 +12,8 @@ public class CharControlPlatformMovement : MonoBehaviour
     private GenericMover _platform;
     private CharControlBase _character;
 
+    public Vector3 CurrentMove { get; private set; }
+
     private void Awake()
     {
         _character = GetComponent<CharControlBase>();
@@ -42,11 +44,21 @@ public class CharControlPlatformMovement : MonoBehaviour
             Vector3 move = _platform.CurrentMove;
             move.y = 0.0f;
             _character.AddDirectMovement(move);
+            CurrentMove = _platform.CurrentMove;
+        }
+        else
+        {
+            CurrentMove = Vector3.zero;
         }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if ((hit.controller.collisionFlags & CollisionFlags.Below) != 0)
+        {
+            _platform = null;
+        }
+
         GenericMover gm = hit.gameObject.GetComponent<GenericMover>();
         if (gm != null) _platform = gm;
     }
