@@ -100,17 +100,8 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         
         if (Dead && !_bCanAct && _bHasBeenActivated)
         {
-            if (_ostControlRelease.IsRunning || _ostDisable.IsRunning)
-            {
-                if (!_selfTrampoline._bActing)
-                {
-                    EnablePlayerControls();
-                    ReleaseInstant();
-                }
-                _ostDisable.StartTimer(_transitionTimeOnPlayerDeath * 1.1f);
-                return;
-            }
-            DisableAction();
+            EnablePlayerControls();
+            ReleaseInstant();
             return;
         }
 
@@ -126,7 +117,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
             _ostControlRelease.StartTimer(_transitionTime * 0.9f);
             ActualRelease();
         }
-        if (OnBotReleased != null) OnBotReleased();
+        OnBotReleased?.Invoke();
     }
 
     public void EnablePlayerControls()
@@ -141,6 +132,8 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
         _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
+        if (!GameManager.Instance.Player.Dead)
+            EnablePlayerControls();
     }
 
     private void ActualRelease()
@@ -211,6 +204,13 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         Dead = true;
         _selfMover.Dead = true;
+
+        // Why the fuck I didn't do this before?
+        _ostControlRelease.StopTimer();
+        _ostDisable.StopTimer();
+        _ostLife.StopTimer();
+        _ostRelease.StopTimer();
+
         ReleaseControls(false);
     }
 }
