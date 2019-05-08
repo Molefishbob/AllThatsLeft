@@ -180,6 +180,7 @@ public class LevelManager : MonoBehaviour
             switch (GameManager.Instance.GamePaused)
             {
                 case false:
+                    if (GameManager.Instance.Player.Dead) return;
                     GameManager.Instance.PauseMenu.gameObject.SetActive(true);
                     GameManager.Instance.PauseMenu.ToPauseMenu();
                     GameManager.Instance.PauseGame();
@@ -190,7 +191,7 @@ public class LevelManager : MonoBehaviour
                     break;
             }
         }
-        else if (!GameManager.Instance.GamePaused)
+        /* else if (!GameManager.Instance.GamePaused)
         {
             if (Input.GetKeyDown(KeyCode.K))
             {
@@ -220,7 +221,7 @@ public class LevelManager : MonoBehaviour
             {
                 GameManager.Instance.NextLevel();
             }
-        }
+        } */
     }
 
     private Vector3 GetSpawnPosition()
