@@ -82,6 +82,7 @@ public class BombAction : BotActionBase
             _releaser.DisableActing();
             _bExploding = true;
             _releaser.ReleaseControls(true);
+            _releaser.DeadButNotDead();
         }
     }
 
