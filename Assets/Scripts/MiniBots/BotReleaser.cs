@@ -218,4 +218,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         Dead = true;
     }
+
+    public float GetRemainingLifeTime()
+    {
+        return _ostDisable.TimeLeft;
+    }
 }
