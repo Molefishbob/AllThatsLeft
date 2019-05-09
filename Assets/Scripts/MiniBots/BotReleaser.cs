@@ -213,4 +213,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         ReleaseControls(false);
     }
+
+    public void DeadButNotDead()
+    {
+        Dead = true;
+    }
 }
