@@ -12,8 +12,11 @@ public class TrampolineAction : BotActionBase
 
     private List<Renderer> _botRenderers = null;
     private List<Color> _cMatColors = null;
-    private int _iBlinkBufferSize = 5;
-    private int _iBlinkBuffer = 0;
+    [SerializeField]
+    private Color _cBlinkColor = Color.red;
+    [SerializeField]
+    private float _fBlinkDelay = 0.5f;
+    private float _fBlinkTimer = 0;
 
     protected override void Awake()
     {
@@ -63,9 +66,9 @@ public class TrampolineAction : BotActionBase
             float lifeTime = _releaser.GetRemainingLifeTime();
             if (lifeTime < 5 && lifeTime > 0)
             {
-                if (_iBlinkBuffer >= _iBlinkBufferSize)
+                if (_fBlinkTimer >= _fBlinkDelay)
                 {
-                    bool wantedState = _botRenderers[0].materials[0].color != Color.red;
+                    bool wantedState = _botRenderers[0].materials[0].color != _cBlinkColor;
                     foreach (Renderer o in _botRenderers)
                     {
                         int loops = 0;
@@ -73,17 +76,17 @@ public class TrampolineAction : BotActionBase
                         foreach (Material p in tmp)
                         {
                             if (wantedState)
-                                p.color = Color.red;
+                                p.color = _cBlinkColor;
                             else
                                 p.color = _cMatColors[loops];
                             loops++;
                         }
                     }
-                    _iBlinkBuffer = 0;
+                    _fBlinkTimer = 0;
                 }
                 else
                 {
-                    _iBlinkBuffer++;
+                    _fBlinkTimer += Time.deltaTime;
                 }
             }
         }
