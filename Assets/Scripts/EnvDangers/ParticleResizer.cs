@@ -20,7 +20,7 @@ public class ParticleResizer : MonoBehaviour
             shape.scale = box.size + Vector3.one * _effectOverflowAmount;
 
             ParticleSystem.EmissionModule emission = effects[i].emission;
-            emission.rateOverTimeMultiplier = _particleDensities[i] * shape.scale.x * shape.scale.y * shape.scale.z;
+            emission.rateOverTimeMultiplier = _particleDensities[i] * Mathf.Sqrt(shape.scale.x * shape.scale.y * shape.scale.z);
         }
     }
 }
