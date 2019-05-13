@@ -110,7 +110,7 @@ public class Console : GenericHackable
                 }
                 else
                 {
-                    GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime, true);
+                    GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime);
                 }
                 break;
             default:
