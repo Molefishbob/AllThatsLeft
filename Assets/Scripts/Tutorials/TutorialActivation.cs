@@ -227,6 +227,6 @@ public class TutorialActivation : MonoBehaviour
     private void ElvisHasLeftTheBuilding()
     {
         _shown = false;
-        _prompt.gameObject.SetActive(false);
+        if (_prompt != null) _prompt.gameObject.SetActive(false);
     }
 }
