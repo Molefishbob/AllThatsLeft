@@ -9,8 +9,10 @@ public class CharControlPlatformMovement : MonoBehaviour
     [SerializeField]
     private float _disconnectDistance = 2.5f;
 
-    private GenericMover _platform;
+    [HideInInspector]
+    public GenericMover _platform;
     private CharControlBase _character;
+    private bool _forced = false;
 
     public Vector3 CurrentMove { get; private set; }
 
@@ -32,7 +34,7 @@ public class CharControlPlatformMovement : MonoBehaviour
         }
         else
         {
-            GenericMover plat = FindPlatform(_disconnectDistance);
+            GenericMover plat = FindPlatform(_forced ? Mathf.Infinity : _disconnectDistance);
             if (plat != _platform && plat != null) pos.y = _platform.transform.position.y;
             _platform = plat;
         }
@@ -49,6 +51,7 @@ public class CharControlPlatformMovement : MonoBehaviour
         else
         {
             CurrentMove = Vector3.zero;
+            _forced = false;
         }
     }
 
@@ -57,6 +60,7 @@ public class CharControlPlatformMovement : MonoBehaviour
         if ((hit.controller.collisionFlags & CollisionFlags.Below) != 0)
         {
             _platform = null;
+            _forced = false;
         }
 
         GenericMover gm = hit.gameObject.GetComponent<GenericMover>();
@@ -77,5 +81,11 @@ public class CharControlPlatformMovement : MonoBehaviour
             return hit.transform.GetComponent<GenericMover>();
         }
         return null;
+    }
+
+    public void ForcePlatform(GenericMover platform)
+    {
+        _platform = platform;
+        _forced = true;
     }
 }
