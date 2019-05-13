@@ -54,7 +54,7 @@ MonoBehaviour:
   _startingStatus: 0
   _hackTarget: {fileID: 0}
   _duration: 0.5
-  _lookAtHackedTime: 1
+  _lookAtHackedTime: 1.25
   _transitionTime: 0.5
   _anim: {fileID: 0}
 --- !u!65 &2129702414
@@ -68,8 +68,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 3}
-  m_Center: {x: 0, y: 1.5, z: 0}
+  m_Size: {x: 3, y: 2, z: 3}
+  m_Center: {x: -0.1, y: 1, z: 0.5}
 --- !u!114 &2129702413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,8 +143,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.2, y: 2.4, z: 1.4}
-  m_Center: {x: 0, y: 1.2, z: 0}
+  m_Size: {x: 2, y: 1, z: 1.3}
+  m_Center: {x: -0.1, y: 0.5, z: 0.15}
 --- !u!1001 &839360751285814101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -253,18 +253,6 @@ PrefabInstance:
       value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -294,6 +282,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 493d4527774d5a047aa00fad27169953, type: 3}
