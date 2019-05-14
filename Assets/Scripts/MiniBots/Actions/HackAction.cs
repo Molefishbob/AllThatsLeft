@@ -60,7 +60,7 @@ public class HackAction : BotActionBase
                     _bHacking = true;
                     _hackTargets[0].TimeToStart();
                     _releaser.DisableActing();
-                    _releaser.ReleaseControls(true);
+                    _selfMover.ControlsDisabled = true;
                 }
             }
         }

@@ -123,6 +123,8 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// </summary>
     protected virtual void SymbolDown()
     {
+        _activated = true;
+        Init();
         if (_symbol != null)
         {
             _symbol.SetActive(false);
@@ -131,13 +133,11 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// <summary>
     /// Defines what happens when a connected console is hacked
     /// </summary>
-    public virtual bool ButtonDown()
+    public virtual bool ButtonDown(float actionDelay)
     {
         if (!_activated)
         {
-            _delayTimer.StartTimer(_delayDuration);
-            _activated = true;
-            Init();
+            _delayTimer.StartTimer(actionDelay + _delayDuration);
             return true;
         }
         return false;

@@ -16,10 +16,12 @@ public class NewMinibotAnimatorMiddlehand : MonoBehaviour
     private Animator _animator;
 
     public GameObject[] particleEffects;
+    private BotReleaser _releaser;
 
     void Awake()
     {
         _bombAction = transform.parent.gameObject.GetComponent<BombAction>();
+        _releaser = transform.parent.gameObject.GetComponent<BotReleaser>();
         _animator = GetComponent<Animator>();
     }
 
@@ -53,5 +55,10 @@ public class NewMinibotAnimatorMiddlehand : MonoBehaviour
         foreach (GameObject effect in particleEffects) {
             effect.SetActive(false);
         }
+    }
+
+    public void Die()
+    {
+        _releaser.Die();
     }
 }

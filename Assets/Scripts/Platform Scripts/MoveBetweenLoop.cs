@@ -66,10 +66,10 @@ public class MoveBetweenLoop : GenericMover
         _currentObjectNum = 0;
     }
 
-    public override bool ButtonDown()
+    public override bool ButtonDown(float actionDelay)
     {
         _anim.SetTrigger(Wiggle);
-        return base.ButtonDown();
+        return base.ButtonDown(actionDelay);
     }
 
     /// <summary>

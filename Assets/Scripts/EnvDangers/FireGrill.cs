@@ -18,13 +18,10 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     private GameObject _sparks = null;
     [SerializeField]
     private bool _activated = true;
-    [SerializeField, Tooltip("Time it waits before deactivating when hacked")]
-    private float _deactivationTime = 0.5f;
     private PhysicsRepeatingTimer _timer;
     private Collider _trigger;
     private bool _cycleStarted = false;
-    private ScaledOneShotTimer _deactivationTimer;
-    [Tooltip("The duration after which the symbol goes off")]
+    [Tooltip("The duration after which the symbol goes off and fire deactivates when hacked")]
     public float _delayDuration = 0.4f;
     [SerializeField]
     protected GameObject _symbol = null;
@@ -38,13 +35,11 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     {
         _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
         _trigger = GetComponent<Collider>();
-        _deactivationTimer = gameObject.AddComponent<ScaledOneShotTimer>();
         _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
-        _deactivationTimer.OnTimerCompleted += FlamesOff;
         _delayTimer.OnTimerCompleted += SymbolDown;
 
         if (_startDelay > 0)
@@ -137,14 +132,11 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
         StartCycle();
     }
 
-    public bool ButtonDown()
+    public bool ButtonDown(float actionDelay)
     {
         if (_activated)
         {
-            _activated = false;
-            _delayTimer.StartTimer(_delayDuration);
-            _timer.StopTimer();
-            _deactivationTimer.StartTimer(_deactivationTime);
+            _delayTimer.StartTimer(actionDelay + _delayDuration);
             return true;
         }
         return false;
@@ -154,13 +146,7 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     {
         if (!_activated)
         {
-            _activated = true;
-            if (!_cycleStarted || _timer.TimeElapsed <= _fireDuration)
-            {
-                FlamesOn();
-            }
             _delayTimer.StartTimer(_delayDuration);
-            _timer.ResumeTimer();
             return true;
         }
         return false;
@@ -168,6 +154,20 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
 
     protected virtual void SymbolDown()
     {
+        _activated = !_activated;
+        if (_activated)
+        {
+            if (!_cycleStarted || _timer.TimeElapsed <= _fireDuration)
+            {
+                FlamesOn();
+            }
+            _timer.ResumeTimer();
+        }
+        else
+        {
+            _timer.StopTimer();
+            FlamesOff();
+        }
         try
         {
             _symbol.SetActive(false);
@@ -180,7 +180,6 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
 
     private void OnDestroy()
     {
-        if (_deactivationTimer != null)
-            _deactivationTimer.OnTimerCompleted -= FlamesOff;
+        if (_delayTimer != null) _delayTimer.OnTimerCompleted -= SymbolDown;
     }
 }

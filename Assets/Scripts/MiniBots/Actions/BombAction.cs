@@ -12,10 +12,7 @@ public class BombAction : BotActionBase
     [SerializeField]
     private float _fExplodeRadius = 4;
     [SerializeField]
-    private float _fReleaseOverwrite = 1;
-    [SerializeField]
     private float _fRenderDisableTimeOnExplode = 0.25f;
-    private float _fOldreleaseTime;
     public ParticleSystem[] ExplosionParticles { get { return _psExplosion; } }
     private ParticleSystem[] _psExplosion = null;
     private bool _bFirstEnable = true;
@@ -92,8 +89,6 @@ public class BombAction : BotActionBase
                     o.gameObject.SetActive(true);
                 }
             }
-            _fOldreleaseTime = _releaser.fReleaseDelay;
-            _releaser.fReleaseDelay = _fReleaseOverwrite > 0.5f ? _fReleaseOverwrite : _fOldreleaseTime;
             _releaser.DisableActing();
             _bExploding = true;
             _releaser.ReleaseControls(true);
@@ -108,7 +103,6 @@ public class BombAction : BotActionBase
             _goParticleHolder.transform.parent = transform;
             _goParticleHolder.transform.localPosition = Vector3.zero;
         }
-        _releaser.fReleaseDelay = _fOldreleaseTime;
         _bExploding = false;
         _shadowProjector.enabled = true;
         foreach (Renderer renderer in _renderers)

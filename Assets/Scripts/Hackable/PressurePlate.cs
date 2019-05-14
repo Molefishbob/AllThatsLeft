@@ -49,11 +49,11 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction
     /// <summary>
     /// What happens when the button is pressed down
     /// </summary>
-    public bool ButtonDown()
+    public bool ButtonDown(float actionDelay)
     {
         /// TODO: ADD ANIMATION
         /// TODO: ADD SOUNDS HERE
-        _tInt.ButtonDown();
+        _tInt.ButtonDown(actionDelay);
         _timer.StartTimer(_cooldownDuration);
         _cooldownDone = false;
         return true;
@@ -76,7 +76,7 @@ public class PressurePlate : MonoBehaviour, IButtonInteraction
     {
         if (!_isButtonPressed && _cooldownDone)
         {
-            ButtonDown();
+            ButtonDown(0);
             _isButtonPressed = true;
         }
     }

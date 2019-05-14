@@ -29,13 +29,11 @@ public class Door : MonoBehaviour, IButtonInteraction
         _delayTimer.OnTimerCompleted += SymbolDown;
     }
 
-    public bool ButtonDown()
+    public bool ButtonDown(float actionDelay)
     {
         if (!_opened)
         {
-            _delayTimer.StartTimer(_delayDuration);
-            _anim.SetBool(_openBool, true);
-            _openSound.PlaySound();
+            _delayTimer.StartTimer(actionDelay + _delayDuration);
             _opened = true;
             return true;
         }
@@ -56,6 +54,8 @@ public class Door : MonoBehaviour, IButtonInteraction
 
     protected virtual void SymbolDown()
     {
+        _anim.SetBool(_openBool, true);
+        _openSound.PlaySound();
         try
         {
             _symbol.SetActive(false);

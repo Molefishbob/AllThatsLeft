@@ -16,7 +16,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     [HideInInspector]
     public bool Dead { get; protected set; }
-    private bool _bHasBeenActivated = false;
 
     private LayerMask _lHackableLayer = 1 << 18;
 
@@ -77,8 +76,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _ostLife.StopTimer();
         _selfMover._animator.SetBool("Explode", false);
         Dead = false;
-        _selfMover.Dead = false;
-        _bHasBeenActivated = false;
         // TODO Add player jump reset to BotMovement
         // Right now happens in movements OnDisable not a fan of that
         //_selfMover._playerJump.ResetJump();
@@ -90,7 +87,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     public void Activate()
     {
-        _bHasBeenActivated = true;
         _bCanAct = true;
         _selfBomb._bCanAct = true;
         _selfHack._bCanAct = true;
@@ -99,18 +95,15 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     public void ReleaseControls(bool withDelay)
     {
-        _selfMover.ControlsDisabled = true;
-        
-        if (Dead && !_bCanAct && _bHasBeenActivated)
-        {
-            EnablePlayerControls();
-            ReleaseInstant();
-            return;
-        }
+        GameManager.Instance.Player.OnPlayerDeath -= ReleaseInstant;
 
         DisableActing();
 
-        if (withDelay)
+        if (_selfMover.ControlsDisabled)
+        {
+            _ostDisable.StartTimer(_transitionTime);
+        }
+        else if (withDelay)
         {
             _ostRelease.StartTimer(fReleaseDelay);
             _ostControlRelease.StartTimer(fReleaseDelay + _transitionTime * 0.9f);
@@ -120,7 +113,10 @@ public class BotReleaser : BotActionBase, IDamageReceiver
             _ostControlRelease.StartTimer(_transitionTime * 0.9f);
             ActualRelease();
         }
-        OnBotReleased?.Invoke();
+
+        _selfMover.ControlsDisabled = true;
+
+        if (OnBotReleased != null) OnBotReleased();
     }
 
     public void EnablePlayerControls()
@@ -141,14 +137,14 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     private void ActualRelease()
     {
-        if (GameManager.Instance.Camera.LookingAt.transform == _thisCamTarget)
+        if (GameManager.Instance.Camera.LookingAt == _thisCamTarget)
         {
             GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime);
         }
-        if (_selfTrampoline._bActing || _selfHack.Hacking)
+        if (_selfTrampoline._bActing)
         {
-            _ostDisable.StartTimer(_fLifeTime);
-        } 
+            _ostLife.StartTimer(_fLifeTime);
+        }
         else
             _ostDisable.StartTimer(_transitionTime);
     }
@@ -158,14 +154,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfHack.DisableAction();
         _selfBomb.DisableAction();
         _selfTrampoline.DisableAction();
-
-        _selfMover.ControlsDisabled = true;
-        if (!_ostLife.IsRunning)
-        {
-            if (!Dead)
-                Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false);
     }
 
     public void DisableActing()
@@ -208,15 +197,16 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         if (Dead || _selfBomb._bExploding) return;
 
         Dead = true;
-        _selfMover.Dead = true;
 
         // Why the fuck I didn't do this before?
-        _ostControlRelease.StopTimer();
-        _ostDisable.StopTimer();
         _ostLife.StopTimer();
-        _ostRelease.StopTimer();
 
-        ReleaseControls(false);
+        if (!_selfBomb._bExploding)
+        {
+            Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
+        }
+
+        ReleaseControls(true);
     }
 
     public void DeadButNotDead()
@@ -226,6 +216,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     public float GetRemainingLifeTime()
     {
-        return _ostDisable.TimeLeft;
+        return _ostLife.TimeLeft;
     }
 }

@@ -43,7 +43,7 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
     /// Checks if every console in the list of consoles have been hacked.
     /// If they are hacked the method calls every single targets ButtonDown method.
     /// </summary>
-    public bool ButtonDown()
+    public bool ButtonDown(float actionDelay)
     {
         if (!_hacked)
         {
@@ -60,7 +60,7 @@ public class MultipleObjectActivation : MonoBehaviour, IButtonInteraction
             {
                 foreach (MonoBehaviour target in _targets)
                 {
-                    target.GetComponent<IButtonInteraction>().ButtonDown();
+                    target.GetComponent<IButtonInteraction>().ButtonDown(actionDelay);
                 }
                 _hacked = true;
                 return true;
