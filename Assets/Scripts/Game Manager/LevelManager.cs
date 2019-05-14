@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour
     /// The pool prefab
     /// </summary>
     public PatrolEnemyPool _patrolEnemyPoolPrefab;
-    public PauseMenu _pauseMenu;
+    public GameObject _pauseMenu;
     public LoadingScreen _loadingScreen;
     public LoopingMusic _levelMusic;
 
@@ -117,14 +117,10 @@ public class LevelManager : MonoBehaviour
 
         if (GameManager.Instance.PauseMenu == null)
         {
-            PauseMenu pauseMenu = FindObjectOfType<PauseMenu>();
-            if (pauseMenu == null)
-            {
-                pauseMenu = Instantiate(_pauseMenu);
-            }
+            GameObject pauseMenu = Instantiate(_pauseMenu);
             DontDestroyOnLoad(pauseMenu);
-            GameManager.Instance.PauseMenu = pauseMenu;
-            pauseMenu.gameObject.SetActive(false);
+            GameManager.Instance.PauseMenu = pauseMenu.GetComponentInChildren<PauseMenu>(true);
+            GameManager.Instance.PauseMenu.gameObject.SetActive(false);
         }
 
         if (GameManager.Instance.LoadingScreen == null)
@@ -181,13 +177,10 @@ public class LevelManager : MonoBehaviour
             {
                 case false:
                     if (GameManager.Instance.Player.Dead) return;
-                    GameManager.Instance.PauseMenu.gameObject.SetActive(true);
                     GameManager.Instance.PauseMenu.ToPauseMenu();
-                    GameManager.Instance.PauseGame();
                     break;
                 case true:
-                    GameManager.Instance.PauseMenu.gameObject.SetActive(false);
-                    GameManager.Instance.UnPauseGame();
+                    GameManager.Instance.PauseMenu.Resume();
                     break;
             }
         }

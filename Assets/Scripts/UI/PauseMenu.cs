@@ -15,6 +15,10 @@ public class PauseMenu : MonoBehaviour
     private GameObject _masterVolumeSlider = null, _noButton = null, _resumeButton = null, _camxSlider = null;
     [SerializeField]
     private SingleUISound _buttonClickSound = null;
+    [SerializeField]
+    private SingleUISound _resumeSound = null;
+    [SerializeField]
+    private SingleUISound _menuOpenSound = null;
     private UnscaledOneShotTimer _timer;
     public enum Page
     {
@@ -83,26 +87,19 @@ public class PauseMenu : MonoBehaviour
     {
         if (_timer != null)
         {
-            _timer.OnTimerCompleted -= ResumeGame;
             _timer.OnTimerCompleted -= Menu;
             _timer.OnTimerCompleted -= Quit;
         }
     }
 
-    private void ResumeGame()
-    {
-        GameManager.Instance.UnPauseGame();
-        gameObject.SetActive(false);
-        _timer.OnTimerCompleted -= ResumeGame;
-    }
-
     /// <summary>
-    /// Resumes the game
+    /// Resumes the game with a button click sound
     /// </summary>
     public void Resume()
     {
-        _timer.StartTimer(_buttonClickSound.Duration);
-        _timer.OnTimerCompleted += ResumeGame;
+        _resumeSound.PlaySound();
+        GameManager.Instance.UnPauseGame();
+        gameObject.SetActive(false);
     }
 
     private void Menu()
@@ -160,7 +157,11 @@ public class PauseMenu : MonoBehaviour
     {
         if (_timer != null)
             _timer.StopTimer();
+
+        _menuOpenSound.PlaySound();
+        GameManager.Instance.PauseGame();
         _currentPage = Page.MainMenu;
+        gameObject.SetActive(true);
         _pauseMenu.SetActive(true);
         if (_settings != null) _settings.SetActive(false);
         if (_confirmQuit != null) _confirmQuit.SetActive(false);
