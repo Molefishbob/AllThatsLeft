@@ -37,10 +37,10 @@ public abstract class CharControlBase : MonoBehaviour
     private Vector3 _slopeDirection = Vector3.down;
     private bool _onSlope = false;
     private bool _resetGravity = false;
-    private bool _controllerEnabled = true;
     private bool _airBorne = false;
     private bool _holdPosition = false;
     private PhysicsOneShotTimer _airTimer;
+    private CharControlPlatformMovement _ccpm;
 
     public bool HoldPosition
     {
@@ -64,6 +64,7 @@ public abstract class CharControlBase : MonoBehaviour
         _animator = GetComponentInChildren<Animator>(true);
         _renderer = GetComponentInChildren<SkinnedMeshRenderer>(true);
         _airTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
+        _ccpm = GetComponent<CharControlPlatformMovement>();
         SetControllerActive(_startsActive);
     }
 
@@ -81,7 +82,7 @@ public abstract class CharControlBase : MonoBehaviour
     {
         if (GameManager.Instance.GamePaused) return;
 
-        if (_controllerEnabled)
+        if (_controller.enabled)
         {
             float maxSpeed = _speed * Time.deltaTime;
             float accelerationMagnitude;
@@ -245,7 +246,7 @@ public abstract class CharControlBase : MonoBehaviour
     /// </summary>
     public virtual void SetControllerActive(bool active)
     {
-        if (active && !_controllerEnabled)
+        if (active && !_controller.enabled)
         {
             _internalMove = Vector3.zero;
             _externalMove = Vector3.zero;
@@ -253,7 +254,10 @@ public abstract class CharControlBase : MonoBehaviour
         }
 
         _controller.enabled = active;
-        _controllerEnabled = active;
+        if (!active && _ccpm != null)
+        {
+            _ccpm.ResetPlatform();
+        }
         // if (_animator != null) _animator.speed = 1;
     }
 
