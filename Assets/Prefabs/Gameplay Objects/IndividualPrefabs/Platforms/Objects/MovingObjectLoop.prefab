@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!95 &5890937872788773440
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3975362166169227348}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c25081fbfd8f5ff46ae8e275b642c4b2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &4271464963644485511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,7 +32,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 4
+  _delayDuration: 0.4
+  _transform: []
   _activated: 1
+  _symbol: {fileID: 0}
+  _moveSound: {fileID: 0}
 --- !u!1001 &7521905922212088747
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,6 +103,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6865877573626272754, guid: 9f45b0e42780f6846a9e34f42b765abe,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 4.5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6865877573626272765, guid: 9f45b0e42780f6846a9e34f42b765abe, type: 3}
