@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 {
-
+    protected const string Wiggle = "viggle";
+    private const string Stop = "stop";
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
     [Tooltip("The duration after which the symbol goes off")]
@@ -26,11 +27,16 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected GameObject _symbol = null;
     [SerializeField]
     protected SingleSFXSound _moveSound = null;
+    protected Animator _anim = null;
+    protected ScaledOneShotTimer _viggleTimer = null;
+    protected float _animationLength = 0;
     [HideInInspector]
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
     protected virtual void Awake()
     {
+        _viggleTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _anim = GetComponent<Animator>();
         _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
         _transform = new List<Transform>(transform.parent.childCount);
         _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
@@ -65,6 +71,8 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
             _timer.OnTimerCompleted -= TimedAction;
         if (_delayTimer != null)
             _delayTimer.OnTimerCompleted -= SymbolDown;
+        if (_viggleTimer != null)
+            _viggleTimer.OnTimerCompleted -= StartViggle;
     }
 
     private void FixedUpdate()
@@ -95,6 +103,14 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
             _length += (_transform[a].position - _transform[a + 1].position).magnitude;
         }
     }
+    /// <summary>
+    /// Does a viggle animation before the platform leaves
+    /// </summary>
+    protected virtual void StartViggle()
+    {
+        _anim.SetTrigger(Wiggle);
+    }
+
     /// <summary>
     /// Called when the timer is completed.
     ///
@@ -157,7 +173,9 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
             }
         }
         Gizmos.color = new Color(0, 0, 0, 1);
-        Gizmos.DrawWireCube(_transform[0].position, new Vector3(3, 0.5f, 2));
-        Gizmos.DrawWireCube(_transform[_transform.Count - 1].position, new Vector3(3, 0.5f, 2)); ;
+        Gizmos.DrawWireCube(new Vector3(_transform[0].position.x, _transform[0].position.y - 0.1f, _transform[0].position.z),
+                            new Vector3(4, 0.25f, 4.5f));
+        Gizmos.DrawWireCube(new Vector3(_transform[_transform.Count-1].position.x, _transform[_transform.Count - 1].position.y - 0.1f, _transform[_transform.Count - 1].position.z),
+                            new Vector3(4, 0.25f, 4.5f));
     }
 }
