@@ -83,7 +83,6 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         _damageDeathSound.PlaySound();
         _animator.SetTrigger(_animatorTriggerDeath);
         SetControllerActive(false);
-        Jump.ResetJump();
         _deathTimer.StartTimer(_deathTime);
         if (OnPlayerDeath != null) OnPlayerDeath();
     }

@@ -71,9 +71,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _ostRelease.StopTimer();
         _ostLife.StopTimer();
         Dead = false;
-        // TODO Add player jump reset to BotMovement
-        // Right now happens in movements OnDisable not a fan of that
-        //_selfMover._playerJump.ResetJump();
         _selfMover.SetControllerActive(false);
         _selfMover.ControlsDisabled = true;
 
@@ -132,6 +129,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         }
         if (Dead)
         {
+            _ostLife.StopTimer();
             if (!_ostDisable.IsRunning)
             {
                 _ostDisable.StartTimer(_transitionTime);
@@ -187,12 +185,8 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         if (Dead || _selfBomb._bExploding) return;
 
         Dead = true;
-
-        // Why the fuck I didn't do this before?
-        _ostLife.StopTimer();
-
         Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
-
+        _selfMover.SetControllerActive(false);
         ReleaseControls(false);
     }
 

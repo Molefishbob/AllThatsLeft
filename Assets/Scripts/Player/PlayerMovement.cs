@@ -65,4 +65,10 @@ public abstract class PlayerMovement : CharControlBase
 
         return inputDirection;
     }
+
+    public override void SetControllerActive(bool active)
+    {
+        base.SetControllerActive(active);
+        if (Jump != null && !active) Jump.ResetJump();
+    }
 }

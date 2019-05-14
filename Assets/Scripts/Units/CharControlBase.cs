@@ -243,7 +243,7 @@ public abstract class CharControlBase : MonoBehaviour
     /// <summary>
     /// Activates/deactivates character controller.
     /// </summary>
-    public void SetControllerActive(bool active)
+    public virtual void SetControllerActive(bool active)
     {
         if (active && !_controllerEnabled)
         {
