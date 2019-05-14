@@ -46,14 +46,15 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         _amountOfTransforms = _transform.Count - 1;
     }
 
-    void Start()
+    protected virtual void Start()
     {
         _timer.OnTimerCompleted += TimedAction;
         _delayTimer.OnTimerCompleted += SymbolDown;
         transform.position = _transform[0].position;
         if (_activated)
         {
-            _symbol.SetActive(false);
+             if (_symbol != null)
+                _symbol.SetActive(false);
             Init();
         }
     }
@@ -106,12 +107,9 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// </summary>
     protected virtual void SymbolDown()
     {
-        try
+        if (_symbol != null)
         {
             _symbol.SetActive(false);
-        } catch
-        {
-            Debug.LogError(gameObject.name + " has to have a symbol!");
         }
     }
     /// <summary>
