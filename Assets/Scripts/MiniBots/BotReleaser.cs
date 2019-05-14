@@ -21,7 +21,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     private ScaledOneShotTimer _ostRelease;
     private ScaledOneShotTimer _ostDisable;
-    private ScaledOneShotTimer _ostControlRelease;
     private PhysicsOneShotTimer _ostLife;
 
     // Could use a BotActionBase list/array for scaleability
@@ -41,7 +40,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         _ostRelease = gameObject.AddComponent<ScaledOneShotTimer>();
         _ostDisable = gameObject.AddComponent<ScaledOneShotTimer>();
-        _ostControlRelease = gameObject.AddComponent<ScaledOneShotTimer>();
         _ostLife = gameObject.AddComponent<PhysicsOneShotTimer>();
 
         _selfBomb = GetComponent<BombAction>();
@@ -60,7 +58,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         _ostRelease.OnTimerCompleted += ActualRelease;
         _ostDisable.OnTimerCompleted += DisableAction;
-        _ostControlRelease.OnTimerCompleted += EnablePlayerControls;
         _ostLife.OnTimerCompleted += Die;
         _lHackableLayer = _selfHack.HackLayer;
 
@@ -72,9 +69,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
-        _ostControlRelease.StopTimer();
         _ostLife.StopTimer();
-        _selfMover._animator.SetBool("Explode", false);
         Dead = false;
         // TODO Add player jump reset to BotMovement
         // Right now happens in movements OnDisable not a fan of that
@@ -99,29 +94,18 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         DisableActing();
 
-        if (_selfMover.ControlsDisabled)
-        {
-            _ostDisable.StartTimer(_transitionTime);
-        }
-        else if (withDelay)
+        if (withDelay)
         {
             _ostRelease.StartTimer(fReleaseDelay);
-            _ostControlRelease.StartTimer(fReleaseDelay + _transitionTime * 0.9f);
         }
         else
         {
-            _ostControlRelease.StartTimer(_transitionTime * 0.9f);
             ActualRelease();
         }
 
         _selfMover.ControlsDisabled = true;
 
         if (OnBotReleased != null) OnBotReleased();
-    }
-
-    public void EnablePlayerControls()
-    {
-        GameManager.Instance.Player.ControlsDisabled = false;
     }
 
     public void ReleaseInstant()
@@ -131,8 +115,13 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath);
         _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
-        if (!GameManager.Instance.Player.Dead)
-            EnablePlayerControls();
+    }
+
+    public void ReleaseOnly()
+    {
+        Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
+        _ostDisable.StartTimer(_transitionTime);
+        if (OnBotReleased != null) OnBotReleased();
     }
 
     private void ActualRelease()
@@ -141,12 +130,17 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         {
             GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime);
         }
-        if (_selfTrampoline._bActing)
+        if (Dead)
+        {
+            if (!_ostDisable.IsRunning)
+            {
+                _ostDisable.StartTimer(_transitionTime);
+            }
+        }
+        else if (_selfTrampoline._bActing)
         {
             _ostLife.StartTimer(_fLifeTime);
         }
-        else
-            _ostDisable.StartTimer(_transitionTime);
     }
 
     public override void DisableAction()
@@ -177,10 +171,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         {
             _ostDisable.OnTimerCompleted -= DisableAction;
         }
-        if (_ostControlRelease != null)
-        {
-            _ostControlRelease.OnTimerCompleted -= EnablePlayerControls;
-        }
         if (_ostLife != null && _selfMover != null)
         {
             _ostLife.OnTimerCompleted -= Die;
@@ -201,12 +191,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         // Why the fuck I didn't do this before?
         _ostLife.StopTimer();
 
-        if (!_selfBomb._bExploding)
-        {
-            Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
-        }
+        Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
 
-        ReleaseControls(true);
+        ReleaseControls(false);
     }
 
     public void DeadButNotDead()

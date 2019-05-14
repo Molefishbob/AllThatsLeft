@@ -104,7 +104,7 @@ MonoBehaviour:
   _verticalSensitivity: 1
   _minPitch: -70
   _maxPitch: 85
-  _defaultTransitionTime: 1
+  _defaultTransitionTime: 0.5
   _horSensMulti: 0.05
   _verSensMulti: 0.05
   _zoomMulti: 0.01
@@ -256,6 +256,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5459540576229880259}
     m_Modifications:
+    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
+        type: 3}
+      propertyPath: m_Name
+      value: UI Camera
+      objectReference: {fileID: 0}
     - target: {fileID: 5459540576229880259, guid: 0f7c0ba7edc786d409962d40ba139490,
         type: 3}
       propertyPath: m_RootOrder
@@ -275,11 +280,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
-        type: 3}
-      propertyPath: m_Name
-      value: UI Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f7c0ba7edc786d409962d40ba139490, type: 3}

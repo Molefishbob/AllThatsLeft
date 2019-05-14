@@ -57,8 +57,8 @@ public class NewMinibotAnimatorMiddlehand : MonoBehaviour
         }
     }
 
-    public void Die()
+    public void HackComplete()
     {
-        _releaser.Die();
+        _releaser.ReleaseOnly();
     }
 }

@@ -25,6 +25,29 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
 
     public bool Dead { get; protected set; }
 
+    public override bool ControlsDisabled
+    {
+        get
+        {
+            return _controlsDisabled || Dead;
+        }
+        set
+        {
+            if (!Dead)
+            {
+                _controlsDisabled = value;
+                if (Jump != null)
+                {
+                    Jump.ControlsDisabled = value;
+                }
+                if (_controlsDisabled)
+                {
+                    ResetInternalMove();
+                }
+            }
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -57,7 +80,6 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
 
         GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
-        ControlsDisabled = true;
         _damageDeathSound.PlaySound();
         _animator.SetTrigger(_animatorTriggerDeath);
         SetControllerActive(false);
@@ -81,7 +103,6 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         if (Dead) return;
 
         Dead = true;
-        ControlsDisabled = true;
         _fallDeathSound.PlaySound();
         _deathTimer.StartTimer(_deathTime);
         if (OnPlayerDeath != null) OnPlayerDeath();

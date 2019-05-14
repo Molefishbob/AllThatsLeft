@@ -16,6 +16,14 @@ public class ControlledBotPool : ObjectPool<BotMovement>
         activeBots = new List<BotReleaser>();
     }
 
+    protected override void OnDisable()
+    {
+        foreach (BotMovement bot in _pool)
+        {
+            bot.GetComponent<BotReleaser>().DisableAction();
+        }
+    }
+
     private void LateUpdate()
     {
         if (bots.Count < transform.childCount)

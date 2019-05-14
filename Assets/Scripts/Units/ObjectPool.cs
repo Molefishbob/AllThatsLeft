@@ -23,7 +23,7 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         foreach (T item in _pool)
         {
