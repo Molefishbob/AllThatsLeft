@@ -25,6 +25,8 @@ public class CharControlPlatformMovement : MonoBehaviour
     {
         if (GameManager.Instance.GamePaused) return;
 
+        if (!_character._controller.enabled) return;
+
         Vector3 pos = _character.transform.position;
 
         if (_platform == null)
@@ -87,5 +89,12 @@ public class CharControlPlatformMovement : MonoBehaviour
     {
         _platform = platform;
         _forced = true;
+    }
+
+    public void ResetPlatform()
+    {
+        _platform = null;
+        CurrentMove = Vector3.zero;
+        _forced = false;
     }
 }
