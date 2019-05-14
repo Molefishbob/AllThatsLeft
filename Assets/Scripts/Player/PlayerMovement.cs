@@ -11,7 +11,7 @@ public abstract class PlayerMovement : CharControlBase
     [SerializeField]
     protected string _verticalAxis = "Vertical";
 
-    public bool ControlsDisabled
+    public virtual bool ControlsDisabled
     {
         get
         {

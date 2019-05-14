@@ -6,6 +6,30 @@ public class BotMovement : PlayerMovement
 {
     public bool Dead { get { return _selfReleaser.Dead; } }
     private BotReleaser _selfReleaser;
+
+    public override bool ControlsDisabled
+    {
+        get
+        {
+            return _controlsDisabled || Dead;
+        }
+        set
+        {
+            if (!Dead)
+            {
+                _controlsDisabled = value;
+                if (Jump != null)
+                {
+                    Jump.ControlsDisabled = value;
+                }
+                if (_controlsDisabled)
+                {
+                    ResetInternalMove();
+                }
+            }
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();

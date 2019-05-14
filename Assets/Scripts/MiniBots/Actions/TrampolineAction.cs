@@ -10,8 +10,8 @@ public class TrampolineAction : BotActionBase
     private BotReleaser _releaser;
     public bool _bActing = false;
 
-    private List<Renderer> _botRenderers = null;
-    private List<Color> _cMatColors = null;
+    private SkinnedMeshRenderer[] _botRenderers = null;
+    private Color[][] _cMatColors = null;
     [SerializeField]
     private Color _cBlinkColor = Color.red;
     [SerializeField]
@@ -23,25 +23,15 @@ public class TrampolineAction : BotActionBase
         base.Awake();
         _goTrampoline = GetComponentInChildren<TopOfThetramp>(true).gameObject;
         _releaser = GetComponent<BotReleaser>();
-    }
 
-    private void Start()
-    {
-        Renderer[] tmp = GetComponentsInChildren<Renderer>();
-        _cMatColors = new List<Color>();
-        _botRenderers = new List<Renderer>();
-
-        for (int i = 0; i < tmp.Length; i++)
+        _botRenderers = GetComponentsInChildren<SkinnedMeshRenderer>(true);
+        _cMatColors = new Color[_botRenderers.Length][];
+        for (int i = 0; i < _botRenderers.Length; i++)
         {
-            _botRenderers.Add(tmp[i]);
-        }
-
-        foreach (Renderer o in _botRenderers)
-        {
-            Material[] tmpMats = o.materials;
-            foreach (Material p in tmpMats)
+            _cMatColors[i] = new Color[_botRenderers[i].materials.Length];
+            for (int j = 0; j < _botRenderers[i].materials.Length; j++)
             {
-                _cMatColors.Add(p.color);
+                _cMatColors[i][j] = _botRenderers[i].materials[j].color;
             }
         }
     }
@@ -69,17 +59,11 @@ public class TrampolineAction : BotActionBase
                 if (_fBlinkTimer >= _fBlinkDelay)
                 {
                     bool wantedState = _botRenderers[0].materials[0].color != _cBlinkColor;
-                    foreach (Renderer o in _botRenderers)
+                    for (int i = 0; i < _botRenderers.Length; i++)
                     {
-                        int loops = 0;
-                        Material[] tmp = o.materials;
-                        foreach (Material p in tmp)
+                        for (int j = 0; j < _botRenderers[i].materials.Length; j++)
                         {
-                            if (wantedState)
-                                p.color = _cBlinkColor;
-                            else
-                                p.color = _cMatColors[loops];
-                            loops++;
+                            _botRenderers[i].materials[j].color = wantedState ? _cBlinkColor : _cMatColors[i][j];
                         }
                     }
                     _fBlinkTimer = 0;
@@ -104,14 +88,11 @@ public class TrampolineAction : BotActionBase
 
     public override void DisableAction()
     {
-        foreach (Renderer o in _botRenderers)
+        for (int i = 0; i < _botRenderers.Length; i++)
         {
-            int loops = 0;
-            Material[] tmp = o.materials;
-            foreach (Material p in tmp)
+            for (int j = 0; j < _botRenderers[i].materials.Length; j++)
             {
-                p.color = _cMatColors[loops];
-                loops++;
+                _botRenderers[i].materials[j].color = _cMatColors[i][j];
             }
         }
         _goTrampoline.SetActive(false);

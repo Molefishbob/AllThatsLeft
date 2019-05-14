@@ -109,6 +109,7 @@ public class BombAction : BotActionBase
         {
             renderer.enabled = true;
         }
+        _selfMover._animator.SetBool("Explode", false);
     }
 
     public void ExplodeBot()
