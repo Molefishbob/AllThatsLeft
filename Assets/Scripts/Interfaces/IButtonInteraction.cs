@@ -3,7 +3,7 @@
     /// <summary>
     /// Add the desired effect when the connected button is pressed.
     /// </summary>
-    bool ButtonDown();
+    bool ButtonDown(float actionDelay);
 
     /// <summary>
     /// Add the desired effect when the connected button is not pressed / released.

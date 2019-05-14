@@ -32,6 +32,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private int _invertY = 1;
     public HashSet<Camera> _cameras;
     private ScaledOneShotTimer _transitionTimer;
+    private ScaledOneShotTimer _returnControlsTimer;
     private ScaledOneShotTimer _freezeTimer;
     public float _horSensMulti = 0.05f;
     public float _verSensMulti = 0.05f;
@@ -59,12 +60,14 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>(true));
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _returnControlsTimer = gameObject.AddComponent<ScaledOneShotTimer>();
         _freezeTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
         OnPlayerRebirth();
+        _returnControlsTimer.OnTimerCompleted += ReturnControls;
         _freezeTimer.OnTimerCompleted += UnFreeze;
         PlayerControlled = true;
     }
@@ -112,6 +115,10 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (_returnControlsTimer != null && GameManager.Instance != null && GameManager.Instance.Player != null)
+        {
+            _returnControlsTimer.OnTimerCompleted -= ReturnControls;
+        }
         if (_freezeTimer != null)
         {
             _freezeTimer.OnTimerCompleted -= UnFreeze;
@@ -201,6 +208,11 @@ public class ThirdPersonCamera : MonoBehaviour
         return distance;
     }
 
+    private void ReturnControls()
+    {
+        GameManager.Instance.Player.ControlsDisabled = false;
+    }
+
     public void MoveToTarget(Transform trans)
     {
         MoveToTarget(trans, _defaultTransitionTime);
@@ -224,6 +236,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             _botDistance = _distance;
             _distance = _playerDistance;
+            _returnControlsTimer.StartTimer(time);
         }
         else
         {

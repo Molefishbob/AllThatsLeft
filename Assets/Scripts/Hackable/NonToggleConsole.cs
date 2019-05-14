@@ -14,7 +14,7 @@ public class NonToggleConsole : GenericHackable
         switch (CurrentStatus)
         {
             case Status.BeingHacked:
-                _hTarget.ButtonDown();
+                _hTarget.ButtonDown(0);
                 return true;
             case Status.NotHacked:
                 _hTarget.ButtonUp();

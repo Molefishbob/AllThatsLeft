@@ -8,19 +8,22 @@ public class Console : GenericHackable
     [SerializeField, Tooltip("The amount of time needed to hack")]
     protected float _duration = 0.5f;
     [SerializeField]
+    protected float _cameraDelay = 1.0f;
+    [SerializeField]
     protected float _lookAtHackedTime = 1.0f;
     [SerializeField]
     protected float _transitionTime = 0.5f;
-    [SerializeField]
     protected Animator _anim = null;
 
     private PhysicsOneShotTimer _timer;
+    private ScaledOneShotTimer _delayTimer;
 
     protected override void Awake()
     {
         base.Awake();
         _anim = GetComponent<Animator>();
         _timer = UnityEngineExtensions.GetOrAddComponent<PhysicsOneShotTimer>(gameObject);
+        _delayTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
     protected virtual void Start()
     {
@@ -70,7 +73,7 @@ public class Console : GenericHackable
     /// </summary>
     protected override bool HackAction()
     {
-        return _hTarget.ButtonDown();
+        return _hTarget.ButtonDown(_cameraDelay);
     }
 
     /// <summary>
@@ -106,16 +109,31 @@ public class Console : GenericHackable
                 CurrentStatus = Status.Hacked;
                 if (HackAction())
                 {
-                    GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
+                    _delayTimer.OnTimerCompleted += MoveToHack;
                 }
                 else
                 {
-                    GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime);
+                    _delayTimer.OnTimerCompleted += MoveToPlayer;
                 }
+                _delayTimer.StartTimer(_cameraDelay);
                 break;
             default:
                 Debug.LogError("Current Status:" + CurrentStatus + " Timer completed even though it shouldn't! ree");
                 break;
         }
+    }
+
+    private void MoveToHack()
+    {
+        _delayTimer.OnTimerCompleted -= MoveToHack;
+        _delayTimer.OnTimerCompleted -= MoveToPlayer;
+        GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
+    }
+
+    private void MoveToPlayer()
+    {
+        _delayTimer.OnTimerCompleted -= MoveToHack;
+        _delayTimer.OnTimerCompleted -= MoveToPlayer;
+        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime);
     }
 }

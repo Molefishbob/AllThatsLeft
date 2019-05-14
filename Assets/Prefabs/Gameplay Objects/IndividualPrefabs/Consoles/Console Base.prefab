@@ -53,10 +53,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingStatus: 0
   _hackTarget: {fileID: 0}
-  _duration: 0.5
-  _lookAtHackedTime: 1.25
+  _duration: 2
+  _cameraDelay: 2
+  _lookAtHackedTime: 1.5
   _transitionTime: 0.5
-  _anim: {fileID: 0}
 --- !u!65 &2129702414
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -111,6 +111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1168291482335329533}
   - component: {fileID: 6119275128370689717}
+  - component: {fileID: 6072796805210196808}
   m_Layer: 14
   m_Name: Collider
   m_TagString: Untagged
@@ -145,6 +146,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1, z: 1.3}
   m_Center: {x: -0.1, y: 0.5, z: 0.15}
+--- !u!65 &6072796805210196808
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568549573128571653}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4, y: 1, z: 0.3}
+  m_Center: {x: 1.1, y: 0.5, z: 0.65}
 --- !u!1001 &839360751285814101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -152,16 +166,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2011995365629210983}
     m_Modifications:
-    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
-        type: 3}
-      propertyPath: m_Name
-      value: smokeDamageConsoleStream
-      objectReference: {fileID: 0}
-    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1133318056373196356, guid: 22a2341fcc66857479042e8d64b992e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -215,6 +219,16 @@ PrefabInstance:
     - target: {fileID: 1133318056373196356, guid: 22a2341fcc66857479042e8d64b992e4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
+        type: 3}
+      propertyPath: m_Name
+      value: smokeDamageConsoleStream
+      objectReference: {fileID: 0}
+    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -308,6 +322,18 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
@@ -339,18 +365,6 @@ PrefabInstance:
     - target: {fileID: 400006, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalRotation.x
@@ -464,11 +478,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2011995365629210983}
     m_Modifications:
-    - target: {fileID: 3119780472202093036, guid: dc13f9303f412a34488cf07d948f7993,
-        type: 3}
-      propertyPath: m_Name
-      value: Hackable Glow
-      objectReference: {fileID: 0}
     - target: {fileID: 8138281941495567869, guid: dc13f9303f412a34488cf07d948f7993,
         type: 3}
       propertyPath: m_RootOrder
@@ -488,6 +497,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119780472202093036, guid: dc13f9303f412a34488cf07d948f7993,
+        type: 3}
+      propertyPath: m_Name
+      value: Hackable Glow
       objectReference: {fileID: 0}
     - target: {fileID: 4852621411433496182, guid: dc13f9303f412a34488cf07d948f7993,
         type: 3}

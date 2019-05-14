@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class BotMovement : PlayerMovement
 {
-    [HideInInspector]
-    public bool Dead { get { return _dead; } set { _dead = value; } }
-    private bool _dead = false;
+    public bool Dead { get { return _selfReleaser.Dead; } }
     private BotReleaser _selfReleaser;
     protected override void Awake()
     {
@@ -27,7 +25,7 @@ public class BotMovement : PlayerMovement
     protected override void OutOfBounds()
     {
         if (Dead) return;
-
-        _selfReleaser.Die();
+        _selfReleaser.DeadButNotDead();
+        _selfReleaser.ReleaseControls(false);
     }
 }
