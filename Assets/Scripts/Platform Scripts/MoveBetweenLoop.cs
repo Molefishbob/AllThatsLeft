@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoveBetweenLoop : GenericMover
 {
+
     protected override Vector3 InternalMove()
     {
         if (_activated)
@@ -63,6 +64,12 @@ public class MoveBetweenLoop : GenericMover
     {
         _nextObjectNum = 1;
         _currentObjectNum = 0;
+    }
+
+    public override bool ButtonDown()
+    {
+        _anim.SetTrigger(Wiggle);
+        return base.ButtonDown();
     }
 
     /// <summary>

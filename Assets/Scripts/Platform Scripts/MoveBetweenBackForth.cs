@@ -6,14 +6,44 @@ public class MoveBetweenBackForth : GenericMover
 {
     [SerializeField, Tooltip("The amount of time the platform is still at the ends of the route")]
     protected float _stopTime;
+    [SerializeField]
+    protected GameObject _endPoint = null;
     private bool _backwards;
+    private float _viggleOffset = 0.3f;
     private bool _stop;
     private float _stopCounter;
+    private Vector3 _endPointOffset = new Vector3(0,-0.45f,0);
 
     protected override void Awake()
     {
         base.Awake();
         _duration += _stopTime;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        _animationLength = _anim.runtimeAnimatorController.animationClips[0].length;
+        _viggleTimer.OnTimerCompleted += StartViggle;
+        if (_endPoint != null)
+        {
+            Instantiate(_endPoint, _transform[_transform.Count - 1].position + _endPointOffset, _endPoint.transform.rotation, _transform[_transform.Count - 1]);
+        } else
+        {
+            Debug.LogError("EndPoint should not be null");
+        }
+    }
+
+    public override void Init()
+    {
+        base.Init();
+        if (_stopTime - _animationLength - _viggleOffset <= 0)
+        {
+            StartViggle();
+        } else
+        {
+            _viggleTimer.StartTimer(_stopTime - _animationLength - _viggleOffset);
+        }
     }
 
     protected override Vector3 InternalMove()
@@ -57,11 +87,12 @@ public class MoveBetweenBackForth : GenericMover
                 }
 
                 return pos;
-            }
+            } 
         }
 
         return transform.position;
     }
+
 
     /// <summary>
     /// Changes the direction the object is travelling
@@ -86,6 +117,7 @@ public class MoveBetweenBackForth : GenericMover
 
         }
     }
+
     /// <summary>
     /// Called when the timer is completed.
     /// 
@@ -93,6 +125,14 @@ public class MoveBetweenBackForth : GenericMover
     /// </summary>
     protected override void TimedAction()
     {
+        if (_stopTime - _animationLength - _viggleOffset <= 0)
+        {
+            StartViggle();
+        }
+        else
+        {
+            _viggleTimer.StartTimer(_stopTime - _animationLength - _viggleOffset);
+        }
         if (!_backwards)
         {
             _backwards = true;

@@ -10,7 +10,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public LayerMask _groundLayer;
     private Transform _lookAt;
     private Vector3 _oldTarget;
-    public float _distance = 10.0f;
+    private float _distance = 10.0f;
     public float _maxDistance = 15.0f;
     public float _minDistance = 5.0f;
     public float _zoomSpeed = 0.5f;
@@ -37,7 +37,9 @@ public class ThirdPersonCamera : MonoBehaviour
     public float _verSensMulti = 0.05f;
     public float _zoomMulti = 0.01f;
     private bool _follow;
+    [SerializeField]
     private float _botDistance;
+    [SerializeField]
     private float _playerDistance;
     private float _oldDistance;
     public float _collisionRadius = 0.5f;
@@ -56,15 +58,12 @@ public class ThirdPersonCamera : MonoBehaviour
     private void Awake()
     {
         _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>(true));
-        _oldDistance = _distance;
-        _newDistance = _distance;
         _transitionTimer = gameObject.AddComponent<ScaledOneShotTimer>();
         _freezeTimer = gameObject.AddComponent<ScaledOneShotTimer>();
     }
 
     private void Start()
     {
-        _botDistance = _minDistance;
         OnPlayerRebirth();
         _freezeTimer.OnTimerCompleted += UnFreeze;
         PlayerControlled = true;
@@ -202,15 +201,26 @@ public class ThirdPersonCamera : MonoBehaviour
         return distance;
     }
 
-    public void MoveToTarget(Transform trans, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans)
     {
-
-        MoveToTarget(trans, _defaultTransitionTime, willFollowPlayer);
+        MoveToTarget(trans, _defaultTransitionTime);
     }
 
-    public void MoveToTarget(Transform trans, float time, bool willFollowPlayer)
+    public void MoveToTarget(Transform trans, float time)
     {
-        if (willFollowPlayer)
+        Transform target = trans.Find(_cameraTargetName);
+        if (target == null)
+        {
+            target = trans;
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+        }
+
+        if (target == _lookAt)
+        {
+            return;
+        }
+
+        if (trans == GameManager.Instance.Player.transform)
         {
             _botDistance = _distance;
             _distance = _playerDistance;
@@ -221,46 +231,47 @@ public class ThirdPersonCamera : MonoBehaviour
             _distance = _botDistance;
         }
 
-        Transform tf = trans.Find(_cameraTargetName);
-        if (tf != null)
-        {
-            trans = tf;
-        }
-        else
-        {
-            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
-        }
-
-        if (trans != _lookAt)
-        {
-            _oldTarget = _lookAt.position;
-            _oldDistance = Vector3.Distance(transform.position, _oldTarget);
-            _lookAt = trans;
-            _newDistance = CheckCollision(transform.TransformDirection(Vector3.back), _distance);
-            _transitionTimer.StartTimer(time);
-        }
-        if (_oldTarget == null)
-        {
-            _oldTarget = trans.position;
-        }
+        _oldTarget = _lookAt.position;
+        _oldDistance = Vector3.Distance(transform.position, _oldTarget);
+        _lookAt = target;
+        _newDistance = CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+        _transitionTimer.StartTimer(time);
     }
 
     public void MoveToTargetInstant(Transform trans)
     {
-        Transform tf = trans.Find(_cameraTargetName);
-        if (tf == null)
+        Transform target = trans.Find(_cameraTargetName);
+        if (target == null)
         {
+            target = trans;
             Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
-            tf = trans;
         }
 
-        _lookAt = tf;
+        if (target == _lookAt)
+        {
+            return;
+        }
+
+        if (trans == GameManager.Instance.Player.transform)
+        {
+            _botDistance = _distance;
+            _distance = _playerDistance;
+        }
+        else
+        {
+            _playerDistance = _distance;
+            _distance = _botDistance;
+        }
+
+        _lookAt = target;
+        _transitionTimer.StopTimer();
 
         if (_follow)
         {
             Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
             transform.position = _lookAt.position + rotation * Vector3.back;
         }
+
         transform.LookAt(_lookAt.position);
         Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
         transform.position = _lookAt.position + transform.rotation * dirr;
@@ -299,6 +310,8 @@ public class ThirdPersonCamera : MonoBehaviour
         _follow = true;
         _pitch = _startingPitch;
         _yaw = GameManager.Instance.Player.transform.eulerAngles.y;
+        _lookAt = GameManager.Instance.Player.transform.Find(_cameraTargetName);
+        _distance = _playerDistance;
     }
 
     private void ChangeInvertX(bool b)
@@ -337,6 +350,6 @@ public class ThirdPersonCamera : MonoBehaviour
     private void UnFreeze()
     {
         Frozen = false;
-        MoveToTarget(GameManager.Instance.Player.transform, _returnToPlayerTime, true);
+        MoveToTarget(GameManager.Instance.Player.transform, _returnToPlayerTime);
     }
 }
