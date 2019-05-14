@@ -13,6 +13,10 @@ public class CheckPointPole : MonoBehaviour
     private string _triggerName = "getChecked";
     [SerializeField]
     private SingleSFXSound _sound = null;
+    [SerializeField]
+    private SkinnedMeshRenderer _renderer = null;
+    [SerializeField]
+    private Material _checkedMaterial = null;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,6 +24,12 @@ public class CheckPointPole : MonoBehaviour
         {
             _animator.SetTrigger(_triggerName);
             _sound.PlaySound(false);
+            Checked();
         }
+    }
+
+    public void Checked()
+    {
+        if (_renderer != null) _renderer.material = _checkedMaterial;
     }
 }

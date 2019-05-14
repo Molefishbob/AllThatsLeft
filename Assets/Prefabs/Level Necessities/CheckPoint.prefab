@@ -112,6 +112,8 @@ MonoBehaviour:
   _animator: {fileID: 1248169893434760565}
   _triggerName: getChecked
   _sound: {fileID: 7722108640684447871}
+  _renderer: {fileID: 1248169893439071157}
+  _checkedMaterial: {fileID: 2100000, guid: 54f22f5a3bde5f94cb7160ca353c28fb, type: 2}
 --- !u!65 &6929583723703662565
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -123,7 +125,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 3, z: 5}
+  m_Size: {x: 6, y: 3, z: 6}
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &6929583724828996188
 GameObject:
@@ -148,13 +150,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6929583724828996188}
-  m_LocalRotation: {x: -0, y: -0.9268675, z: -0, w: 0.37538883}
-  m_LocalPosition: {x: -3.0999978, y: 0, z: 1.2999983}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6929583723703662566}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -135.903, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1001 &1151627219409458093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,6 +164,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6929583723703662566}
     m_Modifications:
+    - target: {fileID: 6814602272700647187, guid: 6275d0f91de2ccc42a568d2e4f26328a,
+        type: 3}
+      propertyPath: m_Name
+      value: checkpointFlag
+      objectReference: {fileID: 0}
     - target: {fileID: 2309610704117306614, guid: 6275d0f91de2ccc42a568d2e4f26328a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -217,11 +224,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6814602272700647187, guid: 6275d0f91de2ccc42a568d2e4f26328a,
-        type: 3}
-      propertyPath: m_Name
-      value: checkpointFlag
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6275d0f91de2ccc42a568d2e4f26328a, type: 3}
 --- !u!4 &3455954610568054619 stripped
@@ -243,6 +245,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7492455780060602048}
     m_Modifications:
+    - target: {fileID: 100008, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
+      propertyPath: m_Name
+      value: checkpoint_flag_animated
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 15d1619ca7db26147b0139d94351e54a, type: 2}
     - target: {fileID: 400008, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -287,14 +297,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 100008, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
-      propertyPath: m_Name
-      value: checkpoint_flag_animated
-      objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 15d1619ca7db26147b0139d94351e54a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
 --- !u!1 &1248169893427506877 stripped
@@ -312,6 +314,12 @@ Transform:
 --- !u!95 &1248169893434760565 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 9500000, guid: 6eef0b910373ba449aeece2e3d690a2d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1248169893427472405}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1248169893439071157 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 13700000, guid: 6eef0b910373ba449aeece2e3d690a2d,
     type: 3}
   m_PrefabInstance: {fileID: 1248169893427472405}
   m_PrefabAsset: {fileID: 0}
@@ -382,6 +390,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9037547206285222063, guid: 7133886849c700445b58397ab9f61fe4,
+        type: 3}
+      propertyPath: _pitchVariance
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_audioClip
@@ -396,11 +409,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Volume
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037547206285222063, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: _pitchVariance
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7133886849c700445b58397ab9f61fe4, type: 3}

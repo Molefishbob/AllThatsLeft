@@ -188,17 +188,15 @@ public class LevelManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.K))
             {
-                int[] keys = new int[_allLevelCheckPoints.Keys.Count];
-                _allLevelCheckPoints.Keys.CopyTo(keys, 0);
                 int nextKey = 0;
-                foreach (int key in keys)
+                foreach (KeyValuePair<int, CheckPointPole> pole in _allLevelCheckPoints)
                 {
-                    if (key > nextKey) nextKey = key;
+                    if (pole.Key > nextKey) nextKey = pole.Key;
                 }
-                foreach (int key in keys)
+                foreach (KeyValuePair<int, CheckPointPole> pole in _allLevelCheckPoints)
                 {
-                    if (key <= _currentCheckPoint.id) continue;
-                    if (key < nextKey) nextKey = key;
+                    if (pole.Key <= _currentCheckPoint.id) continue;
+                    if (pole.Key < nextKey) nextKey = pole.Key;
                 }
 
                 CheckPointPole cp;
@@ -246,6 +244,7 @@ public class LevelManager : MonoBehaviour
             _allLevelCheckPoints.TryGetValue(id, out _currentCheckPoint);
             PrefsManager.Instance.CheckPoint = _currentCheckPoint.id;
             PrefsManager.Instance.Save();
+            CheckAllVisitedPoints();
             return true;
         }
 
@@ -265,10 +264,22 @@ public class LevelManager : MonoBehaviour
             _currentCheckPoint = cp;
             PrefsManager.Instance.CheckPoint = _currentCheckPoint.id;
             PrefsManager.Instance.Save();
+            CheckAllVisitedPoints();
             return true;
         }
 
         return false;
+    }
+
+    private void CheckAllVisitedPoints()
+    {
+        foreach (KeyValuePair<int, CheckPointPole> pole in _allLevelCheckPoints)
+        {
+            if (pole.Key <= _currentCheckPoint.id)
+            {
+                pole.Value.Checked();
+            }
+        }
     }
 
     public void ResetLevel()
