@@ -20,10 +20,11 @@ public class BombAction : BotActionBase
     [SerializeField]
     private GameObject _goParticlePrefab = null;
     private GameObject _goParticleHolder;
-    private GameObject[] _goTarget;
     private Projector _shadowProjector = null;
     private BotReleaser _releaser = null;
     private List<Renderer> _renderers = null;
+    [SerializeField]
+    private Vector3 _botCenter = new Vector3(0.0f, 0.4f, 0.0f);
 
     void OnDrawGizmosEnabled()
     {
@@ -79,15 +80,12 @@ public class BombAction : BotActionBase
             _selfMover._animator.SetBool("Explode", true);
             if (_psExplosion == null)
             {
-                _goParticleHolder = Instantiate(_goParticlePrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity, transform);
+                _goParticleHolder = Instantiate(_goParticlePrefab, transform.TransformPoint(_botCenter), transform.rotation, transform);
                 _psExplosion = _goParticleHolder.GetComponentsInChildren<ParticleSystem>(true);
             }
-            else
+            foreach (ParticleSystem o in _psExplosion)
             {
-                foreach (ParticleSystem o in _psExplosion)
-                {
-                    o.gameObject.SetActive(true);
-                }
+                o.gameObject.SetActive(true);
             }
             _releaser.DisableActing();
             _bExploding = true;
@@ -100,8 +98,10 @@ public class BombAction : BotActionBase
     {
         if (_psExplosion != null)
         {
-            _goParticleHolder.transform.parent = transform;
-            _goParticleHolder.transform.localPosition = Vector3.zero;
+            foreach (ParticleSystem o in _psExplosion)
+            {
+                o.gameObject.SetActive(false);
+            }
         }
         _bExploding = false;
         _shadowProjector.enabled = true;
@@ -114,17 +114,17 @@ public class BombAction : BotActionBase
 
     public void ExplodeBot()
     {
-        _goTarget = CheckSurroundings(_lBombableLayer, _fExplodeRadius);
-        if (_goTarget != null)
+        Collider[] targets = Physics.OverlapSphere(transform.TransformPoint(_botCenter), _fExplodeRadius, _lBombableLayer);
+        if (targets != null)
         {
-            foreach (GameObject o in _goTarget)
+            foreach (Collider target in targets)
             {
-                if (o != gameObject)
-                    o.GetComponent<IDamageReceiver>()?.TakeDamage(1);
+                if (target != gameObject)
+                    target.GetComponent<IDamageReceiver>()?.TakeDamage(1);
             }
         }
-        _goParticleHolder.transform.parent = null;
         _shadowProjector.enabled = false;
+        _selfMover.SetControllerActive(false);
         Invoke("DisableRenderers", _fRenderDisableTimeOnExplode);
     }
 
