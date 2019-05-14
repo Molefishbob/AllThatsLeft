@@ -6,14 +6,29 @@ public class MoveBetweenBackForth : GenericMover
 {
     [SerializeField, Tooltip("The amount of time the platform is still at the ends of the route")]
     protected float _stopTime;
+    [SerializeField]
+    protected GameObject _endPoint = null;
     private bool _backwards;
     private bool _stop;
     private float _stopCounter;
+    private Vector3 _endPointOffset = new Vector3(0,-0.45f,0);
 
     protected override void Awake()
     {
         base.Awake();
         _duration += _stopTime;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        if (_endPoint != null)
+        {
+            Instantiate(_endPoint, _transform[_transform.Count - 1].position + _endPointOffset, _endPoint.transform.rotation, _transform[_transform.Count - 1]);
+        } else
+        {
+            Debug.LogError("EndPoint should not be null");
+        }
     }
 
     protected override Vector3 InternalMove()

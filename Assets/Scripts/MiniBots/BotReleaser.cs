@@ -6,8 +6,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 {
     public event GenericEvent OnBotReleased;
 
-    [SerializeField]
-    private float _fReleaseDelay = 2.0f;
+    public float fReleaseDelay = 2.0f;
     [SerializeField]
     private float _transitionTime = 1.0f;
     [SerializeField]
@@ -29,9 +28,13 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     // Could use a BotActionBase list/array for scaleability
     private BombAction _selfBomb;
     private HackAction _selfHack;
+    [HideInInspector]
     public TrampolineAction _selfTrampoline;
     private Transform _thisCamTarget;
     public Transform ThisCameraTarget { get { return _thisCamTarget; } }
+
+    [SerializeField]
+    private GameObject teleportAwayParticle = null;
 
     protected override void Awake()
     {
@@ -109,8 +112,8 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         if (withDelay)
         {
-            _ostRelease.StartTimer(_fReleaseDelay);
-            _ostControlRelease.StartTimer(_fReleaseDelay + _transitionTime * 0.9f);
+            _ostRelease.StartTimer(fReleaseDelay);
+            _ostControlRelease.StartTimer(fReleaseDelay + _transitionTime * 0.9f);
         }
         else
         {
@@ -130,7 +133,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfMover.ControlsDisabled = true;
         DisableActing();
 
-        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath, true);
+        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath);
         _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
         if (!GameManager.Instance.Player.Dead)
             EnablePlayerControls();
@@ -140,7 +143,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         if (GameManager.Instance.Camera.LookingAt.transform == _thisCamTarget)
         {
-            GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime, true);
+            GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime);
         }
         if (_selfTrampoline._bActing || _selfHack.Hacking)
         {
@@ -152,15 +155,17 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     public override void DisableAction()
     {
-        // Right now lets just do this the stupid way
-        // Need to do some stuff BEFORE the object is disabled
         _selfHack.DisableAction();
         _selfBomb.DisableAction();
         _selfTrampoline.DisableAction();
 
         _selfMover.ControlsDisabled = true;
         if (!_ostLife.IsRunning)
+        {
+            if (!Dead)
+                Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
+        }
     }
 
     public void DisableActing()

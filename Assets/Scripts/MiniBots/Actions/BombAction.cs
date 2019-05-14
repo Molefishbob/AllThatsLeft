@@ -11,6 +11,11 @@ public class BombAction : BotActionBase
     private LayerMask _lBombableLayer = 1 << 11 | 1 << 10 | 1 << 9;
     [SerializeField]
     private float _fExplodeRadius = 4;
+    [SerializeField]
+    private float _fReleaseOverwrite = 1;
+    [SerializeField]
+    private float _fRenderDisableTimeOnExplode = 0.25f;
+    private float _fOldreleaseTime;
     public ParticleSystem[] ExplosionParticles { get { return _psExplosion; } }
     private ParticleSystem[] _psExplosion = null;
     private bool _bFirstEnable = true;
@@ -21,6 +26,7 @@ public class BombAction : BotActionBase
     private GameObject[] _goTarget;
     private Projector _shadowProjector = null;
     private BotReleaser _releaser = null;
+    private List<Renderer> _renderers = null;
 
     void OnDrawGizmosEnabled()
     {
@@ -47,6 +53,13 @@ public class BombAction : BotActionBase
         base.Awake();
         _shadowProjector = GetComponentInChildren<Projector>(true);
         _releaser = GetComponent<BotReleaser>();
+
+        Renderer[] tmp = GetComponentsInChildren<Renderer>(true);
+        _renderers = new List<Renderer>();
+        foreach (Renderer renderer in tmp)
+        {
+            _renderers.Add(renderer);
+        }
     }
 
     void Update()
@@ -79,6 +92,8 @@ public class BombAction : BotActionBase
                     o.gameObject.SetActive(true);
                 }
             }
+            _fOldreleaseTime = _releaser.fReleaseDelay;
+            _releaser.fReleaseDelay = _fReleaseOverwrite > 0.5f ? _fReleaseOverwrite : _fOldreleaseTime;
             _releaser.DisableActing();
             _bExploding = true;
             _releaser.ReleaseControls(true);
@@ -93,8 +108,13 @@ public class BombAction : BotActionBase
             _goParticleHolder.transform.parent = transform;
             _goParticleHolder.transform.localPosition = Vector3.zero;
         }
+        _releaser.fReleaseDelay = _fOldreleaseTime;
         _bExploding = false;
         _shadowProjector.enabled = true;
+        foreach (Renderer renderer in _renderers)
+        {
+            renderer.enabled = true;
+        }
     }
 
     public void ExplodeBot()
@@ -110,5 +130,14 @@ public class BombAction : BotActionBase
         }
         _goParticleHolder.transform.parent = null;
         _shadowProjector.enabled = false;
+        Invoke("DisableRenderers", _fRenderDisableTimeOnExplode);
+    }
+
+    private void DisableRenderers()
+    {
+        foreach (Renderer renderer in _renderers)
+        {
+            renderer.enabled = false;
+        }
     }
 }

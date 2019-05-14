@@ -204,6 +204,7 @@ public class GameManager : Singleton<GameManager>
 
     private void ChangeScene(int id)
     {
+        MenuMusic?.StopSound();
         PauseMenu?.gameObject.SetActive(false);
         if (id >= SceneManager.sceneCountInBuildSettings)
         {
