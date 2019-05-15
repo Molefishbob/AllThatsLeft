@@ -176,7 +176,7 @@ public class EnemyDirection : MonoBehaviour
 
     public void CheckTargets()
     {
-        if (_aggroTargets.Count <= 1)
+        if (_aggroTargets.Count > 0)
         {
             Alert();
         }
