@@ -71,6 +71,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     {
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
+        _ostLife.StartTimer(_fLifeTime);
         _ostLife.StopTimer();
         Dead = false;
         _selfMover.SetControllerActive(false);
