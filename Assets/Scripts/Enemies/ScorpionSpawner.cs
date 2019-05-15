@@ -37,7 +37,6 @@ public class ScorpionSpawner : MonoBehaviour
     {
         if (_shaderTimer.IsRunning)
         {
-            Debug.Log("aa");
             _patrolEnemy._renderer.materials[1].SetFloat(_shaderProperty, _shaderTimer.NormalizedTimeElapsed);
         }
     }
@@ -60,15 +59,16 @@ public class ScorpionSpawner : MonoBehaviour
         _patrolEnemy.transform.position = transform.position;
         _patrolEnemy.Targets = _patrolTargets;
         _patrolEnemy._spawner = this;
+        _patrolEnemy.gameObject.GetComponentInChildren<ScorpionTakeDamage>()._scorpion._renderer.materials[0].SetFloat(_shaderProperty, 1.0f);
         _shaderTimer.StartTimer(_teleportTime);
     }
 
     private void TeleportComplete()
     {
-        Debug.Log("ss");
         _patrolEnemy.SetControllerActive(true);
         _patrolEnemy.gameObject.GetComponentInChildren<ScorpionTakeDamage>()._scorpion._renderer.materials[0].SetFloat(_shaderProperty, 0.0f);
         _patrolEnemy._renderer.materials[1].SetFloat(_shaderProperty, 0.0f);
+        _shaderTimer.StopTimer();
     }
 
     private void OnTriggerEnter(Collider other)

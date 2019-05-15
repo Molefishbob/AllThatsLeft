@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5351755448507247430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7213735, y: -2.1484032, z: 3.781292}
+  m_LocalPosition: {x: -0.7213735, y: 0, z: 3.781292}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6992752187268385580}
@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
+  _respawnTime: 10
+  _teleportTime: 2
 --- !u!135 &4465346089395428531
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -155,7 +157,7 @@ PrefabInstance:
     - target: {fileID: 2334982067165652783, guid: a04352c7e9da0e34583f62a32dc33faa,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2334982067165652783, guid: a04352c7e9da0e34583f62a32dc33faa,
         type: 3}
