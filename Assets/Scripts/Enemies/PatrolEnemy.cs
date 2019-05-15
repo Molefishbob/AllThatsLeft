@@ -14,6 +14,7 @@ public class PatrolEnemy : CharControlBase
     private string _defaultAnimState = "Default";
     public ScorpionSpawner _spawner;
     public bool _dead;
+    public ParticleSystem _teleportEffect;
 
     public float Speed
     {
@@ -49,11 +50,13 @@ public class PatrolEnemy : CharControlBase
         _attack.gameObject.SetActive(false);
     }
 
-    protected override void Start()
+    /*protected override void Start()
     {
-
-        SetControllerActive(true);
-    }
+        //SetControllerActive(true);
+        
+        var main = _teleportEffect.main;
+        main.duration = _spawner._teleportTime;
+    }*/
 
     public List<Transform> Targets
     {

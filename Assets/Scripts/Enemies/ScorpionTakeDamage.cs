@@ -6,7 +6,8 @@ public class ScorpionTakeDamage : MonoBehaviour, IDamageReceiver
 {
     [SerializeField]
     private string _defendtrigger = "Defend";
-    private PatrolEnemy _scorpion;
+    [HideInInspector]
+    public PatrolEnemy _scorpion;
     public ParticleSystem _dissolveFlakes;
     private int _shaderProperty;
     protected ScaledOneShotTimer _timer;
