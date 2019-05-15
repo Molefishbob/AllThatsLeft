@@ -14,6 +14,8 @@ public class HackAction : BotActionBase
     private bool _bHacking = false;
     private BotReleaser _releaser = null;
     private NewMinibotAnimatorMiddlehand _animMiddlehand;
+    [SerializeField]
+    private SingleSFXSound _hackSound;
 
     protected override void Awake()
     {
@@ -40,6 +42,7 @@ public class HackAction : BotActionBase
         {
             if (_hackTargets[0].CurrentStatus == GenericHackable.Status.Hacked)
             {
+                _hackSound.StopSound();
                 _selfMover._animator.SetBool("Hack", false);
                 _hackTargets.Clear();
                 _bHacking = false;
@@ -57,6 +60,7 @@ public class HackAction : BotActionBase
             {
                 if (_hackTargets[0].CurrentStatus == GenericHackable.Status.NotHacked)
                 {
+                    _hackSound.PlaySound(false);
                     _selfMover._animator.SetBool("Hack", true);
                     _bHacking = true;
                     _hackTargets[0].TimeToStart();
