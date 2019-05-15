@@ -166,6 +166,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void Alert()
     {
+        Debug.Log("gg");
         if (!_enemy.GetComponent<IDamageReceiver>().Dead)
         {
             _enemy.StopMoving = true;
@@ -176,7 +177,7 @@ public class EnemyDirection : MonoBehaviour
 
     public void CheckTargets()
     {
-        if (_aggroTargets.Count <= 1)
+        if (_aggroTargets.Count > 0)
         {
             Alert();
         }
