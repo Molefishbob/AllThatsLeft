@@ -9,6 +9,10 @@ public class TrampolineAction : BotActionBase
     private GameObject _goTrampoline;
     private BotReleaser _releaser;
     public bool _bActing = false;
+    [SerializeField]
+    private SingleSFXSound _assembleSound = null;
+    [SerializeField]
+    private SingleSFXSound _bounceSound = null;
 
     private SkinnedMeshRenderer[] _botRenderers = null;
     private Color[][] _cMatColors = null;
@@ -21,7 +25,9 @@ public class TrampolineAction : BotActionBase
     protected override void Awake()
     {
         base.Awake();
-        _goTrampoline = GetComponentInChildren<TopOfThetramp>(true).gameObject;
+        TopOfThetramp tmpTrampsHead = GetComponentInChildren<TopOfThetramp>(true);
+        tmpTrampsHead._bounceSound = _bounceSound;
+        _goTrampoline = tmpTrampsHead.gameObject;
         _releaser = GetComponent<BotReleaser>();
 
         _botRenderers = GetComponentsInChildren<SkinnedMeshRenderer>(true);
@@ -49,8 +55,6 @@ public class TrampolineAction : BotActionBase
             return;
         }
 
-        // Lets give em blinking!
-        // Its surprisingly lightweight
         if (_bActing)
         {
             float lifeTime = _releaser.GetRemainingLifeTime();
@@ -79,6 +83,7 @@ public class TrampolineAction : BotActionBase
 
         if (Input.GetButtonDown(_sTrampolineButton))
         {
+            _assembleSound.PlaySound(false);
             _goTrampoline.SetActive(true);
             _bActing = true;
             _selfMover._animator.SetTrigger("Trampoline");

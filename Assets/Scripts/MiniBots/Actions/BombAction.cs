@@ -25,6 +25,8 @@ public class BombAction : BotActionBase
     private List<Renderer> _renderers = null;
     [SerializeField]
     private Vector3 _botCenter = new Vector3(0.0f, 0.4f, 0.0f);
+    [SerializeField]
+    private RandomSFXSound _bombSound = null;
 
     void OnDrawGizmosEnabled()
     {
@@ -123,6 +125,7 @@ public class BombAction : BotActionBase
                     target.GetComponent<IDamageReceiver>()?.TakeDamage(1);
             }
         }
+        _bombSound.PlaySound(false);
         _shadowProjector.enabled = false;
         _selfMover.SetControllerActive(false);
         Invoke("DisableRenderers", _fRenderDisableTimeOnExplode);

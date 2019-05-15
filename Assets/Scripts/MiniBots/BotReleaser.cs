@@ -33,6 +33,8 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     [SerializeField]
     private GameObject teleportAwayParticle = null;
+    [SerializeField]
+    private SingleSFXSound _dieSound = null;
 
     protected override void Awake()
     {
@@ -102,7 +104,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         _selfMover.ControlsDisabled = true;
 
-        if (OnBotReleased != null) OnBotReleased();
+        OnBotReleased?.Invoke();
     }
 
     public void ReleaseInstant()
@@ -117,8 +119,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     public void ReleaseOnly()
     {
         Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
+        _dieSound.PlaySound(false);
         _ostDisable.StartTimer(_transitionTime);
-        if (OnBotReleased != null) OnBotReleased();
+        OnBotReleased?.Invoke();
     }
 
     private void ActualRelease()
@@ -186,6 +189,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
         Dead = true;
         Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
+        _dieSound.PlaySound(false);
         _selfMover.SetControllerActive(false);
         ReleaseControls(false);
     }

@@ -10,6 +10,8 @@ public class TopOfThetramp : MonoBehaviour
     private CharControlPlatformMovement _PlayerCCPM;
     private CharControlPlatformMovement _ownCCPM;
     private Animator _animator;
+    [HideInInspector]
+    public SingleSFXSound _bounceSound = null;
 
     void Awake()
     {
@@ -27,6 +29,7 @@ public class TopOfThetramp : MonoBehaviour
         }
         if (!_Player.IsGrounded && !_Player.ControlsDisabled)
         {
+            _bounceSound.PlaySound(false);
             _animator.SetTrigger("TrampolineBounce");
             _PlayerMover.ForceJump(_fJumpHeight);
             if (_ownCCPM._platform != null) _PlayerCCPM.ForcePlatform(_ownCCPM._platform);
