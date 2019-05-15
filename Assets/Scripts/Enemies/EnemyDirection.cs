@@ -166,7 +166,6 @@ public class EnemyDirection : MonoBehaviour
 
     private void Alert()
     {
-        Debug.Log("gg");
         if (!_enemy.GetComponent<IDamageReceiver>().Dead)
         {
             _enemy.StopMoving = true;
