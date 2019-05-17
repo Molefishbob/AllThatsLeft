@@ -159,7 +159,8 @@ public class PauseMenu : MonoBehaviour
             _timer.StopTimer();
 
         _menuOpenSound.PlaySound();
-        GameManager.Instance.PauseGame();
+        if (!GameManager.Instance.GamePaused)
+            GameManager.Instance.PauseGame();
         _currentPage = Page.MainMenu;
         gameObject.SetActive(true);
         _pauseMenu.SetActive(true);
