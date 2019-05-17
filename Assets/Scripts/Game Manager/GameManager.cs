@@ -214,7 +214,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            LoadingScreen.gameObject.SetActive(true);
+            LoadingScreen.BeginLoading();
             ActivateGame(false);
             SceneManager.LoadScene(id);
             if (GamePaused) UnPauseGame();
@@ -265,7 +265,7 @@ public class GameManager : Singleton<GameManager>
     public void ReloadScene(bool useLoadingScreen)
     {
         ActivateGame(false);
-        if (useLoadingScreen) LoadingScreen.gameObject.SetActive(true);
+        if (useLoadingScreen) LoadingScreen.BeginLoading();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
