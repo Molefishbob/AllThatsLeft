@@ -69,11 +69,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1142853284372499558, guid: 9afafcacf6f281d46a4e0aa05a736ef7,
         type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1142853284372499558, guid: 9afafcacf6f281d46a4e0aa05a736ef7,
-        type: 3}
       propertyPath: SubModule.subEmitters.Array.data[0].emitter
       value: 
       objectReference: {fileID: 5539749281695286194}
@@ -156,7 +151,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.textComponent
       value: 
-      objectReference: {fileID: 3552681169975511764}
+      objectReference: {fileID: 0}
     - target: {fileID: 8669053176278256573, guid: 7d81a4965e8124c45976c7eb22fb57c6,
         type: 3}
       propertyPath: m_havePropertiesChanged
@@ -182,6 +177,11 @@ PrefabInstance:
       propertyPath: SubModule.subEmitters.Array.data[0].emitter
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1562240399614283652, guid: 7d81a4965e8124c45976c7eb22fb57c6,
+        type: 3}
+      propertyPath: _hidePermanentlyWhenHacked
+      value: 
+      objectReference: {fileID: 6019305046471139534}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d81a4965e8124c45976c7eb22fb57c6, type: 3}
 --- !u!114 &6019305046471139534 stripped
@@ -194,18 +194,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d68aed979940a24fbb673a816ae8e65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3552681169975511764 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8669053176278256573, guid: 7d81a4965e8124c45976c7eb22fb57c6,
-    type: 3}
-  m_PrefabInstance: {fileID: 5261050290380308841}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &8250420992950137998 stripped
