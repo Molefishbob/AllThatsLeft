@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3933721677573210715}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: nut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6013579366068873968}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8311881471369987292}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7394829566634807469}
@@ -92,11 +92,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: itemGlow
-      objectReference: {fileID: 0}
-    - target: {fileID: 4069835912580063726, guid: 0b2df43e48a2b234db4e14c8c463eb4a,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4069835912580063715, guid: 0b2df43e48a2b234db4e14c8c463eb4a,
         type: 3}
@@ -202,11 +197,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: particleDrops
       objectReference: {fileID: 0}
-    - target: {fileID: 5500343279339459347, guid: 7b838b8733574da49b707c7b422118ba,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 5500343279339459346, guid: 7b838b8733574da49b707c7b422118ba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -286,6 +276,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6013579366068873968}
     m_Modifications:
+    - target: {fileID: 100000, guid: 3d02d32c02863ff42a3624ce43918f4b, type: 3}
+      propertyPath: m_Name
+      value: nut
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 3d02d32c02863ff42a3624ce43918f4b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -329,14 +323,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 3d02d32c02863ff42a3624ce43918f4b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 3d02d32c02863ff42a3624ce43918f4b, type: 3}
-      propertyPath: m_Name
-      value: nut
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 3d02d32c02863ff42a3624ce43918f4b, type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 3d02d32c02863ff42a3624ce43918f4b, type: 3}
       propertyPath: m_CastShadows
