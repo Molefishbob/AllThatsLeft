@@ -6,9 +6,8 @@ public class EnemyDirection : MonoBehaviour
 {
     private float _aggroRadius;
     [Tooltip("How much smaller the patrolradius is compared to the aggroradius trigger")]
-    public float _patrolRadiusDecrease;
+    public float _patrolRadius = 6.0f;
     public float _patrolSpeedMultiplier = 0.5f;
-    private float _patrolRadius;
     private float _idleTime;
     [SerializeField]
     private float _minIdleTime = 1.0f;
@@ -31,7 +30,6 @@ public class EnemyDirection : MonoBehaviour
         _burpTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
-        _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         _aggroTargets = new List<Transform>(4);
     }
 
@@ -194,7 +192,6 @@ public class EnemyDirection : MonoBehaviour
     {
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
-        _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _patrolRadius);
     }
