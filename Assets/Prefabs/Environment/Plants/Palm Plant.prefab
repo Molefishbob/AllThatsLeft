@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4995818587591935888}
   - component: {fileID: 9066716120516011839}
   - component: {fileID: 889052282980377084}
-  m_Layer: 14
+  m_Layer: 25
   m_Name: Palm Plant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7324801912220156027}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.25, y: 0.25, z: 0.25}
@@ -91,6 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc02d22b1f9b8124fa448e48360e5666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 4995818587591935888}
+  animationTriggerName: wind
 --- !u!1001 &780158003174192565
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98,10 +100,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (10)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -158,6 +156,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003174584117 stripped
@@ -173,10 +179,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -233,6 +235,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003324336921 stripped
@@ -248,10 +258,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (9)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -308,6 +314,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003329157501 stripped
@@ -323,10 +337,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (8)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -383,6 +393,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003330484687 stripped
@@ -398,10 +416,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (12)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -458,6 +472,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003332834000 stripped
@@ -473,10 +495,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -533,6 +551,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003354972940 stripped
@@ -548,10 +574,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -608,6 +630,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003358430774 stripped
@@ -623,10 +653,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (7)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -683,6 +709,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003459856870 stripped
@@ -698,10 +732,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -758,6 +788,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158003787794272 stripped
@@ -773,10 +811,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (13)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -833,6 +867,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158004121322317 stripped
@@ -848,10 +890,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -908,6 +946,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158004415569288 stripped
@@ -923,10 +969,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -983,6 +1025,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158004583283679 stripped
@@ -998,10 +1048,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (11)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1058,6 +1104,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
 --- !u!4 &780158004723230155 stripped
@@ -1073,10 +1127,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6125272038393687126}
     m_Modifications:
-    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
-      propertyPath: m_Name
-      value: palmLeaf (6)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1132,6 +1182,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Name
+      value: palmLeaf (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa2f80e71691014a82db149474304db, type: 3}
