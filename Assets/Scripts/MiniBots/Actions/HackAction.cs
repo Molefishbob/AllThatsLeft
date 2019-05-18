@@ -15,7 +15,7 @@ public class HackAction : BotActionBase
     private BotReleaser _releaser = null;
     private NewMinibotAnimatorMiddlehand _animMiddlehand;
     [SerializeField]
-    private SingleSFXSound _hackSound;
+    private SingleSFXSound _hackSound = null;
 
     protected override void Awake()
     {

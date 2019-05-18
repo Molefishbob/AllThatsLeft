@@ -6,14 +6,14 @@ public class EnemyDirection : MonoBehaviour
 {
     private float _aggroRadius;
     [Tooltip("How much smaller the patrolradius is compared to the aggroradius trigger")]
-    public float _patrolRadiusDecrease;
-    public float _speed = 4;
-    private float _patrolRadius;
+    public float _patrolRadius = 6.0f;
+    public float _patrolSpeedMultiplier = 0.5f;
     private float _idleTime;
     [SerializeField]
     private float _minIdleTime = 1.0f;
     [SerializeField]
     private float _maxIdleTime = 3.0f;
+    [HideInInspector]
     public EnemyMover _enemy;
     [HideInInspector]
     public List<Transform> _aggroTargets;
@@ -30,7 +30,6 @@ public class EnemyDirection : MonoBehaviour
         _burpTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
-        _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         _aggroTargets = new List<Transform>(4);
     }
 
@@ -42,7 +41,6 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnEnable()
     {
-        _enemy.Speed = _speed;
         SetRandomTarget();
     }
 
@@ -51,7 +49,6 @@ public class EnemyDirection : MonoBehaviour
         _aggroTargets.Clear();
         _targetTimer.StopTimer();
         _burpTimer.StopTimer();
-        _enemy.Speed = _speed;
     }
 
     private void OnDestroy()
@@ -78,7 +75,7 @@ public class EnemyDirection : MonoBehaviour
                 _burpTimer.StartTimer(Random.Range(_minBurpWait, _maxBurpWait));
             }
 
-            _enemy.Speed = _speed;
+            _enemy._speedMultiplier = _patrolSpeedMultiplier;
             float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
             
             if (dist < 1.0f && !_targetTimer.IsRunning)
@@ -91,7 +88,7 @@ public class EnemyDirection : MonoBehaviour
         }
         else
         {      
-            _enemy.Speed = _speed * 2;
+            _enemy._speedMultiplier = 1.0f;
             _moveTarget = _aggroTargets[0].position;
             _enemy.SetTarget(_moveTarget);
         }
@@ -195,7 +192,6 @@ public class EnemyDirection : MonoBehaviour
     {
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
-        _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _patrolRadius);
     }

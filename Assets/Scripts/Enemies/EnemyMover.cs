@@ -35,10 +35,8 @@ public class EnemyMover : CharControlBase
         get { return _stopMoving; }
     }
 
-    public float Speed
-    {
-        set { _speed = value; }
-    }
+    [HideInInspector]
+    public float _speedMultiplier = 1.0f;
 
     public void SetTarget(Vector3 target)
     {
@@ -55,6 +53,7 @@ public class EnemyMover : CharControlBase
     {
         _stopMoving = false;
         _attack.gameObject.SetActive(false);
+        _speedMultiplier = 1.0f;
     }
 
     protected override Vector2 InternalMovement()
@@ -63,7 +62,7 @@ public class EnemyMover : CharControlBase
 
         Vector3 newDir = _target - transform.position;
         Vector2 move = new Vector2(newDir.x, newDir.z);
-        move.Normalize();
+        move = move.normalized * _speedMultiplier;
         return move;
     }
 

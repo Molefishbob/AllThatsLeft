@@ -117,7 +117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3119720878922258614}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: ThirdPoint
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
@@ -132,7 +132,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6009411707705563031}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7281724848377874318}
@@ -147,7 +147,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7281724847263494925}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: SecondPoint
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
@@ -162,7 +162,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7281724847263494924}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 0}
+  m_LocalPosition: {x: 4, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7281724848377874318}
@@ -177,7 +177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7281724847399564932}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: FirstPoint
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
@@ -308,11 +308,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7281724848377874318}
     m_Modifications:
-    - target: {fileID: 3975362166169227348, guid: 33c317159c23a184da6f2583deb63e56,
-        type: 3}
-      propertyPath: m_Name
-      value: MovingObjectLoop
-      objectReference: {fileID: 0}
     - target: {fileID: 3975362166169227351, guid: 33c317159c23a184da6f2583deb63e56,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -367,6 +362,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3975362166169227348, guid: 33c317159c23a184da6f2583deb63e56,
+        type: 3}
+      propertyPath: m_Name
+      value: MovingObjectLoop
       objectReference: {fileID: 0}
     - target: {fileID: 4271464963644485511, guid: 33c317159c23a184da6f2583deb63e56,
         type: 3}
