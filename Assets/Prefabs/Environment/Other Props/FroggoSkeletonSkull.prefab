@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8178286027415483263}
-  - component: {fileID: 6992970428336082376}
   m_Layer: 14
   m_Name: FroggoSkeletonSkull
   m_TagString: Untagged
@@ -32,19 +31,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6992970428336082376
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7004445121752550862}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.5, z: 1}
-  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!1001 &5953821795679583483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -52,6 +38,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8178286027415483263}
     m_Modifications:
+    - target: {fileID: 100000, guid: b75fbf5132e554ee5a5fcc077d44bb55, type: 3}
+      propertyPath: m_Name
+      value: FroggoSkeletonSkull
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: b75fbf5132e554ee5a5fcc077d44bb55, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b75fbf5132e554ee5a5fcc077d44bb55, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -95,14 +89,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: b75fbf5132e554ee5a5fcc077d44bb55, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: b75fbf5132e554ee5a5fcc077d44bb55, type: 3}
-      propertyPath: m_Name
-      value: FroggoSkeletonSkull
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: b75fbf5132e554ee5a5fcc077d44bb55, type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b75fbf5132e554ee5a5fcc077d44bb55, type: 3}
