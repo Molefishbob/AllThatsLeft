@@ -83,11 +83,16 @@ public class HackAction : BotActionBase
         if (_bHacking) return;
         GenericHackable ghOther = other.GetComponent<GenericHackable>();
         if (ghOther == null) return;
+        ghOther.TimeToLeave();
         _hackTargets.Remove(ghOther);
     }
 
     public override void DisableAction()
     {
+        foreach (GenericHackable item in _hackTargets)
+        {
+            item.TimeToLeave();
+        }
         _hackTargets.Clear();
         _bHacking = false;
         _animMiddlehand.ToggleParticleEffectsOff();
