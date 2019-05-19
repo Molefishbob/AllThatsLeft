@@ -9,7 +9,7 @@ public class MoveBetweenBackForth : GenericMover
     [SerializeField]
     protected GameObject _endPoint = null;
     private bool _backwards;
-    private float _viggleOffset = 0.3f;
+    private float _viggleOffsetMultiplier = 2f;
     private bool _stop;
     private float _stopCounter;
     private Vector3 _endPointOffset = new Vector3(0,-0.45f,0);
@@ -37,12 +37,12 @@ public class MoveBetweenBackForth : GenericMover
     public override void Init()
     {
         base.Init();
-        if (_stopTime - _animationLength - _viggleOffset <= 0)
+        if (_stopTime - _animationLength * _viggleOffsetMultiplier <= 0)
         {
             StartViggle();
         } else
         {
-            _viggleTimer.StartTimer(_stopTime - _animationLength - _viggleOffset);
+            _viggleTimer.StartTimer(_stopTime - (_animationLength * _viggleOffsetMultiplier));
         }
     }
 
@@ -125,13 +125,13 @@ public class MoveBetweenBackForth : GenericMover
     /// </summary>
     protected override void TimedAction()
     {
-        if (_stopTime - _animationLength - _viggleOffset <= 0)
+        if (_stopTime - _animationLength * _viggleOffsetMultiplier <= 0)
         {
             StartViggle();
         }
         else
         {
-            _viggleTimer.StartTimer(_stopTime - _animationLength - _viggleOffset);
+            _viggleTimer.StartTimer(_stopTime - (_animationLength * _viggleOffsetMultiplier));
         }
         if (!_backwards)
         {
