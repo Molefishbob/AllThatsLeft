@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 {
     protected const string Wiggle = "viggle";
-    private const string Stop = "stop";
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
     [Tooltip("The duration after which the symbol goes off")]
@@ -30,6 +29,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected Animator _anim = null;
     protected ScaledOneShotTimer _viggleTimer = null;
     protected float _animationLength = 0;
+    protected float _actionDelay = 0;
     [HideInInspector]
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
@@ -130,6 +130,11 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
             _symbol.SetActive(false);
         }
     }
+
+    protected void LoadDelay()
+    {
+        _delayTimer.StartTimer(_actionDelay + _delayDuration);
+    }
     /// <summary>
     /// Defines what happens when a connected console is hacked
     /// </summary>
@@ -137,7 +142,15 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     {
         if (!_activated)
         {
-            _delayTimer.StartTimer(actionDelay + _delayDuration);
+            if (!GameManager.Instance.Player.ControlsDisabled)
+            {
+                _delayTimer.StartTimer(actionDelay + _delayDuration);
+            }
+            else
+            {
+                _actionDelay = actionDelay;
+                GameManager.Instance.Player.OnPlayerControlEnabled += LoadDelay;
+            }
             return true;
         }
         return false;
