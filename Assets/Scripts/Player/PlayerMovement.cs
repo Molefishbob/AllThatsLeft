@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class PlayerMovement : CharControlBase
 {
     public event GenericEvent OnPlayerMovement;
-    public event GenericEvent OnPlayerControlEnabled;
 
     [SerializeField]
     protected string _horizontalAxis = "Horizontal";
@@ -28,9 +27,6 @@ public abstract class PlayerMovement : CharControlBase
             if (_controlsDisabled)
             {
                 ResetInternalMove();
-            } else
-            {
-                if (OnPlayerControlEnabled != null) OnPlayerControlEnabled();
             }
         }
     }

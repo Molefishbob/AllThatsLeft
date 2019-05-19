@@ -29,7 +29,6 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected Animator _anim = null;
     protected ScaledOneShotTimer _viggleTimer = null;
     protected float _animationLength = 0;
-    protected float _actionDelay = 0;
     [HideInInspector]
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
@@ -59,9 +58,16 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         transform.position = _transform[0].position;
         if (_activated)
         {
-             if (_symbol != null)
+            if (_symbol != null)
                 _symbol.SetActive(false);
-            Init();
+            if (GameManager.Instance.Player.ControlsDisabled)
+            {
+                GameManager.Instance.Player.OnPlayerControlEnabled += Init;
+            }
+            else
+            {
+                Init();
+            }
         }
     }
 
@@ -91,8 +97,9 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// Gets all the checkpoints and counts the complete length of the trip.
     /// The length is later used to calculate the speed between objects.
     /// </summary>
-    public virtual void Init()
+    protected virtual void Init()
     {
+        GameManager.Instance.Player.OnPlayerControlEnabled -= Init;
         _moveSound.PlaySound();
         _length = 0;
 
@@ -123,8 +130,6 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// </summary>
     protected virtual void SymbolDown()
     {
-        _activated = true;
-        Init();
         if (_symbol != null)
         {
             _symbol.SetActive(false);
@@ -133,7 +138,10 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 
     protected void LoadDelay()
     {
-        _delayTimer.StartTimer(_actionDelay + _delayDuration);
+        _delayTimer.OnTimerCompleted -= LoadDelay;
+        GameManager.Instance.Player.OnPlayerControlEnabled -= LoadDelay;
+        _activated = true;
+        Init();
     }
     /// <summary>
     /// Defines what happens when a connected console is hacked
@@ -142,13 +150,13 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     {
         if (!_activated)
         {
+            _delayTimer.StartTimer(actionDelay + _delayDuration);
             if (!GameManager.Instance.Player.ControlsDisabled)
             {
-                _delayTimer.StartTimer(actionDelay + _delayDuration);
+                _delayTimer.OnTimerCompleted += LoadDelay;
             }
             else
             {
-                _actionDelay = actionDelay;
                 GameManager.Instance.Player.OnPlayerControlEnabled += LoadDelay;
             }
             return true;
@@ -188,7 +196,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         Gizmos.color = new Color(0, 0, 0, 1);
         Gizmos.DrawWireCube(new Vector3(_transform[0].position.x, _transform[0].position.y - 0.1f, _transform[0].position.z),
                             new Vector3(4, 0.25f, 4.5f));
-        Gizmos.DrawWireCube(new Vector3(_transform[_transform.Count-1].position.x, _transform[_transform.Count - 1].position.y - 0.1f, _transform[_transform.Count - 1].position.z),
+        Gizmos.DrawWireCube(new Vector3(_transform[_transform.Count - 1].position.x, _transform[_transform.Count - 1].position.y - 0.1f, _transform[_transform.Count - 1].position.z),
                             new Vector3(4, 0.25f, 4.5f));
     }
 }
