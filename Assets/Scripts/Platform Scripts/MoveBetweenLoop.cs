@@ -49,7 +49,7 @@ public class MoveBetweenLoop : GenericMover
     ///
     /// Adds the distance between the last and the first object to the complete length.
     /// </summary>
-    public override void Init()
+    protected override void Init()
     {
         base.Init();
         _length += (_transform[0].position - _transform[_amountOfTransforms].position).magnitude;

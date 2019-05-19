@@ -6,6 +6,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
 {
     public event GenericEvent OnPlayerAlive;
     public event GenericEvent OnPlayerDeath;
+    public event GenericEvent OnPlayerControlEnabled;
 
     [SerializeField]
     protected string _animatorTriggerDeath = "Die";
@@ -43,6 +44,10 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
                 if (_controlsDisabled)
                 {
                     ResetInternalMove();
+                }
+                else
+                {
+                    OnPlayerControlEnabled?.Invoke();
                 }
             }
         }
