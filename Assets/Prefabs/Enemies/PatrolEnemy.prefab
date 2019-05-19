@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 822df50f8e9bbd14ab10b6bf3bf11e32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 8
+  _speed: 6
   _turningSpeed: 200
   _accelerationTime: 5
   _decelerationTime: 5
@@ -373,6 +373,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7013265379018812351}
     m_Modifications:
+    - target: {fileID: 3050510496603141345, guid: af492c8009af21e45932dc41558e4070,
+        type: 3}
+      propertyPath: m_Name
+      value: AttackTrigger
+      objectReference: {fileID: 0}
     - target: {fileID: 1000324180731870600, guid: af492c8009af21e45932dc41558e4070,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -427,11 +432,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3050510496603141345, guid: af492c8009af21e45932dc41558e4070,
-        type: 3}
-      propertyPath: m_Name
-      value: AttackTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 4227865846345406563, guid: af492c8009af21e45932dc41558e4070,
         type: 3}
@@ -470,6 +470,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3504351460403419296}
     m_Modifications:
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Land
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Player Land
+      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -524,21 +539,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Name
-      value: Land
-      objectReference: {fileID: 0}
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Player Land
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52d85fd4ab713f4408c47a467be28f9f, type: 3}
@@ -555,6 +555,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3504351460403419296}
     m_Modifications:
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Walk
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
+        type: 3}
+      propertyPath: _resourceFolder
+      value: Player Walk
+      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 52d85fd4ab713f4408c47a467be28f9f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -609,21 +624,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Name
-      value: Walk
-      objectReference: {fileID: 0}
-    - target: {fileID: 8666454931776417949, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842622043010894464, guid: 52d85fd4ab713f4408c47a467be28f9f,
-        type: 3}
-      propertyPath: _resourceFolder
-      value: Player Walk
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52d85fd4ab713f4408c47a467be28f9f, type: 3}
@@ -640,6 +640,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7013265379018812351}
     m_Modifications:
+    - target: {fileID: 100214, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
+      propertyPath: m_Name
+      value: scorpion
+      objectReference: {fileID: 0}
+    - target: {fileID: 100214, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 100216, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 400214, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -683,22 +699,6 @@ PrefabInstance:
     - target: {fileID: 400214, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100214, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
-      propertyPath: m_Name
-      value: scorpion
-      objectReference: {fileID: 0}
-    - target: {fileID: 100214, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 100216, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
-      propertyPath: m_Layer
-      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 9549f3a690a6a544eacf6e92ddea848d, type: 3}
       propertyPath: m_Controller

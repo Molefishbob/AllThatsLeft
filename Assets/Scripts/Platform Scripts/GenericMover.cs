@@ -10,6 +10,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     [Tooltip("The duration after which the symbol goes off")]
     public float _delayDuration = 0.4f;
     protected float _eventTime;
+    [HideInInspector]
     public List<Transform> _transform;
     protected float _fracTime;
     protected int _amountOfTransforms;
@@ -29,7 +30,6 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected Animator _anim = null;
     protected ScaledOneShotTimer _viggleTimer = null;
     protected float _animationLength = 0;
-    [HideInInspector]
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
     protected virtual void Awake()
