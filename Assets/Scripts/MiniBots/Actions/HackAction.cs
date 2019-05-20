@@ -16,6 +16,8 @@ public class HackAction : BotActionBase
     private NewMinibotAnimatorMiddlehand _animMiddlehand;
     [SerializeField]
     private SingleSFXSound _hackSound = null;
+    [SerializeField]
+    private GameObject[] _particleEffects = null;
 
     protected override void Awake()
     {
@@ -46,7 +48,7 @@ public class HackAction : BotActionBase
                 _selfMover._animator.SetBool("Hack", false);
                 _hackTargets.Clear();
                 _bHacking = false;
-                _animMiddlehand.ToggleParticleEffectsOff();
+                ToggleParticleEffectsOff();
                 _releaser.DeadButNotDead();
             }
             return;
@@ -63,6 +65,7 @@ public class HackAction : BotActionBase
                     _hackSound.PlaySound(false);
                     _selfMover._animator.SetBool("Hack", true);
                     _bHacking = true;
+                    ToggleParticleEffectsOn();
                     _hackTargets[0].TimeToStart();
                     _releaser.DisableActing();
                     _selfMover.ControlsDisabled = true;
@@ -85,6 +88,7 @@ public class HackAction : BotActionBase
         if (ghOther == null) return;
         ghOther.TimeToLeave();
         _hackTargets.Remove(ghOther);
+        ToggleParticleEffectsOff();
     }
 
     public override void DisableAction()
@@ -95,7 +99,22 @@ public class HackAction : BotActionBase
         }
         _hackTargets.Clear();
         _bHacking = false;
-        _animMiddlehand.ToggleParticleEffectsOff();
+        ToggleParticleEffectsOff();
         _selfMover._animator.SetBool("Hack", false);
+    }
+
+    public void ToggleParticleEffectsOn()
+    {
+        foreach (GameObject effect in _particleEffects)
+        {
+            effect.SetActive(true);
+        }
+    }
+    public void ToggleParticleEffectsOff()
+    {
+        foreach (GameObject effect in _particleEffects)
+        {
+            effect.SetActive(false);
+        }
     }
 }
