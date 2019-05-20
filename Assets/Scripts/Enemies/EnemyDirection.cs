@@ -8,7 +8,8 @@ public class EnemyDirection : MonoBehaviour
     [Tooltip("How much smaller the patrolradius is compared to the aggroradius trigger")]
     public float _patrolRadius = 6.0f;
     public float _patrolSpeedMultiplier = 0.5f;
-    private float _idleTime;
+    private float _randomIdleTime;
+    public float _idleTime = 0.5f;
     [SerializeField]
     private float _minIdleTime = 1.0f;
     [SerializeField]
@@ -19,7 +20,8 @@ public class EnemyDirection : MonoBehaviour
     public List<Transform> _aggroTargets;
     private SphereCollider _aggroArea;
     private Vector3 _moveTarget;
-    private PhysicsOneShotTimer _targetTimer;
+    [HideInInspector]
+    public PhysicsOneShotTimer _targetTimer;
     private PhysicsOneShotTimer _burpTimer;
     private float _minBurpWait = 5.0f;
     private float _maxBurpWait = 10.0f;
@@ -81,8 +83,8 @@ public class EnemyDirection : MonoBehaviour
             if (dist < 1.0f && !_targetTimer.IsRunning)
             {
                 _enemy.StopMoving = true;
-                _idleTime = Random.Range(_minIdleTime, _maxIdleTime);
-                _targetTimer.StartTimer(_idleTime);
+                _randomIdleTime = Random.Range(_minIdleTime, _maxIdleTime);
+                _targetTimer.StartTimer(_randomIdleTime);
                 _enemy.DirTimerRunning = true;
             }
         }
@@ -110,6 +112,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedAction()
     {
+        
         _enemy.DirTimerRunning = false;
         SetRandomTarget();
         _enemy.StopMoving = false;
@@ -117,9 +120,9 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _enemy._animator.SetBool("Jump", true);
+        //_enemy._animator.SetBool("Jump", true);
         _aggroTargets.Add(other.transform);
-        if (_aggroTargets.Count <= 1)
+        if (_aggroTargets.Count > 0)
         {
             Alert();
         }
@@ -140,8 +143,14 @@ public class EnemyDirection : MonoBehaviour
         if (_aggroTargets.Count == 0 && targetCount > 0)
         {
             _enemy._animator.SetBool("Jump", false);
-            SetRandomTarget();
+            //if (!_targetTimer.IsRunning)
+            //{
+                _enemy.StopMoving = true;
+                _targetTimer.StartTimer(_idleTime);
+            //}
+            //SetRandomTarget();
         }
+        
     }
 
     public void RemoveTarget(Transform other)
@@ -153,7 +162,12 @@ public class EnemyDirection : MonoBehaviour
         if (_aggroTargets.Count == 0)
         {
             _enemy._animator.SetBool("Jump", false);
-            SetRandomTarget();
+            //if (!_targetTimer.IsRunning)
+            //{
+                _enemy.StopMoving = true;
+                _targetTimer.StartTimer(_idleTime);
+            //}
+            //SetRandomTarget();
         }
         else if(isSameTarget)
         {
@@ -177,10 +191,10 @@ public class EnemyDirection : MonoBehaviour
         {
             Alert();
         }
-        else
-        {
-            _enemy.StopMoving = false;
-        }
+        //else
+        //{
+            //_enemy.StopMoving = false;
+        //}
     }
 
     private void OnTriggerExit(Collider other)
@@ -198,6 +212,6 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedBurp()
     {
-        if (_enemy._burpSound != null && _enemy.gameObject.activeInHierarchy) _enemy._burpSound.PlaySound();
+        if (_enemy._burpSound != null && !_enemy.gameObject.GetComponent<IDamageReceiver>().Dead) _enemy._burpSound.PlaySound();
     }
 }
