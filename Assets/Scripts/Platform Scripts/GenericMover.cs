@@ -30,6 +30,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected Animator _anim = null;
     protected ScaledOneShotTimer _viggleTimer = null;
     protected float _animationLength = 0;
+    protected bool _initialized = false;
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
     protected virtual void Awake()
@@ -83,7 +84,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.GamePaused) return;
+        if (GameManager.Instance.GamePaused || !_initialized) return;
 
         CurrentMove = InternalMove() - transform.position;
         transform.position += CurrentMove;
@@ -109,6 +110,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         {
             _length += (_transform[a].position - _transform[a + 1].position).magnitude;
         }
+        _initialized = true;
     }
     /// <summary>
     /// Does a viggle animation before the platform leaves

@@ -180,7 +180,7 @@ public class GameManager : Singleton<GameManager>
         if (Player != null)
         {
             Player.gameObject.SetActive(active);
-            if (LoadingScreen.gameObject.activeSelf) Player.ControlsDisabled = true;
+            Player.ControlsDisabled = LoadingScreen.gameObject.activeSelf;
         }
         if (Camera != null)
         {

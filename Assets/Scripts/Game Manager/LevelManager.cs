@@ -141,7 +141,9 @@ public class LevelManager : MonoBehaviour
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.ContainsKey(0))
         {
             int currentLevel = SceneManager.GetActiveScene().buildIndex;
-            if (currentLevel > 1) PrefsManager.Instance.BotsUnlocked = true; //TODO: remove this
+            #if (UNITY_EDITOR)
+            if (currentLevel > 2) PrefsManager.Instance.BotsUnlocked = true; //TODO: remove this
+            #endif
             if (PrefsManager.Instance.Level != currentLevel)
             {
                 PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
