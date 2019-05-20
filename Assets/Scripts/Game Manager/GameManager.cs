@@ -202,7 +202,7 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
-    private void ChangeScene(int id)
+    private void ChangeScene(int id, bool useLoadingScreen)
     {
         MenuMusic?.StopSound();
         PauseMenu?.gameObject.SetActive(false);
@@ -214,7 +214,8 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            LoadingScreen.BeginLoading();
+            if (useLoadingScreen)
+                LoadingScreen.BeginLoading();
             ActivateGame(false);
             SceneManager.LoadScene(id);
             if (GamePaused) UnPauseGame();
@@ -239,7 +240,7 @@ public class GameManager : Singleton<GameManager>
         PrefsManager.Instance.Level++;
         PrefsManager.Instance.CheckPoint = 0;
         PrefsManager.Instance.Save();
-        ChangeScene(PrefsManager.Instance.Level);
+        ChangeScene(PrefsManager.Instance.Level,true);
     }
 
     /// <summary>
@@ -248,7 +249,7 @@ public class GameManager : Singleton<GameManager>
     public void StartNewGame()
     {
         PrefsManager.Instance.DeleteSavedGame();
-        ChangeScene(PrefsManager.Instance.Level);
+        ChangeScene(PrefsManager.Instance.Level,false);
     }
 
     /// <summary>
@@ -256,7 +257,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ContinueGame()
     {
-        ChangeScene(PrefsManager.Instance.Level);
+        ChangeScene(PrefsManager.Instance.Level,true);
     }
 
     /// <summary>
