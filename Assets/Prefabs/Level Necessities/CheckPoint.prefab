@@ -114,6 +114,8 @@ MonoBehaviour:
   _sound: {fileID: 7722108640684447871}
   _renderer: {fileID: 1248169893439071157}
   _checkedMaterial: {fileID: 2100000, guid: 54f22f5a3bde5f94cb7160ca353c28fb, type: 2}
+  _pole: {fileID: 7492455780060602048}
+  _windAngle: -120
 --- !u!65 &6929583723703662565
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -164,11 +166,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6929583723703662566}
     m_Modifications:
-    - target: {fileID: 6814602272700647187, guid: 6275d0f91de2ccc42a568d2e4f26328a,
-        type: 3}
-      propertyPath: m_Name
-      value: particle
-      objectReference: {fileID: 0}
     - target: {fileID: 2309610704117306614, guid: 6275d0f91de2ccc42a568d2e4f26328a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -223,6 +220,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6814602272700647187, guid: 6275d0f91de2ccc42a568d2e4f26328a,
+        type: 3}
+      propertyPath: m_Name
+      value: particle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6275d0f91de2ccc42a568d2e4f26328a, type: 3}
@@ -297,6 +299,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 15d1619ca7db26147b0139d94351e54a, type: 2}
     - target: {fileID: 100000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
       propertyPath: m_Layer
       value: 14
@@ -317,10 +323,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 14
       objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 15d1619ca7db26147b0139d94351e54a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6eef0b910373ba449aeece2e3d690a2d, type: 3}
 --- !u!1 &1248169893427506877 stripped
@@ -354,11 +356,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6929583723703662566}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: m_Name
-      value: Activation Sound
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -414,6 +411,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
+        type: 3}
+      propertyPath: m_Name
+      value: Activation Sound
+      objectReference: {fileID: 0}
+    - target: {fileID: 9037547206285222063, guid: 7133886849c700445b58397ab9f61fe4,
+        type: 3}
+      propertyPath: _pitchVariance
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_audioClip
@@ -428,11 +435,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Volume
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037547206285222063, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: _pitchVariance
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7133886849c700445b58397ab9f61fe4, type: 3}
