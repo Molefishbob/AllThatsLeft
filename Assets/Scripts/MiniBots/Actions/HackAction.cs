@@ -42,6 +42,10 @@ public class HackAction : BotActionBase
 
         if (_bHacking)
         {
+            Vector3 targetDirection = _hackTargets[0].transform.position - transform.position;
+            targetDirection.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _selfMover.TurningSpeed * Time.deltaTime);
             if (_hackTargets[0].CurrentStatus == GenericHackable.Status.Hacked)
             {
                 _hackSound.StopSound();
