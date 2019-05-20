@@ -10,6 +10,8 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
     private SingleSFXSound _victorySound = null;
     [SerializeField]
     private RandomSFXSound _throwSound = null;
+    [SerializeField]
+    private RandomSFXSound _walkSound = null;
 
     private DeployControlledBots _deployScript = null;
 
@@ -47,5 +49,10 @@ public class PlayerAnimatorMiddlehand : MonoBehaviour
     public void PlayLanding()
     {
         Instantiate(landing, transform.position, transform.rotation);
+    }
+
+    public void PlayStepSound()
+    {
+        _walkSound.PlaySound();
     }
 }
