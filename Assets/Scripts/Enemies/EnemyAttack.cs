@@ -29,7 +29,7 @@ public class EnemyAttack : MonoBehaviour
         {
             _frog._animator.SetTrigger(attacktrigger);
             if (_frog._attackSound != null && _frog.gameObject.activeInHierarchy) _frog._attackSound.PlaySound();
-            //_frog.StopMoving = true;
+            _frog.StopMoving = true;
         }
         if(_scorpion != null)
         {

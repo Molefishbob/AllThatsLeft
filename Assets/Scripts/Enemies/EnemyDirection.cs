@@ -122,7 +122,7 @@ public class EnemyDirection : MonoBehaviour
     {
         //_enemy._animator.SetBool("Jump", true);
         _aggroTargets.Add(other.transform);
-        if (_aggroTargets.Count > 0)
+        if (_aggroTargets.Count <= 1)
         {
             Alert();
         }
