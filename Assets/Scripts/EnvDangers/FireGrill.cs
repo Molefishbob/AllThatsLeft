@@ -31,6 +31,7 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
                              _FlameLoopSound = null;
     protected ScaledOneShotTimer _delayTimer;
 
+
     private void Awake()
     {
         _timer = gameObject.AddComponent<PhysicsRepeatingTimer>();
@@ -42,6 +43,11 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     {
         _delayTimer.OnTimerCompleted += SymbolDown;
 
+        GameManager.Instance.Player.OnPlayerControlEnabled += StartFire;
+    }
+
+    private void StartFire()
+    {
         if (_startDelay > 0)
         {
             _timer.OnTimerCompleted += DelayedStartCycle;
@@ -61,6 +67,8 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
             FlamesOff();
             _timer.StopTimer();
         }
+
+        if (GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerControlEnabled -= StartFire;
     }
 
     private void FixedUpdate()
@@ -181,5 +189,7 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
     private void OnDestroy()
     {
         if (_delayTimer != null) _delayTimer.OnTimerCompleted -= SymbolDown;
+
+        if (GameManager.Instance != null) GameManager.Instance.Player.OnPlayerControlEnabled -= StartFire;
     }
 }
