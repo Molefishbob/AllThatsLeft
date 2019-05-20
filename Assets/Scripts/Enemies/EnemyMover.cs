@@ -16,6 +16,8 @@ public class EnemyMover : CharControlBase
     public RandomSFXSound _burpSound = null;
     public RandomSFXSound _deathSound = null;
     public SingleSFXSound _attackSound;
+    [HideInInspector]
+    public FrogSpawner _spawner;
 
     public bool DirTimerRunning
     {
