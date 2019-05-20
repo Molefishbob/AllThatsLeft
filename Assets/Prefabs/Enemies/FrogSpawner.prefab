@@ -44,7 +44,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 50
+  m_Radius: 75
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7791268610396001084
 MonoBehaviour:
@@ -65,11 +65,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7181744646978947807}
     m_Modifications:
-    - target: {fileID: 583770356982989689, guid: dd8b6b69767a4d94fb71e26475be9bb4,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyDirection
-      objectReference: {fileID: 0}
     - target: {fileID: 4583456212573917188, guid: dd8b6b69767a4d94fb71e26475be9bb4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -124,6 +119,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 583770356982989689, guid: dd8b6b69767a4d94fb71e26475be9bb4,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyDirection
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd8b6b69767a4d94fb71e26475be9bb4, type: 3}
