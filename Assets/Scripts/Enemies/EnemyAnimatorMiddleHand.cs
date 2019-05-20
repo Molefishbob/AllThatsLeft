@@ -64,6 +64,15 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
 
     public void AlertEnded()
     {
-        _frog.StopMoving = false;
+        if (_frog._eDirect._aggroTargets.Count > 0)
+        {
+            _frog.StopMoving = false;
+            _frog._animator.SetBool("Jump", true);
+        }
+        else
+        {
+            _frog._animator.SetBool("Jump", false);
+            _frog._eDirect._targetTimer.StartTimer(_frog._eDirect._idleTime);
+        }
     }
 }
