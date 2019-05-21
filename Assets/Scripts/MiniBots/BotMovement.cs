@@ -30,6 +30,8 @@ public class BotMovement : PlayerMovement
         }
     }
 
+    public float TurningSpeed { get { return _turningSpeed; } }
+
     protected override void Awake()
     {
         base.Awake();

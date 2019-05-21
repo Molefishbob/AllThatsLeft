@@ -9,19 +9,20 @@ public class FrogSpawner : MonoBehaviour
 
     private void Awake()
     {
-        _eD = GetComponentInChildren < EnemyDirection >();
-     
+        _eD = GetComponentInChildren<EnemyDirection>(true);
     }
 
     public void Spawn()
     {
         _eD._enemy = GameManager.Instance.FrogEnemyPool.GetObject();
         _eD._enemy._eDirect = _eD;
+        _eD._enemy.transform.position = _eD.GetRandomTarget();
+        _eD._enemy.transform.rotation = Quaternion.Euler(0, Random.Range(-180, 180), 0);
         _eD.SetRandomTarget();
-        _eD._enemy.transform.position = transform.position;
-        _eD._enemy.transform.rotation = transform.rotation;
         _eD._enemy.SetControllerActive(true);
         _eD._enemy._spawner = this;
+        _eD._enemy.StopMoving = false;
+        _hasSpawned = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,7 +30,6 @@ public class FrogSpawner : MonoBehaviour
         if (!_hasSpawned)
         {
             Spawn();
-            _hasSpawned = true;
         }
     }
 }

@@ -41,11 +41,6 @@ public class EnemyDirection : MonoBehaviour
         _burpTimer.OnTimerCompleted += TimedBurp;
     }
 
-    private void OnEnable()
-    {
-        SetRandomTarget();
-    }
-
     private void OnDisable()
     {
         _aggroTargets.Clear();
@@ -68,6 +63,10 @@ public class EnemyDirection : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.GamePaused) return;
+
+        if (_enemy == null || !_enemy.gameObject.activeSelf || _enemy._controller == null || !_enemy._controller.enabled) return;
+
         RemoveDeadTargets();
 
         if (_aggroTargets == null || _aggroTargets.Count == 0)
@@ -79,41 +78,40 @@ public class EnemyDirection : MonoBehaviour
 
             _enemy._speedMultiplier = _patrolSpeedMultiplier;
             float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
-            
-            if (dist < 1.0f && !_targetTimer.IsRunning)
+
+            if (dist < 0.1f && !_targetTimer.IsRunning)
             {
                 _enemy.StopMoving = true;
                 _randomIdleTime = Random.Range(_minIdleTime, _maxIdleTime);
                 _targetTimer.StartTimer(_randomIdleTime);
-                _enemy.DirTimerRunning = true;
             }
         }
         else
-        {      
+        {
             _enemy._speedMultiplier = 1.0f;
             _moveTarget = _aggroTargets[0].position;
             _enemy.SetTarget(_moveTarget);
         }
     }
 
-    public void SetRandomTarget()
+    public Vector3 GetRandomTarget()
     {
         Quaternion angle = Quaternion.Euler(0, Random.Range(-180.0f, 180.0f), 0);
-        
         float distance = Random.Range(0.0f, _patrolRadius);
+        return transform.TransformPoint(angle * Vector3.forward * distance);
+    }
 
-        _moveTarget = transform.TransformPoint(angle * Vector3.forward  * distance);
-        
+    public void SetRandomTarget()
+    {
+        _moveTarget = GetRandomTarget();
         if (_enemy != null)
         {
             _enemy.SetTarget(_moveTarget);
         }
-    }    
+    }
 
     private void TimedAction()
     {
-        
-        _enemy.DirTimerRunning = false;
         SetRandomTarget();
         _enemy.StopMoving = false;
     }
@@ -132,7 +130,7 @@ public class EnemyDirection : MonoBehaviour
     {
         int targetCount = _aggroTargets.Count;
 
-        for(int i = 0; i < _aggroTargets.Count; i++)
+        for (int i = 0; i < _aggroTargets.Count; i++)
         {
             if (_aggroTargets[i].GetComponent<IDamageReceiver>().Dead || !_aggroTargets[i].gameObject.activeInHierarchy)
             {
@@ -145,12 +143,12 @@ public class EnemyDirection : MonoBehaviour
             _enemy._animator.SetBool("Jump", false);
             //if (!_targetTimer.IsRunning)
             //{
-                _enemy.StopMoving = true;
-                _targetTimer.StartTimer(_idleTime);
+            _enemy.StopMoving = true;
+            _targetTimer.StartTimer(_idleTime);
             //}
             //SetRandomTarget();
         }
-        
+
     }
 
     public void RemoveTarget(Transform other)
@@ -164,12 +162,12 @@ public class EnemyDirection : MonoBehaviour
             _enemy._animator.SetBool("Jump", false);
             //if (!_targetTimer.IsRunning)
             //{
-                _enemy.StopMoving = true;
-                _targetTimer.StartTimer(_idleTime);
+            _enemy.StopMoving = true;
+            _targetTimer.StartTimer(_idleTime);
             //}
             //SetRandomTarget();
         }
-        else if(isSameTarget)
+        else if (isSameTarget)
         {
             Alert();
         }
@@ -193,7 +191,7 @@ public class EnemyDirection : MonoBehaviour
         }
         //else
         //{
-            //_enemy.StopMoving = false;
+        //_enemy.StopMoving = false;
         //}
     }
 

@@ -9,7 +9,6 @@ public class EnemyMover : CharControlBase
     private bool _stopMoving = false;
     [HideInInspector]
     public EnemyAttack _attack;
-    private bool _dirTimerRunning;
     public SingleSFXSound _alertSound;
     [HideInInspector]
     public EnemyDirection _eDirect;
@@ -19,12 +18,6 @@ public class EnemyMover : CharControlBase
     public SingleSFXSound _dissolveSound;
     [HideInInspector]
     public FrogSpawner _spawner;
-
-    public bool DirTimerRunning
-    {
-        set { _dirTimerRunning = value; }
-        get { return _dirTimerRunning; }
-    }
 
     protected override void Awake()
     {
@@ -48,7 +41,6 @@ public class EnemyMover : CharControlBase
 
     private void OnEnable()
     {
-        _stopMoving = false;
         _attack.gameObject.SetActive(true);
     }
 

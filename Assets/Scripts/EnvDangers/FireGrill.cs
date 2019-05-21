@@ -176,13 +176,9 @@ public class FireGrill : MonoBehaviour, IButtonInteraction
             _timer.StopTimer();
             FlamesOff();
         }
-        try
+        if (_symbol != null)
         {
             _symbol.SetActive(false);
-        }
-        catch
-        {
-            Debug.LogError(gameObject.name + " has to have a symbol!");
         }
     }
 

@@ -22,6 +22,9 @@ public class Console : GenericHackable
     private PhysicsOneShotTimer _timer;
     private ScaledOneShotTimer _delayTimer;
 
+    [SerializeField]
+    private GameObject _symbol = null;
+
     protected override void Awake()
     {
         base.Awake();
@@ -141,5 +144,10 @@ public class Console : GenericHackable
         _delayTimer.OnTimerCompleted -= MoveToHack;
         _delayTimer.OnTimerCompleted -= MoveToPlayer;
         GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTime);
+    }
+
+    public void HideSymbol()
+    {
+        if (_symbol != null) _symbol.SetActive(false);
     }
 }
