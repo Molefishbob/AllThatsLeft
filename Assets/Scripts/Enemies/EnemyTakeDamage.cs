@@ -12,6 +12,8 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     protected ScaledOneShotTimer _timer;
     [SerializeField]
     private float _dissolveTime = 4.0f;
+    private ScaledOneShotTimer _dissolveSoundTimer;
+    private AudioSource _deathAudioSource;
 
     public bool Dead { get; protected set; }
 
@@ -21,6 +23,9 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         _shaderProperty = Shader.PropertyToID("_cutoff");
         _timer = gameObject.AddComponent<ScaledOneShotTimer>();
         _timer.OnTimerCompleted += DeathComplete;
+        _dissolveSoundTimer = gameObject.AddComponent<ScaledOneShotTimer>();
+        _dissolveSoundTimer.OnTimerCompleted += PlayDissolveSound;
+        _deathAudioSource = gameObject.transform.Find("Sounds").gameObject.transform.Find("Frog Death Sound").gameObject.GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -38,6 +43,7 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
     private void OnDestroy()
     {
         if (_timer != null) _timer.OnTimerCompleted -= DeathComplete;
+        if (_dissolveSoundTimer != null) _dissolveSoundTimer.OnTimerCompleted -= PlayDissolveSound;
     }
 
     private void Update()
@@ -59,6 +65,7 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         Dead = true;
         _frog.SetControllerActive(false);
         if (_frog._deathSound != null) _frog._deathSound.PlaySound();
+        if (_frog._dissolveSound != null) _dissolveSoundTimer.StartTimer(_deathAudioSource.clip.length);
         _frog._attack.gameObject.SetActive(false);
         _frog._animator.SetBool(_deadBool, true);
         _timer.StartTimer(_dissolveTime);
@@ -73,5 +80,10 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
             _frog._animator.SetBool(_deadBool, false);
             _frog.gameObject.SetActive(false);
         }
+    }
+
+    private void PlayDissolveSound()
+    {
+        _frog._dissolveSound.PlaySound();
     }
 }

@@ -69,6 +69,7 @@ public class ScorpionSpawner : MonoBehaviour
         _patrolEnemy.gameObject.GetComponentInChildren<ScorpionTakeDamage>()._scorpion._renderer.materials[0].SetFloat(_shaderProperty, 0.0f);
         _patrolEnemy._renderer.materials[1].SetFloat(_shaderProperty, 0.0f);
         _shaderTimer.StopTimer();
+        if (_patrolEnemy._walkSound != null) _patrolEnemy._walkSound.PlaySound();
     }
 
     private void OnTriggerEnter(Collider other)

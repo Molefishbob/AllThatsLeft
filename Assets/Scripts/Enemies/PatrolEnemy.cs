@@ -17,6 +17,10 @@ public class PatrolEnemy : CharControlBase
     [HideInInspector]
     public bool _dead;
     public ParticleSystem _teleportEffect;
+    public SingleSFXSound _deathSound;
+    public SingleSFXSound _walkSound;
+    public SingleSFXSound _attackSound;
+    public SingleSFXSound _dissolveSound;
 
     public bool StopMoving
     {
