@@ -13,6 +13,10 @@ public class Console : GenericHackable
     protected float _lookAtHackedTime = 1.0f;
     [SerializeField]
     protected float _transitionTime = 0.5f;
+    [SerializeField]
+    protected SingleSFXSound _brokenSound = null;
+    [SerializeField]
+    protected SingleSFXSound _goBrokeSound = null;
     protected Animator _anim = null;
 
     private PhysicsOneShotTimer _timer;
@@ -105,6 +109,8 @@ public class Console : GenericHackable
         switch (CurrentStatus)
         {
             case Status.BeingHacked:
+                _goBrokeSound.PlaySound();
+                _brokenSound.PlaySound();
                 _anim.SetTrigger(Hacking);
                 CurrentStatus = Status.Hacked;
                 if (HackAction())
