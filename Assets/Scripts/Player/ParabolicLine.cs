@@ -69,7 +69,12 @@ public class ParabolicLine : MonoBehaviour
                             _botCollisions);
                     if (hits2 != null && hits2.Length > 0)
                     {
-                        positions[i].y = hits2[0].point.y;
+                        float highest = hits2[0].point.y;
+                        foreach (RaycastHit hit in hits2)
+                        {
+                            if (hit.point.y > highest) highest = hit.point.y;
+                        }
+                        positions[i].y = highest;
                     }
                     else
                     {
