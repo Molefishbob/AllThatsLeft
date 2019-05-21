@@ -61,22 +61,26 @@ public class ParabolicLine : MonoBehaviour
                 if (hits != null && hits.Length > 0)
                 {
                     positions[i] = positions[i - 1];
-                    RaycastHit hit2;
-                    if (Physics.SphereCast(
+                    RaycastHit[] hits2 = Physics.SphereCastAll(
                             transform.TransformPoint(positions[i]) + Vector3.up * radius,
                             _bot._controller.radius * 0.9f,
                             Vector3.down,
-                            out hit2,
-                            positions[i].y - _minYPosition,
-                            _botCollisions))
+                            transform.position.y + positions[i].y - _minYPosition,
+                            _botCollisions);
+                    if (hits2 != null && hits2.Length > 0)
                     {
-                        positions[i].y = hit2.point.y;
+                        positions[i].y = hits2[0].point.y;
                     }
                     else
                     {
                         positions[i].y = _minYPosition;
                     }
                     positions[i].y -= transform.position.y;
+                    points = i + 1;
+                    break;
+                }
+                else if (transform.position.y + positions[i].y <= _minYPosition)
+                {
                     points = i + 1;
                     break;
                 }

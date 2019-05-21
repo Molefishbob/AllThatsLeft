@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5378142566068011873}
   - component: {fileID: 7444334843296781215}
   - component: {fileID: 8193294106701121416}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 5146434485897199038}
   - component: {fileID: 1824373660449475306}
   - component: {fileID: 1319742023986640917}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Aiming Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,12 +203,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _deploy: {fileID: 0}
   _lr: {fileID: 1319742023986640917}
-  _maxDistance: 5
+  _maxDistance: 8
   _distanceBetweenPoints: 0.1
   _botCollisions:
     serializedVersion: 2
     m_Bits: 28672
-  _minYPosition: -10
+  _minYPosition: -8
   _circle: {fileID: 8193294106701121416}
 --- !u!120 &1319742023986640917
 LineRenderer:
