@@ -7,8 +7,6 @@ public class ScorpionSpawner : MonoBehaviour
     private PatrolEnemy _patrolEnemy;
     private bool _hasSpawned = false;
     private List<Transform> _patrolTargets = new List<Transform>();
-    [SerializeField]
-    private float _speed = 3;
     public float _respawnTime = 10;
     public float _teleportTime = 2;
     private ScaledOneShotTimer _timer;
@@ -43,7 +41,7 @@ public class ScorpionSpawner : MonoBehaviour
 
     private void OnDisable()
     {
-        if(_patrolEnemy != null) _patrolEnemy._renderer.materials[1].SetFloat(_shaderProperty, 0.0f);
+        if (_patrolEnemy != null) _patrolEnemy._renderer.materials[1].SetFloat(_shaderProperty, 0.0f);
     }
 
     private void OnDestroy()
@@ -52,11 +50,10 @@ public class ScorpionSpawner : MonoBehaviour
         if (_shaderTimer != null) _shaderTimer.OnTimerCompleted -= TeleportComplete;
     }
 
-    public void Spawn()
+    private void Spawn()
     {
         _patrolEnemy = GameManager.Instance.PatrolEnemyPool.GetObject();
-        _patrolEnemy.Speed = _speed;
-        _patrolEnemy.transform.position = transform.position;
+        _patrolEnemy.transform.position = _patrolTargets[0].position;
         _patrolEnemy.Targets = _patrolTargets;
         _patrolEnemy._spawner = this;
         _patrolEnemy._animator.speed = 0;
@@ -81,5 +78,10 @@ public class ScorpionSpawner : MonoBehaviour
             Spawn();
             _hasSpawned = true;
         }
+    }
+
+    public void Respawn()
+    {
+        _timer.StartTimer(_respawnTime);
     }
 }

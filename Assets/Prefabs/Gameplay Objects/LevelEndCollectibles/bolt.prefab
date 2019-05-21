@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &279003077460035511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2162844879902016213}
+  m_Layer: 0
+  m_Name: Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2162844879902016213
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279003077460035511}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6166580099137348820}
+  m_Father: {fileID: 2012615943573755198}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &581582951485044429
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2012615943573755198}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,39 +58,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2382630503627729728}
+  - {fileID: 2162844879902016213}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4322278365439951860
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2382630503627729728}
-  m_Layer: 14
-  m_Name: Anchor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2382630503627729728
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4322278365439951860}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 6166580099137348820}
-  m_Father: {fileID: 2012615943573755198}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7015936458598859299
@@ -92,11 +92,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: itemGlow
-      objectReference: {fileID: 0}
-    - target: {fileID: 4069835912580063726, guid: 0b2df43e48a2b234db4e14c8c463eb4a,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4069835912580063715, guid: 0b2df43e48a2b234db4e14c8c463eb4a,
         type: 3}
@@ -160,8 +155,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 2382630503627729728}
+    m_TransformParent: {fileID: 2162844879902016213}
     m_Modifications:
+    - target: {fileID: 100000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
+      propertyPath: m_Name
+      value: bolt
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -176,15 +175,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
       propertyPath: m_LocalRotation.w
@@ -205,14 +204,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
-      propertyPath: m_Name
-      value: bolt
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: cc545aef43faa3343a763c65c2f69fbe, type: 3}
       propertyPath: m_CastShadows
@@ -247,11 +238,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: particleDrops
-      objectReference: {fileID: 0}
-    - target: {fileID: 5500343279339459347, guid: 7b838b8733574da49b707c7b422118ba,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 5500343279339459346, guid: 7b838b8733574da49b707c7b422118ba,
         type: 3}

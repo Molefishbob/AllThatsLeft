@@ -5,12 +5,12 @@ using UnityEngine;
 public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 {
     protected const string Wiggle = "viggle";
-    private const string Stop = "stop";
     [Tooltip("The amount of time it takes to go the whole length")]
     public float _duration;
     [Tooltip("The duration after which the symbol goes off")]
     public float _delayDuration = 0.4f;
     protected float _eventTime;
+    [HideInInspector]
     public List<Transform> _transform;
     protected float _fracTime;
     protected int _amountOfTransforms;
@@ -30,7 +30,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     protected Animator _anim = null;
     protected ScaledOneShotTimer _viggleTimer = null;
     protected float _animationLength = 0;
-    [HideInInspector]
+    protected bool _initialized = false;
     public Vector3 CurrentMove { get; protected set; } = Vector3.zero;
 
     protected virtual void Awake()
@@ -59,9 +59,16 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         transform.position = _transform[0].position;
         if (_activated)
         {
-             if (_symbol != null)
+            if (_symbol != null)
                 _symbol.SetActive(false);
-            Init();
+            if (GameManager.Instance.Player.ControlsDisabled)
+            {
+                GameManager.Instance.Player.OnPlayerControlEnabled += Init;
+            }
+            else
+            {
+                Init();
+            }
         }
     }
 
@@ -77,7 +84,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.GamePaused) return;
+        if (GameManager.Instance.GamePaused || !_initialized) return;
 
         CurrentMove = InternalMove() - transform.position;
         transform.position += CurrentMove;
@@ -91,8 +98,9 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// Gets all the checkpoints and counts the complete length of the trip.
     /// The length is later used to calculate the speed between objects.
     /// </summary>
-    public virtual void Init()
+    protected virtual void Init()
     {
+        GameManager.Instance.Player.OnPlayerControlEnabled -= Init;
         _moveSound.PlaySound();
         _length = 0;
 
@@ -102,6 +110,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         {
             _length += (_transform[a].position - _transform[a + 1].position).magnitude;
         }
+        _initialized = true;
     }
     /// <summary>
     /// Does a viggle animation before the platform leaves
@@ -123,12 +132,18 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
     /// </summary>
     protected virtual void SymbolDown()
     {
-        _activated = true;
-        Init();
         if (_symbol != null)
         {
             _symbol.SetActive(false);
         }
+    }
+
+    protected void LoadDelay()
+    {
+        _delayTimer.OnTimerCompleted -= LoadDelay;
+        GameManager.Instance.Player.OnPlayerControlEnabled -= LoadDelay;
+        _activated = true;
+        Init();
     }
     /// <summary>
     /// Defines what happens when a connected console is hacked
@@ -138,6 +153,14 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         if (!_activated)
         {
             _delayTimer.StartTimer(actionDelay + _delayDuration);
+            if (!GameManager.Instance.Player.ControlsDisabled)
+            {
+                _delayTimer.OnTimerCompleted += LoadDelay;
+            }
+            else
+            {
+                GameManager.Instance.Player.OnPlayerControlEnabled += LoadDelay;
+            }
             return true;
         }
         return false;
@@ -175,7 +198,7 @@ public abstract class GenericMover : MonoBehaviour, IButtonInteraction
         Gizmos.color = new Color(0, 0, 0, 1);
         Gizmos.DrawWireCube(new Vector3(_transform[0].position.x, _transform[0].position.y - 0.1f, _transform[0].position.z),
                             new Vector3(4, 0.25f, 4.5f));
-        Gizmos.DrawWireCube(new Vector3(_transform[_transform.Count-1].position.x, _transform[_transform.Count - 1].position.y - 0.1f, _transform[_transform.Count - 1].position.z),
+        Gizmos.DrawWireCube(new Vector3(_transform[_transform.Count - 1].position.x, _transform[_transform.Count - 1].position.y - 0.1f, _transform[_transform.Count - 1].position.z),
                             new Vector3(4, 0.25f, 4.5f));
     }
 }

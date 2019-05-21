@@ -74,6 +74,7 @@ public class ScorpionTakeDamage : MonoBehaviour, IDamageReceiver
     {
         if (_scorpion != null)
         {
+            _scorpion._spawner.Respawn();
             _scorpion.gameObject.SetActive(false);
         }
     }

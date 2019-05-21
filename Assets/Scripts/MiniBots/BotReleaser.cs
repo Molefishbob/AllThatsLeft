@@ -192,7 +192,10 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
         _dieSound.PlaySound(false);
         _selfMover.SetControllerActive(false);
-        ReleaseControls(false);
+        _selfHack.DisableAction();
+        _selfBomb.DisableAction();
+        _selfTrampoline.DisableAction();
+        ReleaseControls(true);
     }
 
     public void DeadButNotDead()

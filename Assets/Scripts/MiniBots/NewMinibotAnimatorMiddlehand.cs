@@ -15,7 +15,6 @@ public class NewMinibotAnimatorMiddlehand : MonoBehaviour
     private string _rngTrigger2 = "RNG2";
     private Animator _animator;
 
-    public GameObject[] particleEffects;
     private BotReleaser _releaser;
 
     void Awake()
@@ -41,19 +40,6 @@ public class NewMinibotAnimatorMiddlehand : MonoBehaviour
         {
             if (Random.Range(0, 2) == 0) _animator.SetTrigger(_rngTrigger1);
             else _animator.SetTrigger(_rngTrigger2);
-        }
-    }
-
-    public void ToggleParticleEffectsOn() {
-        
-        foreach (GameObject effect in particleEffects) {
-            effect.SetActive(true);
-        }
-    }
-    public void ToggleParticleEffectsOff() {
-
-        foreach (GameObject effect in particleEffects) {
-            effect.SetActive(false);
         }
     }
 

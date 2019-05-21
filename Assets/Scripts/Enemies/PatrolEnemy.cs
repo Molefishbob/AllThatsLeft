@@ -4,22 +4,19 @@ using UnityEngine;
 
 public class PatrolEnemy : CharControlBase
 {
-    private List<Transform> _targets = new List<Transform>();
-    private int _targetCounter;
-    private bool _goingForward;
+    private int _targetCounter = 0;
+    private bool _goingForward = true;
     private bool _stopMoving;
     private bool _turningStop;
     private Quaternion _lookAtThis;
+    [HideInInspector]
     public EnemyAttack _attack;
     private string _defaultAnimState = "Default";
+    [HideInInspector]
     public ScorpionSpawner _spawner;
+    [HideInInspector]
     public bool _dead;
     public ParticleSystem _teleportEffect;
-
-    public float Speed
-    {
-        set { _speed = value; }
-    }
 
     public bool StopMoving
     {
@@ -29,9 +26,7 @@ public class PatrolEnemy : CharControlBase
     protected override void Awake()
     {
         base.Awake();
-        _targetCounter = 0;
-        _goingForward = true;
-        _attack = GetComponentInChildren<EnemyAttack>();
+        _attack = GetComponentInChildren<EnemyAttack>(true);
     }
 
     private void OnEnable()
@@ -58,70 +53,48 @@ public class PatrolEnemy : CharControlBase
         main.duration = _spawner._teleportTime;
     }*/
 
-    public List<Transform> Targets
-    {
-        set { _targets = value; }
-        get { return _targets; }
-    }
+    [HideInInspector]
+    public List<Transform> Targets;
 
     private void Update()
     {
-        Quaternion oldRotation = transform.rotation;
         if (_turningStop)
         {
+            Quaternion oldRotation = transform.rotation;
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _lookAtThis, _turningSpeed * Time.deltaTime);
+            if (Quaternion.Angle(oldRotation, transform.rotation) <= 2)
+            {
+                _turningStop = false;
+            }
         }
-        if(oldRotation == transform.rotation)
+        else if (Vector3.Distance(transform.position, Targets[_targetCounter].position) <= 0.1f)
         {
-            _turningStop = false;
-        }
-        if(_spawner != null && _dead)
-        {
-            _spawner.GetComponent<ScaledOneShotTimer>().StartTimer(_spawner._respawnTime);
+            ChangeTarget();
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void ChangeTarget()
     {
+        _turningStop = true;
 
-        if (other.gameObject.layer == 23)
+        if (_targetCounter >= Targets.Count - 1)
         {
-            _turningStop = true;
-            
-            if (_goingForward)
-            {
-                _targetCounter++;
-            }
-            else if (!_goingForward && _targetCounter > 0)
-            {
-                _targetCounter--;
-            }
-            else if (!_goingForward && _targetCounter == 0)
-            {
-                _targetCounter++;
-                _goingForward = true;
-            }
-
-            if (_targetCounter > _targets.Count - 1)
-            {
-                _goingForward = false;
-                _targetCounter = _targets.Count - 2;
-
-            }
-            else if (_targetCounter == 0)
-            {
-                _goingForward = true;
-            }
-
-            _lookAtThis = Quaternion.LookRotation(_targets[_targetCounter].position - transform.position);
+            _goingForward = false;
         }
+        else if (_targetCounter <= 0)
+        {
+            _goingForward = true;
+        }
+        _targetCounter += _goingForward ? 1 : -1;
+
+        _lookAtThis = Quaternion.LookRotation(Targets[_targetCounter].position - transform.position, Vector3.up);
     }
 
     protected override Vector2 InternalMovement()
     {
         if (_stopMoving || _turningStop) return Vector2.zero;
 
-        Vector3 moveDirection = _targets[_targetCounter].position - transform.position;
+        Vector3 moveDirection = Targets[_targetCounter].position - transform.position;
         Vector2 move = new Vector2(moveDirection.x, moveDirection.z);
         move.Normalize();
         return move;

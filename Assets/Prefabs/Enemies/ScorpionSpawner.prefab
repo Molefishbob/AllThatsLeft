@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1192370485623986047}
   - component: {fileID: 4966281025776813703}
   - component: {fileID: 4465346089395428531}
-  m_Layer: 17
+  m_Layer: 20
   m_Name: ScorpionSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,8 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3449561258a299c4989cdfd7c08be96d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
-  _respawnTime: 10
+  _respawnTime: 45
   _teleportTime: 2
 --- !u!135 &4465346089395428531
 SphereCollider:
@@ -60,7 +59,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 200
+  m_Radius: 75
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1303908113926800513
 PrefabInstance:

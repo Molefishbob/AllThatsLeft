@@ -2017,7 +2017,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 490
   m_TargetDisplay: 0
 --- !u!114 &8154636201211610706
 MonoBehaviour:
@@ -2080,6 +2080,7 @@ MonoBehaviour:
   _camxSlider: {fileID: 5020486190968433820}
   _buttonClickSound: {fileID: 0}
   _resumeSound: {fileID: 0}
+  _menuOpenSound: {fileID: 0}
 --- !u!222 &1688518780298491960
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2208,17 +2209,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1784121258796136012}
         m_MethodName: ToPauseMenu
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1784121258796136012}
-        m_MethodName: ButtonClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2860,7 +2850,7 @@ PrefabInstance:
     - target: {fileID: 4827785965510144219, guid: 5f8804127a3806d4ca408cd0e1430dd8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4827785965510144219, guid: 5f8804127a3806d4ca408cd0e1430dd8,
         type: 3}

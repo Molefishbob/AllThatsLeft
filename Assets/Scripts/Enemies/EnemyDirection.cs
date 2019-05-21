@@ -6,20 +6,22 @@ public class EnemyDirection : MonoBehaviour
 {
     private float _aggroRadius;
     [Tooltip("How much smaller the patrolradius is compared to the aggroradius trigger")]
-    public float _patrolRadiusDecrease;
-    public float _speed = 4;
-    private float _patrolRadius;
-    private float _idleTime;
+    public float _patrolRadius = 6.0f;
+    public float _patrolSpeedMultiplier = 0.5f;
+    private float _randomIdleTime;
+    public float _idleTime = 0.5f;
     [SerializeField]
     private float _minIdleTime = 1.0f;
     [SerializeField]
     private float _maxIdleTime = 3.0f;
+    [HideInInspector]
     public EnemyMover _enemy;
     [HideInInspector]
     public List<Transform> _aggroTargets;
     private SphereCollider _aggroArea;
     private Vector3 _moveTarget;
-    private PhysicsOneShotTimer _targetTimer;
+    [HideInInspector]
+    public PhysicsOneShotTimer _targetTimer;
     private PhysicsOneShotTimer _burpTimer;
     private float _minBurpWait = 5.0f;
     private float _maxBurpWait = 10.0f;
@@ -30,7 +32,6 @@ public class EnemyDirection : MonoBehaviour
         _burpTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
-        _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         _aggroTargets = new List<Transform>(4);
     }
 
@@ -42,7 +43,6 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnEnable()
     {
-        _enemy.Speed = _speed;
         SetRandomTarget();
     }
 
@@ -51,7 +51,6 @@ public class EnemyDirection : MonoBehaviour
         _aggroTargets.Clear();
         _targetTimer.StopTimer();
         _burpTimer.StopTimer();
-        _enemy.Speed = _speed;
     }
 
     private void OnDestroy()
@@ -78,20 +77,20 @@ public class EnemyDirection : MonoBehaviour
                 _burpTimer.StartTimer(Random.Range(_minBurpWait, _maxBurpWait));
             }
 
-            _enemy.Speed = _speed;
+            _enemy._speedMultiplier = _patrolSpeedMultiplier;
             float dist = Vector3.Distance(_moveTarget, _enemy.transform.position);
             
             if (dist < 1.0f && !_targetTimer.IsRunning)
             {
                 _enemy.StopMoving = true;
-                _idleTime = Random.Range(_minIdleTime, _maxIdleTime);
-                _targetTimer.StartTimer(_idleTime);
+                _randomIdleTime = Random.Range(_minIdleTime, _maxIdleTime);
+                _targetTimer.StartTimer(_randomIdleTime);
                 _enemy.DirTimerRunning = true;
             }
         }
         else
         {      
-            _enemy.Speed = _speed * 2;
+            _enemy._speedMultiplier = 1.0f;
             _moveTarget = _aggroTargets[0].position;
             _enemy.SetTarget(_moveTarget);
         }
@@ -113,6 +112,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedAction()
     {
+        
         _enemy.DirTimerRunning = false;
         SetRandomTarget();
         _enemy.StopMoving = false;
@@ -120,7 +120,7 @@ public class EnemyDirection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _enemy._animator.SetBool("Jump", true);
+        //_enemy._animator.SetBool("Jump", true);
         _aggroTargets.Add(other.transform);
         if (_aggroTargets.Count <= 1)
         {
@@ -143,8 +143,14 @@ public class EnemyDirection : MonoBehaviour
         if (_aggroTargets.Count == 0 && targetCount > 0)
         {
             _enemy._animator.SetBool("Jump", false);
-            SetRandomTarget();
+            //if (!_targetTimer.IsRunning)
+            //{
+                _enemy.StopMoving = true;
+                _targetTimer.StartTimer(_idleTime);
+            //}
+            //SetRandomTarget();
         }
+        
     }
 
     public void RemoveTarget(Transform other)
@@ -156,7 +162,12 @@ public class EnemyDirection : MonoBehaviour
         if (_aggroTargets.Count == 0)
         {
             _enemy._animator.SetBool("Jump", false);
-            SetRandomTarget();
+            //if (!_targetTimer.IsRunning)
+            //{
+                _enemy.StopMoving = true;
+                _targetTimer.StartTimer(_idleTime);
+            //}
+            //SetRandomTarget();
         }
         else if(isSameTarget)
         {
@@ -180,10 +191,10 @@ public class EnemyDirection : MonoBehaviour
         {
             Alert();
         }
-        else
-        {
-            _enemy.StopMoving = false;
-        }
+        //else
+        //{
+            //_enemy.StopMoving = false;
+        //}
     }
 
     private void OnTriggerExit(Collider other)
@@ -195,13 +206,12 @@ public class EnemyDirection : MonoBehaviour
     {
         _aggroArea = GetComponent<SphereCollider>();
         _aggroRadius = _aggroArea.radius;
-        _patrolRadius = _aggroRadius - _patrolRadiusDecrease;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _patrolRadius);
     }
 
     private void TimedBurp()
     {
-        if (_enemy._burpSound != null && _enemy.gameObject.activeInHierarchy) _enemy._burpSound.PlaySound();
+        if (_enemy._burpSound != null && !_enemy.gameObject.GetComponent<IDamageReceiver>().Dead && _enemy.gameObject.activeInHierarchy) _enemy._burpSound.PlaySound();
     }
 }

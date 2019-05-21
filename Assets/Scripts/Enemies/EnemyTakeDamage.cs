@@ -63,6 +63,7 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         _frog._animator.SetBool(_deadBool, true);
         _timer.StartTimer(_dissolveTime);
         _dissolveFlakes.Play();
+        _frog._spawner.gameObject.SetActive(false);
     }
 
     private void DeathComplete()

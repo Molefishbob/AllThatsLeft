@@ -21,6 +21,7 @@ public class FrogSpawner : MonoBehaviour
         _eD._enemy.transform.position = transform.position;
         _eD._enemy.transform.rotation = transform.rotation;
         _eD._enemy.SetControllerActive(true);
+        _eD._enemy._spawner = this;
     }
 
     private void OnTriggerEnter(Collider other)

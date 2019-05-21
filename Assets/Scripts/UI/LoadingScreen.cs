@@ -34,16 +34,6 @@ public class LoadingScreen : MonoBehaviour
         _shaderProperty = Shader.PropertyToID("_cutoff");
     }
 
-    private void OnEnable()
-    {
-        _scaledObject.localScale = Vector3.zero;
-        _inTransition = false;
-        _loadState = -1;
-        _mute = PrefsManager.Instance.AudioMuteSFX;
-        PrefsManager.Instance.AudioMuteSFX = true;
-        SceneManager.sceneLoaded += Begin;
-    }
-
     private void Start()
     {
         _teleportTimer.OnTimerCompleted += TeleportDone;
@@ -94,6 +84,17 @@ public class LoadingScreen : MonoBehaviour
         {
             GameManager.Instance.Player._renderer.material.SetFloat(_shaderProperty, _teleportTimer.NormalizedTimeElapsed);
         }
+    }
+
+    public void BeginLoading()
+    {
+        _scaledObject.localScale = Vector3.zero;
+        _inTransition = false;
+        _loadState = -1;
+        _mute = PrefsManager.Instance.AudioMuteSFX;
+        PrefsManager.Instance.AudioMuteSFX = true;
+        SceneManager.sceneLoaded += Begin;
+        gameObject.SetActive(true);
     }
 
     private void Begin(Scene scene, LoadSceneMode mode)
