@@ -212,6 +212,6 @@ public class EnemyDirection : MonoBehaviour
 
     private void TimedBurp()
     {
-        if (_enemy._burpSound != null && !_enemy.gameObject.GetComponent<IDamageReceiver>().Dead) _enemy._burpSound.PlaySound();
+        if (_enemy._burpSound != null && !_enemy.gameObject.GetComponent<IDamageReceiver>().Dead && _enemy.gameObject.activeInHierarchy) _enemy._burpSound.PlaySound();
     }
 }
