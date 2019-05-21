@@ -37,8 +37,7 @@ public class CharControlPlatformMovement : MonoBehaviour
         else
         {
             GenericMover plat = FindPlatform(_forced ? Mathf.Infinity : _disconnectDistance);
-            if (plat != _platform && plat != null) pos.y = _platform.transform.position.y;
-            _platform = plat;
+            if (plat != _platform) _platform = null;
         }
 
         if (_platform != null)
