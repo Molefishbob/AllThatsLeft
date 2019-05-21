@@ -34,6 +34,7 @@ public class EnemyAttack : MonoBehaviour
         if(_scorpion != null)
         {
             _scorpion._animator.SetTrigger(attacktrigger);
+            if (_scorpion._attackSound != null && _scorpion.gameObject.activeInHierarchy) _scorpion._attackSound.PlaySound();
             _scorpion.StopMoving = true;
         }
     }
