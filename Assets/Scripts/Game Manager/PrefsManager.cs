@@ -17,7 +17,9 @@ public class PrefsManager : Singleton<PrefsManager>
         keyCameraXSensitivity = "Camera X Sensitivity",
         keyCameraYSensitivity = "Camera Y Sensitivity",
         keyFieldOfView = "Field Of View",
-        keyZoomSpeed = "Zoom Speed";
+        keyZoomSpeed = "Zoom Speed",
+        playerDeaths = "Player Deaths",
+        minibotsUsed = "Minibots Used";
 
     public event ValueChangedInt OnAudioVolumeSFXChanged;
     public event ValueChangedInt OnAudioVolumeMusicChanged;
@@ -41,6 +43,29 @@ public class PrefsManager : Singleton<PrefsManager>
     public void Save()
     {
         PlayerPrefs.Save();
+    }
+
+    public int PlayerDeaths
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(playerDeaths, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(playerDeaths, value);
+        }
+    }
+    public int MinibotsUsed
+    {
+        get
+        {
+            return PlayerPrefs.GetInt(minibotsUsed, 0);
+        }
+        set
+        {
+            PlayerPrefs.SetInt(minibotsUsed, value);
+        }
     }
 
     public int AudioVolumeSFX
@@ -184,6 +209,8 @@ public class PrefsManager : Singleton<PrefsManager>
         PlayerPrefs.DeleteKey(keyBotsUnlocked);
         PlayerPrefs.DeleteKey(keyLevel);
         PlayerPrefs.DeleteKey(keyCheckPoint);
+        PlayerPrefs.DeleteKey(minibotsUsed);
+        PlayerPrefs.DeleteKey(playerDeaths);
     }
 
     public bool SavedGameExists

@@ -10,15 +10,26 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private EventSystem _eventSystem = null;
     [SerializeField]
-    private GameObject _settings = null, _pauseMenu = null, _confirmQuit = null;
+    private GameObject 
+        _settings = null,
+        _pauseMenu = null,
+        _confirmQuit = null;
     [SerializeField]
-    private GameObject _masterVolumeSlider = null, _noButton = null, _resumeButton = null, _camxSlider = null;
+    private GameObject 
+        _masterVolumeSlider = null,
+        
+        _noButton = null, _resumeButton = null,
+        _camxSlider = null;
     [SerializeField]
     private SingleUISound _buttonClickSound = null;
     [SerializeField]
     private SingleUISound _resumeSound = null;
     [SerializeField]
     private SingleUISound _menuOpenSound = null;
+    [SerializeField]
+    private TMP_Text 
+        _deathsGO = null,
+        _minibotsGO = null;
     private UnscaledOneShotTimer _timer;
     public enum Page
     {
@@ -90,6 +101,12 @@ public class PauseMenu : MonoBehaviour
             _timer.OnTimerCompleted -= Menu;
             _timer.OnTimerCompleted -= Quit;
         }
+    }
+
+    private void OnEnable()
+    {
+        _deathsGO.text = PrefsManager.Instance.PlayerDeaths.ToString();
+        _minibotsGO.text = PrefsManager.Instance.MinibotsUsed.ToString();
     }
 
     /// <summary>
