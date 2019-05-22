@@ -148,6 +148,7 @@ MonoBehaviour:
   teleportAwayParticle: {fileID: 2731946010798643001, guid: 942f8c328cb5eeb4d99c7eab8239e076,
     type: 3}
   _dieSound: {fileID: 2541140426125908954}
+  _shadowProjector: {fileID: 0}
 --- !u!114 &7729380837203966630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,11 +335,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9171848565421935631}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: m_Name
-      value: TrampolineAssemble
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -393,6 +389,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
+        type: 3}
+      propertyPath: m_Name
+      value: TrampolineAssemble
       objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
@@ -1268,11 +1269,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9171848565421935631}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: m_Name
-      value: Hack
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1328,6 +1324,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
+        type: 3}
+      propertyPath: m_Name
+      value: Hack
+      objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_audioClip
@@ -1360,11 +1361,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9171848565421935631}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: m_Name
-      value: TrampolineBounce
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1419,6 +1415,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
+        type: 3}
+      propertyPath: m_Name
+      value: TrampolineBounce
       objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
@@ -1636,9 +1637,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8590310021024571873}
     m_Modifications:
-    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
-      propertyPath: m_Name
-      value: hackbot
+    - target: {fileID: 400050, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -6.966911e-24
+      objectReference: {fileID: 0}
+    - target: {fileID: 400050, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 1.1089001e-22
+      objectReference: {fileID: 0}
+    - target: {fileID: 400050, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0.00000033467924
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1684,21 +1693,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_Name
+      value: hackbot
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -89.98021
-      objectReference: {fileID: 0}
-    - target: {fileID: 400050, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -6.966911e-24
-      objectReference: {fileID: 0}
-    - target: {fileID: 400050, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 1.1089001e-22
-      objectReference: {fileID: 0}
-    - target: {fileID: 400050, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.00000033467924
       objectReference: {fileID: 0}
     - target: {fileID: 400038, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2019,11 +2020,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9171848565421935631}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: m_Name
-      value: Death
-      objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2078,6 +2074,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: 7133886849c700445b58397ab9f61fe4,
+        type: 3}
+      propertyPath: m_Name
+      value: Death
       objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: 7133886849c700445b58397ab9f61fe4,
         type: 3}
@@ -2293,11 +2294,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8590310021024571873}
     m_Modifications:
-    - target: {fileID: 170874424196588824, guid: 77191fac458d0d547b19e59ab4f80572,
-        type: 3}
-      propertyPath: m_Name
-      value: Tutorial Attach Point
-      objectReference: {fileID: 0}
     - target: {fileID: 6477375710572859657, guid: 77191fac458d0d547b19e59ab4f80572,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2352,6 +2348,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170874424196588824, guid: 77191fac458d0d547b19e59ab4f80572,
+        type: 3}
+      propertyPath: m_Name
+      value: Tutorial Attach Point
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77191fac458d0d547b19e59ab4f80572, type: 3}
