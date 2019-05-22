@@ -39,6 +39,11 @@ public class LoadingScreen : MonoBehaviour
         _teleportTimer.OnTimerCompleted += TeleportDone;
     }
 
+    private void OnApplicationQuit()
+    {
+        if (_timer.IsRunning) PrefsManager.Instance.AudioMuteSFX = _mute;
+    }
+
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= Begin;
