@@ -5,6 +5,8 @@ using UnityEngine;
 public class EndLevel : Collectible
 {
     private int _shaderProperty;
+    [SerializeField]
+    private SingleSFXSound _teleportOut = null;
 
     protected override void Awake()
     {
@@ -34,6 +36,11 @@ public class EndLevel : Collectible
     {
         StopEffects();
         GameManager.Instance.NextLevel();
+    }
+
+    protected override void ExtraTrigger()
+    {
+        _teleportOut.PlaySound();
     }
 
     private void StopEffects()

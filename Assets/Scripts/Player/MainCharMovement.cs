@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     protected float _deathTime = 5.0f;
     [SerializeField]
     protected RandomSFXSound _damageDeathSound = null;
+    [SerializeField]
+    protected RandomSFXSound _teleportInSound = null;
     [SerializeField]
     protected SingleSFXSound _fallDeathSound = null;
 
@@ -90,6 +93,12 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         SetControllerActive(false);
         _deathTimer.StartTimer(_deathTime);
         if (OnPlayerDeath != null) OnPlayerDeath();
+    }
+
+    internal void TeleportIn()
+    {
+        _teleportEffectFast.Play();
+        _teleportInSound.PlaySound();
     }
 
     private void Alive()

@@ -61,6 +61,7 @@ MonoBehaviour:
   _transitionTime: 0.5
   _brokenSound: {fileID: 6122473454547327396}
   _goBrokeSound: {fileID: 8557161049822771763}
+  _symbol: {fileID: 0}
 --- !u!65 &2129702414
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -170,16 +171,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2011995365629210983}
     m_Modifications:
-    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
-        type: 3}
-      propertyPath: m_Name
-      value: smokeDamageConsoleStream
-      objectReference: {fileID: 0}
-    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1133318056373196356, guid: 22a2341fcc66857479042e8d64b992e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -233,6 +224,16 @@ PrefabInstance:
     - target: {fileID: 1133318056373196356, guid: 22a2341fcc66857479042e8d64b992e4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
+        type: 3}
+      propertyPath: m_Name
+      value: smokeDamageConsoleStream
+      objectReference: {fileID: 0}
+    - target: {fileID: 1133318056373196355, guid: 22a2341fcc66857479042e8d64b992e4,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -417,11 +418,6 @@ PrefabInstance:
       propertyPath: Loop
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7896917203928575601, guid: 7133886849c700445b58397ab9f61fe4,
-        type: 3}
-      propertyPath: m_Volume
-      value: 0.8
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7133886849c700445b58397ab9f61fe4, type: 3}
 --- !u!4 &7433249375899939291 stripped
@@ -449,26 +445,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2011995365629210983}
     m_Modifications:
-    - target: {fileID: 100000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_Name
-      value: Console
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 100004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: 493d4527774d5a047aa00fad27169953, type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
@@ -512,6 +488,26 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_Name
+      value: Console
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 493d4527774d5a047aa00fad27169953, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 493d4527774d5a047aa00fad27169953, type: 3}
       propertyPath: m_LocalRotation.x
@@ -681,11 +677,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2011995365629210983}
     m_Modifications:
-    - target: {fileID: 3119780472202093036, guid: dc13f9303f412a34488cf07d948f7993,
-        type: 3}
-      propertyPath: m_Name
-      value: Hackable Glow
-      objectReference: {fileID: 0}
     - target: {fileID: 8138281941495567869, guid: dc13f9303f412a34488cf07d948f7993,
         type: 3}
       propertyPath: m_RootOrder
@@ -705,6 +696,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119780472202093036, guid: dc13f9303f412a34488cf07d948f7993,
+        type: 3}
+      propertyPath: m_Name
+      value: Hackable Glow
       objectReference: {fileID: 0}
     - target: {fileID: 4852621411433496182, guid: dc13f9303f412a34488cf07d948f7993,
         type: 3}
