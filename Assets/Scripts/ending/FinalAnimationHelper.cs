@@ -10,6 +10,8 @@ public class FinalAnimationHelper : MonoBehaviour
     public bool run = false;
     [SerializeField]
     private GameObject _textField = null;
+    [SerializeField]
+    private GameObject _camera = null;
     public Animator creditsAnimator;
     public string creditsBoolName = "credits";
     public bool showCredits = false;
@@ -26,11 +28,13 @@ public class FinalAnimationHelper : MonoBehaviour
         _timer = gameObject.AddComponent<UnscaledOneShotTimer>();
         _timer2 = gameObject.AddComponent<UnscaledOneShotTimer>();
         _timer2.OnTimerCompleted += InputMe;
+        Destroy(GameManager.Instance.Camera.gameObject);
+        Destroy(GameManager.Instance.SkyCamera.gameObject);
     }
 
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (Input.anyKeyDown && GetComponent<Animator>().enabled)
         {
             if (_textField.activeSelf && _touchIsOkay)
             {
@@ -73,6 +77,8 @@ public class FinalAnimationHelper : MonoBehaviour
 
     private void EndScreen()
     {
+        _textField.SetActive(false);
+        _camera.SetActive(false);
         GetComponent<Animator>().enabled = false;
         _endScreen.SetActive(true);
         _timer.OnTimerCompleted -= EndScreen;

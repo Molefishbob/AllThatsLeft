@@ -549,9 +549,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 4647719876468441807}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 2
@@ -1247,8 +1247,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 6043180929048959922}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -1549,9 +1549,11 @@ MonoBehaviour:
   _confirmQuit: {fileID: 8379619493706082017}
   _masterVolumeSlider: {fileID: 0}
   _noButton: {fileID: 8249510099128090567}
-  _resumeButton: {fileID: 0}
+  _resumeButton: {fileID: 2277483535837637553}
   _camxSlider: {fileID: 0}
   _buttonClickSound: {fileID: 7797911753990633752}
+  _resumeSound: {fileID: 0}
+  _menuOpenSound: {fileID: 0}
 --- !u!222 &1688518780298491960
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2152,11 +2154,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8154636201211610716}
     m_Modifications:
-    - target: {fileID: 8666454931776417949, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
-        type: 3}
-      propertyPath: m_Name
-      value: Single UI Sound
-      objectReference: {fileID: 0}
     - target: {fileID: 5220022383897545976, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
         type: 3}
       propertyPath: _pitchVariance
@@ -2216,6 +2213,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8666454931776417949, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
+        type: 3}
+      propertyPath: m_Name
+      value: Single UI Sound
       objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
         type: 3}
