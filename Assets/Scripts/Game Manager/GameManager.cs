@@ -240,7 +240,7 @@ public class GameManager : Singleton<GameManager>
         PrefsManager.Instance.Level++;
         PrefsManager.Instance.CheckPoint = 0;
         PrefsManager.Instance.Save();
-        ChangeScene(PrefsManager.Instance.Level,true);
+        ChangeScene(PrefsManager.Instance.Level, true);
     }
 
     /// <summary>
@@ -249,7 +249,7 @@ public class GameManager : Singleton<GameManager>
     public void StartNewGame()
     {
         PrefsManager.Instance.DeleteSavedGame();
-        ChangeScene(PrefsManager.Instance.Level,false);
+        ChangeScene(PrefsManager.Instance.Level, false);
     }
 
     /// <summary>
@@ -257,7 +257,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public void ContinueGame()
     {
-        ChangeScene(PrefsManager.Instance.Level,true);
+        ChangeScene(PrefsManager.Instance.Level, true);
     }
 
     /// <summary>
@@ -270,16 +270,22 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void PlayLevelMusic()
+    public void PlayLevelMusic()
     {
         MenuMusic?.StopSound();
         LevelMusic?.PlayMusic();
     }
 
-    private void PlayMenuMusic()
+    public void PlayMenuMusic()
     {
         LevelMusic?.StopSound();
         MenuMusic?.PlayMusic();
+    }
+
+    public void StopAllMusic()
+    {
+        MenuMusic?.StopSound();
+        LevelMusic?.StopSound();
     }
 
     private void Awake()

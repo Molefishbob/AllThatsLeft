@@ -37,6 +37,9 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     [SerializeField]
     private SingleSFXSound _dieSound = null;
 
+    [HideInInspector]
+    public Projector _shadowProjector = null;
+
     protected override void Awake()
     {
         base.Awake();
@@ -50,6 +53,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfTrampoline = GetComponent<TrampolineAction>();
 
         _thisCamTarget = transform.Find("CameraTarget");
+        _shadowProjector = GetComponentInChildren<Projector>(true);
     }
 
     void OnEnable()
@@ -78,6 +82,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         Dead = false;
         _selfMover.SetControllerActive(false);
         _selfMover.ControlsDisabled = true;
+        _shadowProjector.enabled = true;
 
         if (GameManager.Instance != null && GameManager.Instance.Player != null) GameManager.Instance.Player.OnPlayerDeath -= ReleaseInstant;
     }
@@ -122,6 +127,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     public void ReleaseOnly()
     {
         Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
+        _shadowProjector.enabled = false;
         _dieSound.PlaySound(false);
         _ostDisable.StartTimer(_transitionTime);
         OnBotReleased?.Invoke();
@@ -193,6 +199,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         Dead = true;
         _selfMover._animator.SetTrigger(DeadTrigger);
         Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
+        _shadowProjector.enabled = false;
         _dieSound.PlaySound(false);
         _selfMover.SetControllerActive(false);
         _selfHack.DisableAction();
