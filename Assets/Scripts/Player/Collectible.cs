@@ -65,7 +65,10 @@ public abstract class Collectible : MonoBehaviour
 
         PlayerAnimatorMiddlehand pamh = GameManager.Instance.Player.GetComponentInChildren<PlayerAnimatorMiddlehand>();
         pamh._collectible = this;
+        ExtraTrigger();
     }
+
+    protected virtual void ExtraTrigger() {}
 
     public void HoldPose(Transform hand)
     {
