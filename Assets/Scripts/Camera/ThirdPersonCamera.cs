@@ -16,7 +16,8 @@ public class ThirdPersonCamera : MonoBehaviour
     public float _zoomSpeed = 0.5f;
     public string _cameraXAxis = "Camera X";
     public string _cameraYAxis = "Camera Y";
-    private float _yaw = 0.0f;
+    [HideInInspector]
+    public float Yaw = 0.0f;
     private float _pitch;
     public float _startingPitch = 0.0f;
     public float _horizontalSensitivity = 1.0f;
@@ -55,6 +56,18 @@ public class ThirdPersonCamera : MonoBehaviour
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
+
+    public float Pitch
+    {
+        get
+        {
+            return _pitch;
+        }
+        set
+        {
+            _pitch = Mathf.Clamp(value, _minPitch, _maxPitch);
+        }
+    }
 
     private void Awake()
     {
@@ -135,7 +148,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_transitionTimer.IsRunning)
         {
-            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+            Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
 
             float lerpedDistance = Mathf.Lerp(_oldDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
 
@@ -161,22 +174,13 @@ public class ThirdPersonCamera : MonoBehaviour
                     _distance = _maxDistance;
                 }
 
-                _yaw += _horizontalSensitivity * xInput * _invertX;
-                _pitch += _verticalSensitivity * yInput * _invertY;
-
-                if (_pitch > _maxPitch)
-                {
-                    _pitch = _maxPitch;
-                }
-                else if (_pitch < _minPitch)
-                {
-                    _pitch = _minPitch;
-                }
+                Yaw += _horizontalSensitivity * xInput * _invertX;
+                Pitch += _verticalSensitivity * yInput * _invertY;
             }
 
             if (_follow)
             {
-                Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+                Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
                 transform.position = _lookAt.position + rotation * Vector3.back;
             }
             transform.LookAt(_lookAt.position);
@@ -281,12 +285,21 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_follow)
         {
-            Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0);
+            Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
             transform.position = _lookAt.position + rotation * Vector3.back;
         }
 
         transform.LookAt(_lookAt.position);
         Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+        transform.position = _lookAt.position + transform.rotation * dirr;
+    }
+
+    public void RefreshValues(float distance)
+    {
+        Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
+        transform.position = _lookAt.position + rotation * Vector3.back;
+        transform.LookAt(_lookAt.position);
+        Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), distance);
         transform.position = _lookAt.position + transform.rotation * dirr;
     }
 
@@ -306,8 +319,8 @@ public class ThirdPersonCamera : MonoBehaviour
         transform.position = tf.position;
         transform.LookAt(trans);
 
-        _pitch = transform.eulerAngles.x;
-        _yaw = transform.eulerAngles.y;
+        Pitch = transform.eulerAngles.x;
+        Yaw = transform.eulerAngles.y;
 
         Frozen = true;
         _freezeTimer.StartTimer(lookatTime);
@@ -321,8 +334,8 @@ public class ThirdPersonCamera : MonoBehaviour
     public void OnPlayerRebirth()
     {
         _follow = true;
-        _pitch = _startingPitch;
-        _yaw = GameManager.Instance.Player.transform.eulerAngles.y;
+        Pitch = _startingPitch;
+        Yaw = GameManager.Instance.Player.transform.eulerAngles.y;
         _lookAt = GameManager.Instance.Player.transform.Find(_cameraTargetName);
         _distance = _playerDistance;
     }
