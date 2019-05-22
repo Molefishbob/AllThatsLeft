@@ -65,7 +65,7 @@ public class EnemyTakeDamage : MonoBehaviour, IDamageReceiver
         Dead = true;
         _frog.SetControllerActive(false);
         if (_frog._deathSound != null) _frog._deathSound.PlaySound();
-        if (_frog._dissolveSound != null) _dissolveSoundTimer.StartTimer(_deathAudioSource.clip.length);
+        if (_frog._dissolveSound != null) _dissolveSoundTimer.StartTimer(_deathAudioSource.clip.length * 0.5f);
         _frog._attack.gameObject.SetActive(false);
         _frog._animator.SetBool(_deadBool, true);
         _timer.StartTimer(_dissolveTime);
