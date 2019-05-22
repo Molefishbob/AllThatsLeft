@@ -111,6 +111,9 @@ public class DeployControlledBots : MonoBehaviour
     public void DeployBot(Transform hand)
     {
         if (!PrefsManager.Instance.BotsUnlocked) return;
+
+        PrefsManager.Instance.MinibotsUsed += 1;
+        PrefsManager.Instance.Save();
         _activeBot = GameManager.Instance.BotPool.GetObject();
         Vector3 pos = transform.InverseTransformPoint(hand.position);
         pos.x = 0.0f;

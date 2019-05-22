@@ -86,6 +86,8 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     {
         if (Dead) return;
 
+        PrefsManager.Instance.PlayerDeaths += 1;
+        PrefsManager.Instance.Save();
         GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
         _damageDeathSound.PlaySound();
@@ -115,6 +117,8 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
     {
         if (Dead) return;
 
+        PrefsManager.Instance.PlayerDeaths += 1;
+        PrefsManager.Instance.Save();
         Dead = true;
         _fallDeathSound.PlaySound();
         _deathTimer.StartTimer(_deathTime);
