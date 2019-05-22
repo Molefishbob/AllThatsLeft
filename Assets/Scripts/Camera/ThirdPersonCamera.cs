@@ -45,7 +45,19 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _playerDistance;
     private float _oldDistance;
     public float _collisionRadius = 0.5f;
-    public bool Frozen;
+    private bool _frozen;
+    public bool Frozen
+    {
+        get
+        {
+            return _frozen;
+        }
+        set
+        {
+            _frozen = value;
+            _cinematicEffect.SetActive(value);
+        }
+    }
     public bool PlayerControlled;
     private float _returnToPlayerTime;
 
@@ -56,6 +68,9 @@ public class ThirdPersonCamera : MonoBehaviour
 
     [SerializeField]
     private string _cameraTargetName = "CameraTarget";
+
+    [SerializeField]
+    private GameObject _cinematicEffect = null;
 
     public float Pitch
     {
@@ -214,6 +229,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void ReturnControls()
     {
+        _cinematicEffect.SetActive(false);
         GameManager.Instance.Player.ControlsDisabled = false;
     }
 
@@ -375,7 +391,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void UnFreeze()
     {
-        Frozen = false;
+        _frozen = false;
         MoveToTarget(GameManager.Instance.Player.transform, _returnToPlayerTime);
     }
 }
