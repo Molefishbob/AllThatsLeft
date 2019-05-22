@@ -6,6 +6,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 {
     public event GenericEvent OnBotReleased;
 
+    private const string DeadTrigger = "Dead";
     public float fReleaseDelay = 2.0f;
     [SerializeField]
     private float _transitionTime = 1.0f;
@@ -69,6 +70,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
 
     void OnDisable()
     {
+        _selfMover._animator.transform.localScale = Vector3.one;
         _ostDisable.StopTimer();
         _ostRelease.StopTimer();
         _ostLife.StartTimer(_fLifeTime);
@@ -189,6 +191,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         if (Dead || _selfBomb._bExploding) return;
 
         Dead = true;
+        _selfMover._animator.SetTrigger(DeadTrigger);
         Instantiate(teleportAwayParticle, transform.position, Quaternion.identity);
         _dieSound.PlaySound(false);
         _selfMover.SetControllerActive(false);
