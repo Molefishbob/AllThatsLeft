@@ -1439,7 +1439,6 @@ GameObject:
   - component: {fileID: 8154636201211610707}
   - component: {fileID: 1784121258796136012}
   - component: {fileID: 1688518780298491960}
-  - component: {fileID: 3252264352144973199}
   m_Layer: 5
   m_Name: EndScreen
   m_TagString: Untagged
@@ -1562,18 +1561,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8154636201211610704}
   m_CullTransparentMesh: 0
---- !u!114 &3252264352144973199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8154636201211610704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2110fbcccdd0464e9a7a5e3e0fea1ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8249510099128090567
 GameObject:
   m_ObjectHideFlags: 0
@@ -2154,10 +2141,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8154636201211610716}
     m_Modifications:
-    - target: {fileID: 5220022383897545976, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
+    - target: {fileID: 8666454931776417949, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
         type: 3}
-      propertyPath: _pitchVariance
-      value: 0.2
+      propertyPath: m_Name
+      value: Single UI Sound
       objectReference: {fileID: 0}
     - target: {fileID: 5671299163561773264, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
         type: 3}
@@ -2214,10 +2201,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8666454931776417949, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
+    - target: {fileID: 5220022383897545976, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
         type: 3}
-      propertyPath: m_Name
-      value: Single UI Sound
+      propertyPath: _pitchVariance
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7896917203928575601, guid: d4fbf8fee2cd7b1449e128ad7e128b2a,
         type: 3}
@@ -2313,12 +2300,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bca17874e2198f4ab7a205f75aee988, type: 3}
---- !u!4 &2438670806184338354 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7701190109337308945, guid: 0bca17874e2198f4ab7a205f75aee988,
-    type: 3}
-  m_PrefabInstance: {fileID: 5420075242959072419}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8723625208368310929 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3613984078821934642, guid: 0bca17874e2198f4ab7a205f75aee988,
@@ -2331,3 +2312,9 @@ MonoBehaviour:
   m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &2438670806184338354 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7701190109337308945, guid: 0bca17874e2198f4ab7a205f75aee988,
+    type: 3}
+  m_PrefabInstance: {fileID: 5420075242959072419}
+  m_PrefabAsset: {fileID: 0}

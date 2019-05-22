@@ -80,7 +80,7 @@ public class LoadingScreen : MonoBehaviour
             if (!_teleportTimer.IsRunning && _timer.NormalizedTimeElapsed >= _normalizedEffectStartTime)
             {
                 _teleportTimer.StartTimer(_teleportEffectTime);
-                GameManager.Instance.Player.TeleportIn();
+                if (GameManager.Instance.Player.gameObject.activeSelf) GameManager.Instance.Player.TeleportIn();
                 PrefsManager.Instance.AudioMuteSFX = _mute;
             }
         }

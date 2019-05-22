@@ -142,7 +142,7 @@ public class LevelManager : MonoBehaviour
         {
             int currentLevel = SceneManager.GetActiveScene().buildIndex;
             #if (UNITY_EDITOR)
-            if (currentLevel > 2) PrefsManager.Instance.BotsUnlocked = true; //TODO: remove this
+            if (currentLevel > 2) PrefsManager.Instance.BotsUnlocked = true;
             #endif
             if (PrefsManager.Instance.Level != currentLevel)
             {
@@ -186,6 +186,8 @@ public class LevelManager : MonoBehaviour
                     break;
             }
         }
+        //TODO: add these back
+        //#if UNITY_EDITOR
         else if (!GameManager.Instance.GamePaused)
         {
             if (Input.GetKeyDown(KeyCode.K))
@@ -215,6 +217,7 @@ public class LevelManager : MonoBehaviour
                 GameManager.Instance.NextLevel();
             }
         }
+        //#endif
     }
 
     private Vector3 GetSpawnPosition()
