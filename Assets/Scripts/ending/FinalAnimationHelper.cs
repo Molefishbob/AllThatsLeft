@@ -65,6 +65,7 @@ public class FinalAnimationHelper : MonoBehaviour
     }
 
     public void StartCredits() {
+        GameManager.Instance.PlayMenuMusic();
         showCredits = true;
         _timer.StartTimer(creditsAnimator.runtimeAnimatorController.animationClips[0].length);
         _timer.OnTimerCompleted += EndScreen;
