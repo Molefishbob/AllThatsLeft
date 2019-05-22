@@ -41,7 +41,7 @@ public class LoadingScreen : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        if (_timer.IsRunning) PrefsManager.Instance.AudioMuteSFX = _mute;
+        if (_loadState < 2 || _timer.IsRunning) PrefsManager.Instance.AudioMuteSFX = _mute;
     }
 
     private void OnDisable()

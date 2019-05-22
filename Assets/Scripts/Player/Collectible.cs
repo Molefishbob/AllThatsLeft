@@ -16,6 +16,10 @@ public abstract class Collectible : MonoBehaviour
     protected Animator _modelAnimator = null;
     [SerializeField]
     protected string _modelAnimatorTrigger = "Hold";
+    [SerializeField]
+    protected float _cameraLockPitch = 0;
+    [SerializeField]
+    protected float _cameraLockDistance = 8;
 
     protected bool _animate = false;
     protected Collider _collider;
@@ -44,6 +48,12 @@ public abstract class Collectible : MonoBehaviour
         {
             GameManager.Instance.Player._animator.SetTrigger(_playerAnimTriggerStart);
             _animate = false;
+            GameManager.Instance.Camera.Pitch = _cameraLockPitch;
+            GameManager.Instance.Camera.Yaw = GameManager.Instance.Player.transform.eulerAngles.y;
+            GameManager.Instance.Camera.MoveToTargetInstant(GameManager.Instance.Player.transform);
+            GameManager.Instance.Camera.RefreshValues(_cameraLockDistance);
+            GameManager.Instance.Camera.Frozen = true;
+            ExtraTrigger();
         }
     }
 
@@ -65,10 +75,9 @@ public abstract class Collectible : MonoBehaviour
 
         PlayerAnimatorMiddlehand pamh = GameManager.Instance.Player.GetComponentInChildren<PlayerAnimatorMiddlehand>();
         pamh._collectible = this;
-        ExtraTrigger();
     }
 
-    protected virtual void ExtraTrigger() {}
+    protected virtual void ExtraTrigger() { }
 
     public void HoldPose(Transform hand)
     {
@@ -87,8 +96,9 @@ public abstract class Collectible : MonoBehaviour
     {
         GameManager.Instance.Player.ControlsDisabled = false;
         GameManager.Instance.Player._animator.SetTrigger(_playerAnimTriggerEnd);
-        gameObject.SetActive(false);
+        GameManager.Instance.Camera.Frozen = false;
         CollectAction();
+        gameObject.SetActive(false);
     }
 
     protected abstract void CollectAction();
