@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TrampolineAction : BotActionBase
 {
+    private const string TrampolineAssembleTrigger = "Trampoline";
     [SerializeField]
     private string _sTrampolineButton = "Stay Action";
     private GameObject _goTrampoline;
@@ -86,7 +87,7 @@ public class TrampolineAction : BotActionBase
             _assembleSound.PlaySound(false);
             _goTrampoline.SetActive(true);
             _bActing = true;
-            _selfMover._animator.SetTrigger("Trampoline");
+            _selfMover._animator.SetTrigger(TrampolineAssembleTrigger);
             _releaser.ReleaseControls(true);
         }
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BombAction : BotActionBase
 {
+    private const string ExplodeTrigger = "Explode";
     [SerializeField]
     private string _sExplodeButton = "Bomb Action";
     public LayerMask BombableLayer { get { return _lBombableLayer; } }
@@ -20,7 +21,6 @@ public class BombAction : BotActionBase
     [SerializeField]
     private GameObject _goParticlePrefab = null;
     private GameObject _goParticleHolder;
-    private Projector _shadowProjector = null;
     private BotReleaser _releaser = null;
     private List<Renderer> _renderers = null;
     [SerializeField]
@@ -51,7 +51,6 @@ public class BombAction : BotActionBase
     protected override void Awake()
     {
         base.Awake();
-        _shadowProjector = GetComponentInChildren<Projector>(true);
         _releaser = GetComponent<BotReleaser>();
 
         Renderer[] tmp = GetComponentsInChildren<Renderer>(true);
@@ -79,7 +78,7 @@ public class BombAction : BotActionBase
 
         if (Input.GetButtonDown(_sExplodeButton))
         {
-            _selfMover._animator.SetBool("Explode", true);
+            _selfMover._animator.SetTrigger(ExplodeTrigger);
             if (_psExplosion == null)
             {
                 _goParticleHolder = Instantiate(_goParticlePrefab, transform.TransformPoint(_botCenter), transform.rotation, transform);
@@ -106,12 +105,10 @@ public class BombAction : BotActionBase
             }
         }
         _bExploding = false;
-        _shadowProjector.enabled = true;
         foreach (Renderer renderer in _renderers)
         {
             renderer.enabled = true;
         }
-        _selfMover._animator.SetBool("Explode", false);
     }
 
     public void ExplodeBot()
@@ -126,7 +123,7 @@ public class BombAction : BotActionBase
             }
         }
         _bombSound.PlaySound(false);
-        _shadowProjector.enabled = false;
+        _releaser._shadowProjector.enabled = false;
         _selfMover.SetControllerActive(false);
         Invoke("DisableRenderers", _fRenderDisableTimeOnExplode);
     }

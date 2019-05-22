@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HackAction : BotActionBase
 {
+    private const string HackLoopTrigger = "Hack";
+    private const string HackFinishTrigger = "HackFinish";
     [SerializeField]
     private string _sHackButton = "Hack Action";
     public LayerMask HackLayer { get { return _lHackLayer; } }
@@ -49,7 +51,7 @@ public class HackAction : BotActionBase
             if (_hackTargets[0].CurrentStatus == GenericHackable.Status.Hacked)
             {
                 _hackSound.StopSound();
-                _selfMover._animator.SetBool("Hack", false);
+                _selfMover._animator.SetTrigger(HackFinishTrigger);
                 _hackTargets.Clear();
                 _bHacking = false;
                 ToggleParticleEffectsOff();
@@ -67,7 +69,7 @@ public class HackAction : BotActionBase
                 if (_hackTargets[0].CurrentStatus == GenericHackable.Status.NotHacked)
                 {
                     _hackSound.PlaySound(false);
-                    _selfMover._animator.SetBool("Hack", true);
+                    _selfMover._animator.SetTrigger(HackLoopTrigger);
                     _bHacking = true;
                     ToggleParticleEffectsOn();
                     _hackTargets[0].TimeToStart();
@@ -104,7 +106,6 @@ public class HackAction : BotActionBase
         _hackTargets.Clear();
         _bHacking = false;
         ToggleParticleEffectsOff();
-        _selfMover._animator.SetBool("Hack", false);
     }
 
     public void ToggleParticleEffectsOn()
