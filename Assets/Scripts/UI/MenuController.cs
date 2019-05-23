@@ -201,24 +201,9 @@ public class MenuController : MonoBehaviour
     /// <param name="playSound">Plays a button click sound if true</param>
     public void EnableMainMenuPanel(bool playSound)
     {
-        _timer.StopTimer();
         if (playSound)
             _buttonSound.PlaySound();
-
-        _mainMenuPanel.SetActive(true);
-        _optionsPanel.SetActive(false);
-        _quitPanel.SetActive(false);
-        _continueButton.interactable = PrefsManager.Instance.SavedGameExists;
-        _currentPage = Page.MainMenu;
-        _eventSystem.UpdateModules();
-        if (_continueButton.interactable)
-        {
-            _eventSystem.SetSelectedGameObject(_continueButton.gameObject);
-        }
-        else
-        {
-            _eventSystem.SetSelectedGameObject(_newGame);
-        }
+        EnableMainMenuPanel();
     }
 
     /// <summary>
