@@ -95,7 +95,7 @@ MonoBehaviour:
   _model: {fileID: 6032988780185699851}
   _modelAnimator: {fileID: 3881591537863488845}
   _modelAnimatorTrigger: Hold
-  _cameraLockPitch: 45
+  _cameraLockPitch: 25
   _cameraLockDistance: 8
 --- !u!1001 &3881591537856086061
 PrefabInstance:
@@ -104,6 +104,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 446041711082391757}
     m_Modifications:
+    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
+      propertyPath: m_Name
+      value: hackbot
+      objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -147,10 +151,6 @@ PrefabInstance:
     - target: {fileID: 400016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 100016, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
-      propertyPath: m_Name
-      value: hackbot
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: e510b5e7b09a0db4f90d862aa15b05cd, type: 3}
       propertyPath: m_Controller
