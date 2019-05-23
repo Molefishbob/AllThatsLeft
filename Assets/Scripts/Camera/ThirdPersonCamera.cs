@@ -139,6 +139,12 @@ public class ThirdPersonCamera : MonoBehaviour
             PrefsManager.Instance.OnZoomSpeedChanged -= SetZoomSpeed;
             PrefsManager.Instance.OnFieldOfViewChanged -= SetFieldOfView;
         }
+
+        Frozen = false;
+        _lookAt = null;
+        _transitionTimer.StopTimer();
+        _returnControlsTimer.StopTimer();
+        _freezeTimer.StopTimer();
     }
 
     private void OnDestroy()
