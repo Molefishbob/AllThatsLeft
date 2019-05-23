@@ -100,7 +100,6 @@ MonoBehaviour:
   _zoomSpeed: 1
   _cameraXAxis: Camera X
   _cameraYAxis: Camera Y
-  Yaw: 0
   _startingPitch: 15
   _horizontalSensitivity: 1
   _verticalSensitivity: 1
@@ -115,7 +114,7 @@ MonoBehaviour:
   _collisionRadius: 0.5
   PlayerControlled: 0
   _cameraTargetName: CameraTarget
-  _cinematicEffect: {fileID: 557888082020394222}
+  _cinematicEffect: {fileID: 154725452709709483}
 --- !u!81 &5459540576229880262
 AudioListener:
   m_ObjectHideFlags: 0
@@ -208,6 +207,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5459540576229880259}
     m_Modifications:
+    - target: {fileID: 5459540576229880263, guid: 93cff93bfc0273b4d8bf217cc2f78ee9,
+        type: 3}
+      propertyPath: m_Name
+      value: Death Camera
+      objectReference: {fileID: 0}
     - target: {fileID: 5459540576229880259, guid: 93cff93bfc0273b4d8bf217cc2f78ee9,
         type: 3}
       propertyPath: m_RootOrder
@@ -227,11 +231,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880263, guid: 93cff93bfc0273b4d8bf217cc2f78ee9,
-        type: 3}
-      propertyPath: m_Name
-      value: Death Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93cff93bfc0273b4d8bf217cc2f78ee9, type: 3}
@@ -358,17 +357,27 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9166845549988197330, guid: 63a7e28c25af3f747bf0a2cb70f3d8ea,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 44.999878
+      objectReference: {fileID: 0}
+    - target: {fileID: 2244332712667442100, guid: 63a7e28c25af3f747bf0a2cb70f3d8ea,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -44.999878
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63a7e28c25af3f747bf0a2cb70f3d8ea, type: 3}
---- !u!1 &557888082020394222 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7271256088155817373, guid: 63a7e28c25af3f747bf0a2cb70f3d8ea,
-    type: 3}
-  m_PrefabInstance: {fileID: 7158107265970692467}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7500974112671600333 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 814699172562366398, guid: 63a7e28c25af3f747bf0a2cb70f3d8ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 7158107265970692467}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &154725452709709483 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7021962122370885592, guid: 63a7e28c25af3f747bf0a2cb70f3d8ea,
     type: 3}
   m_PrefabInstance: {fileID: 7158107265970692467}
   m_PrefabAsset: {fileID: 0}
@@ -379,6 +388,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5459540576229880259}
     m_Modifications:
+    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
+        type: 3}
+      propertyPath: m_Name
+      value: UI Camera
+      objectReference: {fileID: 0}
     - target: {fileID: 5459540576229880259, guid: 0f7c0ba7edc786d409962d40ba139490,
         type: 3}
       propertyPath: m_RootOrder
@@ -398,11 +412,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459540576229880263, guid: 0f7c0ba7edc786d409962d40ba139490,
-        type: 3}
-      propertyPath: m_Name
-      value: UI Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f7c0ba7edc786d409962d40ba139490, type: 3}

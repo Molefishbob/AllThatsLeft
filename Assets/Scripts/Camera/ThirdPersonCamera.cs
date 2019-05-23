@@ -7,6 +7,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public event GenericEvent OnCameraZoomedByPlayer;
     public event GenericEvent OnCameraMovedByPlayer;
 
+    private const string OutTrigger = "Out";
     public LayerMask _groundLayer;
     private Transform _lookAt;
     private Vector3 _oldTarget;
@@ -16,8 +17,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public float _zoomSpeed = 0.5f;
     public string _cameraXAxis = "Camera X";
     public string _cameraYAxis = "Camera Y";
-    [HideInInspector]
-    public float Yaw = 0.0f;
+    private float Yaw = 0.0f;
     private float _pitch;
     public float _startingPitch = 0.0f;
     public float _horizontalSensitivity = 1.0f;
@@ -55,7 +55,14 @@ public class ThirdPersonCamera : MonoBehaviour
         set
         {
             _frozen = value;
-            _cinematicEffect.SetActive(value);
+            if (_frozen)
+            {
+                _cinematicEffect.gameObject.SetActive(true);
+            }
+            else
+            {
+                _cinematicEffect.SetTrigger(OutTrigger);
+            }
         }
     }
     public bool PlayerControlled;
@@ -70,9 +77,9 @@ public class ThirdPersonCamera : MonoBehaviour
     private string _cameraTargetName = "CameraTarget";
 
     [SerializeField]
-    private GameObject _cinematicEffect = null;
+    private Animator _cinematicEffect = null;
 
-    public float Pitch
+    private float Pitch
     {
         get
         {
@@ -235,7 +242,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void ReturnControls()
     {
-        _cinematicEffect.SetActive(false);
         GameManager.Instance.Player.ControlsDisabled = false;
     }
 
@@ -316,13 +322,25 @@ public class ThirdPersonCamera : MonoBehaviour
         transform.position = _lookAt.position + transform.rotation * dirr;
     }
 
-    public void RefreshValues(float distance)
+    public void MoveToTargetAndLock(Transform trans, float distance, float pitch, float yaw)
     {
-        Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
-        transform.position = _lookAt.position + rotation * Vector3.back;
-        transform.LookAt(_lookAt.position);
+        Transform tf = trans.Find(_cameraTargetName);
+        if (tf == null)
+        {
+            Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
+            tf = trans;
+        }
+        MoveToTargetAndLock(tf.position, distance, pitch, yaw);
+    }
+
+    public void MoveToTargetAndLock(Vector3 target, float distance, float pitch, float yaw)
+    {
+        Frozen = true;
+        Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
+        transform.position = target + rotation * Vector3.back;
+        transform.LookAt(target);
         Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), distance);
-        transform.position = _lookAt.position + transform.rotation * dirr;
+        transform.position = target + transform.rotation * dirr;
     }
 
     public void MoveToHackTargetInstant(Transform trans, float lookatTime, float transitionTime)
@@ -397,7 +415,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void UnFreeze()
     {
-        _frozen = false;
+        Frozen = false;
         MoveToTarget(GameManager.Instance.Player.transform, _returnToPlayerTime);
     }
 }

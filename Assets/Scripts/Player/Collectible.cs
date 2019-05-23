@@ -48,11 +48,7 @@ public abstract class Collectible : MonoBehaviour
         {
             GameManager.Instance.Player._animator.SetTrigger(_playerAnimTriggerStart);
             _animate = false;
-            GameManager.Instance.Camera.Pitch = _cameraLockPitch;
-            GameManager.Instance.Camera.Yaw = GameManager.Instance.Player.transform.eulerAngles.y;
-            GameManager.Instance.Camera.MoveToTargetInstant(GameManager.Instance.Player.transform);
-            GameManager.Instance.Camera.RefreshValues(_cameraLockDistance);
-            GameManager.Instance.Camera.Frozen = true;
+            GameManager.Instance.Camera.MoveToTargetAndLock(GameManager.Instance.Player.transform, _cameraLockDistance, _cameraLockPitch, GameManager.Instance.Player.transform.eulerAngles.y);
             ExtraTrigger();
         }
     }
