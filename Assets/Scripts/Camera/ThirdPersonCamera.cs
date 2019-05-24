@@ -240,7 +240,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             return;
         }
-        else if (!GameManager.Instance.Player.Dead && _follow)
+        else if (_follow)
         {
             transform.position = _lookAt.position + rot * Vector3.back;
             transform.LookAt(_lookAt.position);
