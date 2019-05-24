@@ -184,7 +184,12 @@ public class GameManager : Singleton<GameManager>
         }
         if (Camera != null)
         {
+            Camera.gameObject.SetActive(active);
             if (LoadingScreen.gameObject.activeSelf) Camera.PlayerControlled = false;
+        }
+        if (SkyCamera != null)
+        {
+            SkyCamera.gameObject.SetActive(active);
         }
         BotPool?.gameObject.SetActive(active);
         FrogEnemyPool?.gameObject.SetActive(active);
