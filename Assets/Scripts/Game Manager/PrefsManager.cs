@@ -40,6 +40,8 @@ public class PrefsManager : Singleton<PrefsManager>
 
     public event ValueChangedInt OnZoomSpeedChanged;
 
+    private bool _tempMute = false;
+
     public void Save()
     {
         PlayerPrefs.Save();
@@ -120,14 +122,26 @@ public class PrefsManager : Singleton<PrefsManager>
     {
         get
         {
-            return PlayerPrefs.GetInt(keyMuteSFX, 0) == 1;
+            return PlayerPrefs.GetInt(keyMuteSFX, 0) == 1 || _tempMute;
         }
         set
         {
             PlayerPrefs.SetInt(keyMuteSFX, value ? 1 : 0);
             if (OnAudioMuteSFXChanged != null)
             {
-                OnAudioMuteSFXChanged(value);
+                OnAudioMuteSFXChanged(value || _tempMute);
+            }
+        }
+    }
+
+    public bool TempAudioMuteSFX
+    {
+        set
+        {
+            _tempMute = value;
+            if (OnAudioMuteSFXChanged != null)
+            {
+                OnAudioMuteSFXChanged(value || PlayerPrefs.GetInt(keyMuteSFX, 0) == 1);
             }
         }
     }
