@@ -43,6 +43,11 @@ public class Console : GenericHackable
         {
             _timer.OnTimerCompleted -= CompleteHack;
         }
+        if (_delayTimer != null)
+        {
+            _delayTimer.OnTimerCompleted -= MoveToHack;
+            _delayTimer.OnTimerCompleted -= MoveToPlayer;
+        }
     }
 
     /// <summary>

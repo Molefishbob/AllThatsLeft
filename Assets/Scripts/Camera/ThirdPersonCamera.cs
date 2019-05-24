@@ -42,6 +42,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private float _newDistance;
     private int _invertX = 1;
     private int _invertY = 1;
+    [HideInInspector]
     public HashSet<Camera> _cameras;
     private ScaledOneShotTimer _transitionTimer;
     private ScaledOneShotTimer _returnControlsTimer;
@@ -171,6 +172,8 @@ public class ThirdPersonCamera : MonoBehaviour
         _transitionTimer.StopTimer();
         _returnControlsTimer.StopTimer();
         _freezeTimer.StopTimer();
+        _cinematicEffect.gameObject.SetActive(false);
+        PlayerControlled = false;
     }
 
     private void OnDestroy()
@@ -195,6 +198,30 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_lookAt == null) return;
 
+        float scroll = 0;
+        float xInput = 0;
+        float yInput = 0;
+
+        if (PlayerControlled)
+        {
+            scroll = Input.GetAxis("Scroll");
+            xInput = Input.GetAxis(_cameraXAxis);
+            yInput = Input.GetAxis(_cameraYAxis);
+            Distance -= scroll * _zoomSpeed;
+            if (_lookAt == _playerLookAt)
+            {
+                _playerDistance = Distance;
+            }
+            else
+            {
+                _botDistance = Distance;
+            }
+            Yaw += _horizontalSensitivity * xInput * _invertX;
+            Pitch += _verticalSensitivity * yInput * _invertY;
+        }
+
+        Quaternion rot = Quaternion.Euler(Pitch, Yaw, 0);
+
         if (_transitionTimer.IsRunning)
         {
             if (Frozen)
@@ -205,53 +232,30 @@ public class ThirdPersonCamera : MonoBehaviour
             else
             {
                 Vector3 dir = Vector3.back * Mathf.Lerp(_oldDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
-                transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + transform.rotation * dir;
+                transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rot * dir;
+                transform.rotation = rot;
             }
         }
         else if (Frozen)
         {
             return;
         }
-        else if (!GameManager.Instance.Player.Dead)
+        else if (!GameManager.Instance.Player.Dead && _follow)
         {
-            float scroll = Input.GetAxis("Scroll");
-            float xInput = Input.GetAxis(_cameraXAxis);
-            float yInput = Input.GetAxis(_cameraYAxis);
-
-            if (PlayerControlled)
-            {
-                Distance -= scroll * _zoomSpeed;
-                if (_lookAt == _playerLookAt)
-                {
-                    _playerDistance = Distance;
-                }
-                else
-                {
-                    _botDistance = Distance;
-                }
-
-                Yaw += _horizontalSensitivity * xInput * _invertX;
-                Pitch += _verticalSensitivity * yInput * _invertY;
-            }
-
-            if (_follow)
-            {
-                Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
-                transform.position = _lookAt.position + rotation * Vector3.back;
-            }
+            transform.position = _lookAt.position + rot * Vector3.back;
             transform.LookAt(_lookAt.position);
             Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), Distance);
             transform.position = _lookAt.position + transform.rotation * dirr;
-
-            if (PlayerControlled)
-            {
-                if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
-                if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
-            }
         }
         else
         {
             transform.LookAt(_lookAt.position);
+        }
+
+        if (PlayerControlled)
+        {
+            if (OnCameraZoomedByPlayer != null && Mathf.Abs(scroll) >= 0.1f) OnCameraZoomedByPlayer();
+            if (OnCameraMovedByPlayer != null && (Mathf.Abs(xInput) >= 0.5f || Mathf.Abs(yInput) >= 0.5f)) OnCameraMovedByPlayer();
         }
     }
 
@@ -317,7 +321,6 @@ public class ThirdPersonCamera : MonoBehaviour
             Distance = _botDistance;
         }
 
-        PlayerControlled = false;
         Frozen = false;
         _oldRotation = transform.rotation;
         _newRotation = transform.rotation;
