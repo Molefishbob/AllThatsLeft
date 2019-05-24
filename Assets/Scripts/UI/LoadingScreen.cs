@@ -22,7 +22,6 @@ public class LoadingScreen : MonoBehaviour
 
     private UnscaledOneShotTimer _timer;
     private ScaledOneShotTimer _teleportTimer;
-    private bool _mute;
     private bool _inTransition;
     private int _shaderProperty;
     private int _loadState = -1;
@@ -37,11 +36,6 @@ public class LoadingScreen : MonoBehaviour
     private void Start()
     {
         _teleportTimer.OnTimerCompleted += TeleportDone;
-    }
-
-    private void OnApplicationQuit()
-    {
-        if (_loadState < 2 || _timer.IsRunning) PrefsManager.Instance.AudioMuteSFX = _mute;
     }
 
     private void OnDisable()
@@ -81,7 +75,7 @@ public class LoadingScreen : MonoBehaviour
             {
                 _teleportTimer.StartTimer(_teleportEffectTime);
                 if (GameManager.Instance.Player.gameObject.activeSelf) GameManager.Instance.Player.TeleportIn();
-                PrefsManager.Instance.AudioMuteSFX = _mute;
+                PrefsManager.Instance.TempAudioMuteSFX = false;
             }
         }
 
@@ -96,8 +90,7 @@ public class LoadingScreen : MonoBehaviour
         _scaledObject.localScale = Vector3.zero;
         _inTransition = false;
         _loadState = -1;
-        _mute = PrefsManager.Instance.AudioMuteSFX;
-        PrefsManager.Instance.AudioMuteSFX = true;
+        PrefsManager.Instance.TempAudioMuteSFX = true;
         SceneManager.sceneLoaded += Begin;
         gameObject.SetActive(true);
     }

@@ -80,7 +80,7 @@ public class Console : GenericHackable
     /// </summary>
     protected override bool HackAction()
     {
-        return _hTarget.ButtonDown(_cameraDelay);
+        return _hTarget.ButtonDown(_cameraDelay + _transitionTime);
     }
 
     /// <summary>
@@ -136,7 +136,7 @@ public class Console : GenericHackable
     {
         _delayTimer.OnTimerCompleted -= MoveToHack;
         _delayTimer.OnTimerCompleted -= MoveToPlayer;
-        GameManager.Instance.Camera.MoveToHackTargetInstant(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
+        GameManager.Instance.Camera.MoveToHackTarget(_hackTarget.transform, _lookAtHackedTime, _transitionTime);
     }
 
     private void MoveToPlayer()
