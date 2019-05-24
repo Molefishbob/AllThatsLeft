@@ -11,7 +11,18 @@ public class ThirdPersonCamera : MonoBehaviour
     public LayerMask _groundLayer;
     private Transform _lookAt;
     private Vector3 _oldTarget;
-    private float _distance = 10.0f;
+    private float _distance;
+    private float Distance
+    {
+        get
+        {
+            return _distance;
+        }
+        set
+        {
+            _distance = Mathf.Clamp(value, _minDistance, _maxDistance);
+        }
+    }
     public float _maxDistance = 15.0f;
     public float _minDistance = 5.0f;
     public float _zoomSpeed = 0.5f;
@@ -59,7 +70,7 @@ public class ThirdPersonCamera : MonoBehaviour
             {
                 _cinematicEffect.gameObject.SetActive(true);
             }
-            else
+            else if (_cinematicEffect.gameObject.activeSelf)
             {
                 _cinematicEffect.SetTrigger(OutTrigger);
             }
@@ -78,6 +89,12 @@ public class ThirdPersonCamera : MonoBehaviour
 
     [SerializeField]
     private Animator _cinematicEffect = null;
+
+    private Quaternion _oldRotation;
+    private Quaternion _newRotation;
+    private Vector3 _oldPos;
+    private Vector3 _newPos;
+    private Transform _playerLookAt;
 
     private float Pitch
     {
@@ -101,9 +118,11 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void Start()
     {
+        _playerLookAt = GameManager.Instance.Player.transform.Find(_cameraTargetName);
         OnPlayerRebirth();
         _returnControlsTimer.OnTimerCompleted += ReturnControls;
         _freezeTimer.OnTimerCompleted += UnFreeze;
+        _transitionTimer.OnTimerCompleted += FinishTransition;
         PlayerControlled = true;
     }
 
@@ -164,6 +183,10 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             _freezeTimer.OnTimerCompleted -= UnFreeze;
         }
+        if (_transitionTimer != null)
+        {
+            _transitionTimer.OnTimerCompleted -= FinishTransition;
+        }
     }
 
     private void Update()
@@ -172,16 +195,22 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (_lookAt == null) return;
 
-        if (Frozen) return;
-
         if (_transitionTimer.IsRunning)
         {
-            Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
-
-            float lerpedDistance = Mathf.Lerp(_oldDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
-
-            Vector3 dir = Vector3.back * lerpedDistance;
-            transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + rotation * dir;
+            if (Frozen)
+            {
+                transform.position = Vector3.Lerp(_oldPos, _newPos, _transitionTimer.NormalizedTimeElapsed);
+                transform.rotation = Quaternion.Lerp(_oldRotation, _newRotation, _transitionTimer.NormalizedTimeElapsed);
+            }
+            else
+            {
+                Vector3 dir = Vector3.back * Mathf.Lerp(_oldDistance, _newDistance, _transitionTimer.NormalizedTimeElapsed);
+                transform.position = (Vector3.Lerp(_oldTarget, _lookAt.position, _transitionTimer.NormalizedTimeElapsed)) + transform.rotation * dir;
+            }
+        }
+        else if (Frozen)
+        {
+            return;
         }
         else if (!GameManager.Instance.Player.Dead)
         {
@@ -191,15 +220,14 @@ public class ThirdPersonCamera : MonoBehaviour
 
             if (PlayerControlled)
             {
-                _distance -= scroll * _zoomSpeed;
-
-                if (_distance < _minDistance)
+                Distance -= scroll * _zoomSpeed;
+                if (_lookAt == _playerLookAt)
                 {
-                    _distance = _minDistance;
+                    _playerDistance = Distance;
                 }
-                else if (_distance > _maxDistance)
+                else
                 {
-                    _distance = _maxDistance;
+                    _botDistance = Distance;
                 }
 
                 Yaw += _horizontalSensitivity * xInput * _invertX;
@@ -212,7 +240,7 @@ public class ThirdPersonCamera : MonoBehaviour
                 transform.position = _lookAt.position + rotation * Vector3.back;
             }
             transform.LookAt(_lookAt.position);
-            Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+            Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), Distance);
             transform.position = _lookAt.position + transform.rotation * dirr;
 
             if (PlayerControlled)
@@ -242,7 +270,23 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void ReturnControls()
     {
+        PlayerControlled = true;
         GameManager.Instance.Player.ControlsDisabled = false;
+    }
+
+    private void FinishTransition()
+    {
+        if (Frozen)
+        {
+            transform.position = _newPos;
+            transform.rotation = _newRotation;
+            Pitch = transform.eulerAngles.x;
+            Yaw = transform.eulerAngles.y;
+        }
+        else
+        {
+            PlayerControlled = true;
+        }
     }
 
     public void MoveToTarget(Transform trans)
@@ -250,7 +294,7 @@ public class ThirdPersonCamera : MonoBehaviour
         MoveToTarget(trans, _defaultTransitionTime);
     }
 
-    public void MoveToTarget(Transform trans, float time)
+    public void MoveToTarget(Transform trans, float time, bool forced)
     {
         Transform target = trans.Find(_cameraTargetName);
         if (target == null)
@@ -259,28 +303,34 @@ public class ThirdPersonCamera : MonoBehaviour
             Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
         }
 
-        if (target == _lookAt)
+        if (target == _playerLookAt)
         {
-            return;
-        }
-
-        if (trans == GameManager.Instance.Player.transform)
-        {
-            _botDistance = _distance;
-            _distance = _playerDistance;
+            if (forced)
+            {
+                _cinematicEffect.SetTrigger(OutTrigger);
+            }
+            Distance = _playerDistance;
             _returnControlsTimer.StartTimer(time);
         }
         else
         {
-            _playerDistance = _distance;
-            _distance = _botDistance;
+            Distance = _botDistance;
         }
 
+        PlayerControlled = false;
+        Frozen = false;
+        _oldRotation = transform.rotation;
+        _newRotation = transform.rotation;
         _oldTarget = _lookAt.position;
         _oldDistance = Vector3.Distance(transform.position, _oldTarget);
         _lookAt = target;
-        _newDistance = CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+        _newDistance = CheckCollision(transform.TransformDirection(Vector3.back), Distance);
         _transitionTimer.StartTimer(time);
+    }
+
+    public void MoveToTarget(Transform trans, float time)
+    {
+        MoveToTarget(trans, time, false);
     }
 
     public void MoveToTargetInstant(Transform trans)
@@ -292,24 +342,21 @@ public class ThirdPersonCamera : MonoBehaviour
             Debug.LogWarning("Didn't find camera target on " + trans.gameObject.name);
         }
 
-        if (target == _lookAt)
+        if (target == _playerLookAt)
         {
-            return;
-        }
-
-        if (trans == GameManager.Instance.Player.transform)
-        {
-            _botDistance = _distance;
-            _distance = _playerDistance;
+            Distance = _playerDistance;
         }
         else
         {
-            _playerDistance = _distance;
-            _distance = _botDistance;
+            Distance = _botDistance;
         }
 
         _lookAt = target;
         _transitionTimer.StopTimer();
+        _returnControlsTimer.StopTimer();
+        _freezeTimer.StopTimer();
+        Frozen = false;
+        PlayerControlled = false;
 
         if (_follow)
         {
@@ -318,7 +365,7 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         transform.LookAt(_lookAt.position);
-        Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), _distance);
+        Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), Distance);
         transform.position = _lookAt.position + transform.rotation * dirr;
     }
 
@@ -335,15 +382,18 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public void MoveToTargetAndLock(Vector3 target, float distance, float pitch, float yaw)
     {
+        PlayerControlled = false;
         Frozen = true;
-        Quaternion rotation = Quaternion.Euler(pitch, yaw, 0);
+        Pitch = pitch;
+        Yaw = yaw;
+        Quaternion rotation = Quaternion.Euler(Pitch, Yaw, 0);
         transform.position = target + rotation * Vector3.back;
         transform.LookAt(target);
         Vector3 dirr = Vector3.back * CheckCollision(transform.TransformDirection(Vector3.back), distance);
         transform.position = target + transform.rotation * dirr;
     }
 
-    public void MoveToHackTargetInstant(Transform trans, float lookatTime, float transitionTime)
+    public void MoveToHackTarget(Transform trans, float lookatTime, float transitionTime)
     {
         _returnToPlayerTime = transitionTime;
         Transform tf = trans.Find(_cameraTargetName);
@@ -356,14 +406,15 @@ public class ThirdPersonCamera : MonoBehaviour
 
         _lookAt = trans;
 
-        transform.position = tf.position;
-        transform.LookAt(trans);
-
-        Pitch = transform.eulerAngles.x;
-        Yaw = transform.eulerAngles.y;
+        _oldPos = transform.position;
+        _oldRotation = transform.rotation;
+        _newPos = tf.position;
+        _newRotation = Quaternion.LookRotation(trans.position - tf.position);
 
         Frozen = true;
-        _freezeTimer.StartTimer(lookatTime);
+        PlayerControlled = false;
+        _freezeTimer.StartTimer(lookatTime + transitionTime);
+        _transitionTimer.StartTimer(transitionTime);
     }
 
     private void OnPlayerDeath()
@@ -376,8 +427,8 @@ public class ThirdPersonCamera : MonoBehaviour
         _follow = true;
         Pitch = _startingPitch;
         Yaw = GameManager.Instance.Player.transform.eulerAngles.y;
-        _lookAt = GameManager.Instance.Player.transform.Find(_cameraTargetName);
-        _distance = _playerDistance;
+        _lookAt = _playerLookAt;
+        Distance = _playerDistance;
     }
 
     private void ChangeInvertX(bool b)
@@ -415,7 +466,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void UnFreeze()
     {
-        Frozen = false;
         MoveToTarget(GameManager.Instance.Player.transform, _returnToPlayerTime);
     }
 }

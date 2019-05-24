@@ -90,9 +90,8 @@ public abstract class Collectible : MonoBehaviour
 
     private void DoneHolding()
     {
-        GameManager.Instance.Player.ControlsDisabled = false;
         GameManager.Instance.Player._animator.SetTrigger(_playerAnimTriggerEnd);
-        GameManager.Instance.Camera.Frozen = false;
+        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, 0.5f, true);
         CollectAction();
         gameObject.SetActive(false);
     }
