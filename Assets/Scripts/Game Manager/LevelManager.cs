@@ -186,8 +186,7 @@ public class LevelManager : MonoBehaviour
                     break;
             }
         }
-        //TODO: add these back
-        //#if UNITY_EDITOR
+        #if UNITY_EDITOR
         else if (!GameManager.Instance.GamePaused)
         {
             if (Input.GetKeyDown(KeyCode.K))
@@ -217,7 +216,7 @@ public class LevelManager : MonoBehaviour
                 GameManager.Instance.NextLevel();
             }
         }
-        //#endif
+        #endif
     }
 
     private Vector3 GetSpawnPosition()
