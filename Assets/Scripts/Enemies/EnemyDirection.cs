@@ -8,7 +8,6 @@ public class EnemyDirection : MonoBehaviour
     [Tooltip("How much smaller the patrolradius is compared to the aggroradius trigger")]
     public float _patrolRadius = 6.0f;
     public float _patrolSpeedMultiplier = 0.5f;
-    private float _randomIdleTime;
     public float _idleTime = 0.5f;
     [SerializeField]
     private float _minIdleTime = 1.0f;
@@ -20,8 +19,7 @@ public class EnemyDirection : MonoBehaviour
     public List<Transform> _aggroTargets;
     private SphereCollider _aggroArea;
     private Vector3 _moveTarget;
-    [HideInInspector]
-    public PhysicsOneShotTimer _targetTimer;
+    private PhysicsOneShotTimer _targetTimer;
     private PhysicsOneShotTimer _burpTimer;
     private float _minBurpWait = 5.0f;
     private float _maxBurpWait = 10.0f;
@@ -82,8 +80,8 @@ public class EnemyDirection : MonoBehaviour
             if (dist < 0.1f && !_targetTimer.IsRunning)
             {
                 _enemy.StopMoving = true;
-                _randomIdleTime = Random.Range(_minIdleTime, _maxIdleTime);
-                _targetTimer.StartTimer(_randomIdleTime);
+                float randomIdleTime = Random.Range(_minIdleTime, _maxIdleTime);
+                _targetTimer.StartTimer(randomIdleTime);
             }
         }
         else
@@ -144,7 +142,7 @@ public class EnemyDirection : MonoBehaviour
             //if (!_targetTimer.IsRunning)
             //{
             _enemy.StopMoving = true;
-            _targetTimer.StartTimer(_idleTime);
+            Idle();
             //}
             //SetRandomTarget();
         }
@@ -163,7 +161,7 @@ public class EnemyDirection : MonoBehaviour
             //if (!_targetTimer.IsRunning)
             //{
             _enemy.StopMoving = true;
-            _targetTimer.StartTimer(_idleTime);
+            Idle();
             //}
             //SetRandomTarget();
         }
@@ -211,5 +209,10 @@ public class EnemyDirection : MonoBehaviour
     private void TimedBurp()
     {
         if (_enemy._burpSound != null && !_enemy.gameObject.GetComponent<IDamageReceiver>().Dead && _enemy.gameObject.activeInHierarchy) _enemy._burpSound.PlaySound();
+    }
+
+    public void Idle()
+    {
+        _targetTimer.StartTimer(_idleTime);
     }
 }
