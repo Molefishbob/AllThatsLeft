@@ -109,6 +109,14 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
+    public bool IsInTransition
+    {
+        get
+        {
+            return _transitionTimer.IsRunning || _freezeTimer.IsRunning;
+        }
+    }
+
     private void Awake()
     {
         _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>(true));
