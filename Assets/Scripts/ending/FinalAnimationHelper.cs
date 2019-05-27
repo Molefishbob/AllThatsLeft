@@ -15,7 +15,7 @@ public class FinalAnimationHelper : MonoBehaviour
     public Animator creditsAnimator;
     public string creditsBoolName = "credits";
     public bool showCredits = false;
-    public GameObject _endScreen;
+    public PauseMenu _endScreen;
     private UnscaledOneShotTimer _timer = null;
     private UnscaledOneShotTimer _timer2 = null;
     private float _noInputTime = 0.25f;
@@ -30,6 +30,8 @@ public class FinalAnimationHelper : MonoBehaviour
         _timer2.OnTimerCompleted += InputMe;
         Destroy(GameManager.Instance.Camera.gameObject);
         Destroy(GameManager.Instance.SkyCamera.gameObject);
+        _endScreen.SetNumbers(PrefsManager.Instance.PlayerDeaths, PrefsManager.Instance.MinibotsUsed);
+        PrefsManager.Instance.DeleteSavedGame();
     }
 
     void Update()
@@ -63,12 +65,14 @@ public class FinalAnimationHelper : MonoBehaviour
         _timer2.OnTimerCompleted += InputMe;
     }
 
-    public void StartRun() {
+    public void StartRun()
+    {
         run = true;
         mainCharAnimator.SetBool(runBoolName, run);
     }
 
-    public void StartCredits() {
+    public void StartCredits()
+    {
         GameManager.Instance.PlayMenuMusic();
         showCredits = true;
         _timer.StartTimer(creditsAnimator.runtimeAnimatorController.animationClips[0].length);
@@ -81,7 +85,7 @@ public class FinalAnimationHelper : MonoBehaviour
         _textField.SetActive(false);
         _camera.SetActive(false);
         GetComponent<Animator>().enabled = false;
-        _endScreen.SetActive(true);
+        _endScreen.gameObject.SetActive(true);
         _timer.OnTimerCompleted -= EndScreen;
     }
 

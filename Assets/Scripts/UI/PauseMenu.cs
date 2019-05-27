@@ -10,15 +10,15 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private EventSystem _eventSystem = null;
     [SerializeField]
-    private GameObject 
+    private GameObject
         _settings = null,
         _pauseMenu = null,
         _confirmQuit = null;
     [SerializeField]
-    private GameObject 
+    private GameObject
         _masterVolumeSlider = null,
-        
-        _noButton = null, _resumeButton = null,
+        _noButton = null,
+        _resumeButton = null,
         _camxSlider = null;
     [SerializeField]
     private SingleUISound _buttonClickSound = null;
@@ -27,7 +27,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private SingleUISound _menuOpenSound = null;
     [SerializeField]
-    private TMP_Text 
+    private TMP_Text
         _deathsGO = null,
         _minibotsGO = null;
     private UnscaledOneShotTimer _timer;
@@ -39,16 +39,11 @@ public class PauseMenu : MonoBehaviour
         ConfirmationQuit
     }
     private Page _currentPage;
+    private bool _manuallySet = false;
 
     private void Awake()
     {
         _timer = gameObject.AddComponent<UnscaledOneShotTimer>();
-    }
-
-    private void Start()
-    {
-        _currentPage = Page.MainMenu;
-        _eventSystem.SetSelectedGameObject(_resumeButton);
     }
 
     private bool ButtonsUsed()
@@ -105,8 +100,13 @@ public class PauseMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        _deathsGO.text = PrefsManager.Instance.PlayerDeaths.ToString();
-        _minibotsGO.text = PrefsManager.Instance.MinibotsUsed.ToString();
+        if (!_manuallySet)
+        {
+            _deathsGO.text = PrefsManager.Instance.PlayerDeaths.ToString();
+            _minibotsGO.text = PrefsManager.Instance.MinibotsUsed.ToString();
+        }
+        _currentPage = Page.MainMenu;
+        _eventSystem.SetSelectedGameObject(_resumeButton);
     }
 
     /// <summary>
@@ -214,5 +214,12 @@ public class PauseMenu : MonoBehaviour
     {
         _timer.StartTimer(_buttonClickSound.Duration);
         _timer.OnTimerCompleted += Quit;
+    }
+
+    public void SetNumbers(int deaths, int botsUsed)
+    {
+        _deathsGO.text = deaths.ToString();
+        _minibotsGO.text = botsUsed.ToString();
+        _manuallySet = true;
     }
 }

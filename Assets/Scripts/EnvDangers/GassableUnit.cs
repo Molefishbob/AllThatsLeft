@@ -16,6 +16,7 @@ public class GassableUnit : MonoBehaviour
     private ScaledRepeatingTimer _blinkTimer;
     private IDamageReceiver _dmg;
     private SkinnedMeshRenderer[] _renderers;
+    private bool _killedByMe = false;
 
     private void Awake()
     {
@@ -32,6 +33,11 @@ public class GassableUnit : MonoBehaviour
                 _originalColors[i][j] = _renderers[i].materials[j].color;
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        _killedByMe = false;
     }
 
     private void Start()
@@ -57,6 +63,15 @@ public class GassableUnit : MonoBehaviour
     private void Update()
     {
         if (GameManager.Instance.GamePaused) return;
+
+        if (_dmg.Dead)
+        {
+            if (!_killedByMe)
+            {
+                ExitGas();
+            }
+            return;
+        }
 
         if (_blinkTimer.IsRunning)
         {
@@ -121,6 +136,7 @@ public class GassableUnit : MonoBehaviour
 
     private void Death()
     {
+        _killedByMe = true;
         _killTimer.StopTimer();
         _blinkTimer.StopTimer();
         for (int i = 0; i < _renderers.Length; i++)
