@@ -7,14 +7,12 @@ public class BombAction : BotActionBase
     private const string ExplodeTrigger = "Explode";
     [SerializeField]
     private string _sExplodeButton = "Bomb Action";
-    public LayerMask BombableLayer { get { return _lBombableLayer; } }
     [SerializeField]
     private LayerMask _lBombableLayer = 1 << 11 | 1 << 10 | 1 << 9;
     [SerializeField]
     private float _fExplodeRadius = 4;
     [SerializeField]
     private float _fRenderDisableTimeOnExplode = 0.25f;
-    public ParticleSystem[] ExplosionParticles { get { return _psExplosion; } }
     private ParticleSystem[] _psExplosion = null;
     private bool _bFirstEnable = true;
     public bool _bExploding = false;

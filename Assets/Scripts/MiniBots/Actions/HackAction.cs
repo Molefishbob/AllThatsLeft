@@ -8,14 +8,9 @@ public class HackAction : BotActionBase
     private const string HackFinishTrigger = "HackFinish";
     [SerializeField]
     private string _sHackButton = "Hack Action";
-    public LayerMask HackLayer { get { return _lHackLayer; } }
-    [SerializeField]
-    private LayerMask _lHackLayer = 1 << 18;
     private List<GenericHackable> _hackTargets = null;
-    public bool Hacking { get { return _bHacking; } }
     private bool _bHacking = false;
     private BotReleaser _releaser = null;
-    private NewMinibotAnimatorMiddlehand _animMiddlehand;
     [SerializeField]
     private SingleSFXSound _hackSound = null;
     [SerializeField]
@@ -25,7 +20,6 @@ public class HackAction : BotActionBase
     {
         base.Awake();
         _releaser = GetComponent<BotReleaser>();
-        _animMiddlehand = GetComponentInChildren<NewMinibotAnimatorMiddlehand>(true);
         _hackTargets = new List<GenericHackable>(4);
     }
 

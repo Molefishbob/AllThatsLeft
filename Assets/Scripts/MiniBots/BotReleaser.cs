@@ -11,14 +11,10 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     [SerializeField]
     private float _transitionTime = 1.0f;
     [SerializeField]
-    private float _transitionTimeOnPlayerDeath = 0.5f;
-    [SerializeField]
     private float _fLifeTime = 30;
 
     [HideInInspector]
     public bool Dead { get; protected set; }
-
-    private LayerMask _lHackableLayer = 1 << 18;
 
     private ScaledOneShotTimer _ostRelease;
     private ScaledOneShotTimer _ostDisable;
@@ -30,7 +26,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
     [HideInInspector]
     public TrampolineAction _selfTrampoline;
     private Transform _thisCamTarget;
-    public Transform ThisCameraTarget { get { return _thisCamTarget; } }
 
     [SerializeField]
     private GameObject teleportAwayParticle = null;
@@ -66,7 +61,6 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _ostRelease.OnTimerCompleted += ActualRelease;
         _ostDisable.OnTimerCompleted += DisableAction;
         _ostLife.OnTimerCompleted += Die;
-        _lHackableLayer = _selfHack.HackLayer;
 
         if (!_selfMover.ControlsDisabled)
             Activate();
@@ -120,8 +114,7 @@ public class BotReleaser : BotActionBase, IDamageReceiver
         _selfMover.ControlsDisabled = true;
         DisableActing();
 
-        GameManager.Instance.Camera.MoveToTarget(GameManager.Instance.Player.transform, _transitionTimeOnPlayerDeath);
-        _ostDisable.StartTimer(_transitionTimeOnPlayerDeath);
+        _ostRelease.StartTimer(fReleaseDelay);
     }
 
     public void ReleaseOnly()
