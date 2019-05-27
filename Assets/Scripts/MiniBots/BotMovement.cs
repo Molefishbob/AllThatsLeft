@@ -38,11 +38,6 @@ public class BotMovement : PlayerMovement
         _selfReleaser = GetComponent<BotReleaser>();
     }
 
-    private void OnDisable()
-    {
-        Jump.ResetJump();
-    }
-
     public void Activate()
     {
         _selfReleaser.Activate();

@@ -42,6 +42,12 @@ public abstract class PlayerMovement : CharControlBase
         Jump = GetComponent<PlayerJump>();
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        if (Jump != null) Jump.ResetJump();
+    }
+
     protected override Vector2 InternalMovement()
     {
         if (ControlsDisabled)
