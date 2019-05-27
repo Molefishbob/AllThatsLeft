@@ -72,7 +72,7 @@ public class EnemyAnimatorMiddleHand : MonoBehaviour
         else
         {
             _frog._animator.SetBool("Jump", false);
-            _frog._eDirect._targetTimer.StartTimer(_frog._eDirect._idleTime);
+            _frog._eDirect.Idle();
         }
     }
 }

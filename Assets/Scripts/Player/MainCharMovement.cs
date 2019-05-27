@@ -88,12 +88,12 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
 
         PrefsManager.Instance.PlayerDeaths += 1;
         PrefsManager.Instance.Save();
-        GameManager.Instance.Camera.MoveToTargetInstant(transform);
         Dead = true;
         _damageDeathSound.PlaySound();
         _animator.SetTrigger(_animatorTriggerDeath);
         SetControllerActive(false);
         _deathTimer.StartTimer(_deathTime);
+        GameManager.Instance.Camera.MoveToTargetInstant(transform);
         if (OnPlayerDeath != null) OnPlayerDeath();
     }
 
@@ -122,6 +122,7 @@ public class MainCharMovement : PlayerMovement, IDamageReceiver
         Dead = true;
         _fallDeathSound.PlaySound();
         _deathTimer.StartTimer(_deathTime);
+        GameManager.Instance.Camera.MoveToTargetInstant(transform);
         if (OnPlayerDeath != null) OnPlayerDeath();
     }
 

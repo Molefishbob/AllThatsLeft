@@ -58,7 +58,7 @@ public class CharControlPlatformMovement : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if ((hit.controller.collisionFlags & CollisionFlags.Below) != 0)
+        if ((_character._collisionFlags & CollisionFlags.Below) != 0)
         {
             _platform = null;
             _forced = false;

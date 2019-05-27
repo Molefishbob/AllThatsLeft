@@ -39,13 +39,15 @@ public class EnemyMover : CharControlBase
         _target = target;
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         _attack.gameObject.SetActive(true);
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         _stopMoving = false;
         _attack.gameObject.SetActive(false);
         _speedMultiplier = 1.0f;

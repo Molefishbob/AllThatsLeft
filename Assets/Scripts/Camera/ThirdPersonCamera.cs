@@ -109,6 +109,14 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
+    public bool IsInTransition
+    {
+        get
+        {
+            return _transitionTimer.IsRunning || _freezeTimer.IsRunning;
+        }
+    }
+
     private void Awake()
     {
         _cameras = new HashSet<Camera>(GetComponentsInChildren<Camera>(true));
@@ -240,7 +248,7 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             return;
         }
-        else if (!GameManager.Instance.Player.Dead && _follow)
+        else if (_follow)
         {
             transform.position = _lookAt.position + rot * Vector3.back;
             transform.LookAt(_lookAt.position);

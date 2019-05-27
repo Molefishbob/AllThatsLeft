@@ -89,7 +89,7 @@ public class DeployControlledBots : MonoBehaviour
             }
             else if (!_activeBot.IsGrounded)
             {
-                if ((_activeBot._controller.collisionFlags & CollisionFlags.Sides) == CollisionFlags.Sides)
+                if ((_activeBot._collisionFlags & CollisionFlags.Sides) == CollisionFlags.Sides)
                 {
                     _hit = true;
                 }

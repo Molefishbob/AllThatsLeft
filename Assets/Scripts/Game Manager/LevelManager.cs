@@ -141,9 +141,9 @@ public class LevelManager : MonoBehaviour
         if (_allLevelCheckPoints != null && _allLevelCheckPoints.ContainsKey(0))
         {
             int currentLevel = SceneManager.GetActiveScene().buildIndex;
-            #if (UNITY_EDITOR)
+#if (UNITY_EDITOR)
             if (currentLevel > 2) PrefsManager.Instance.BotsUnlocked = true;
-            #endif
+#endif
             if (PrefsManager.Instance.Level != currentLevel)
             {
                 PrefsManager.Instance.Level = SceneManager.GetActiveScene().buildIndex;
@@ -173,51 +173,49 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.Instance.LoadingScreen.gameObject.activeSelf && Input.GetButtonDown(_pauseMenuButton))
+        if (GameManager.Instance.LoadingScreen.gameObject.activeSelf) return;
+
+        if (GameManager.Instance.GamePaused)
         {
-            switch (GameManager.Instance.GamePaused)
+            if (Input.GetButtonDown(_pauseMenuButton))
             {
-                case false:
-                    if (GameManager.Instance.Player.Dead) return;
-                    GameManager.Instance.PauseMenu.ToPauseMenu();
-                    break;
-                case true:
-                    GameManager.Instance.PauseMenu.Resume();
-                    break;
+                GameManager.Instance.PauseMenu.Resume();
             }
         }
-        //TODO: add these back
-        //#if UNITY_EDITOR
-        else if (!GameManager.Instance.GamePaused)
+        else if (!GameManager.Instance.Player.Dead &&
+                GameManager.Instance.Camera.PlayerControlled &&
+                !GameManager.Instance.Camera.IsInTransition &&
+                Input.GetButtonDown(_pauseMenuButton))
         {
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                int nextKey = 0;
-                foreach (KeyValuePair<int, CheckPointPole> pole in _allLevelCheckPoints)
-                {
-                    if (pole.Key > nextKey) nextKey = pole.Key;
-                }
-                foreach (KeyValuePair<int, CheckPointPole> pole in _allLevelCheckPoints)
-                {
-                    if (pole.Key <= _currentCheckPoint.id) continue;
-                    if (pole.Key < nextKey) nextKey = pole.Key;
-                }
-
-                CheckPointPole cp;
-                _allLevelCheckPoints.TryGetValue(nextKey, out cp);
-
-                GameManager.Instance.Player.transform.position = cp.SpawnPoint.position;
-                GameManager.Instance.Player.transform.rotation = cp.SpawnPoint.rotation;
-                Physics.SyncTransforms();
-                GameManager.Instance.Camera.OnPlayerRebirth();
-            }
-
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                GameManager.Instance.NextLevel();
-            }
+            GameManager.Instance.PauseMenu.ToPauseMenu();
         }
-        //#endif
+#if UNITY_EDITOR
+        else if (Input.GetKeyDown(KeyCode.K))
+        {
+            int nextKey = 0;
+            foreach (KeyValuePair<int, CheckPointPole> pole in _allLevelCheckPoints)
+            {
+                if (pole.Key > nextKey) nextKey = pole.Key;
+            }
+            foreach (KeyValuePair<int, CheckPointPole> pole in _allLevelCheckPoints)
+            {
+                if (pole.Key <= _currentCheckPoint.id) continue;
+                if (pole.Key < nextKey) nextKey = pole.Key;
+            }
+
+            CheckPointPole cp;
+            _allLevelCheckPoints.TryGetValue(nextKey, out cp);
+
+            GameManager.Instance.Player.transform.position = cp.SpawnPoint.position;
+            GameManager.Instance.Player.transform.rotation = cp.SpawnPoint.rotation;
+            Physics.SyncTransforms();
+            GameManager.Instance.Camera.OnPlayerRebirth();
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            GameManager.Instance.NextLevel();
+        }
+#endif
     }
 
     private Vector3 GetSpawnPosition()

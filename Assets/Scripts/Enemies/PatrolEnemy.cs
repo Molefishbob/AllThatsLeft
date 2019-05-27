@@ -6,7 +6,7 @@ public class PatrolEnemy : CharControlBase
 {
     private int _targetCounter = 0;
     private bool _goingForward = true;
-    private bool _stopMoving;
+    private bool _stopMoving = false;
     private bool _turningStop;
     private Quaternion _lookAtThis;
     [HideInInspector]
@@ -15,7 +15,7 @@ public class PatrolEnemy : CharControlBase
     [HideInInspector]
     public ScorpionSpawner _spawner;
     [HideInInspector]
-    public bool _dead;
+    public bool _dead = false;
     public ParticleSystem _teleportEffect;
     public SingleSFXSound _deathSound;
     public SingleSFXSound _walkSound;
@@ -33,18 +33,19 @@ public class PatrolEnemy : CharControlBase
         _attack = GetComponentInChildren<EnemyAttack>(true);
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        _dead = false;
-        _stopMoving = false;
+        base.OnEnable();
         _attack.gameObject.SetActive(true);
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         _targetCounter = 0;
         _goingForward = true;
         _stopMoving = false;
+        _dead = false;
         _animator.SetTrigger(_defaultAnimState);
         _attack.gameObject.SetActive(false);
     }

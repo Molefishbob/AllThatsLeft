@@ -21,8 +21,6 @@ public abstract class CharControlBase : MonoBehaviour
     [SerializeField]
     private string _animatorBoolRunning = "Run";
     public string _animatorBoolAirborne = "Airborne";
-    [SerializeField]
-    private bool _startsActive = false;
 
     [HideInInspector]
     public Animator _animator;
@@ -30,6 +28,8 @@ public abstract class CharControlBase : MonoBehaviour
     public SkinnedMeshRenderer _renderer;
     [HideInInspector]
     public CharacterController _controller;
+    [HideInInspector]
+    public CollisionFlags _collisionFlags;
 
     private Vector3 _externalMove = Vector3.zero;
     private Vector3 _internalMove = Vector3.zero;
@@ -65,12 +65,29 @@ public abstract class CharControlBase : MonoBehaviour
         _renderer = GetComponentInChildren<SkinnedMeshRenderer>(true);
         _airTimer = gameObject.AddComponent<PhysicsOneShotTimer>();
         _ccpm = GetComponent<CharControlPlatformMovement>();
-        SetControllerActive(_startsActive);
+    }
+
+    protected virtual void OnEnable()
+    {
+        _collisionFlags = CollisionFlags.None;
     }
 
     protected virtual void Start()
     {
         _airTimer.OnTimerCompleted += Aired;
+    }
+
+    protected virtual void OnDisable()
+    {
+        _controller.enabled = false;
+        _internalMove = Vector3.zero;
+        _externalMove = Vector3.zero;
+        ResetGravity();
+
+        if (_ccpm != null)
+        {
+            _ccpm.ResetPlatform();
+        }
     }
 
     protected virtual void OnDestroy()
@@ -162,7 +179,7 @@ public abstract class CharControlBase : MonoBehaviour
             }
 
             // make character controller move with all combined moves
-            _controller.Move(_externalMove + _internalMove + (_onSlope ? _slopeDirection * _currentGravity.magnitude : _currentGravity));
+            _collisionFlags = _controller.Move(_externalMove + _internalMove + (_onSlope ? _slopeDirection * _currentGravity.magnitude : _currentGravity));
 
             // check grounded
             IsGrounded = _controller.isGrounded && !_onSlope;
@@ -170,7 +187,7 @@ public abstract class CharControlBase : MonoBehaviour
             // reset external movement
             _externalMove = Vector3.zero;
 
-            if (_controller.collisionFlags == CollisionFlags.None)
+            if (_collisionFlags == CollisionFlags.None)
             {
                 _onSlope = false;
             }
